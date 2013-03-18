@@ -13,6 +13,13 @@ trouver un moyen astucieux pour gerer les elements au sein de la slide
  */
 
 $( function () {
+    alert("Bonsoir !")
+    alert("en double cliquant sur UN square ou UN texte  puis sur UNE slide tu peux les grouper via le bouton 'group' ");
+    alert("au sein de chaque slide, le petit cadre bleu indique le positionnement de la slide dans l'espace et le grand cadre noir est pour placé les elements (tu ne peux le faire qu'avec le carré) au sein de la slide");
+    alert("ensuite, clique sur 'creer diapo' pour apprecier la presentation. Backspace pour revenir à l'édition et modifier ta présentaion");
+    alert("malheureusement, pour le moment tu ne peux pas cliquer de nouveau sur 'creer diapo', il faut refresh la page pour recommencer");
+    
+    
     
     var cptSlide = 0;
     var cptElement = 0;
@@ -43,7 +50,7 @@ $( function () {
         var saisie = prompt("Texte a ajouter : ");
         var newT =  $("<div class='zoneTexte'   idElement='"+ cptElement++  +"'> </div>") ;
         
-            $(newT).draggable();
+        $(newT).draggable();
         
         newT.attr('style', 'position : absolute') ;
         
@@ -97,38 +104,55 @@ $( function () {
             var Top = grp.top*10;
            
             //modification de la slide pour qu'elle soit géré par impress
-            var slide = $("#"+i+"");
+            var slide = $("#"+i+"").clone();
             slide.removeClass();
             slide.removeAttr('style');
             slide.addClass('step slide ' );
             slide.attr('data-x',Left );
             slide.attr('data-y', Top);
             
-            
             $('#impress').append(slide);       
         }
+        
+        $(".zonePouet").remove();
         //
         //suppression des scripts relatif à la zone création et a boostrap
-        $("#scriptCreation").empty();
-        $("#scriptBootstrap").empty();
+        //finalement je garde car c'est dans ce div que seront stocké les css des formes et tout
+        //$("#scriptBootstrap").empty();
         
         //chargement des scriptis relatif à impress
-        $('#scriptImpress').append( '<link href="css/impress-demo.css" rel="stylesheet" />');
+        //ce css permet de faire l'echange entre les display des id=impress et id=editot
+        $('#scriptImpress').append( '<link id="impress-demo" href="css/impress-demo.css" rel="stylesheet" />');
+        //$('#impress').append(' <a class="btn btn-large" id="Edit" href="#">Edit<i class="icon-edit"></i> </a> ');
+        //le bouton de retour à l'édition est présent dès le début mais en display:none car dans la div impress
+       
         
         impress().init();
         alert("c'est parti pour impress");
     });
     
-   
+    //*
+    $(document).keydown( function(key) {
+        if(key.keyCode === 8){ //backspace 
+            $("#impress-demo").remove();
+            //$("#impress").children().empty(); //purge de id=impress
+            //$("body").append('<div id="impress"> </div>');
+       
+        }
+    });
+    
+    /*
+    $('#Edit').click( function() {
+        //charcher les scripts pour le mode de création
+        alert("mode edition");
+        $("#impress-demo").remove();      
+    });
+    */
     
     $('#grouper').click( function() {        
         //le calcul des coordonnées ne gère pas le fait de grouper plusieurs elements d'un coup
         var grp = $('.groupageG');
         var elmt = $('.groupage');
-        
-        
-        
-        
         
         grp.removeClass('groupageG');
         grp.toggleClass('alt');
@@ -137,10 +161,6 @@ $( function () {
        
         
         if (!(elmt.hasClass("zoneTexte")) ){
-            
-        
-            
-        
             var posGr = grp.offset();
             var posEl = elmt.offset();
             alert( 'Left =' + posEl.left+ '-' +posGr.left + 'Top =' +posEl.top+' -'+ posGr.top );

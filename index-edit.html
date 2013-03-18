@@ -24,19 +24,41 @@
 
         <!-- les scripts pour impress.js sont chargé plus tard dans le processus, pas en static !-->
 
+        <style type="text/css">
+            #editor {
+                display: inline;
+            }
+
+            #impress {
+                display: none;
+            }
+
+        </style>
+
+
     </head>
     <body>
 
 
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        *************************zone pour l'editeur
+       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --->
         <div class="container-fluid" id="editor">
 
             <div id="scriptBootstrap" >
                 <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
 
 
+
+
+
             </div>
 
-
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            ************************* Barre de Navigation haut : 
+            ************************* titre et fonctionnalitÃ© gÃ©nÃ©rale -> sauver, partager...
+           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <!-- 
              Barre de Navigation haut : 
             titre et fonctionnalitÃ© gÃ©nÃ©rale -> sauver, partager...
@@ -71,7 +93,9 @@
             A la sÃ©lection d'une icone, ce serait mÃ©ga classe qu'un menu horizontale spÃ©cifique apparaisse en haut de la surface de travail
             -->  
 
-            <!-- zone de gestion des boutons, menu et patati !-->
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            *************************zone des menus et des boutons
+           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <div class="row-fluid">
                 <div class="span2">
                     <div class="accordion" id="control-menu">
@@ -109,10 +133,9 @@
                     </div>
                 </div>
 
-                <!-- 
-                SURFACE DE TRAVAIL : 
-                anciennement zone de creation
-                -->
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                *************************zone de travail, stocke l'ensemble des elements du mode editeur
+               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
                 <aside class="span10">
                     <div class="row-fluid">
@@ -131,7 +154,7 @@
                             </div>
                         </div>
                         <div class="span10" id="zoneCreation">
-                            <!-- cette div est le rectangle ou les elements devront etre!-->
+                            <!-- zone creation cette div est le rectangle ou les elements devront etre!-->
 
 
 
@@ -143,25 +166,11 @@
                     </div>
             </div>
 
-            <!-- 
-             zone pour impress
-            -->    
-
-            <div id="impress">
 
 
-                <!-- endroit où les slides seront mises pour être géré par impress !-->
-            </div>
-
-            <div id="scriptImpress">
-                <script src="js/impress.js"></script>
-
-            </div>
-
-            <!-- 
-                        zone pour autre chose
-            -->    
-
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            *************************zone pour autre chose
+           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
             <div class="row-fluid">
                 <div class="span12">
@@ -172,5 +181,33 @@
 
         </div>
 
+
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        *************************zone pour impress
+       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div id="impress">
+
+
+
+
+            <!-- ne fonctionne pas
+            <div class="btn btn-large" id="Edit" >Edit<i class="icon-edit"></i> </div> 
+            !-->
+        </div>
+        <div id="scriptImpress">        <!--la div de script n'est pas id=impress car la div est purgé à chaque retour au mode edition!-->
+            <script src="js/impress.js"></script>
+            <!-- ajouté par le javascript lors d'un clic sur le lancement de la diapo
+            le lancement de ce script permet d'intervertir le display de chacun des deux grosses div
+            <link href="css/impress-demo.css" rel="stylesheet" /> !-->
+
+
+
+        </div>
+
+
+
+
     </body>
+
 </html>
