@@ -1,0 +1,3 @@
+#types de fichiers à ignorer (= pas surveillés par git)
+
+/nbproject # ignorer les fichiers spécifiques netbeans 
