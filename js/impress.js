@@ -35,7 +35,7 @@
             prefixes = 'Webkit Moz O ms Khtml'.split(' '),
             memory = {};
         
-        return function ( prop ) {                              // prop : property ???? 
+        return function ( prop ) {
             if ( typeof memory[ prop ] === "undefined" ) {
                 
                 var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
@@ -94,7 +94,7 @@
     // the given element or whole document.
     var $ = function ( selector, context ) {
         context = context || document;
-        return context.querySelector(selector);     // sélectionne tous les éléments ayant comme propriété CSS "selector"
+        return context.querySelector(selector);
     };
     
     // `$$` return an array of elements for given CSS `selector` in the `context` of
@@ -109,9 +109,7 @@
     var triggerEvent = function (el, eventName, detail) {
         var event = document.createEvent("CustomEvent");
         event.initCustomEvent(eventName, true, true, detail);
-        el.dispatchEvent(event);        // Envoie un évènement dans le système d'évènements. 
-        //                      La valeur renvoyée est false si au moins un des gestionnaires d'évènements gérant 
-        //                      cet évènement a appelé preventDefault. Dans les autres cas, la valeur renvoyée est true. 
+        el.dispatchEvent(event);
     };
     
     // `translate` builds a translate transform string for given data.
@@ -389,7 +387,10 @@
             body.classList.add("impress-enabled");
             
             // get and init steps
+            //ICI JAI MODIFIE DES TRUCS ATTENOERFHfrfrZEGHMZKERJGBZMKERJGMZEJXJGFXJRKJGHZGTRKJ KIKI
+            //steps = $$(".", root);
             steps = $$(".step", root);
+            
             steps.forEach( initStep );
             
             // set a default initial state of the canvas

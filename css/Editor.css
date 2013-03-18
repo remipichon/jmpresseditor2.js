@@ -19,6 +19,7 @@ html, body, body > div.row-fluid {
 #editor{
     height: 100%;
     position: relative;
+   
 }
 
 
@@ -26,7 +27,7 @@ html, body, body > div.row-fluid {
     height: 500px;
 }
 
-#surface {
+#zoneCreation {
   height : 500px;
   position: relative;
   border: 1px solid #ccc;

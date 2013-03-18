@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 
+/*
 // Fonction permettant de sélectionner un outil "faire du texte" quand on appuie sur le bouton texte
 $(document).ready(function(){
     $("#fontbutton").on('click', function(event){
@@ -34,3 +35,4 @@ $("surface").on('click', function(){
     $('#impress').append("<div class=\"step slide\" data-x=\"-1000\" data-y=\"-1500\">\
         <q>Aren't you just <b>bored</b> with all those slides-based presentations?</q>");
 });
+*/

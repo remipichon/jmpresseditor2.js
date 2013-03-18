@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+    <head> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Impress Editor</title>
+
+        <!-- les scripts bootstrap !-->
+        <link href="css/Editor.css" rel="stylesheet" type="text/css">
+
+        <!-- les scripts jquery et jquery ui 
+          <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+        !-->
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+
+        <!-- le script de gestion du monde de creation (liÈ ‡ boostrap) !-->
+        <script type="text/javascript" src="js/creation.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css"></link>
+
+        <!-- les scripts pour impress.js sont chargÈ plus tard dans le processus, pas en static !-->
+
+    </head>
+    <body>
+
+
+        <div class="container-fluid" id="editor">
+
+            <div id="scriptBootstrap" >
+                <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+
+
+            </div>
+
+
+            <!-- 
+             Barre de Navigation haut : 
+            titre et fonctionnalit√© g√©n√©rale -> sauver, partager...
+            -->        
+            <div class="row-fluid">            
+                <header class="span12">
+                    <div class="navbar navbar-static-top">
+                        <div class="navbar-inner">
+                            <div class="container-fluid">
+                                <ul class="nav">
+                                    <li><a class="brand" href="#">Impress Editor</a></li>
+                                </ul>
+                                <ul class="nav pull-right">
+                                    <li class="dropdown"> <a class ="dropdown-toggle" 
+                                                             data-toggle="dropdown" href="#">Partager<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Envoyer lien</a></li>
+                                            <li><a href="#">Partager sur twitter</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Sauver</a></li>
+                                    <li><a href="#">A propos</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <!-- 
+            MENU GAUCHE : 
+            Accordion permettant d'alterner entre l'√©dition du contenu et l'√©dition des slides.
+            A la s√©lection d'une icone, ce serait m√©ga classe qu'un menu horizontale sp√©cifique apparaisse en haut de la surface de travail
+            -->  
+
+            <!-- zone de gestion des boutons, menu et patati !-->
+            <div class="row-fluid">
+                <div class="span2">
+                    <div class="accordion" id="control-menu">
+                        <!-- zone bouton du haut !-->
+                        <div class="accordion-group" >
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#contenu" href="#collapseOne">
+                                    Cr√©er contenu
+                                </a>
+                            </div>
+                            <div id="collapseOne" class="accordion-body collapse in">
+                                <div class="accordion-inner">
+                                    <a class="btn btn-large" id="zoneTexte" href="#">Text<i class="icon-italic"></i> </a>
+                                    <a class="btn btn-large" id="adS" href="#">Square<i class="icon-picture"></i> </a>
+                                    <a class="btn btn-large" id="newGroupe" href="#">Slide<i class="icon-film"></i> </a>
+                                    <a class="btn btn-large" id="grouper" href="#">Group<i class="icon-pencil"></i> </a>
+                                    <div class="divider-horizontal"></div>
+                                    <a class="btn btn-large" id="remove" href="#">Delete<i class="icon-trash"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- zone bouton bas!-->
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" id="init" data-toggle="collapse" data-parent="#contenu" href="#collapseTwo">
+                                    Cr√©er diapo
+                                </a>
+                            </div>
+                            <div id="collapseTwo" class="accordion-body collapse in">
+                                <div class="accordion-inner">
+                                    <a href="#"> A venir ! </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 
+                SURFACE DE TRAVAIL : 
+                anciennement zone de creation
+                -->
+
+                <aside class="span10">
+                    <div class="row-fluid">
+                        <div class="span10">
+
+                            <div class="btn-group">
+                                <button class="btn">Police</button>
+                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Arial</a></li>
+                                    <li><a href="#">Times</a></li>
+                                </ul>
+                                <button class="btn">Couleur</button>
+                            </div>
+                        </div>
+                        <div class="span10" id="zoneCreation">
+                            <!-- cette div est le rectangle ou les elements devront etre!-->
+
+
+
+
+                        </div>
+                        <div class="span10">
+                            footer slider
+                        </div>
+                    </div>
+            </div>
+
+            <!-- 
+             zone pour impress
+            -->    
+
+            <div id="impress">
+
+
+                <!-- endroit o˘ les slides seront mises pour Ítre gÈrÈ par impress !-->
+            </div>
+
+            <div id="scriptImpress">
+                <script src="js/impress.js"></script>
+
+            </div>
+
+            <!-- 
+                        zone pour autre chose
+            -->    
+
+
+            <div class="row-fluid">
+                <div class="span12">
+                    et l√† des trucs en bas
+                </div>   
+            </div>
+
+
+        </div>
+
+    </body>
+</html>
