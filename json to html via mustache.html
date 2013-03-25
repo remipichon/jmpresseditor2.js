@@ -14,6 +14,7 @@
         !-->
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+
          <script type="text/javascript" src="js/mustache.js"></script>
          <script type="text/javascript" src="js/json-sans-eval.js"></script>
 
@@ -24,6 +25,13 @@
          <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css"></link>
 
          
+
+    
+
+
+
+
+
 
 
 
@@ -44,8 +52,28 @@
     </head>
     <body>
 
+
+      
+
+        <script id="templateJmpress" type="text/template">
+            {{#slide}}
+            <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+                {{title}}
+                {{#element}} 
+                <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+                {{/element}} 
+            </div>   
+            {{/slide}}
+        </script>
+
         <div id="slideArea" >
-           <!-- pouet !-->
+            <!-- pouet !-->
+
+        </div>
+        
+        <div id="impress" >
+            <!-- pouet !-->
+
 
         </div>
 

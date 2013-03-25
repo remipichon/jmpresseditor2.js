@@ -8,7 +8,11 @@
         "pos" : {
             "x": "1000", 
             "y": "1500"
-            }, 
+
+           
+
+        }, 
+
         
         "scale": "10",
         
@@ -28,7 +32,11 @@
                 "x": "200", 
                 "y": "200"
             },
-            "description": "Bonjour"
+
+           
+
+            "description": "Bonjour Jmpress"
+
         
         }
             
@@ -65,7 +73,11 @@
         "pos" : {
             "x": 0, 
             "y": 0
-            }, 
+
+
+           
+        }, 
+
         "scale": 1,
         "element": [ {
                 
