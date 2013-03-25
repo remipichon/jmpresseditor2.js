@@ -1,0 +1,80 @@
+
+
+{
+    "slide": [ {
+        "step-number": 1,
+        "class": "step",
+        "title" : "un",
+        "pos" : {
+            "x": "1000", 
+            "y": "1500"
+            }, 
+        
+        "scale": "10",
+        
+        "element": [ {
+            "type" : "forme carre",
+            "pos" : {
+                "x": "340",
+                "y": "100"
+            },
+            "description": ""
+        
+        }, 
+            
+        {
+            "type" : "texte",
+            "pos" : {
+                "x": "200", 
+                "y": "200"
+            },
+            "description": "Bonjour"
+        
+        }
+            
+        ]
+            
+            
+    }, 
+       
+       
+       
+    {
+        "title" : "deux",
+        "step-number": 2,
+        "class": "step",
+        "pos" : {
+            "x": 3000, 
+            "y": 3000
+        }, 
+        "scale": 2,
+        "element": [ {
+                
+        }
+            
+        ]
+           
+    },
+    
+    
+        
+    {
+        "title" : "trois",
+        "step-number": 3,
+        "class": "step",
+        "pos" : {
+            "x": 0, 
+            "y": 0
+            }, 
+        "scale": 1,
+        "element": [ {
+                
+        }
+            
+        ]
+           
+    }
+        
+    ]
+    
+}
