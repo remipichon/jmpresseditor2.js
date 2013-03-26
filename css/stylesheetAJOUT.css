@@ -10,7 +10,7 @@
 }
 
 
-/* pour switcher d'un mode à l'autre*/
+/* pour switcher d'un mode ï¿½ l'autre*/
 /*
 #editor {
     display: inline;
@@ -62,9 +62,8 @@ p {
 .slidegroupe {
     
     border: dashed black; 
-    height: 620px;
-    width: 780px;
-    background: white;
+    height: 310px;
+    width: 390px;
     z-index:0;  
     filter:alpha(opacity=50); 
     opacity:0.5;

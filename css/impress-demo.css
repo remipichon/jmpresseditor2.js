@@ -49,24 +49,6 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-/* pour switcher d'un mode à l'autre*/
-
-#editor {
-    display: none;
-}
-
-#impress {
-    display: inline;
-}
-
-
-
-/*le bouton de retour à l'édition*/
-#Edit {
-    
-    z-index: 4;
-    
-}
 
 
 /* HTML5 display-role reset for older browsers */
