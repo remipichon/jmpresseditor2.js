@@ -23,7 +23,8 @@ $(document).ready(function() {
             console.log("click creation TEXTE");
             event.preventDefault();
             var x = event.pageX - this.offsetLeft;
-            var y = event.pageY - this.offsetTop;
+            var y = event.pageY - this.offsetTop - 83;          // decalage du y de 83px, corrige a l'arrache
+            console.log("x : " + x + " y : "+ y);
             var content = prompt("Entrez le texte : ");
             idComponent++;
             var stringText = '{"id": "idComponent' + idComponent + '","class": "component","datax": "' + x + '", "datay": "' + y + '","content": "' + content + '"}';
@@ -82,9 +83,9 @@ $(document).ready(function() {
             console.log("click creation SLIDE");
             //event.preventDefault();
             var x = event.pageX - this.offsetLeft;
-            var y = event.pageY - this.offsetTop;
+            var y = event.pageY - this.offsetTop - 83;      // decalage du y de 83px, corrige a l'arrache
             idSlide++;
-            var stringSlide = '{"id": "idSlide' + idSlide + '","class": "step","datax": "' + x + '", "datay": "' + y + '","elements": "[]"}';
+            var stringSlide = '{"id": "idSlide' + idSlide + '","class": "step","datax": "' + x + '", "datay": "' + y + '","elements": []}';
             console.log(stringSlide);
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
             gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
@@ -108,14 +109,17 @@ $(document).ready(function() {
         console.log("leftMin = "+leftMin + ", leftMax = " + leftMax);
         console.log("topMax = "+topMax + ", topMin = " + topMin);
         $.each(pressjson.components, function(key, val) {
-            //htmlSlides += createSlide(this);
-            // console.log("key  "+key+ " ,val : "+val);
-            //console.log(component.datay);
+//            //htmlSlides += createSlide(this);
+//            // console.log("key  "+key+ " ,val : "+val);
+//            //console.log("val = "+  JSON.stringify(val));
+//            console.log("slide = "+  JSON.stringify(jsonSlide));
+//            console.log(" pressjson component = "+pressjson.components);
             if (val.datax > leftMin && val.datax < leftMax && val.datay > topMin && val.datay < topMax)
                 {
                     console.log("leftMin = "+leftMin + ", leftMax = " + leftMax +", val datax = " + val.datax);
                     console.log("topMax = "+topMax + ", topMin = " + topMin +", val datay = " + val.datay);
-                    //jsonSlide.elements.push(val); // MARCHE PAAAAAAAAAS
+                    jsonSlide.elements.push(val);
+                //jsonSlide[elements] = val; // MARCHE PAAAAAAAAAS
                 }
             
 //            $.each(val, function(key2, val2) {
