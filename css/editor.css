@@ -1,0 +1,72 @@
+/* 
+    Document   : EditorCSS
+    Created on : 14 mars 2013, 18:05:16
+    Author     : Zool
+    Description:
+        Purpose of the stylesheet follows.
+*/
+html, body, body > div.row-fluid {
+    height: 100%;
+}
+
+#editor{
+    height: 100%;
+    position: relative;
+    display: inline;
+    margin-left: 10px;
+    padding-left: 10px;
+}
+
+
+#menu-ed01{
+    height: 100px;
+    position: relative;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+
+#menu-ed01 .btn {
+    width: 150px;
+    text-align: left;
+}
+
+
+#output-json{
+    display: block;
+    background-color: #ddd;
+    height: 300px;
+    margin-top: 40px;
+    margin-left: 10px;
+    font-size: 10px;
+}
+
+.step {
+    border: 1px solid #ccc;
+    width: 200px;
+    height: 150px;
+}
+
+
+#surface {
+  height: 600px;
+  position: relative;
+  left: 0px;
+  top: 0px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+
+/* test positionnement  */
+.forme2 {
+  background: blue;
+    height: 50px;
+    width: 50px;
+    padding: 0.5em;     
+    z-index: 2;
+    position: absolute;
+    left:100px;
+    top:150px;
+
+}
