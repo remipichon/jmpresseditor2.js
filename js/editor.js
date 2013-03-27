@@ -1,9 +1,11 @@
 /********************
- * - gérer changement d'état de surface (deinitialiser class 'surfaceCreation')
- * - gérer pb data-y faux dans l'insertion des slides
+ * - gérer PROPREMENT pb data-y faux dans l'insertion des slides (et vérifier gestion dans déplacement draggable)
  * - gérer événement "annuler" dans prompt
- * - initialisation slide : prévoir d'emblee tableau component vide ?
  * - affichage json : vider l'affichage avant de réafficher
+ * - gérer la réaffectation de composants en cas de déplacement du composant hors de la slide d'affectation ? 
+ * - réécrire + proprement la génération des slides et components json
+ * - trouver combine pour que le snapsht apparaisse en surbrillance avant de le valider, pour faciliter le snapshot
+ * - VALIDER VRAIMENT la structure json (fusion à faire avec mustach)
  **************/
 
 $(document).ready(function() {
@@ -24,11 +26,9 @@ $(document).ready(function() {
             event.preventDefault();
             var x = event.pageX - this.offsetLeft;
             var y = event.pageY - this.offsetTop - 83;          // decalage du y de 83px, corrige a l'arrache
-            console.log("x : " + x + " y : "+ y);
             var content = prompt("Entrez le texte : ");
             idComponent++;
             var stringText = '{"id": "idComponent' + idComponent + '","class": "component","datax": "' + x + '", "datay": "' + y + '","content": "' + content + '"}';
-            console.log(stringText);
             var jsonComponent = JSON.parse(stringText); // transforme le string 'slide' en objet JSON
             console.log(jsonComponent);
             createComponentonSurface(jsonComponent);
@@ -56,9 +56,7 @@ $(document).ready(function() {
                 var finalOffset = $(this).offset();
                 var parentOffset = $('#surface').offset();
                 var x = finalOffset.left - parentOffset.left;
-                var y = finalOffset.top - parentOffset.top;
-                console.log('left = ' + x);
-                console.log('top = ' + y);
+                var y = finalOffset.top - parentOffset.top;        
                 jsonComponent.datax = x;
                 jsonComponent.datay = y;
                 $('#output-json').append(JSON.stringify(pressjson));
@@ -75,9 +73,8 @@ $(document).ready(function() {
         event.preventDefault();
         $('#surface').addClass('surfaceCreationSlide');
         // une fois le bouton 'make-slide' appuyé, la surface passe en mode creation:
-        // cliquer sur la surface pour ajouter un élément au coord de la souris
+        // cliquer sur la surface pour ajouter un slide aux coord de la souris
         // les infos sont collectées en meme temps pour en faire des JSON
-        // PROBLEME : j'arrive pas à desactiver mode creation**************************************************
         $('.surfaceCreationSlide').on('click', function(event) {
             $(this).unbind('click');        // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
             console.log("click creation SLIDE");
@@ -86,7 +83,6 @@ $(document).ready(function() {
             var y = event.pageY - this.offsetTop - 83;      // decalage du y de 83px, corrige a l'arrache
             idSlide++;
             var stringSlide = '{"id": "idSlide' + idSlide + '","class": "step","datax": "' + x + '", "datay": "' + y + '","elements": []}';
-            console.log(stringSlide);
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
             gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
             console.log(jsonSlide);
@@ -101,13 +97,10 @@ $(document).ready(function() {
 
     function gatherComponentsinSlide(jsonSlide)
     {
-        console.log("entree gatherComponentinSlide");
         var leftMin = Number(jsonSlide.datax);
         var topMax = Number(jsonSlide.datay);
         var leftMax = leftMin + 390;  // 390 = slide.width
         var topMin = topMax - 310;   // 310 = slide.height
-        console.log("leftMin = "+leftMin + ", leftMax = " + leftMax);
-        console.log("topMax = "+topMax + ", topMin = " + topMin);
         $.each(pressjson.components, function(key, val) {
 //            //htmlSlides += createSlide(this);
 //            // console.log("key  "+key+ " ,val : "+val);
@@ -126,7 +119,6 @@ $(document).ready(function() {
 //                console.log("key2  " + key2 + " ,val2 : " + val2);
 //            });
         });
-        console.log("sortie gatherComponentinSlide");
     }
 
 
@@ -172,30 +164,15 @@ $(document).ready(function() {
                 var parentOffset = $('#surface').offset();
                 var x = finalOffset.left - parentOffset.left;
                 var y = finalOffset.top - parentOffset.top;
-                console.log('left = ' + x);
-                console.log('top = ' + y);
                 jsonSlide.datax = x;
                 jsonSlide.datay = y;
                 $('#output-json').append(JSON.stringify(pressjson));
             }
         });
 
-//    $(slideOnSurface).droppable({
-//        drop: function(event, ui) {
-//            var $newPosX = ui.offset.left - $(this).offset().left;
-//            var $newPosY = ui.offset.top - $(this).offset().top;
-//            console.log('top = ' + $newPosY);
-//        }
-//    });
         $('#surface').append(slideOnSurface);
     }
     ;
-
-
-    // essai lancement jmpress peu concluant
-//    $('#launch-slides').click(function() {
-//        $('#surface').jmpress();
-//    });
 
 
 

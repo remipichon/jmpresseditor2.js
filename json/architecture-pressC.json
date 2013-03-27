@@ -1,0 +1,40 @@
+
+
+{
+    "slides": [ {
+            "id": "01",
+            "class": "step",
+            "data-x": "0",
+            "data-y": "-1000",
+            "style": [
+                {  "position": "absolute"
+                }],
+            "elements": [{
+                    "class": "text",
+                    "style": [{
+                        "position": "relative",
+                        "left": "10px",
+                        "top": "10px",
+                        }],
+                    "content": "je suis le contenu de l'element text" 
+                    },
+                {   "class": "square",
+                    "style": [{
+                        "position": "relative",
+                        "left": "10px",
+                        "top": "10px",
+                        }],
+                    }
+                
+                ],},
+        {
+            "id": "02",
+            "class": "step",
+            "data-x": "1000",
+            "data-y": "1500",
+            "elements": ""
+        }
+        
+    ]
+    
+}
