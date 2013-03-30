@@ -1,5 +1,6 @@
 //////////////////mustache jmpress////////////////////////////
 //fonction qui recupère le fichier json et stocke les données dans data
+
 $.getJSON('json/architecture-press.json', function(data) {
     var widthSlide = 900;
     var heightSlide = 700;
@@ -20,7 +21,7 @@ $.getJSON('json/architecture-press.json', function(data) {
     
     //ajout du html à la div 
     $('#slideArea').append(html);
-    
+    /*
     $('#slideArea').children().draggable(  {
         drag: function( event ) {
             var slide = $(this);
@@ -38,6 +39,7 @@ $.getJSON('json/architecture-press.json', function(data) {
             console.log(event.pageX + "   " + event.pageY);
         }
     });
+    */
     /*
     $('#slideArea').children().mousedown( function() {
         
@@ -64,13 +66,14 @@ $.getJSON('json/architecture-press.json', function(data) {
     
     
     //chargement des css propre à la présentation puis lancement de la présentation
+  
     $('#scriptImpress').append( '<link id="impress-demo" href="css/impress-demo.css" rel="stylesheet" />');
     $('#slideArea').jmpress();
     console.log("go jimpress");
   
 });
 
-
+/*
 $( function dragPos () {
    
     $('.step').click( function() {
@@ -86,4 +89,4 @@ $( function dragPos () {
     }) ;
     
 });
-    
+    */
