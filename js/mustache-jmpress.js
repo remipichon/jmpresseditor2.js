@@ -1,7 +1,7 @@
 //////////////////mustache jmpress////////////////////////////
 //fonction qui recupère le fichier json et stocke les données dans data
 
-$.getJSON('json/architecture-press.json', function(data) {
+$.getJSON('json/architecture-pressOLD.json', function(data) {
     var widthSlide = 900;
     var heightSlide = 700;
     
