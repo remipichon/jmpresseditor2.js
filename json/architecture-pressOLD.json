@@ -1,0 +1,81 @@
+
+
+{
+    "data": [{
+            "author": "",
+            "title": ""
+        }],
+    "slide": [{
+            "pos": {
+                "x": "1000",
+                "y": "1500",
+                "z": ""
+            },
+            "rotate": {
+                "x": "90",
+                "y": "",
+                "z": ""
+            },
+            "scale": "10",
+            "element": [{
+                    "pos": {
+                        "x": "200",
+                        "y": "300",
+                        "z": ""
+                    },
+                    "rotate": {
+                        "x": "90",
+                        "y": "20",
+                        "z": ""
+                    },
+                    "text": "true",
+                    "content": "je suis le contenu de l'element text",
+                    "attributes": []
+                },
+                {"pos": {
+                        "x": "200",
+                        "y": "300",
+                        "z": ""
+                    },
+                    "rotate": {
+                        "x": "90",
+                        "y": "20",
+                        "z": ""
+                    },
+                    "text": "false",
+                    "attributes": []
+                }],
+        },
+        {
+            "pos": {
+                "x": "1000",
+                "y": "1500",
+                "z": ""
+            },
+            "rotate": {
+                "x": "90",
+                "y": "",
+                "z": ""
+            },
+            "scale": "10",
+            "element": []
+
+        }],
+            "component" : [{
+                    "pos": {
+                        "x": "200",
+                        "y": "300",
+                        "z": ""
+                    },
+                    "rotate": {
+                        "x": "90",
+                        "y": "20",
+                        "z": ""
+                    },
+                    "text": "true",
+                    "content": "je suis le contenu de l'element text",
+                    "attributes": []
+                }],
+}
+
+    
