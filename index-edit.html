@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 
+<!--NOTES :
+    - fichiers non utilisés : 
+    
+-->
+
 
 <html lang="en">
     <head> 
@@ -9,8 +14,8 @@
         <title>Press Editor</title>
 
         <!-- STYLES (CSS) -->
-        <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <link href="css/editor.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
+        <link rel="stylesheet" type="text/css" href="css/editor.css" >
         <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css">
         <style type="text/css">
 
@@ -38,17 +43,6 @@
                                 <ul class="nav">
                                     <li><a class="brand" href="#">Press Editor</a></li>
                                 </ul>
-                                <!--                                <ul class="nav pull-right">
-                                                                    <li class="dropdown"> <a class ="dropdown-toggle" 
-                                                                                             data-toggle="dropdown" href="#">Partager<b class="caret"></b></a>
-                                                                        <ul class="dropdown-menu">
-                                                                            <li><a href="#">Envoyer lien</a></li>
-                                                                            <li><a href="#">Partager sur twitter</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li><a href="#">Sauver</a></li>
-                                                                    <li><a href="#">A propos</a></li>
-                                                                </ul>-->
                             </div>
                         </div>
                     </div>
@@ -77,11 +71,8 @@
                                 <button class="btn" id='launch-slides'>Launch Slides</button>
                             </div>
                         </div>
-
                     </div>
-                    <div id="output-json">
-
-                    </div>
+                    <div id="output-json"></div>
                 </div>
 
 
@@ -96,6 +87,12 @@
             </div>
         </div>
 
+        <div id="slideArea" >
+            <div class="step" data-x="20000"> Div qui ne sert a rien </div>
+
+            <!-- pouet !-->
+
+        </div>
 
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -111,15 +108,32 @@
 
 
 
-        </div>
+        </div>F
 
 
         <!-- SCRIPTS .js -->
+        <!--<script type="text/javascript" src="js/creation.js"></script>-->
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="js/creation.js"></script>
-        <script src="js/editor.js"></script>
-        <script src="js/jmpress.js"></script>
+
+        <script type="text/javascript" src="js/editor.js"></script>
+        <script type="text/javascript" src="js/mustache.js"></script>
+        <!--<script type="text/javascript" src="js/mustache-jmpress.js"></script>-->
+
+
+        <script type="text/javascript" src="js/jmpress.js"></script>
+
+        <script id="templateJmpress" type="text/template">
+            {{#slides}}
+            <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+            {{title}}
+            {{#element}} 
+            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+            {{/element}} 
+            </div>   
+            {{/slides}}
+        </script>
+
 
     </body>
 
