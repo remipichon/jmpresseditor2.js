@@ -70,3 +70,16 @@ html, body, body > div.row-fluid {
     top:150px;
 
 }
+
+
+.slidegroupe {
+    
+    border: dashed black; 
+    height: 310px;
+    width: 390px;
+    z-index:0;  
+    filter:alpha(opacity=50); 
+    opacity:0.5;
+    
+   
+}

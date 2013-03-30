@@ -1,58 +1,67 @@
 /********************
- * - INFOS : mustach-jmpress.js DIRECTEMENT intégré dans ce fichier !
+ * TODO LIST SUR LE POUCE (NdClaire : désolée, j'ai pris cette habitude !)
  * - gérer PROPREMENT pb data-y faux dans l'insertion des slides (et vérifier gestion dans déplacement draggable)
  * - gérer événement "annuler" dans prompt
- * - affichage json : vider l'affichage avant de réafficher
  * - gérer la réaffectation de composants en cas de déplacement du composant hors de la slide d'affectation ? 
- * - réécrire + proprement la génération des slides et components json
- * - trouver combine pour que le snapsht apparaisse en surbrillance avant de le valider, pour faciliter le snapshot
- * - VALIDER VRAIMENT la structure json (fusion à faire avec mustach)
+ * - réécrire + proprement la génération des slides et components json ?
+ * - trouver combine pour que le snapshot apparaisse en surbrillance avant de le valider, pour faciliter le snapshot
  * - fouiller impress/jmpress
- * - cleaner le code (supprimer ce qui sert à rien)
- * - liste fonctionnalités
- * - régler pb échelle
- * - proposition / laïus graphisme          -> 2 ou 3 configurations de fonctionnalités (use case écrit ?)
+ * - régler pb échelle entre element sur surface et dans jmpress
+ * - proposition / laïus graphisme  -> 2 ou 3 configurations de fonctionnalités (use case écrit ?)
  **************/
 
 $(document).ready(function() {
 
-    var pressjson = {data: null, slides: new Array(), components: new Array()}; // presentation au format json -> initialisation
-    var idSlide = 0;
-    var idComponent = 0;
+
+    /* ======================================================================================
+     * VARIABLES GLOBALES
+     * ======================================================================================/
+     
+     /* presentation au format json (initialisation) -> cf architecture-press.json
+     * data = infos sur la présentation
+     * slide = tableau de toutes les slides de la présentation (y compris leurs éléments, ajoutés dynamiquement)
+     * component = tableau de tous les éléments créés (besoin d'un tableau dédié tant qu'ils sont pas ajoutes aux slides
+     */
+    var pressjson = {data: null, slide: new Array(), component: new Array()};
 
 
-//// EVENEMENTS CONTENU TEXTE  ////////////////////////////////////////////////////////  
-    /* En attendant d etre associe a un slide, les composants sont stockés dans le tableau 'component' dans pressjson */
+
+    /* ======================================================================================
+     * GESTION DES ELEMENTS
+     * ======================================================================================*/
+
+    /* CREATION D'UN ELEMENT TEXTE :
+     * click sur bouton txt -> rend surface cliquabe pour creation de texte 
+     * récupère pos.x, pos.y et contenu texte*/
     $("#insert-text").on('click', function(event) {
         event.preventDefault();
         $('#surface').addClass('surfaceCreationText');
         $('.surfaceCreationText').on('click', function(event) {
-            $(this).unbind('click');                    // permet de désactiver le clic sur la surface
-            console.log("click creation TEXTE");
             event.preventDefault();
+            $(this).unbind('click');                    // permet de désactiver le clic sur la surface
             var x = event.pageX - this.offsetLeft;
             var y = event.pageY - this.offsetTop - 83;          // decalage du y de 83px, corrige a l'arrache
             var content = prompt("Entrez le texte : ");
-            idComponent++;
-//            ligne ci-dessous à revoir : il doit y avoir moyen de faire + propre qu'un moche string' 
-            var stringText = '{"type": "Component' + idComponent + '","class": "component","pos": {"x" : "' + x + '", "y": "' + y + '"},"description": "' + content + '"}';
-            var jsonComponent = JSON.parse(stringText); // transforme le string 'slide' en objet JSON
-            console.log(jsonComponent);
-            createComponentonSurface(jsonComponent);
-            pressjson.components.push(jsonComponent); // ajout de la slide à pressjson
-            $('#output-json').empty();                  // a revoir
-            $('#output-json').append(JSON.stringify(pressjson)); // transforme l'objet json 'jsonslide' en string et l'écrit dans <div output
-//        outputSlide();
+            var stringText = '{"pos": {"x" : "' + x + '", "y": "' + y + '"},"text" : "true", "content": "' + content + '"}';
+            var jsonComponent = JSON.parse(stringText);     // transforme le string 'slide' en objet JSON
+            pressjson.component.push(jsonComponent);        // ajout de l'element à pressjson
+            console.log(pressjson);
+            $('#output-json')
+                    .empty()
+                    .append(JSON.stringify(pressjson));     // transforme l'objet json 'jsonslide' en string et l'écrit dans <div output
+            createComponentonSurface(jsonComponent);        // fonction de creation temporaire, a remplaer par creation immediate via json + mustach 
+            //        outputSlide();
             $('#surface').removeClass('surfaceCreationText');
-
         });
-
     });
 
 
-
+    /* CREATION DE L'ELEMENT TEXTE SUR la SURFACE:
+     * fonction appelee par CREATION D'UN ELEMENT TEXTE 
+     * Vouee a disparaitre (geree par sortie mustache)
+     * -> pour inspiration pour la mise a jour du json avec elements draggable */
     function createComponentonSurface(jsonComponent) {
-        var componentOnSurface = $("<div>" + jsonComponent.description + " </div>");
+        var componentOnSurface = $("<div>" + jsonComponent.content + " </div>");
         componentOnSurface.attr({
             class: jsonComponent.class,
             style: 'position : absolute; left : ' + jsonComponent.pos.x + 'px; top : ' + jsonComponent.pos.y + 'px'
@@ -67,82 +76,77 @@ $(document).ready(function() {
                 var y = finalOffset.top - parentOffset.top;
                 jsonComponent.pos.x = x;
                 jsonComponent.pos.y = y;
-                $('#output-json').append(JSON.stringify(pressjson));
+                $('#output-json')
+                        .empty()
+                        .append(JSON.stringify(pressjson));
             }
         });
         $('#surface').append(componentOnSurface);
     }
     ;
 
-//// EVENEMENTS SLIDES ////////////////////////////////////////////////////////////////////////////////////////////
 
-    // gestion événement bouton slide
+    /* ======================================================================================
+     * GESTION DES SLIDES
+     * ======================================================================================*/
+
+    /* CREATION D'UN ELEMENT SLIDE :
+     * click sur bouton snapshot slide -> rend surface cliquabe pour creation de slide 
+     * récupère data pour json */
     $('#make-slide').on('click', function(event) {
         event.preventDefault();
         $('#surface').addClass('surfaceCreationSlide');
-        // une fois le bouton 'make-slide' appuyé, la surface passe en mode creation:
-        // cliquer sur la surface pour ajouter un slide aux coord de la souris
-        // les infos sont collectées en meme temps pour en faire des JSON
         $('.surfaceCreationSlide').on('click', function(event) {
             $(this).unbind('click');        // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
-            console.log("click creation SLIDE");
-            //event.preventDefault();
             var x = event.pageX - this.offsetLeft;
             var y = event.pageY - this.offsetTop - 83;      // decalage du y de 83px, corrige a l'arrache
-            idSlide++;
-//            var stringSlide = '{"step-number": "' + idSlide + '","datax": "' + x + '", "datay": "' + y + '","elements": []}';
-            var stringSlide = '{"step-number": "' + idSlide + '","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "1", "elements": []}';
+            var stringSlide = '{"pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "1", "element": []}';
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
-            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
             console.log(jsonSlide);
+            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
+            pressjson.slide.push(jsonSlide);        // ajout de la slide à pressjson
             createSlideonSurface(jsonSlide);
-            pressjson.slides.push(jsonSlide); // ajout de la slide à pressjson
-            $('#output-json').append(JSON.stringify(pressjson)); // transforme l'objet json 'jsonslide' en string et l'écrit dans <div output
-//        outputSlide();
-//            getJSONtest(pressjson);
+            $('#output-json')
+                    .empty()
+                    .append(JSON.stringify(pressjson));
             $('#surface').removeClass('surfaceCreationSlide');
         });
 
     });
 
-    function gatherComponentsinSlide(jsonSlide)
-            /* fonction permettant de regrouper, dans l'objet json "pressjson", les éléments
-             * dont les coordonnées sont sous le snapshot de la slide au moment de la prise du snapshot
-             */
+
+    /* REGROUPEMENT DES ELEMENTS DANS LA SLIDE:
+     * fonction appelee par CREATION D'UN ELEMENT SLIDE
+     * regrouper, dans les slides jsn les éléments dt les coord sont sous le snapshot de la slide au moment de la prise du snapshot 
+     * Vouee a disparaitre (geree par sortie mustache)
+     * -> pour inspiration pour l'ajout d'un element a une slide */
+    function gatherComponentsinSlide(jsonSlide) {
+
+        var leftMin = Number(jsonSlide.pos.x);
+        var topMin = Number(jsonSlide.pos.y);
+        var leftMax = leftMin + 390;  // 390 = slide.width -> a automatiser
+        var topMax = topMin + 310;   // 310 = slide.height -> a automatiser -> valeurs fausses, a revoir
+        $.each(pressjson.component, function(key, val) {    // key = n° du component ; val = component
+            if (val.pos.x > leftMin && val.pos.x < leftMax && val.pos.y > topMin && val.pos.y < topMax)
             {
-                var leftMin = Number(jsonSlide.pos.x);
-                var topMax = Number(jsonSlide.pos.y);
-                var leftMax = leftMin + 390;  // 390 = slide.width
-                var topMin = topMax - 310;   // 310 = slide.height
-                $.each(pressjson.components, function(key, val) {
-//            //htmlSlides += createSlide(this);
-//            // console.log("key  "+key+ " ,val : "+val);
-//            //console.log("val = "+  JSON.stringify(val));
-//            console.log("slide = "+  JSON.stringify(jsonSlide));
-//            console.log(" pressjson component = "+pressjson.components);
-                    if (val.pos.x > leftMin && val.pos.x < leftMax && val.pos.y > topMin && val.pos.y < topMax)
-                    {
-                        console.log("leftMin = " + leftMin + ", leftMax = " + leftMax + ", val datax = " + val.datax);
-                        console.log("topMax = " + topMax + ", topMin = " + topMin + ", val datay = " + val.datay);
-                        jsonSlide.elements.push(val);
-                        //jsonSlide[elements] = val; // MARCHE PAAAAAAAAAS
-                    }
-
-                });
+                console.log("leftMin = " + leftMin + ", leftMax = " + leftMax + ", val datax = " + val.pos.x);
+                console.log("topMax = " + topMax + ", topMin = " + topMin + ", val datay = " + val.pos.y);
+                jsonSlide.element.push(val);
             }
+        });
+        console.log(pressjson);
+    }
 
 
-//
-// FONCTION REMI FAITE EN MUSTACH A RAJOUTER ICI A LA PLACE DE MON BRICOLAGE
-// faire apparaitre l'element cree sur la surface
-// Fonction largement inspirée de 'NewGroupe', dans creation.js
-// !!! PROBLEME : forme apparait pas exactement là où elle est supposée apparaitre
+    /* CREATION DE L'ELEMENT SLIDE SUR la SURFACE:
+         * fonction appelee par CREATION D'UN SLIDE  
+         * Vouee a disparaitre (geree par sortie mustache)
+         * -> pour inspiration pour la mise a jour du json avec slides draggable */
     function createSlideonSurface(jsonSlide) {
         var slideOnSurface = $("<div class='slidegroupe' >  </div>");
 
         slideOnSurface.attr('style', 'position : absolute; left : ' + jsonSlide.pos.x + 'px; top : ' + jsonSlide.pos.y + 'px  ');
         slideOnSurface.css({'top': jsonSlide.pos.x, 'left': jsonSlide.pos.y});
-
 
         $(slideOnSurface).draggable({
             cursor: 'move', // sets the cursor apperance
@@ -161,27 +165,16 @@ $(document).ready(function() {
         $('#surface').append(slideOnSurface);
     }
     ;
-
-
-// a partir d'un objet json 'jsonSlide', créé un string avec toutes les balises fonctionnelles d'un slide
-    function createSlide(jsonSlide) {
-        return '<div class="step" data-x="' + jsonSlide.pos.x + '" data-y="' + jsonSlide.pos.y + '">\
-' + jsonSlide.elements + '</div> ';
-    }
-
-
-// afficher sur la surface les slides créé par l'intermediaire de json
-    function outputSlide() {
-        console.log("pressjson : " + pressjson);
-        var htmlSlides = "";
-        $.each(pressjson.slides, function() {
-            htmlSlides += createSlide(this);
-        });
-        console.log("htmlSlides : " + htmlSlides);
-        $('#surface').append(htmlSlides);
-    }
-
-//// GESTION MUSTACH -> bouton "launch-slide" pour lancer la présentation en mode jmpress  ////////////////////////////////////////////////////////  
+    
+ /* ======================================================================================
+  * GESTION MUSTACHE
+  * ======================================================================================*/   
+/* pour le moment, utilisé uniquement pour lancer la présentation en mode jmpress en appuyant bouton "launch-slide"
+ * defi : gérer l'affichage en tant reel sur la div surface !
+ * PS : Remi, j'ai rien touché en dessous de "$('#slideArea').append(html);", je te laisse faire le tri !
+ * ATTENTION : launch slide ne marche plus, surement du fait de la modif de l'archi json -> mustach n'est plus a jour.
+ * pb du fait qu'il n'y a plus d'id aux slides ??? voir comment utiliser l'incrementation auto de jmpress dans mustache ?
+ */  
 
     $("#launch-slides").on('click', function() {
         console.log("entree launch slide");
@@ -193,15 +186,15 @@ $(document).ready(function() {
 
     function getJSONtest(data) {
         console.log("getjson");
-//        var widthSlide = 450;       // avant : 900
-//        var heightSlide = 350;      // avant : 700
+//        var widthSlide = 900;       // jai mis en commentaire, je voyais pas a quoi ca sert (Claire)
+//        var heightSlide = 700;      
 
 
         // pour Mustache il faut un jeu de data (json) ainsi qu'un template (html+mustache)
         //� partir de ces deux variables, Mustache.to_html() cr�e une variable html (en string)
 
         //template
-    var template = $('#templateJmpress').html();
+        var template = $('#templateJmpress').html();
 //        var template = "{{#slide}}            \n\
 //                 <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' >   \n\
 //                {{title}}  \n\
@@ -215,16 +208,17 @@ $(document).ready(function() {
         //generation du html
         var pstring = (JSON.stringify(data));
         console.log(pstring);
-        
+
         var html = Mustache.to_html(template, data);
-        console.log("template->"+template);
-        console.log ("pressjson ->" + pressjson.slides[0].scale);
+        console.log("template->" + template);
+        console.log("pressjson ->" + pressjson.slide[0].scale);
         console.log("html ->" + html);
         alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
 
 
         //ajout du html � la div 
         $('#slideArea').append(html);
+        
 
         $('#slideArea').children().draggable({
             drag: function(event) {

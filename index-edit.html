@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--NOTES :
-    - fichiers non utilisés : 
+    
     
 -->
 
@@ -17,20 +17,9 @@
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <link rel="stylesheet" type="text/css" href="css/editor.css" >
         <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css">
-        <style type="text/css">
-
-            #impress {
-                display: none;
-            }
-
-        </style>
-
-
     </head>
-
-
-
-
+    
+    
     <body>
         <div class="container-fluid" id="editor">  
 
@@ -50,13 +39,13 @@
             </div>
 
             <div class="row-fluid">
-                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 MENU GAUCHE : 
                     menu-ed01 = gros boutons test
                         creation contenu (texte)
                         creation slide
                     output-json = zone de verif du json
-                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
                 <div class="span3">
                     <div id="menu-ed01">
                         <div class="btn-toolbar">
@@ -75,63 +64,30 @@
                     <div id="output-json"></div>
                 </div>
 
-
-
-
-                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 ZONE DE TRAVAIL (ET D'AFFICHAGE ?) :  
-                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-                <div class="span8" id="surface">
-
-                </div>
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+                <div class="span8" id="surface"></div>
             </div>
         </div>
 
-        <div id="slideArea" >
-            <div class="step" data-x="20000"> Div qui ne sert a rien </div>
-
-            <!-- pouet !-->
-
-        </div>
-
-
-        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        *************************zone pour impress
-       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div id="impress">
-
-
-
-        </div>
-        <div id="scriptImpress">        <!--la div de script n'est pas id=impress car la div est purg� � chaque retour au mode edition!-->
-
-
-
-
-        </div>F
-
-
-        <!-- SCRIPTS .js -->
-        <!--<script type="text/javascript" src="js/creation.js"></script>-->
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+        <!-- SCRIPTS .js --> 
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/jmpress.js"></script>
 
         <script type="text/javascript" src="js/editor.js"></script>
         <script type="text/javascript" src="js/mustache.js"></script>
-        <!--<script type="text/javascript" src="js/mustache-jmpress.js"></script>-->
-
-
-        <script type="text/javascript" src="js/jmpress.js"></script>
 
         <script id="templateJmpress" type="text/template">
-            {{#slides}}
+            {{#slide}}
             <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
             {{title}}
             {{#element}} 
-            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{content}} </div>  
             {{/element}} 
             </div>   
-            {{/slides}}
+            {{/slide}}
         </script>
 
 
