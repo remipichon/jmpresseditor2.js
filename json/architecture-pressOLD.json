@@ -1,81 +1,92 @@
 
 
 {
-    "data": [{
-            "author": "",
-            "title": ""
-        }],
-    "slide": [{
-            "pos": {
-                "x": "1000",
-                "y": "1500",
-                "z": ""
+    "slide": [ {
+        "step-number": 1,
+        "class": "step",
+        "title" : "un",
+        "pos" : {
+            "x": "1000", 
+            "y": "1500"
+
+           
+
+        }, 
+
+        
+        "scale": "10",
+        
+        "element": [ {
+            "type" : "forme carre",
+            "pos" : {
+                "x": "340",
+                "y": "100"
             },
-            "rotate": {
-                "x": "90",
-                "y": "",
-                "z": ""
-            },
-            "scale": "10",
-            "element": [{
-                    "pos": {
-                        "x": "200",
-                        "y": "300",
-                        "z": ""
-                    },
-                    "rotate": {
-                        "x": "90",
-                        "y": "20",
-                        "z": ""
-                    },
-                    "text": "true",
-                    "content": "je suis le contenu de l'element text",
-                    "attributes": []
-                },
-                {"pos": {
-                        "x": "200",
-                        "y": "300",
-                        "z": ""
-                    },
-                    "rotate": {
-                        "x": "90",
-                        "y": "20",
-                        "z": ""
-                    },
-                    "text": "false",
-                    "attributes": []
-                }],
-        },
+            "description": ""
+        
+        }, 
+            
         {
-            "pos": {
-                "x": "1000",
-                "y": "1500",
-                "z": ""
+            "type" : "texte",
+            "pos" : {
+                "x": "200", 
+                "y": "200"
             },
-            "rotate": {
-                "x": "90",
-                "y": "",
-                "z": ""
-            },
-            "scale": "10",
-            "element": []
 
-        }],
-            "component" : [{
-                    "pos": {
-                        "x": "200",
-                        "y": "300",
-                        "z": ""
-                    },
-                    "rotate": {
-                        "x": "90",
-                        "y": "20",
-                        "z": ""
-                    },
-                    "text": "true",
-                    "content": "je suis le contenu de l'element text",
-                    "attributes": []
-                }],
-}
+           
 
+            "description": "Bonjour Jmpress"
+
+        
+        }
+            
+        ]
+            
+            
+    }, 
+       
+       
+       
+    {
+        "title" : "deux",
+        "step-number": 2,
+        "class": "step",
+        "pos" : {
+            "x": 3000, 
+            "y": 3000
+        }, 
+        "scale": 2,
+        "element": [ {
+                
+        }
+            
+        ]
+           
+    },
     
+    
+        
+    {
+        "title" : "trois",
+        "step-number": 3,
+        "class": "step",
+        "pos" : {
+            "x": 0, 
+            "y": 0
+
+
+           
+        }, 
+
+        "scale": 1,
+        "element": [ {
+                
+        }
+            
+        ]
+           
+    }
+        
+    ]
+    
+}

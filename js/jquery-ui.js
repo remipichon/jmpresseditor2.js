@@ -756,7 +756,7 @@ $.Widget.prototype = {
 			}
 		});
 	},
-
+// Kiki _trigger
 	_trigger: function( type, event, data ) {
 		var prop, orig,
 			callback = this.options[ type ];
@@ -9226,7 +9226,7 @@ $.widget( "ui.dialog", {
 		this.uiDialog.addClass("ui-dialog-buttons");
 		this.uiDialogButtonPane.appendTo( this.uiDialog );
 	},
-
+////////////////////////Kiki draggable
 	_makeDraggable: function() {
 		var that = this,
 			options = this.options;
@@ -9261,7 +9261,7 @@ $.widget( "ui.dialog", {
 			}
 		});
 	},
-
+////////////////////////////
 	_makeResizable: function() {
 		var that = this,
 			options = this.options,

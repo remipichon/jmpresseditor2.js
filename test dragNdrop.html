@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<!--NOTES :
+    
+    
+-->
+
+
+<html lang="en">
+    <head> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Press Editor</title>
+
+        <!-- STYLES (CSS) -->
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
+        <link rel="stylesheet" type="text/css" href="css/editor.css" >
+        <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css">
+    </head>
+    
+    
+    <body>
+ 
+
+        <!-- SCRIPTS .js --> 
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/jmpress.js"></script>
+
+        <script type="text/javascript" src="js/editor.js"></script>
+        <script type="text/javascript" src="js/mustache.js"></script>
+
+        <div id="jmpress" >
+            <div class ="step slide" data-scale ="1"> Scale 1 </div>
+            <div class ="step slide" data-scale ="2"> Scale 2 </div>
+        </div>
+        <script> 
+            $("#jmpress").jmpress();
+        </script>
+
+
+    </body>
+
+</html>
