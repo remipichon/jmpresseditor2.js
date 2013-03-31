@@ -26,14 +26,12 @@ $.getJSON('json/architecture-pressOLD.json', function(data) {
         drag: function( event ) {
             var slide = $(this);
             var pos = slide.offset();
-            var X =  pos.left;//event.pageX-widthSlide/2;
-            var Y = pos.top;//event.pageY-heightSlide/2;
        
             //màj du fichier json
             //$(this).html("left : " + parseInt(pos.left) + "  top : " + parseInt(pos.top) ); 
             $('#slideArea').jmpress('deinit', $(this) );  
-            $(this).attr("data-x",X);
-            $(this).attr("data-y", Y);
+            $(this).attr("data-x", event.pageX-widthSlide/2);
+            $(this).attr("data-y", event.pageY-heightSlide/2);
             $('#slideArea').jmpress('init', $(this));   //je crois que jimpress n'init que les steps non init par défaut
              
             console.log(event.pageX + "   " + event.pageY);
