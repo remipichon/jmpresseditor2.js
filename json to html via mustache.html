@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 
@@ -8,20 +9,15 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>json musta</title>
 
-        <!-- les scripts jquery et jquery ui 
-          <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-        !-->
+       
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/jquery-ui.js"></script>
 
          <script type="text/javascript" src="js/mustache.js"></script>
-         <script type="text/javascript" src="js/json-sans-eval.js"></script>
-
+       
         
          <script type="text/javascript" src="js/mustache-jmpress.js"></script>
-         <script type="text/javascript" src="js/deplacementSlideArea.js"></script>
-         
+        
          
          <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css"></link>
 
@@ -36,7 +32,7 @@
 
 
 
-        <!-- les scripts pour impress.js sont chargé plus tard dans le processus, pas en static !-->
+        <!-- les scripts pour impress.js sont chargï¿½ plus tard dans le processus, pas en static !-->
 
         <style type="text/css">
             #editor {
@@ -67,8 +63,9 @@
             {{/slide}}
         </script>
 
-        <div id="slideArea" >
-             <div class="step" data-scale="10" id="camera"> Div de deplacement </div>
+        <div id="slideArea" style="perspective:1000" >
+            
+             <div class="step slide" data-scale="10" id="camera"> Div de deplacement </div>
 
             <!-- pouet !-->
 
@@ -81,7 +78,7 @@
         </div>
 
 
-        <div id="scriptImpress">        <!--la div de script n'est pas id=impress car la div est purgé à chaque retour au mode edition!-->
+        <div id="scriptImpress">        <!--la div de script n'est pas id=impress car la div est purgï¿½ ï¿½ chaque retour au mode edition!-->
 
 
 <!--
@@ -90,7 +87,7 @@
             
              <script src="js/jmpress.js"></script>
 
-            <!-- ajouté par le javascript lors d'un clic sur le lancement de la diapo
+            <!-- ajoutï¿½ par le javascript lors d'un clic sur le lancement de la diapo
             le lancement de ce script permet d'intervertir le display de chacun des deux grosses div
             <link href="css/impress-demo.css" rel="stylesheet" /> !-->
 

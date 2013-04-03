@@ -17,14 +17,15 @@
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <link rel="stylesheet" type="text/css" href="css/editor.css" >
         <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css">
+        <link href="css/impress-demo.css" type="text/css" rel="stylesheet" />
     </head>
-    
-    
+
+
     <body>
         <div class="container-fluid" id="editor">  
 
             <!-- Barre de Navigation haut : titre + fonctionnalité générale -->        
-            <div class="row-fluid">            
+           <!-- <div class="row-fluid">            
                 <header class="span12">
                     <div class="navbar navbar-static-top">
                         <div class="navbar-inner">
@@ -36,10 +37,10 @@
                         </div>
                     </div>
                 </header>
-            </div>
+            </div> !-->
 
             <div class="row-fluid">
- <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 MENU GAUCHE : 
                     menu-ed01 = gros boutons test
                         creation contenu (texte)
@@ -61,17 +62,30 @@
                             </div>
                         </div>
                     </div>
-                    <div id="output-json"></div>
+                    <!--<div id="output-json"></div>!-->
                 </div>
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 ZONE DE TRAVAIL (ET D'AFFICHAGE ?) :  
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-                <div class="span8" id="surface"></div>
+                <div class="span8" id="surface"></div> 
             </div>
         </div>
 
+
+
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ZONE D'AFFICHAGE :  
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+        <div id="slideArea" >
+             <div class="step" id="overview" data-scale="3"> </div>
+
+        </div>
+
+
         <!-- SCRIPTS .js --> 
+      
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/jquery-ui.js"></script>
         <script type="text/javascript" src="js/jmpress.js"></script>
@@ -80,12 +94,24 @@
         <script type="text/javascript" src="js/mustache.js"></script>
 
         <script id="templateJmpress" type="text/template">
-            {{#slide}}
-            <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+
+            <div class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
             {{title}}
             {{#element}} 
-            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{content}} </div>  
+            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
             {{/element}} 
+            </div>   
+
+        </script>
+        
+        <!-- template pour un soucis de debug uniquement, voué à disparaitre !-->
+         <script id="templateJmpressINIT" type="text/template">
+            {{#slide}}
+            <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+                {{title}}
+                {{#element}} 
+                <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+                {{/element}} 
             </div>   
             {{/slide}}
         </script>

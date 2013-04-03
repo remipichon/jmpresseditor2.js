@@ -78,7 +78,7 @@ $(document).on('mousemove', function(event) {
     //zone ou sont stocker les slides 
     var $slideArea = $("#slideArea");
 
-
+    //dragg des elements
     $(".dragged").each(function() {
         var offX = $(this).attr("offX");
         var offY = $(this).attr("offY");
@@ -98,6 +98,11 @@ $(document).on('mousemove', function(event) {
         $('#slideArea').jmpress('init', $(this));
 
     });
+
+    //deplacement au sein de la présentation
+    if ($slideArea.hasClasse("navigable")) {
+
+    }
 });
 
 
@@ -116,9 +121,12 @@ jQuery.fn.draggableKiki = function() {
         var tab = getVirtualCoord(event, $slideArea);
         var VTopMouse = tab[0];
         var VLeftMouse = tab[1];
-        
+
 /////////////////////////////////////////////////////////////////////
 ////    DANGER LORS DU PASSAGE a la 3D  data-x va posser de GROS probleme lorsqu'on sera en 3D (il faudra faire des projetÃ©
+///la solution pourrait être de ne pas permettre de selectionner un element n'importe ou mais par endroit (pt d'ancrage) particulier
+///en effet, ici il y a un soucis au niveau du projeté de la slide si elle est de travers
+///que choisit on ? 
         var offTop = $(this).attr("data-y");//$(this).offset().top;          
         var offLeft = $(this).attr("data-x");//$(this).offset().left;
         var offElmt = [offTop, offLeft];  //getRealCoord($(this), $slideArea);
@@ -135,12 +143,18 @@ jQuery.fn.draggableKiki = function() {
 
     //ici, dÃ¨s qu'on mouseup les objets sont relachÃ©s, il peut y avoir une condition Ã  la place, du genre dÃ¨s qu'on sort de slideArea ou de l'Ã©cran...
     $(document).mouseup(function() {
-        $(".dragged").each(function() {  
+        $(".dragged").each(function() {
             $(this).removeClass("dragged");
         });
     });
 
 };
+
+/* ======================================================================================
+ * deplacement lateral au sein de la présentation
+ * 
+ * ====================================================================================== */
+
 
 
 
@@ -161,8 +175,8 @@ $.getJSON('json/architecture-pressOLD.json', function(data) {
 
     //generation du html
     var html = Mustache.to_html(template, data);
+    console.log("html généré");
     alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
-
 
 
 
@@ -172,10 +186,11 @@ $.getJSON('json/architecture-pressOLD.json', function(data) {
     //mise a draggable des slides
     //si les elements ont une classe qui les identifie, il sera possible de faire une autre fonction de draggable
     //afin de diffÃ©rencier les deux cas. Par exemple les slides pourraient avoir une restrictions empechant le drop par dessus une autre slide
+
+
     $(".step").each(function() {
         $(this).draggableKiki();
     });
-
 
 
     //chargement des css propre Ã¯Â¿Â½ la prÃ¯Â¿Â½sentation puis lancement de la prÃ¯Â¿Â½sentation
