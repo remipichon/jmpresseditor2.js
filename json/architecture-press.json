@@ -1,38 +1,39 @@
-
-
 {
     "data": [{
             "author": "",
             "title": ""
         }],
-    "slide": [{
+    "slide": [
+        {
             "pos": {
-                "x": "1000",
-                "y": "1500",
-                "z": ""
+                "x": "0",
+                "y": "0",
+                "z": "0"
             },
             "rotate": {
-                "x": "90",
+                "x": 90,
                 "y": "",
                 "z": ""
             },
-            "scale": "10",
-            "element": [{
+            "scale": 1,
+            "element": [
+                {
                     "pos": {
-                        "x": "200",
-                        "y": "300",
+                        "x": "50",
+                        "y": "50",
                         "z": ""
                     },
                     "rotate": {
-                        "x": "90",
-                        "y": "20",
+                        "x": "0",
+                        "y": "0",
                         "z": ""
                     },
                     "text": "true",
                     "content": "je suis le contenu de l'element text",
                     "attributes": []
                 },
-                {"pos": {
+                {
+                    "pos": {
                         "x": "200",
                         "y": "300",
                         "z": ""
@@ -44,23 +45,43 @@
                     },
                     "text": "false",
                     "attributes": []
-                }],
+                }
+            ]
         },
         {
             "pos": {
-                "x": "1000",
-                "y": "1500",
+                "x": "0",
+                "y": "0",
                 "z": ""
             },
-            "rotate": {
-                "x": "90",
-                "y": "",
-                "z": ""
-            },
-            "scale": "10",
-            "element": []
+            "scale": "1",
+            "element": [
+                {
+                    "pos": {
+                        "x": "340",
+                        "y": "100"
+                    },
+                    "content": "JSON OLD 1"
 
-        }],
+                },
+                {
+                    "pos": {
+                        "x": "0",
+                        "y": "0"
+                    },
+                    "content": "Bonjour Jmpress"
+                }
+            ]
+        },
+        {
+            "pos": {
+                "x": "0",
+                "y": "0"
+            },
+            "scale": 1,
+            "element": [{
+                }
+            ],
             "component" : [{
                     "pos": {
                         "x": "200",
@@ -75,7 +96,10 @@
                     "text": "true",
                     "content": "je suis le contenu de l'element text",
                     "attributes": []
-                }],
+                }]
+        }
+    ]
+    
+
 }
 
-    
