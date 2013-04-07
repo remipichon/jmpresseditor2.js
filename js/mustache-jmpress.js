@@ -6,24 +6,10 @@
  * return : Array[ virtualTop, virtualLeft]
  * callBy : draggableKiki
  * ====================================================================================== */
-function getVirtualCoord(event, $slideArea, $qui) {   //fonctionne semble t'il trÃ¨s bien
+function getVirtualCoord(event, $slideArea) {   //fonctionne semble t'il trÃ¨s bien
     var heightSlide = 700;          //pour le moment la hauteur de la slide conditionne la hauteur "vue" Ã  l'Ã©cran, lorsque zoomable fonctionnera il faudra un autre repere
     var MRH = window.innerHeight; //MaxRealHeight
-    
-    //var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000);      //MaxVirtualHeight  //prise en compte deu zoom
-   // var scale = ($slideArea.hasClass("step"))? parseInt(parseFloat($slideArea.css("perspective")) / 1000) : 1;  
-    var scale;
-    console.log($qui);
-    if ( $qui.hasClass("step") ) {
-        scale = parseInt(parseFloat($slideArea.css("perspective")) / 1000);
-    }
-    else {
-        scale = 1;
-    }
-        
-    
-    console.log("scale " + scale);
-    var MVH = heightSlide * scale;      //MaxVirtualHeight  //prise en compte deu zoom
+    var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000);      //MaxVirtualHeight  //prise en compte deu zoom
     var RTop = event.pageY;      //RealTop (de la souris)
 
     //VirtualTop (position dans le monde des slides)
@@ -96,8 +82,8 @@ $(document).on('mousemove', function(event) {
     $(".dragged").each(function() {
         var offX = $(this).attr("offX");
         var offY = $(this).attr("offY");
-        var $qui = $(this);
-        var tab = getVirtualCoord(event, $slideArea, $qui);      //recupÃ©ration des coord virtuelle de la souris
+
+        var tab = getVirtualCoord(event, $slideArea);      //recupÃ©ration des coord virtuelle de la souris
         var VTop = tab[0];
         var VLeft = tab[1];
 
@@ -105,56 +91,16 @@ $(document).on('mousemove', function(event) {
         VTop = VTop - offY;
         VLeft = VLeft - offX;
 
-
-        //mise à jour du mouvement
-        //$('#slideArea').jmpress('deinit', $(this));
-        //mise à jour du dom de la slide
-        if ($(this).hasClass("element")) {
-
-            $('#slideArea').jmpress('deinit', $(this).parent());
-            //TODO màj du json
-            $(this).css("left", VLeft);
-            $(this).css("top", VTop);
-            console.log("nouvel coord " + VTop + "  " + VLeft);
-            $('#slideArea').jmpress('init', $(this).parent());
-
-        }
-
-
-
         //desinitiatlisation de la slide concernÃ©e, maj des coord, reinit
-        if ($(this).hasClass("step")) {
-            $('#slideArea').jmpress('deinit', $(this));
-            //TODO màj du json
-            $(this).attr("data-x", VLeft);
-            $(this).attr("data-y", VTop);
-            $('#slideArea').jmpress('init', $(this));
-
-        }
-
-
-
+        $('#slideArea').jmpress('deinit', $(this));
+        $(this).attr("data-x", VLeft);
+        $(this).attr("data-y", VTop);
+        $('#slideArea').jmpress('init', $(this));
 
     });
 
     //deplacement au sein de la présentation
-    if ($slideArea.hasClass("navigable")) {
-        //var trs3D = $(".navigable >").css('-webkit-transform', 'translate3d(1000,0,0)');
-
-        $(".navigable >").css({
-            'transform': 'translate3d(10000,0,-100px)',
-            '-ms-transform': 'translate3d(10000,0,-100px)',
-            '-moz-transform': 'translate3d(10000,0,1000px)',
-            '-o-transform': 'translate3d(0,0,-100px)',
-            '-webkit-transform': 'translate3d(0,0,-100px)'
-        });
-
-        var pos = $(".navigable >").css("transform");
-        //console.log( pos + "   " + pos[] );
-        //pos est une matrice de 2*3 (tableau [4] = translateX    tablaeu[5] = translateY
-
-        // console.log("translate3d: "+trs3D[0]);
-        console.log("translate done");
+    if ($slideArea.hasClasse("navigable")) {
 
     }
 });
@@ -168,22 +114,11 @@ $(document).on('mousemove', function(event) {
  * 
  * ====================================================================================== */
 jQuery.fn.draggableKiki = function() {
-    
-
-    //var $slideArea = $("#slideArea");
+    var $slideArea = $("#slideArea");
     $(this).mousedown(function(event) {
-        if ( $(this).hasClass("step")){
-        var $slideArea = $("#slideArea");//$(this).parent();
-    }
-    
-    if ( $(this).hasClass("form")){
-        var $slideArea = $(this).parent();
-    }
-        event.stopPropagation();        //empecher la slide de recuperer l'event     
-        
+
         //position virtuelle dans le monde des slides de la souris
-        var $qui = $(this);
-        var tab = getVirtualCoord(event, $slideArea, $qui);
+        var tab = getVirtualCoord(event, $slideArea);
         var VTopMouse = tab[0];
         var VLeftMouse = tab[1];
 
@@ -192,22 +127,17 @@ jQuery.fn.draggableKiki = function() {
 ///la solution pourrait être de ne pas permettre de selectionner un element n'importe ou mais par endroit (pt d'ancrage) particulier
 ///en effet, ici il y a un soucis au niveau du projeté de la slide si elle est de travers
 ///que choisit on ? 
-        if ($(this).hasClass("step")) {
-            var offTop = $(this).attr("data-y");//$(this).offset().top;          
-            var offLeft = $(this).attr("data-x");//$(this).offset().left;
-        }
-
-        if ($(this).hasClass("element")) {
-            var offTop = parseFloat($(this).css("top"));
-            var offLeft = parseFloat($(this).css("left"));
-        }
+        var offTop = $(this).attr("data-y");//$(this).offset().top;          
+        var offLeft = $(this).attr("data-x");//$(this).offset().left;
+        var offElmt = [offTop, offLeft];  //getRealCoord($(this), $slideArea);
+        console.log(offElmt[1] + "  " + offElmt[0]);
 ////////////////////////////////////:
 
 
         $(this).addClass("dragged");
 
-        $(this).attr("offX", "" + VLeftMouse - offLeft + "");     //ce n'est pas inversÃ©, pos recoit top puis left (pas logique...)
-        $(this).attr("offY", "" + VTopMouse - offTop + "");
+        $(this).attr("offX", "" + VLeftMouse - offElmt[1] + "");     //ce n'est pas inversÃ©, pos recoit top puis left (pas logique...)
+        $(this).attr("offY", "" + VTopMouse - offElmt[0] + "");
 
     });
 
@@ -224,14 +154,7 @@ jQuery.fn.draggableKiki = function() {
  * deplacement lateral au sein de la présentation
  * 
  * ====================================================================================== */
-$(document).dblclick(function() {
-    $("#slideArea").addClass("navigable");
-    console.log("navigable");
-});
 
-$(".navigable").mouseup(function() {
-    $("#slideArea").removeClass("navigable");
-});
 
 
 
@@ -267,9 +190,6 @@ $.getJSON('json/architecture-pressOLD.json', function(data) {
 
     $(".step").each(function() {
         $(this).draggableKiki();
-        $(this).children().each(function() {
-            $(this).draggableKiki();
-        });
     });
 
 

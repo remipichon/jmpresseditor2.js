@@ -16,8 +16,8 @@
         <!-- STYLES (CSS) -->
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <link rel="stylesheet" type="text/css" href="css/editor.css" >
-        <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css">
-        <link href="css/impress-demo.css" type="text/css" rel="stylesheet" />
+<!--        <link rel="stylesheet" type="text/css" href="css/stylesheetAJOUT.css">
+        <link rel="stylesheet" type="text/css" href="css/impress-demo.css"   />-->
     </head>
 
 
@@ -79,7 +79,7 @@
         ZONE D'AFFICHAGE :  
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
         <div id="slideArea" >
-            <!--<div class="step" id="overview" data-scale="3"> </div>-->
+            <!--<div class="step" id="elementKeeper"  data-y="0" data-x="0" data-scale="3"> </div>-->
 
         </div>
 
@@ -95,29 +95,28 @@
 
         <script id="templateSlide" type="text/template">
 
-            <div class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
-            </div>   
+            <div id="slideArea" style="transform-origin: left top 0px; transition-duration: 0s; transition-delay: 500ms; transition-timing-function: ease-in-out; transform-style: preserve-3d; position: absolute; top: 0%; left: 0%; perspective: 1000px;">  
 
         </script>
         
         
         <script id="templateElement" type="text/template">
 
-            <div class='element' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' >  
+            <div class='element'  data-scale = '{{scale}}' style="position: relative; left : {{pos.x}}px; top : {{pos.y}}px' "> <{{hierarchy}} contenteditable="true"> 
             {{content}}
+            </{{hierarchy}}>
             </div>    
 
+        
         </script>
 
 
         <script id="templateJmpress" type="text/template">
 
-
-
             <div class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
             {{title}}
             {{#element}} 
-            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+            <div class = '{{type}}'  style='position: absolute; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
             {{/element}} 
             </div>   
 
@@ -129,7 +128,7 @@
             <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
             {{title}}
             {{#element}} 
-            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+            <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{content}} </div>  
             {{/element}} 
             </div>   
             {{/slide}}

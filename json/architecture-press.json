@@ -5,19 +5,17 @@
         }],
     "slide": [
         {
-            "pos": {
-                "x": "0",
-                "y": "0",
+            "type" : "slide",
+            "pos": 
+                {
+                "x": 100,
+                "y": 200,
                 "z": "0"
-            },
-            "rotate": {
-                "x": 90,
-                "y": "",
-                "z": ""
-            },
+                },
             "scale": 1,
             "element": [
                 {
+                    "type" : "text",
                     "pos": {
                         "x": "50",
                         "y": "50",
@@ -28,30 +26,16 @@
                         "y": "0",
                         "z": ""
                     },
-                    "text": "true",
-                    "content": "je suis le contenu de l'element text",
-                    "attributes": []
-                },
-                {
-                    "pos": {
-                        "x": "200",
-                        "y": "300",
-                        "z": ""
-                    },
-                    "rotate": {
-                        "x": "90",
-                        "y": "20",
-                        "z": ""
-                    },
-                    "text": "false",
+                    "hierarchy" : "h1",
+                    "content": "SLIDE 1",
                     "attributes": []
                 }
             ]
         },
         {
             "pos": {
-                "x": "0",
-                "y": "0",
+                "x": "-200",
+                "y": "50",
                 "z": ""
             },
             "scale": "1",
@@ -61,13 +45,13 @@
                         "x": "340",
                         "y": "100"
                     },
-                    "content": "JSON OLD 1"
+                    "content": "SLIDE 2"
 
                 },
                 {
                     "pos": {
-                        "x": "0",
-                        "y": "0"
+                        "x": "100",
+                        "y": "100"
                     },
                     "content": "Bonjour Jmpress"
                 }
@@ -75,29 +59,31 @@
         },
         {
             "pos": {
-                "x": "0",
-                "y": "0"
+                "x": "400",
+                "y": "500",
+                "z": ""
             },
-            "scale": 1,
-            "element": [{
-                }
-            ],
-            "component" : [{
+            "scale": "1",
+            "element": [
+                {
                     "pos": {
-                        "x": "200",
-                        "y": "300",
-                        "z": ""
+                        "x": "500",
+                        "y": "300"
                     },
-                    "rotate": {
-                        "x": "90",
-                        "y": "20",
-                        "z": ""
+                    "content": "SLIDE 3"
+
+                },
+                {
+                    "pos": {
+                        "x": "250",
+                        "y": "250"
                     },
-                    "text": "true",
-                    "content": "je suis le contenu de l'element text",
-                    "attributes": []
-                }]
+                    "content": "Hello Sweetie"
+                }
+            ]
         }
+        
+        
     ]
     
 

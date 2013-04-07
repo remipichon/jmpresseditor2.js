@@ -14,16 +14,20 @@
 
 $(document).ready(function() {
     /* Des le lancement, jmpress initialise la présentation meme a partir de rien. Cela lui permet de préparer les divs de gestions de la vue et des slides*/
+
+
+
+    /* ======================================================================================
+     * VARIABLES GLOBALES
+     * ======================================================================================*/
+
+
     $('#slideArea').jmpress();
 
 //    initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
 
-    /* ======================================================================================
-     * VARIABLES GLOBALES
-     * ======================================================================================/
-     
-     /* presentation au format json (initialisation) -> cf architecture-press.json
+    /* presentation au format json (initialisation) -> cf architecture-press.json
      * data = infos sur la présentation
      * slide = tableau de toutes les slides de la présentation (y compris leurs éléments, ajoutés dynamiquement)
      * component = tableau de tous les éléments créés (besoin d'un tableau dédié tant qu'ils sont pas ajoutes aux slides
@@ -45,10 +49,13 @@ $(document).ready(function() {
         $('.surfaceCreationText').on('click', function(event) {
             event.preventDefault();
             $(this).unbind('click');                    // permet de désactiver le clic sur la surface
-            var x = event.pageX - this.offsetLeft;
-            var y = event.pageY - this.offsetTop - 83;          // decalage du y de 83px, corrige a l'arrache
+//            var x = event.pageX - this.offsetLeft;
+//            var y = event.pageY - this.offsetTop - 83;          // decalage du y de 83px, corrige a l'arrache
+            var x = event.pageX;
+            var y = event.pageY; 
+            
             var content = prompt("Entrez le texte : ");
-            var stringText = '{"type": "text", "pos": {"x" : "' + x + '", "y": "' + y + '"},"text" : "true", "content": "' + content + '"}';
+            var stringText = '{"type": "text", "pos": {"x" : "' + x + '", "y": "' + y + '"}, "hierarchy":"h1", "content": "' + content + '"}';
             var jsonComponent = JSON.parse(stringText);     // transforme le string 'slide' en objet JSON
             pressjson.component.push(jsonComponent);        // ajout de l'element à pressjson
             console.log(pressjson);
@@ -106,14 +113,21 @@ $(document).ready(function() {
         $('.surfaceCreationSlide').on('click', function(event) {
             $(this).unbind('click');        // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
             var x = event.pageX - this.offsetLeft;
-            var y = event.pageY - this.offsetTop - 83;      // decalage du y de 83px, corrige a l'arrache
-            var stringSlide = '{"type": "slide", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "1", "element": []}';
+            var y = event.pageY - this.offsetTop;      // decalage du y de 83px, corrige a l'arrache
+//            var stringSlide = '{"type": "slide", "pos": {"x" : ' + x + ', "y": ' + y + '},"scale" : 1, "element": []}';
+
+            var stringSlide = '{"type": "slide","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "0,5", "elements": []}';
+
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
 
-            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
+//            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
+
+//            console.log("jsonSlide stringify :"+JSON.stringify(pressjson));
             pressjson.slide.push(jsonSlide);        // ajout de la slide à pressjson
             //createSlideonSurface(jsonSlide);
-            jsonToHtml(pressjson);
+            console.log("pressjson avant toHtml :" + pressjson);
+            jsonToHtml(jsonSlide);
+
             // jsonSlide est la slide est format json juste créé
             $('#output-json')       //permet d'ajouter au dom la slide ?
                     .empty()
@@ -215,22 +229,35 @@ $(document).ready(function() {
     function jsonToHtml(data) {  // ne fonctionne que pour une seule slide
         console.log("getjson");
         // pour Mustache il faut un jeu de data (json) ainsi qu'un template (html+mustache)
-        
-         console.log("data type : " +data.type);  
-        if(data.type == "text") 
-            {
-            console.log("Data = texte");    
+
+//         console.log("data type : " +data.type);  
+        if (data.type === "text")
+        {
+            console.log("Data = texte");
             var template = $('#templateElement').html();
-            }
-            else {
-                console.log("Data = Slide");   
-                var template = $('#templateSlide').html();
-            }
-        
+        }
+        else {
+            console.log("Data = Slide");
+            var template = $('#templateSlide').html();
+        }
+
         var html = Mustache.to_html(template, data);
 
+// ici, faudrait plusieurs cas de figure : si data = élement, vérifier si elle est lachée sur une slide, alors ajout à slide
+
+        if (data.type === "text")
+        {
+            $('#slideArea').append(html);
+        }
+        else {
+            $('#slideArea >').append(html);
+        }
+
+
+
         //ajout du html à l'enfant de la div des slides
-        $('#slideArea >').append(html);
+        
+
 
 
         /////////////////////KIKI modifier ce for each car il met draggable toute les step a chaque fois
@@ -251,7 +278,8 @@ $(document).ready(function() {
     //un espace de de travail deja complet pour debug plus rapidment
     function initPresent() {
 
-        $.getJSON('json/architecture-pressOLD.json', function(data) {
+//        $.getJSON('json/architecture-pressOLD.json', function(data) {
+        $.getJSON('json/architecture-press.json', function(data) {
             var template = $('#templateJmpressINIT').html();
             //generation du html
             var html = Mustache.to_html(template, data);
