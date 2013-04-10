@@ -1,13 +1,10 @@
 /********************
  * TODO LIST SUR LE POUCE (NdClaire : désolée, j'ai pris cette habitude !)
- * - gérer PROPREMENT pb data-y faux dans l'insertion des slides (et vérifier gestion dans déplacement draggable)
- * - gérer événement "annuler" dans prompt
- * - gérer la réaffectation de composants en cas de déplacement du composant hors de la slide d'affectation ? 
- * - réécrire + proprement la génération des slides et components json ?
- * - trouver combine pour que le snapshot apparaisse en surbrillance avant de le valider, pour faciliter le snapshot
- * - fouiller impress/jmpress
- * - régler pb échelle entre element sur surface et dans jmpress
- * - proposition / laïus graphisme  -> 2 ou 3 configurations de fonctionnalités (use case écrit ?)
+ * - gérer position création slide + élément (real -> virtual / suivant pos slide de fond pour éléments ?
+ * - gérer dépôt direct d'éléments dans un slide
+ * - gérer dépôt direct d'un slide sur des élément
+ * - trouver combine pour que le snapshot apparaisse en surbrillance à la création avant de le valider
+ * - gérer click sur div fullscreen
  **************/
 
 
@@ -22,7 +19,14 @@ $(document).ready(function() {
      * ======================================================================================*/
 
 
-    $('#slideArea').jmpress();
+    $('#slideArea').jmpress(
+            {
+                viewPort: {
+                    height: 2000
+
+                }
+            }
+    );
 
 //    initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
@@ -45,16 +49,20 @@ $(document).ready(function() {
      * récupère pos.x, pos.y et contenu texte*/
     $("#insert-text").on('click', function(event) {
         event.preventDefault();
-        $('#surface').addClass('surfaceCreationText');
-        $('.surfaceCreationText').on('click', function(event) {
+        $('#surface').addClass('CreationTextOn');
+        $('.CreationTextOn').on('click', function(event) {
             event.preventDefault();
             $(this).unbind('click');                    // permet de désactiver le clic sur la surface
 //            var x = event.pageX - this.offsetLeft;
 //            var y = event.pageY - this.offsetTop - 83;          // decalage du y de 83px, corrige a l'arrache
             var x = event.pageX;
-            var y = event.pageY; 
-            
+            var y = event.pageY;
+
             var content = prompt("Entrez le texte : ");
+            if (content === null)
+            {
+                return;
+            }
             var stringText = '{"type": "text", "pos": {"x" : "' + x + '", "y": "' + y + '"}, "hierarchy":"h1", "content": "' + content + '"}';
             var jsonComponent = JSON.parse(stringText);     // transforme le string 'slide' en objet JSON
             pressjson.component.push(jsonComponent);        // ajout de l'element à pressjson
@@ -65,7 +73,7 @@ $(document).ready(function() {
 //            createComponentonSurface(jsonComponent);        // fonction de creation temporaire, a remplaer par creation immediate via json + mustach 
             jsonToHtml(jsonComponent);
             //        outputSlide();
-            $('#surface').removeClass('surfaceCreationText');
+            $('#surface').removeClass('CreationTextOn');
         });
     });
 
@@ -82,10 +90,10 @@ $(document).ready(function() {
         });
         $(componentOnSurface).draggable({
             cursor: 'move', // sets the cursor apperance
-            containment: '#surface',
+            containment: '#slideArea',
             stop: function() {
                 var finalOffset = $(this).offset();
-                var parentOffset = $('#surface').offset();
+                var parentOffset = $('#slideArea').offset();
                 var x = finalOffset.left - parentOffset.left;
                 var y = finalOffset.top - parentOffset.top;
                 jsonComponent.pos.x = x;
@@ -95,7 +103,7 @@ $(document).ready(function() {
                         .append(JSON.stringify(pressjson));
             }
         });
-        $('#surface').append(componentOnSurface);
+        $('#slideArea').append(componentOnSurface);
     }
     ;
 
@@ -105,34 +113,34 @@ $(document).ready(function() {
      * ======================================================================================*/
 
     /* CREATION D'UN ELEMENT SLIDE :
-     * click sur bouton snapshot slide -> rend surface cliquabe pour creation de slide 
+     * click sur bouton snapshot slide -> rend slideArea cliquabe pour creation de slide 
      * récupère data pour json */
     $('#make-slide').on('click', function(event) {
         event.preventDefault();
-        $('#surface').addClass('surfaceCreationSlide');
-        $('.surfaceCreationSlide').on('click', function(event) {
+        $('#surface').addClass('CreationSlideOn');
+        $('.CreationSlideOn').on('click', function(event) {
             $(this).unbind('click');        // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
-            var x = event.pageX - this.offsetLeft;
-            var y = event.pageY - this.offsetTop;      // decalage du y de 83px, corrige a l'arrache
-//            var stringSlide = '{"type": "slide", "pos": {"x" : ' + x + ', "y": ' + y + '},"scale" : 1, "element": []}';
-
+            var $slideArea = $("#slideArea");
+            var tab = getVirtualCoord(event, $slideArea);
+            var y = tab[0];
+            var x = tab[1];
+//            var x = event.pageX - this.offsetLeft;
+//            var y = event.pageY - this.offsetTop;      // decalage du y de 83px, corrige a l'arrache
+            // x et y from real to virtual ??
             var stringSlide = '{"type": "slide","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "0,5", "elements": []}';
-
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
 
 //            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
-
-//            console.log("jsonSlide stringify :"+JSON.stringify(pressjson));
             pressjson.slide.push(jsonSlide);        // ajout de la slide à pressjson
             //createSlideonSurface(jsonSlide);
-            console.log("pressjson avant toHtml :" + pressjson);
+            console.dir(pressjson);
             jsonToHtml(jsonSlide);
 
             // jsonSlide est la slide est format json juste créé
             $('#output-json')       //permet d'ajouter au dom la slide ?
                     .empty()
                     .append(JSON.stringify(pressjson));
-            $('#surface').removeClass('surfaceCreationSlide');
+            $('#surface').removeClass('CreationSlideOn');
         });
 
     });
@@ -173,10 +181,10 @@ $(document).ready(function() {
 
         $(slideOnSurface).draggable({
             cursor: 'move', // sets the cursor apperance
-            containment: '#surface',
+            containment: '#slideArea',
             stop: function() {
                 var finalOffset = $(this).offset();
-                var parentOffset = $('#surface').offset();
+                var parentOffset = $('#surfslideArea').offset();
                 var x = finalOffset.left - parentOffset.left;
                 var y = finalOffset.top - parentOffset.top;
                 jsonSlide.pos.x = x;
@@ -185,7 +193,7 @@ $(document).ready(function() {
             }
         });
 
-        $('#surface').append(slideOnSurface);
+        $('#slideArea').append(slideOnSurface);
     }
     ;
 
@@ -193,7 +201,7 @@ $(document).ready(function() {
      * GESTION MUSTACHE
      * ======================================================================================*/
     /* pour le moment, utilisé uniquement pour lancer la présentation en mode jmpress en appuyant bouton "launch-slide"
-     * defi : gérer l'affichage en tant reel sur la div surface !
+     * defi : gérer l'affichage en tant reel sur la div slideArea !
      * PS : Remi, j'ai rien touché en dessous de "$('#slideArea').append(html);", je te laisse faire le tri !
      * ATTENTION : launch slide ne marche plus, surement du fait de la modif de l'archi json -> mustach n'est plus a jour.
      * pb du fait qu'il n'y a plus d'id aux slides ??? voir comment utiliser l'incrementation auto de jmpress dans mustache ?
@@ -243,11 +251,13 @@ $(document).ready(function() {
 
         var html = Mustache.to_html(template, data);
 
+        console.log("html : " + html);
+
 // ici, faudrait plusieurs cas de figure : si data = élement, vérifier si elle est lachée sur une slide, alors ajout à slide
 
         if (data.type === "text")
         {
-            $('#slideArea').append(html);
+            $('#slideArea >').append(html);
         }
         else {
             $('#slideArea >').append(html);
@@ -256,7 +266,7 @@ $(document).ready(function() {
 
 
         //ajout du html à l'enfant de la div des slides
-        
+
 
 
 
@@ -390,6 +400,7 @@ $(document).ready(function() {
     /* ======================================================================================
      * deplacement de chaque element ayant la classe .draggable
      * ====================================================================================== */
+
     $(document).on('mousemove', function(event) {
         //zone ou sont stocker les slides 
         var $slideArea = $("#slideArea");
