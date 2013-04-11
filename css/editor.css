@@ -54,13 +54,11 @@ html, body, body > div.row-fluid {
         position: relative;*/
     left: 0px;
     top: 0px;
+    right:0;
+    bottom:0;
     height:100%;
     position:fixed !important;
     position:absolute;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
     margin-left: 10%;
     /*    border: 1px solid #ccc;
         overflow: hidden;*/
