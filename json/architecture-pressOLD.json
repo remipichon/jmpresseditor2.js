@@ -1,59 +1,43 @@
 {
     "slide": [
+        
+        {
+            "title": "overview",
+            "step-number": 2,
+            "class": "step",
+            "pos": {
+                "x": "100",
+                "y": "0"
+
+
+
+            },
+            "scale": "30",
+            "element": [{
+                }
+
+            ]
+
+        },
         {
             "title": "CENTRE DU MONDE DES SLIDES",
             "step-number": 4,
             "class": "step",
             "pos": {
-                "x": "0",
-                "y": "0"
+                "x": "1000",
+                "y": "50"
 
 
 
             },
-            "scale": 1,
+            "scale": 6,
             "element": [{
                 }
 
             ]
 
         },
-        {
-            "step-number": 1,
-            "class": "step",
-            "title": "un",
-            "pos": {
-                "x": "0",
-                "y": "0"
-
-
-
-            },
-            "scale": "1",
-            "element": [{
-                    "type": "forme carre",
-                    "pos": {
-                        "x": "340",
-                        "y": "100"
-                    },
-                    "description": ""
-
-                },
-                {
-                    "type": "texte",
-                    "pos": {
-                        "x": "0",
-                        "y": "0"
-                    },
-                    "description": "Bonjour Jmpress"
-
-
-                }
-
-            ]
-
-
-        },
+       
         {
             "title": "deux",
             "step-number": 2,
@@ -85,6 +69,43 @@
                 }
 
             ]
+
+        }, 
+        
+         {
+            "step-number": 1,
+            "class": "step",
+            "title": "un",
+            "pos": {
+                "x": "0",
+                "y": "0"
+
+
+
+            },
+            "scale": "4",
+            "element": [{
+                    "type": "forme carre",
+                    "pos": {
+                        "x": "340",
+                        "y": "100"
+                    },
+                    "description": ""
+
+                },
+                {
+                    "type": "texte",
+                    "pos": {
+                        "x": "0",
+                        "y": "0"
+                    },
+                    "description": "Bonjour Jmpress"
+
+
+                }
+
+            ]
+
 
         }
 
