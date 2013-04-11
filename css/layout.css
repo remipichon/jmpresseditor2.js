@@ -1,0 +1,211 @@
+/* 
+    Document   : layout.css
+    Created on : 10 avr. 2013, 22:33:04
+    Author     : claire
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* ======================================================================================
+ * GLOBAL
+ * ====================================================================================== */
+
+
+root { 
+    display: block;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+h1, p 
+{
+    font-family: Arial;
+}
+
+h1
+{
+
+}
+
+
+/* ======================================================================================
+ * TOP BAR
+ * ====================================================================================== */
+
+#topbar
+{
+    background: #666;
+    height: 30px;
+    width:300px;
+    position:absolute;
+    right:0;
+    z-index: 2;
+}
+
+#parameters, #save, #present
+{
+    display:inline-block;
+    width:32%;
+    margin: auto;
+}
+
+#topbar a
+{
+    text-decoration: none;
+    background: #666;
+}
+
+#topbar a:hover
+{
+    text-decoration: none;
+    background: #444;
+}
+
+#topbar a p
+{
+    text-align: center;
+    padding: 4%;
+    margin: auto;
+    color:#FFF;
+
+}
+
+
+/* ======================================================================================
+ * SIDE BAR
+ * ====================================================================================== */
+
+
+#sidebar
+{
+    /*background: #666;*/
+    height: 100%;
+    width:200px;
+    position:absolute;
+    left:0;
+    top:0;
+    z-index: 2;
+    background: #666; 
+}
+
+#sidebar #arrow-nav
+{
+    position:absolute;
+    margin-left: 200px;
+    width:50px;
+    height: 50px;
+    background: #666; 
+    /*    margin: auto 200px;*/
+    top:50%;
+}
+
+#sidebar h1, a
+{
+    text-align: center;
+    color:#FFF;
+
+
+}
+
+#sidebar h1
+{
+    border-bottom: 2px solid #444;
+    line-height: 3em;
+    font-weight: 600;
+}
+
+#sidebar ul
+{
+    list-style: none;
+}
+
+#sidebar li
+{
+    border-bottom: 1px solid #444; 
+}
+
+#sidebar li a
+{
+    /*display: block;*/
+    text-decoration: none;
+    line-height: 2em;
+
+}
+
+#sidebar ul ul li:hover, #sidebar ul ul li:focus
+{
+    background: #444;
+}
+
+#sidebar .submenu
+{
+    /*display:none;*/
+    position:absolute;
+    margin-left:200px;
+    margin-top: -32px;
+    background: #666;
+    width: 100px;
+}
+
+#sidebar ul ul ul li
+{
+    display:none;
+}
+
+#sidebar ul ul li:hover  ul li
+{
+    display:block;
+}
+
+#text-tool, #shape-tool, #slide-tool
+{
+
+}
+
+#time-line
+{
+
+}
+
+.hidden-bar
+{
+    margin-left: -200px;
+}
+
+
+/* ======================================================================================
+ * LAYOUT
+ * ====================================================================================== */
+
+
+#layout
+{
+    background: #DDD;
+    left: 0px;
+    top: 0px;
+    right:0;
+    bottom:0;
+    height:100%;
+    /*position:fixed !important;*/
+    position:absolute;
+    z-index: 1;
+}

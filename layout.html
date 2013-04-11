@@ -14,45 +14,40 @@
         </div>
         <!--tag <nav> ?-->
         <div id="sidebar">
-            <ul>    
-
-                <div id="tools">
-                    <li>
-                        <div id="header-drawing-tools">
-                            <h1> DRAWING TOOLS </h1>
-                        </div>
-                    </li>
+            <div id="arrow-nav"></div>
+            <ul>  
+                <li id="tools">
+                    <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
                     <ul>
                         <li>
-                            <a href="#" id="text-tool" title="text tools">
-                                <p>text</p>
-                            </a>
+                            <a href="#" id="text-tool" title="text tools"><p>text</p></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" id="text-tool-title" title="title type"><p>title</p></a>
+                                </li>
+                                <li>
+                                    <a href="#" id="text-tool-body" title="body type"><p>body</p></a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="#" id="shape-tool" title="shape tools">
-                                <p>shape</p>
-                            </a>
+                            <a href="#" id="shape-tool"  title="shape tools"><p>shape</p></a>
                         </li>
                         <li>
-                            <a href="#" id="slide-tool" title="slide tools">
-                                <p>slide</p>
-                            </a>
+                            <a href="#" id="slide-tool" title="slide tools"><p>slide</p></a>
                         </li>
                     </ul>
-
-                </div>
-                <div id="time-line">
-                    <li>
-                        <h1>
-                            TIME LINE
-                        </h1>
-                    </li>
-                </div>
+                </li>
+                <li id="time-line">
+                    <h1>TIME LINE</h1>
+                </li>
             </ul>
         </div>
 
         <div id="layout">
 
-        </div>        
+        </div>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/layout.js"></script>
     </body>
 </html>
