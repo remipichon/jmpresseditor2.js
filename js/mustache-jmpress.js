@@ -27,7 +27,7 @@ function getVirtualCoord(event, $slideArea, flag) {   //flag = 0 -> slide
     }
 
 
-   // console.log("scale " + scale);
+    // console.log("scale " + scale);
     var MVH = heightSlide * scale;      //MaxVirtualHeight  //prise en compte deu zoom
     var RTop = event.pageY;      //RealTop (de la souris)
 
@@ -90,9 +90,161 @@ function getRealCoord(element, $slideArea) {        //semble bien fonctionner
     return tab;
 }
 
+
+
 /* ======================================================================================
- * deplacement de chaque element ayant la classe .draggable
+ * permet de rendre draggable un element
+ * 
+ * $(element).draggableKiki();
+ * 
  * ====================================================================================== */
+
+//fait suivre la souris à un objet
+function move(event, $objet) {
+    var $slideArea = $("#slideArea");
+
+    var offX = $objet.attr("offX");
+    var offY = $objet.attr("offY");
+    if ($objet.hasClass("step")) {
+        var flag = 0;
+    }
+    else {
+        var flag = 1;
+    }
+    var tab = getVirtualCoord(event, $slideArea, flag);      //recupÃ©ration des coord virtuelle de la souris
+    var VTop = tab[0];
+    var VLeft = tab[1];
+
+    //compension du lieu de click
+    VTop = VTop - offY;
+    VLeft = VLeft - offX;
+
+
+    //mise à jour du mouvement
+    //$('#slideArea').jmpress('deinit', $(this));
+    //mise à jour du dom de la slide
+    if ($objet.hasClass("element")) {
+
+        $('#slideArea').jmpress('deinit', $objet.parent());
+        //TODO màj du json
+        $objet.css("left", VLeft);
+        $objet.css("top", VTop);
+        //console.log("nouvel coord " + VTop + "  " + VLeft);
+        $('#slideArea').jmpress('init', $objet.parent());
+
+    }
+
+    //desinitiatlisation de la slide concernÃ©e, maj des coord, reinit
+    if ($objet.hasClass("step")) {
+        $('#slideArea').jmpress('deinit', $objet);
+        //TODO màj du json
+        $objet.attr("data-x", VLeft);
+        $objet.attr("data-y", VTop);
+        $('#slideArea').jmpress('init', $objet);
+
+
+    }
+}
+;
+
+//determine l'offset pour le drag from where you click
+function offSet(event, $objet) {
+
+
+    if ($objet.hasClass("step")) {
+        var $slideArea = $("#slideArea");
+    }
+
+    if ($objet.hasClass("form")) {
+        var $slideArea = $objet.parent();
+    }
+
+    //position virtuelle dans le monde des slides de la souris
+    if ($objet.hasClass("step")) {
+        var flag = 0;
+    }
+    else {
+        var flag = 1;
+    }
+    var tab = getVirtualCoord(event, $slideArea, flag);
+    var VTopMouse = tab[0];
+    var VLeftMouse = tab[1];
+
+/////////////////////////////////////////////////////////////////////
+////    DANGER LORS DU PASSAGE a la 3D  data-x va posser de GROS probleme lorsqu'on sera en 3D (il faudra faire des projetÃ©
+///la solution pourrait être de ne pas permettre de selectionner un element n'importe ou mais par endroit (pt d'ancrage) particulier
+///en effet, ici il y a un soucis au niveau du projeté de la slide si elle est de travers
+///que choisit on ? 
+    if ($objet.hasClass("step")) {
+        var offTop = $objet.attr("data-y");//$objet.offset().top;          
+        var offLeft = $objet.attr("data-x");//$objet.offset().left;
+    }
+
+    if ($objet.hasClass("element")) {
+        var offTop = parseFloat($objet.css("top"));
+        var offLeft = parseFloat($objet.css("left"));
+    }
+////////////////////////////////////:
+
+
+    $objet.attr("offX", "" + VLeftMouse - offLeft + "");     //ce n'est pas inversÃ©, pos recoit top puis left (pas logique...)
+    $objet.attr("offY", "" + VTopMouse - offTop + "");
+}
+;
+
+/* methode Kiki qui fonctionne */
+$(document).on("mousemove", function(event) {
+
+    $(".dragged").each(function() {
+        move(event, $(this));
+    });
+
+});
+
+$(document).on("mouseup", function(event) {
+    $(".dragged").each(function() {
+        $(this).removeClass("dragged");
+    });
+});
+
+
+jQuery.fn.draggableKiki = function() {
+
+//    $(this).on("mouseup", function() {      //le probleme c'est que la slide au dessus capte l'event
+//        console.log("mouseup du draggable" + $(this).html());
+//        $(this).off(".movable");
+//
+//    });
+//    
+
+
+    $(this).on("mousedown.movable", function(event) {
+
+        $(this).addClass("dragged");
+        offSet(event, $(this));
+
+
+        event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
+//
+//        $(this).on("mousemove.movable", function(event) {
+//            move(event, $(this));
+//        });
+
+
+
+    });
+
+
+
+};
+
+
+
+/* ======================================================================================
+ * deplacement au sein de la présentation
+ * 
+ * ====================================================================================== */            //passer cela en mode bind (avec le on)
+
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
 
     //zone ou sont stocker les slides 
@@ -109,7 +261,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
         //var elmt = $slideMother; //(":first-child", $slideGrandMother);
         //console.log(elmt)
         var oldposView = $slideMother.css("transform");
-       // console.log(oldposView);
+        // console.log(oldposView);
 
 
         //console.log(oldposView);
@@ -184,7 +336,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
     });
 });
 
-//// pour effectuer le zoomable
+//// pour effectuer le zoomable                 TODO : à calibrer
 $(document).mousewheel(function(event, delta, deltaX, deltaY) {
     //console.log(deltaX + " " + deltaY);
     //zone ou sont stocker les slides 
@@ -197,147 +349,38 @@ $(document).mousewheel(function(event, delta, deltaX, deltaY) {
     oldScale = oldScale.split(')')[0];
     oldScale = oldScale.split(',');
 
-
-
-    var newScale = parseFloat(oldScale[0]) + deltaY / 100;
-    if (newScale < 0) {
+    var a = 0.1/10;
+    var b = 0;
+    var coef = a * oldScale[0] + b;
+    var diff = deltaY * coef;
+    var newScale = parseFloat(oldScale[0]) + diff;
+    
+    if (newScale < 0.001) {
         console.log("zoom out max");
-        newScale = 0.01;
+        newScale = 0.001;
+    } else if (newScale > 10) {
+        console.log("zomm in max");
+        newScale = 10;
     }
 
 
-    //console.log("oldScale " + oldScale + "  newScale " + newScale + "  deltaY " + deltaY / 100 + " parseINt " + parseFloat(oldScale[0]));
+
+    console.log("oldScale " + oldScale[0] + " coef :" + coef + " diff :" + diff + "  newScale " + newScale);
 
 
     $slideGrandMother.css({
         'transform': 'scaleX(' + newScale + ') scaleY(' + newScale + ') '
     });
-    
-    $slideGrandMother.css("perspective", 1/newScale*1000);
+    //target.perspectiveScale = 1;
+    //target.perspectiveScale *= (step.scaleX || step.scale);
+    // perspective: Math.round(target.perspectiveScale * 1000) + "px"
+    var perspective = Math.round(1 / newScale * 1000);
+    //il faudrait augmenter la précision du newScale afin de palier à l'écart de deplacement lors d'un fort dezoom
+
+
+    $slideGrandMother.css("perspective", perspective);//1 / newScale * 1000);
 
 });
-
-
-/* ======================================================================================
- * permet de rendre draggable un element
- * 
- * $(element).draggableKiki();
- * 
- * ====================================================================================== */
-jQuery.fn.draggableKiki = function() {
-
-
-    //var $slideArea = $("#slideArea");
-    $(this).on("mousedown", function(event) {
-        event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
-
-        $(this).on("mousemove.movable", function(event) {
-
-
-
-            var offX = $(this).attr("offX");
-            var offY = $(this).attr("offY");
-            if ($(this).hasClass("step")) {
-                var flag = 0;
-            }
-            else {
-                var flag = 1;
-            }
-            var tab = getVirtualCoord(event, $slideArea, flag);      //recupÃ©ration des coord virtuelle de la souris
-            var VTop = tab[0];
-            var VLeft = tab[1];
-
-            //compension du lieu de click
-            VTop = VTop - offY;
-            VLeft = VLeft - offX;
-
-
-            //mise à jour du mouvement
-            //$('#slideArea').jmpress('deinit', $(this));
-            //mise à jour du dom de la slide
-            if ($(this).hasClass("element")) {
-
-                $('#slideArea').jmpress('deinit', $(this).parent());
-                //TODO màj du json
-                $(this).css("left", VLeft);
-                $(this).css("top", VTop);
-                //console.log("nouvel coord " + VTop + "  " + VLeft);
-                $('#slideArea').jmpress('init', $(this).parent());
-
-            }
-
-            //desinitiatlisation de la slide concernÃ©e, maj des coord, reinit
-            if ($(this).hasClass("step")) {
-                $('#slideArea').jmpress('deinit', $(this));
-                //TODO màj du json
-                $(this).attr("data-x", VLeft);
-                $(this).attr("data-y", VTop);
-                $('#slideArea').jmpress('init', $(this));
-
-
-            }
-
-
-        });
-
-        $(this).on("mouseup", function() {
-            console.log("mouseup du draggable");
-            $(this).off(".movable");
-        });
-
-        $(this).addClass("dragged");
-        if ($(this).hasClass("step")) {
-            var $slideArea = $("#slideArea");//$(this).parent();
-        }
-
-        if ($(this).hasClass("form")) {
-            var $slideArea = $(this).parent();
-        }
-        //event.stopPropagation();        //empecher la slide de recuperer l'event     
-
-        //position virtuelle dans le monde des slides de la souris
-        if ($(this).hasClass("step")) {
-            var flag = 0;
-        }
-        else {
-            var flag = 1;
-        }
-        var tab = getVirtualCoord(event, $slideArea, flag);
-        var VTopMouse = tab[0];
-        var VLeftMouse = tab[1];
-
-/////////////////////////////////////////////////////////////////////
-////    DANGER LORS DU PASSAGE a la 3D  data-x va posser de GROS probleme lorsqu'on sera en 3D (il faudra faire des projetÃ©
-///la solution pourrait être de ne pas permettre de selectionner un element n'importe ou mais par endroit (pt d'ancrage) particulier
-///en effet, ici il y a un soucis au niveau du projeté de la slide si elle est de travers
-///que choisit on ? 
-        if ($(this).hasClass("step")) {
-            var offTop = $(this).attr("data-y");//$(this).offset().top;          
-            var offLeft = $(this).attr("data-x");//$(this).offset().left;
-        }
-
-        if ($(this).hasClass("element")) {
-            var offTop = parseFloat($(this).css("top"));
-            var offLeft = parseFloat($(this).css("left"));
-        }
-////////////////////////////////////:
-
-
-        $(this).attr("offX", "" + VLeftMouse - offLeft + "");     //ce n'est pas inversÃ©, pos recoit top puis left (pas logique...)
-        $(this).attr("offY", "" + VTopMouse - offTop + "");
-
-    });
-
- 
-
-};
-
-/* ======================================================================================
- * deplacement lateral au sein de la présentation
- * 
- * ====================================================================================== */            //passer cela en mode bind (avec le on)
-
-
 
 
 

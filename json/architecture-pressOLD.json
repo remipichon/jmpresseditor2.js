@@ -38,39 +38,8 @@
 
         },
        
-        {
-            "title": "deux",
-            "step-number": 2,
-            "class": "step",
-            "pos": {
-                "x": "0",
-                "y": "0"
-            },
-            "scale": 1,
-            "element": [{
-                }
-
-            ]
-
-        },
-        {
-            "title": "trois",
-            "step-number": 3,
-            "class": "step",
-            "pos": {
-                "x": "0",
-                "y": "0"
-
-
-
-            },
-            "scale": 1,
-            "element": [{
-                }
-
-            ]
-
-        }, 
+      
+        
         
          {
             "step-number": 1,
