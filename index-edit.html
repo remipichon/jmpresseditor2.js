@@ -79,10 +79,11 @@
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         ZONE D'AFFICHAGE :  
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-        <div id="slideArea" >
-            <div class='step' style="transform-origin: left top 0px; transition-duration: 0s; transition-delay: 500ms; transition-timing-function: ease-in-out; transform-style: preserve-3d; position: absolute; top: 0%; left: 0%; perspective: 1000px;"> 
+        <div id="slideArea" style="perspective:1000">
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000"><p> en profondeur</div>
 
-            </div>
+            
+            
         </div>
         <!--  </div>-->
 
@@ -92,8 +93,11 @@
         <script type="text/javascript" src="js/jquery-ui.js"></script>
         <script type="text/javascript" src="js/jmpress.js"></script>
 
+        <script type="text/javascript" src="js/navigable-zoombale-draggable.js"></script>
+        
         <script type="text/javascript" src="js/editor.js"></script>
         <script type="text/javascript" src="js/mustache.js"></script>
+        <script type="text/javascript" src="js/mousewheel.js"></script>
 
         <script id="templateSlide" type="text/template">
 
@@ -113,17 +117,20 @@
 
         </script>
 
-
         <script id="templateJmpress" type="text/template">
 
-            <div class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+            {{#slide}}
+            <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
             {{title}}
             {{#element}} 
-            <div class = '{{type}}'  style='position: absolute; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+            <div class = 'element {{type}}'  style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'> {{description}} </div>  
             {{/element}} 
             </div>   
-
+            {{/slide}}
         </script>
+
+
+       
 
         <!-- template pour un soucis de debug uniquement, voué à disparaitre !-->
         <script id="templateJmpressINIT" type="text/template">
