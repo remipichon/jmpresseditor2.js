@@ -240,11 +240,6 @@ jQuery.fn.draggableKiki = function() {
 
 
 
-/* ======================================================================================
- * deplacement au sein de la présentation
- * 
- * ====================================================================================== */            //passer cela en mode bind (avec le on)
-
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
 
     //zone ou sont stocker les slides 
@@ -259,12 +254,12 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
 
         //recupération des coord du translate 3D
         //var elmt = $slideMother; //(":first-child", $slideGrandMother);
-        //console.log(elmt)
+        console.log($slideMother.html());
         var oldposView = $slideMother.css("transform");
         // console.log(oldposView);
 
 
-        //console.log(oldposView);
+        console.log(oldposView);
         oldposView = oldposView.split('(')[1];
         oldposView = oldposView.split(')')[0];
         oldposView = oldposView.split(',');
@@ -336,108 +331,55 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
     });
 });
 
-//// pour effectuer le zoomable                 TODO : à calibrer
-$(document).mousewheel(function(event, delta, deltaX, deltaY) {
-    //console.log(deltaX + " " + deltaY);
-    //zone ou sont stocker les slides 
-    var $slideMother = $("#slideArea >");
-    var $slideGrandMother = $("#slideArea");
+$(document).ready(function() {
+//// pour effectuer le zoomable                
+    $(document).mousewheel(function(event, delta, deltaX, deltaY) {
+        //console.log(deltaX + " " + deltaY);
+        //zone ou sont stocker les slides 
+        var $slideMother = $("#slideArea >");
+        var $slideGrandMother = $("#slideArea");
 
-    //recupération des coord du transform scale
-    var oldScale = $slideGrandMother.css("transform");
-    oldScale = oldScale.split('(')[1];
-    oldScale = oldScale.split(')')[0];
-    oldScale = oldScale.split(',');
+        //recupération des coord du transform scale
+        var oldScale = $slideGrandMother.css("transform");
+        oldScale = oldScale.split('(')[1];
+        oldScale = oldScale.split(')')[0];
+        oldScale = oldScale.split(',');
 
-    var a = 0.1/10;
-    var b = 0;
-    var coef = a * oldScale[0] + b;
-    var diff = deltaY * coef;
-    var newScale = parseFloat(oldScale[0]) + diff;
-    
-    if (newScale < 0.001) {
-        console.log("zoom out max");
-        newScale = 0.001;
-    } else if (newScale > 10) {
-        console.log("zomm in max");
-        newScale = 10;
-    }
+        var a = 0.1 / 10;
+        var b = 0;
+        var coef = a * oldScale[0] + b;
+        var diff = deltaY * coef;
+        var newScale = parseFloat(oldScale[0]) + diff;
 
-
-
-    console.log("oldScale " + oldScale[0] + " coef :" + coef + " diff :" + diff + "  newScale " + newScale);
-
-
-    $slideGrandMother.css({
-        'transform': 'scaleX(' + newScale + ') scaleY(' + newScale + ') '
-    });
-    //target.perspectiveScale = 1;
-    //target.perspectiveScale *= (step.scaleX || step.scale);
-    // perspective: Math.round(target.perspectiveScale * 1000) + "px"
-    var perspective = Math.round(1 / newScale * 1000);
-    //il faudrait augmenter la précision du newScale afin de palier à l'écart de deplacement lors d'un fort dezoom
-
-
-    $slideGrandMother.css("perspective", perspective);//1 / newScale * 1000);
-
-});
+        if (newScale < 0.001) {
+            console.log("zoom out max");
+            newScale = 0.001;
+        } else if (newScale > 10) {
+            console.log("zomm in max");
+            newScale = 10;
+        }
 
 
 
-
-/* ======================================================================================
- * Json to Html + init Jmpress via Mustache
- * Initialise une prÃ©sentation Ã  partir d'un fichier Json
- * argument(s) : *fichier Json
- * ====================================================================================== */
-$.getJSON('json/architecture-pressOLD.json', function(data) {
-
-    //template
-    var template = $('#templateJmpress').html();
-
-    //generation du html
-    var html = Mustache.to_html(template, data);
-    console.log("html généré");
-    alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
+        console.log("oldScale " + oldScale[0] + " coef :" + coef + " diff :" + diff + "  newScale " + newScale);
 
 
-
-    //ajout du html Ã¯Â¿Â½ la div 
-    $('#slideArea').append(html);
-
-    //mise a draggable des slides
-    //si les elements ont une classe qui les identifie, il sera possible de faire une autre fonction de draggable
-    //afin de diffÃ©rencier les deux cas. Par exemple les slides pourraient avoir une restrictions empechant le drop par dessus une autre slide
-
-
-    $(".step").each(function() {
-        $(this).draggableKiki();
-        $(this).children().each(function() {
-            $(this).draggableKiki();
+        $slideGrandMother.css({
+            'transform': 'scaleX(' + newScale + ') scaleY(' + newScale + ') '
         });
+        //target.perspectiveScale = 1;
+        //target.perspectiveScale *= (step.scaleX || step.scale);
+        // perspective: Math.round(target.perspectiveScale * 1000) + "px"
+        var perspective = Math.round(1 / newScale * 1000);
+        //il faudrait augmenter la précision du newScale afin de palier à l'écart de deplacement lors d'un fort dezoom
+
+
+        $slideGrandMother.css("perspective", perspective);//1 / newScale * 1000);
+
     });
 
 
+    
 
-
-    //chargement des css propre Ã¯Â¿Â½ la prÃ¯Â¿Â½sentation puis lancement de la prÃ¯Â¿Â½sentation
-    $('#scriptImpress').append('<link id="impress-demo" href="css/impress-demo.css" rel="stylesheet" />');
-    $('#slideArea').jmpress();
-//    $('#slideArea').jmpress(
-//            {
-//                viewPort: {     //ce truc est du json
-//                    height: 2700,        //taille des slides
-//                    width: 900,
-//                    maxScale: 10, //capacité du zomm
-//                    minScale: 0.01,
-//                    zoomable: 10 //vitesse de zomm
-//            
-//                }
-//            }  //il faut que j'arrive à récupérer le viewport pour les fonctions de calculs de coord
-//    );
-
-    console.log("go jimpress");
-
-});
-
-
+}
+);
