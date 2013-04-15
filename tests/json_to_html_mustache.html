@@ -7,6 +7,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=1024" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        
+        <!-- pour gerer le viewport(zone vue à l'écran) de jmpress.js   je sais pas trop à quoi ca sert en fait
+        
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
+	 !-->
+        
+        
         <title>json musta</title>
 
        
@@ -14,6 +21,7 @@
         <script type="text/javascript" src="js/jquery-ui.js"></script>
 
          <script type="text/javascript" src="js/mustache.js"></script>
+          <script src="js/mousewheel.js"></script>
        
         
          <script type="text/javascript" src="js/mustache-jmpress.js"></script>
@@ -53,20 +61,22 @@
       
 
         <script id="templateJmpress" type="text/template">
+            
             {{#slide}}
             <div class='step slide {{step-number}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
                 {{title}}
                 {{#element}} 
-                <div class = '{{type}}'  style='position: relative; left: {{pos.x}}px; right: {{pos.y}}'> {{description}} </div>  
+                <div class = 'element {{type}}'  style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'> {{description}} </div>  
                 {{/element}} 
             </div>   
             {{/slide}}
         </script>
 
         <div id="slideArea" style="perspective:1000" >
-            
-             <div class="step slide" data-scale="10" id="camera"> Div de deplacement </div>
+              <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000"><p> en profondeur</div>
 
+
+            
             <!-- pouet !-->
 
         </div>
@@ -79,13 +89,13 @@
 
 
         <div id="scriptImpress">        <!--la div de script n'est pas id=impress car la div est purg� � chaque retour au mode edition!-->
-
-
+          
 <!--
             <script src="js/jmpress.js"></script>
 !-->
             
              <script src="js/jmpress.js"></script>
+           
 
             <!-- ajout� par le javascript lors d'un clic sur le lancement de la diapo
             le lancement de ce script permet d'intervertir le display de chacun des deux grosses div

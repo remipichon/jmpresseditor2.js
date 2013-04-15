@@ -3,6 +3,14 @@
     <head>
         <title>Editor</title>
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
+
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jmpress.js"></script>
+        <script type="text/javascript" src="js/mustache.js"></script>
+        <script type="text/javascript" src="js/layout.js"></script>
+        <script type="text/javascript" src="js/button-trigger.js"></script>
+        <script type="text/javascript" src="js/navigable-zoombale-draggable.js"></script>
+        <script type="text/javascript" src="js/mousewheel.js"></script>
     </head>
 
     <body>
@@ -43,11 +51,42 @@
                 </li>
             </ul>
         </div>
-
-        <div id="layout">
-
+        <div id="layout"></div>
+        <div id="slideArea" style="perspective:1000">
+            <!--            <div id='elementStock' class='step'>
+                            <div class="element" style="position: relative; left : 300px; top : -650px' " data-scale="">
+                                <h1 contenteditable="true"> test </h1>
+                            </div>
+                        </div>-->
         </div>
-        <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/layout.js"></script>
+
+
+
+        <script id="templateSlide" type="text/template">
+
+            <div class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+            </div>
+
+        </script>
+
+        <script id="templateElement" type="text/template">
+
+            <div class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > <{{hierarchy}} contenteditable="true"> 
+            {{content}}
+            </{{hierarchy}}>
+            </div>    
+
+        </script>
+
+
+        <!--        <script id="templateElement" type="text/template">
+        
+                    <div class='element'  data-scale = '{{scale}}' style="position: relative; left : {{pos.x}}px; top : {{pos.y}}px' "> <{{hierarchy}} contenteditable="true"> 
+                    {{content}}
+                    </{{hierarchy}}>
+                    </div>    
+        
+                </script>-->
+
     </body>
 </html>

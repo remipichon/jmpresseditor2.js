@@ -1,6 +1,6 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Scripts regarding only animation of layout (slidding menu, etc)
+ * 
  */
 
 
