@@ -111,6 +111,7 @@ function move(event, $objet) {
     else {
         var flag = 1;
     }
+
     var tab = getVirtualCoord(event, $slideArea, flag);      //recupÃ©ration des coord virtuelle de la souris
     var VTop = tab[0];
     var VLeft = tab[1];
@@ -120,29 +121,22 @@ function move(event, $objet) {
     VLeft = VLeft - offX;
 
 
-    //mise à jour du mouvement
-    //$('#slideArea').jmpress('deinit', $(this));
-    //mise à jour du dom de la slide
+    //mise à jour de la position
     if ($objet.hasClass("element")) {
 
         $('#slideArea').jmpress('deinit', $objet.parent());
         //TODO màj du json
         $objet.css("left", VLeft);
         $objet.css("top", VTop);
-        //console.log("nouvel coord " + VTop + "  " + VLeft);
         $('#slideArea').jmpress('init', $objet.parent());
-
     }
 
-    //desinitiatlisation de la slide concernÃ©e, maj des coord, reinit
     if ($objet.hasClass("step")) {
         $('#slideArea').jmpress('deinit', $objet);
         //TODO màj du json
         $objet.attr("data-x", VLeft);
         $objet.attr("data-y", VTop);
         $('#slideArea').jmpress('init', $objet);
-
-
     }
 }
 ;
@@ -187,7 +181,7 @@ function offSet(event, $objet) {
 ////////////////////////////////////:
 
 
-    $objet.attr("offX", "" + VLeftMouse - offLeft + "");     //ce n'est pas inversÃ©, pos recoit top puis left (pas logique...)
+    $objet.attr("offX", "" + VLeftMouse - offLeft + "");
     $objet.attr("offY", "" + VTopMouse - offTop + "");
 }
 ;
@@ -240,6 +234,11 @@ jQuery.fn.draggableKiki = function() {
 
 
 
+/* ======================================================================================
+ * deplacement au sein de la présentation
+ * 
+ * ====================================================================================== */
+
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
 
     //zone ou sont stocker les slides 
@@ -253,18 +252,11 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
     $(this).on('mousemove.navigable', function(event) {
 
         //recupération des coord du translate 3D
-        //var elmt = $slideMother; //(":first-child", $slideGrandMother);
-        console.log($slideMother.html());
         var oldposView = $slideMother.css("transform");
-        // console.log(oldposView);
 
-
-        console.log(oldposView);
         oldposView = oldposView.split('(')[1];
         oldposView = oldposView.split(')')[0];
         oldposView = oldposView.split(',');
-
-        //oldposview ne semble pas suivre la dynamique, je n'arrive pas mettre à jour le oldposview en dynamique
 
         var posView = {
             x: oldposView[4],
@@ -279,7 +271,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
         };
 
         //calcul du déplacement dans le monde des slides
-        var scale = parseInt(parseFloat($slideGrandMother.css("perspective")) / 1000);
+        var scale = -parseInt(parseFloat($slideGrandMother.css("perspective")) / 1000);
         var dVirtuel = {//element différentiel virtuel
             x: dReal.x * scale,
             y: dReal.y * scale
@@ -298,88 +290,56 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
         posData.x = event.pageX;
         posData.y = event.pageY;
 
-//        console.log("posView " + posView.x + " " + posView.y + " dReal " + dReal.x + " " + dReal.y + " newPosview " + newPosView.x + " " + newPosView.y
-//                + " posdata " + posData.x + " " + posData.y + " scale " + scale);
-
-
-        //màj de la position de la scene
-        //$(":first-child", $slideGrandMother).css({
-        //ca ne  met pas à jour !
-        //console.log($slideMother.html());
-//        var transformValue = 'matrix(' + oldposView[0] + "," + oldposView[1] + "," + oldposView[2] + "," + oldposView[3] + "," + newPosView.x + ',' + newPosView.y + ')';
-//        // $slideMother.css
-//        $slideMother.css({
-//            'transform': transformValue,
-//            'transform-style': null,
-//            'transform-origin': null
-//
-//
-//                    //'transform': 'translate3d(' + newPosView.x + 'px,' + newPosView.y + 'px,0px)'
-//        });
 
         $slideMother.css({
             'transform': 'translate3d(' + newPosView.x + 'px,' + newPosView.y + 'px,0px)'
         });
 
-//        console.log("transform " + $slideMother.css("transform"));
-//        console.log("transform value " + transformValue);
     });
 
     $(this).on("mouseup", function() {
         console.log("mouseup du navigable");
         $(this).off(".navigable");
     });
+
 });
 
-$(document).ready(function() {
-//// pour effectuer le zoomable                
-    $(document).mousewheel(function(event, delta, deltaX, deltaY) {
-        //console.log(deltaX + " " + deltaY);
-        //zone ou sont stocker les slides 
-        var $slideMother = $("#slideArea >");
-        var $slideGrandMother = $("#slideArea");
+//// pour effectuer le zoomable                 
+$(document).mousewheel(function(event, delta, deltaX, deltaY) {
+    var $slideMother = $("#slideArea >");
+    var $slideGrandMother = $("#slideArea");
 
-        //recupération des coord du transform scale
-        var oldScale = $slideGrandMother.css("transform");
-        oldScale = oldScale.split('(')[1];
-        oldScale = oldScale.split(')')[0];
-        oldScale = oldScale.split(',');
+    //recupération des coord du transform scale
+    var oldScale = $slideGrandMother.css("transform");
+    oldScale = oldScale.split('(')[1];
+    oldScale = oldScale.split(')')[0];
+    oldScale = oldScale.split(',');
 
-        var a = 0.1 / 10;
-        var b = 0;
-        var coef = a * oldScale[0] + b;
-        var diff = deltaY * coef;
-        var newScale = parseFloat(oldScale[0]) + diff;
+    var a = 0.1 / 10;
+    var b = 0;
+    var coef = a * oldScale[0] + b;
+    var diff = deltaY * coef;
+    var newScale = parseFloat(oldScale[0]) + diff;
 
-        if (newScale < 0.001) {
-            console.log("zoom out max");
-            newScale = 0.001;
-        } else if (newScale > 10) {
-            console.log("zomm in max");
-            newScale = 10;
-        }
+    if (newScale < 0.001) {
+        console.log("zoom out max");
+        newScale = 0.001;
+    } else if (newScale > 10) {
+        console.log("zomm in max");
+        newScale = 10;
+    }
 
 
-
-        console.log("oldScale " + oldScale[0] + " coef :" + coef + " diff :" + diff + "  newScale " + newScale);
-
-
-        $slideGrandMother.css({
-            'transform': 'scaleX(' + newScale + ') scaleY(' + newScale + ') '
-        });
-        //target.perspectiveScale = 1;
-        //target.perspectiveScale *= (step.scaleX || step.scale);
-        // perspective: Math.round(target.perspectiveScale * 1000) + "px"
-        var perspective = Math.round(1 / newScale * 1000);
-        //il faudrait augmenter la précision du newScale afin de palier à l'écart de deplacement lors d'un fort dezoom
-
-
-        $slideGrandMother.css("perspective", perspective);//1 / newScale * 1000);
-
+    $slideGrandMother.css({
+        'transform': 'scaleX(' + newScale + ') scaleY(' + newScale + ') '
     });
 
+    //màj de la perspective qui est utiliséé par les fonctions de changement de monde
+    var perspective = Math.round(1 / newScale * 1000);
+    //il faudrait augmenter la précision du newScale afin de palier à l'écart de deplacement lors d'un fort dezoom
+    $slideGrandMother.css("perspective", perspective);
 
-    
+});
 
-}
-);
+
+
