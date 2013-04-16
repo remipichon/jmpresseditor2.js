@@ -1,8 +1,4 @@
 
-var posData = {
-    x: 0,
-    y: 0
-};
 
 /* ======================================================================================
  * position de l'event (souris) dans le monde des slides  (real to virtual)
@@ -93,13 +89,41 @@ function getRealCoord(element, $slideArea) {        //semble bien fonctionner
 
 
 /* ======================================================================================
- * permet de rendre draggable un element
+ * permet de rendre draggable un element sur chacun des axes x,y,z
  * 
  * $(element).draggableKiki();
  * 
  * ====================================================================================== */
 
-//fait suivre la souris à un objet
+
+/* permet de stocker des positions d'event, utile pour recupérer la distance d'un mousemouve depuis un mousedown */
+var posData = {
+    x: 0,
+    y: 0
+};
+
+/* 
+ * obtenir la distance depuis un evenement (marqué par l'initialisation du posData
+ * @param {type} event
+ * @returns {getDistanceMouseMove.distance}
+ */
+function getDistanceMouseMove(event) {
+
+    //recupération de déplacement de la souris
+    var distance = {//element différentiel reel
+        x: event.pageX - posData.x,
+        y: event.pageY - posData.y
+    };
+    return distance;
+}
+
+/*
+ * effectue le deplacement en x et y de $objet (objet jquery)
+ * compatible pour les slides et les elements
+ * @param {type} event
+ * @param {type} $objet
+ * @returns {undefined}
+ */
 function move(event, $objet) {
     var $slideArea = $("#slideArea");
 
@@ -141,7 +165,13 @@ function move(event, $objet) {
 }
 ;
 
-//determine l'offset pour le drag from where you click
+
+/*
+ * determine l'offset pour le drag en x et y
+ * @param {type} event
+ * @param {type} $objet
+ * @returns {undefined}
+ */
 function offSet(event, $objet) {
 
 
@@ -186,22 +216,97 @@ function offSet(event, $objet) {
 }
 ;
 
-/* methode Kiki qui fonctionne */
-$(document).on("mousemove", function(event) {
 
+/*
+ * deplacement d'une slide en z
+ * @param {type} event
+ * @param {type} $objet
+ * @returns {undefined}
+ */
+function moveZ(event, $objet) {
+    var $slideMother = $("#slideArea >");
+    var $slideGrandMother = $("#slideArea");
+
+    var distance = getDistanceMouseMove(event);
+    //console.log("distance " + distance.x + "  " + distance.y);
+
+    var newZ = -distance.y * 100;
+
+
+    $('#slideArea').jmpress('deinit', $objet);
+    //TODO màj du json
+    $objet.attr("data-z", newZ);
+    $('#slideArea').jmpress('init', $objet);
+
+
+}
+
+//rotate x,y
+// deplacement en left (x) rotation -> y
+function rotate(event, $objet){
+    var $slideMother = $("#slideArea >");
+    var $slideGrandMother = $("#slideArea");
+
+    var distance = getDistanceMouseMove(event);
+    console.log("distance " + distance.x + "  " + distance.y);
+    //data-rotate-x en degré
+    /////////////// 2 de tolerance sur le distance
+    var rotate = {
+        x : distance.y*2,
+        y : distance.x*2
+    };
+    
+    
+    
+    
+    $('#slideArea').jmpress('deinit', $objet);
+    //TODO màj du json
+    $objet.attr("data-rotate-x", rotate.x);
+    $objet.attr("data-rotate-y", rotate.y);
+    
+    $('#slideArea').jmpress('init', $objet);
+}
+
+
+/*
+ * mise en mouvement/rotation des objets en fonction de leur classe
+ */
+$(document).on('mousemove', function(event) {
+    //deplacement Z de la slide
+    $('.moveZ').each(function() {
+        moveZ(event, $(this));
+    });
     $(".dragged").each(function() {
         move(event, $(this));
     });
-
+    $(".rotate").each( function() {
+        console.log("rotate");
+       rotate(event, $(this)); 
+    });
+    
 });
 
-$(document).on("mouseup", function(event) {
+
+
+/*
+ * annulation de la mise en mouvement/rotation des objets
+ */
+$(document).on('mouseup', function(event) {
+     $('.moveZ').each(function() {
+        $(this).removeClass('.moveZ');
+    });
     $(".dragged").each(function() {
         $(this).removeClass("dragged");
     });
+    $(".rotate").each( function() {
+       $(this).removeClass("rotate");
+   });
 });
 
 
+/*
+ * permet de rendre draggable (en x,y,z) un objet (slide ou element)
+ */
 jQuery.fn.draggableKiki = function() {
 
 //    $(this).on("mouseup", function() {      //le probleme c'est que la slide au dessus capte l'event
@@ -212,21 +317,55 @@ jQuery.fn.draggableKiki = function() {
 //    
 
 
-    $(this).on("mousedown.movable", function(event) {
-
-        $(this).addClass("dragged");
-        offSet(event, $(this));
-
-
+    $(this).on("mousedown", function(event) {
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
-//
+
+
+        if (event.which === 1) {
+
+            $(this).addClass("dragged");
+            offSet(event, $(this));
+
+
+            
 //        $(this).on("mousemove.movable", function(event) {
 //            move(event, $(this));
 //        });
+        };
+        
+        //gere la rotation d'axe x et y
+        if (event.which === 3){
+            $(this).addClass("rotate");
+            posData.x = event.pageX;
+            posData.y = event.pageY;
 
+        }
+        
+       // clic droit gère le deplacemen en Z
+//        if (event.which === 3) {
+//            posData.x = event.pageX;
+//            posData.y = event.pageY;
+//            console.log("Z edit");
+//
+//
+//            $(this).addClass("moveZ");
+//
+//            $(this).on("mousemove.moveZ", function(event) {       //ceci ne fonctionne pas car lorsqu'on descend la slide, on ne la survole plus
+//                //deplacement Z de la slide
+//                moveZ(event, $(this));
+//            });
+//
+//
+//        };
+        
 
 
     });
+    
+    $(this).on('mouseup', function() {            //meme probleme, lorsqu'on descend la slide le mouseup ne sera pas capté par la slide qui deviendra toute petite
+        $(this).off('.moveZ');
+    });
+
 
 
 
@@ -235,76 +374,78 @@ jQuery.fn.draggableKiki = function() {
 
 
 /* ======================================================================================
- * deplacement au sein de la présentation
+ * 
+ * deplacement et zoom au sein de la présentation
  * 
  * ====================================================================================== */
-
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
 
-    //zone ou sont stocker les slides 
-    var $slideMother = $("#slideArea >");
-    var $slideGrandMother = $("#slideArea");
-    posData.x = event.pageX;
-    posData.y = event.pageY;
-    //console.log("mousedown");
-
-
-    $(this).on('mousemove.navigable', function(event) {
-
-        //recupération des coord du translate 3D
-        var oldposView = $slideMother.css("transform");
-
-        oldposView = oldposView.split('(')[1];
-        oldposView = oldposView.split(')')[0];
-        oldposView = oldposView.split(',');
-
-        var posView = {
-            x: oldposView[4],
-            y: oldposView[5]
-        };
-
-
-        //recupération de déplacement de la souris
-        var dReal = {//element différentiel reel
-            x: event.pageX - posData.x,
-            y: event.pageY - posData.y
-        };
-
-        //calcul du déplacement dans le monde des slides
-        var scale = -parseInt(parseFloat($slideGrandMother.css("perspective")) / 1000);
-        var dVirtuel = {//element différentiel virtuel
-            x: dReal.x * scale,
-            y: dReal.y * scale
-        };
-
-
-        //console.log(trX + " " + trY + " Virtual event " + event.pageX + "  " + event.pageY + " " + Vevent[1] + " " + Vevent[0]);
-
-        //calcul de la nouvelle position du viewport
-        var newPosView = {
-            x: parseInt(posView.x - dVirtuel.x),
-            y: parseInt(posView.y - dVirtuel.y)
-        };
-
-        //mise à jour de l'ancienne position de souris, pour avoir l'element différent de déplacement reel
+    if (event.which === 1) {
+        //zone ou sont stocker les slides 
+        var $slideMother = $("#slideArea >");
+        var $slideGrandMother = $("#slideArea");
+        //initialisation du posData
         posData.x = event.pageX;
         posData.y = event.pageY;
+        //console.log("mousedown");
 
 
-        $slideMother.css({
-            'transform': 'translate3d(' + newPosView.x + 'px,' + newPosView.y + 'px,0px)'
+        $(this).on('mousemove.navigable', function(event) {
+
+            //recupération des coord du translate 3D
+            var oldposView = $slideMother.css("transform");
+
+            oldposView = oldposView.split('(')[1];
+            oldposView = oldposView.split(')')[0];
+            oldposView = oldposView.split(',');
+
+            var posView = {
+                x: oldposView[4],
+                y: oldposView[5]
+            };
+
+
+            //recupération de déplacement de la souris
+            var dReal = {//element différentiel reel
+                x: event.pageX - posData.x,
+                y: event.pageY - posData.y
+            };
+
+            //calcul du déplacement dans le monde des slides
+            var scale = -parseInt(parseFloat($slideGrandMother.css("perspective")) / 1000);
+            var dVirtuel = {//element différentiel virtuel
+                x: dReal.x * scale,
+                y: dReal.y * scale
+            };
+
+
+            //console.log(trX + " " + trY + " Virtual event " + event.pageX + "  " + event.pageY + " " + Vevent[1] + " " + Vevent[0]);
+
+            //calcul de la nouvelle position du viewport
+            var newPosView = {
+                x: parseInt(posView.x - dVirtuel.x),
+                y: parseInt(posView.y - dVirtuel.y)
+            };
+
+            //mise à jour de l'ancienne position de souris, pour avoir l'element différent de déplacement reel
+            posData.x = event.pageX;
+            posData.y = event.pageY;
+
+
+            $slideMother.css({
+                'transform': 'translate3d(' + newPosView.x + 'px,' + newPosView.y + 'px,0px)'
+            });
+
         });
 
-    });
-
-    $(this).on("mouseup", function() {
-        console.log("mouseup du navigable");
-        $(this).off(".navigable");
-    });
+        $(this).on("mouseup", function() {
+            console.log("mouseup du navigable");
+            $(this).off(".navigable");
+        });
+    }
 
 });
 
-//// pour effectuer le zoomable                 
 $(document).mousewheel(function(event, delta, deltaX, deltaY) {
     var $slideMother = $("#slideArea >");
     var $slideGrandMother = $("#slideArea");
@@ -343,3 +484,30 @@ $(document).mousewheel(function(event, delta, deltaX, deltaY) {
 
 
 
+
+/* ======================================================================================
+ * zone de test
+ * ====================================================================================== */
+
+
+
+
+
+//////////test du both click : echec
+
+//$(document).on('mousedown', function(event) {
+//   
+//   if (event.which === 1 || event.which === 3) {
+//       
+//       $(document).on('mousedown', function(event2) {
+//           console.log("event2:" + event2.which + " event;" + event.which);
+//                if (event.which === 1 && event2.which === 3 || event.which === 3 && event2.which === 1) {
+//                    console.log("both click");
+//                }
+//   });
+//   }
+//   
+//});
+
+
+////////////fin test
