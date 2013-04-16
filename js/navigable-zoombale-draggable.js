@@ -215,6 +215,7 @@ function offSet(event, $objet) {
     $objet.attr("offY", "" + VTopMouse - offTop + "");
 }
 ;
+//
 
 
 /*
