@@ -28,7 +28,7 @@ $(document).ready(function() {
 //            }
             );
 
-  //  initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
+    initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
 
     /* presentation au format json (initialisation) -> cf architecture-press.json
