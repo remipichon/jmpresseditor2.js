@@ -314,9 +314,9 @@ $(document).on('mouseup', function(event) {
 ///bricolage pour le long press
 
 function DIYllgpress($object) {
-     //gestion du deplacement z via longclick
-     $object.one('mousedown', function() {
-         var $objet = $(this);
+    //gestion du deplacement z via longclick
+    $object.one('mousedown', function() {
+        var $objet = $(this);
         posData.x = event.pageX;
         posData.y = event.pageY;
         window.setTimeout(function() {
@@ -324,8 +324,8 @@ function DIYllgpress($object) {
             $objet.addClass("moveZ");
             $objet.removeClass('dragged');
         }, 700);
-     });
-        
+    });
+
 
 }
 
@@ -356,6 +356,7 @@ jQuery.fn.draggableKiki = function() {
 //        $(this).addClass("moveZ");
 //    });
 
+   
 
     $(this).on("mousedown", function(event) {
         //console.log('mousedown draggable kiki');
@@ -380,10 +381,8 @@ jQuery.fn.draggableKiki = function() {
             posData.y = event.pageY;
 
         }
-       
-       ///bricolage pour le deplacement en z via longpress
-       
-       //fin bricolage
+
+        
 
         // clic droit gère le deplacemen en Z
         if (event.which === 3 && event.ctrlKey === true) {
