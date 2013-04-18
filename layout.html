@@ -52,7 +52,7 @@
             </ul>
         </div>
         <div id="layout"></div>
-        <div id="slideArea" style="perspective:1000">
+        <div id="slideArea" style="perspective:2000">
             <!--            <div id='elementStock' class='step'>
                             <div class="element" style="position: relative; left : 300px; top : -650px' " data-scale="">
                                 <h1 contenteditable="true"> test </h1>
@@ -71,7 +71,7 @@
 
         <script id="templateElement" type="text/template">
 
-            <div class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' style="transform: translate(0%, 0%) "> <{{hierarchy}} contenteditable="true"> 
+            <div class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' style="transform: translate(0%, 0%) "> <{{hierarchy}} contenteditable="false"> 
             {{content}}
             </{{hierarchy}}>
             </div>    

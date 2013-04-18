@@ -440,7 +440,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
         });
 
         $(this).on("mouseup", function() {
-            console.log("mouseup du navigable");
+//            console.log("mouseup du navigable");
             $(this).off(".navigable");
         });
     }
