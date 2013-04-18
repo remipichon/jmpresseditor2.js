@@ -215,7 +215,7 @@ function offSet(event, $objet) {
     $objet.attr("offY", "" + VTopMouse - offTop + "");
 }
 ;
-//
+
 
 
 /*
@@ -244,27 +244,33 @@ function moveZ(event, $objet) {
 
 //rotate x,y
 // deplacement en left (x) rotation -> y
-function rotate(event, $objet){
+function rotate(event, $objet) {
     var $slideMother = $("#slideArea >");
     var $slideGrandMother = $("#slideArea");
 
     var distance = getDistanceMouseMove(event);
-    console.log("distance " + distance.x + "  " + distance.y);
-    //data-rotate-x en degré
-    /////////////// 2 de tolerance sur le distance
+
+    //tolerance de 20 pixel de deplacement reel, peut etre faudrait il connecter cette tolerance à la taille de l'écran -> ergonomie
+    var tolerance = 20;
     var rotate = {
-        x : distance.y*2,
-        y : distance.x*2
+        /* explication du bout de code ci dessous :
+         * condition ternaire, si la distance est inférieur à la tolérance, aucune rotation
+         * sinon on soustrait à la distance la tolérance doté du signe de la distance (abs(x)/x = signe de x)
+         */
+        x: ((Math.abs(distance.y) - tolerance) >= 0 ? distance.y - tolerance * Math.abs(distance.y) / distance.y : 0),
+        y: ((Math.abs(distance.x) - tolerance) >= 0 ? distance.x - tolerance * Math.abs(distance.x) / distance.x : 0)
     };
-    
-    
-    
-    
+
+
+    //console.log("distance " + distance.x + "  " + distance.y + " rotate " + rotate.x + " " + rotate.y);
+
+
+
     $('#slideArea').jmpress('deinit', $objet);
     //TODO màj du json
     $objet.attr("data-rotate-x", rotate.x);
     $objet.attr("data-rotate-y", rotate.y);
-    
+
     $('#slideArea').jmpress('init', $objet);
 }
 
@@ -280,11 +286,11 @@ $(document).on('mousemove', function(event) {
     $(".dragged").each(function() {
         move(event, $(this));
     });
-    $(".rotate").each( function() {
-        console.log("rotate");
-       rotate(event, $(this)); 
+    $(".rotate").each(function() {
+        //console.log("rotate");
+        rotate(event, $(this));
     });
-    
+
 });
 
 
@@ -293,16 +299,39 @@ $(document).on('mousemove', function(event) {
  * annulation de la mise en mouvement/rotation des objets
  */
 $(document).on('mouseup', function(event) {
-     $('.moveZ').each(function() {
-        $(this).removeClass('.moveZ');
+    console.log('mouseup');
+    $('.moveZ').each(function() {
+        $(this).removeClass('moveZ');
     });
     $(".dragged").each(function() {
         $(this).removeClass("dragged");
     });
-    $(".rotate").each( function() {
-       $(this).removeClass("rotate");
-   });
+    $(".rotate").each(function() {
+        $(this).removeClass("rotate");
+    });
 });
+
+///bricolage pour le long press
+
+function DIYllgpress($object) {
+     //gestion du deplacement z via longclick
+     $object.one('mousedown', function() {
+         var $objet = $(this);
+        posData.x = event.pageX;
+        posData.y = event.pageY;
+        window.setTimeout(function() {
+            console.log("Z edit");
+            $objet.addClass("moveZ");
+            $objet.removeClass('dragged');
+        }, 700);
+     });
+        
+
+}
+
+
+///fin bricolage du ling press
+
 
 
 /*
@@ -315,12 +344,22 @@ jQuery.fn.draggableKiki = function() {
 //        $(this).off(".movable");
 //
 //    });
-//    
+//    $(this).on('mouseup', function() {            //meme probleme, lorsqu'on descend la slide le mouseup ne sera pas capté par la slide qui deviendra toute petite
+//        $(this).off('.moveZ');
+//    });
+
+
+    //gestion du deplacement Z via longclick
+//    $(this).longclick(500, function() {
+//        //$("#result").html("You longclicked. Nice!");
+//        console.log("Z edit");
+//        $(this).addClass("moveZ");
+//    });
 
 
     $(this).on("mousedown", function(event) {
+        //console.log('mousedown draggable kiki');
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
-
 
         if (event.which === 1) {
 
@@ -328,44 +367,46 @@ jQuery.fn.draggableKiki = function() {
             offSet(event, $(this));
 
 
-            
+
 //        $(this).on("mousemove.movable", function(event) {
 //            move(event, $(this));
 //        });
-        };
-        
+        }
+
         //gere la rotation d'axe x et y
-        if (event.which === 3){
+        if (event.which === 3 && event.ctrlKey === false) {
             $(this).addClass("rotate");
             posData.x = event.pageX;
             posData.y = event.pageY;
 
         }
-        
-       // clic droit gère le deplacemen en Z
-//        if (event.which === 3) {
-//            posData.x = event.pageX;
-//            posData.y = event.pageY;
-//            console.log("Z edit");
-//
-//
-//            $(this).addClass("moveZ");
-//
+       
+       ///bricolage pour le deplacement en z via longpress
+       
+       //fin bricolage
+
+        // clic droit gère le deplacemen en Z
+        if (event.which === 3 && event.ctrlKey === true) {
+            posData.x = event.pageX;
+            posData.y = event.pageY;
+            console.log("Z edit");
+
+
+            $(this).addClass("moveZ");
+
 //            $(this).on("mousemove.moveZ", function(event) {       //ceci ne fonctionne pas car lorsqu'on descend la slide, on ne la survole plus
 //                //deplacement Z de la slide
 //                moveZ(event, $(this));
 //            });
-//
-//
-//        };
-        
+
+
+        }
+        ;
+
 
 
     });
-    
-    $(this).on('mouseup', function() {            //meme probleme, lorsqu'on descend la slide le mouseup ne sera pas capté par la slide qui deviendra toute petite
-        $(this).off('.moveZ');
-    });
+
 
 
 
@@ -446,6 +487,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
     }
 
 });
+
 
 $(document).mousewheel(function(event, delta, deltaX, deltaY) {
     var $slideMother = $("#slideArea >");
