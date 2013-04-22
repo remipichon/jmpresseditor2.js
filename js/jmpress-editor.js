@@ -185,9 +185,13 @@
          */
         function doStepInit(element, idx) {
             var data = dataset(element);
+//            console.log("do step init data : "+  data);
+//            console.dir(data);
             var step = {
                 oldStyle: $(element).attr("style") || ""
             };
+//            console.log("do step init step : "+  step);
+//            console.dir(step);
 
             var callbackData = {
                 data: data
@@ -198,6 +202,8 @@
             callCallback.call(this, 'initStep', $(element), callbackData);
 
             $(element).data('stepData', step);
+//            console.log("do step init stepData fin: " + $(element).data('stepData'));
+//            console.dir($(element).data('stepData'));
 
             if (!$(element).attr('id')) {
                 $(element).attr('id', 'step-' + (idx + 1));
@@ -212,6 +218,8 @@
          */
         function doStepDeinit(element) {
             var stepData = $(element).data('stepData');
+//            console.log(" doStepDeinit stepData : " + stepData);
+//            console.dir(stepData);
 
             $(element).attr("style", stepData.oldStyle);
 
@@ -228,6 +236,7 @@
             callCallback.call(this, 'unapplyStep', $(element), {
                 stepData: element.data("stepData")
             });
+//            console.log("doStepReapply");
 
             callCallback.call(this, 'applyStep', $(element), {
                 stepData: element.data("stepData")
@@ -238,6 +247,7 @@
          *
          */
         function deinit() {
+//            console.log("function deinit()");
             if (active) {
                 callCallback.call(this, 'setInactive', active, {
                     stepData: $(active).data('stepData')
@@ -315,6 +325,7 @@
          * @return Object element selected
          */
         function select(el, type) {
+//            console.log("function select(el, type)");
             var substep;
             if ($.isPlainObject(el)) {
                 substep = el.substep;
@@ -986,8 +997,10 @@
 
     $.jmpress("defaults").reasonableAnimation = {};
     $.jmpress("initStep", function(step, eventData) {
+//        console.log("$.jmpress(initStep, function(step, eventData)");
         var data = eventData.data;
         var stepData = eventData.stepData;
+//        console.log("$.jmpress(initstep) step data 1" + stepData);
         var pf = parseFloat;
         $.extend(stepData, {
             x: pf(data.x) || 0
@@ -1045,7 +1058,7 @@
                 sd.scaleZ || sd.scale]
         ];
         engine.transform(step, transform);
-//        console.log("engine.transform(step, transform)" + transform);
+//        console.log("Apply step : engine.transform(step, transform)" + transform);
     });
     $.jmpress("setActive", function(element, eventData) {
         var target = eventData.target;
@@ -1126,6 +1139,8 @@
                 settings = eventData.settings,
                 zoomin = target.perspectiveScale * 1.3 < eventData.current.perspectiveScale,
                 zoomout = target.perspectiveScale > eventData.current.perspectiveScale * 1.3;
+//        console.log("apply target - stepData :" + step);
+//        console.dir(step);
 
         // extract first scale from transform
         var lastScale = -1;
@@ -1173,7 +1188,7 @@
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: Math.round(target.perspectiveScale * 1000) + "px"
-            
+
         };
 //        console.log("props.perspective :" +  props.perspective);
         props = $.extend({}, animation, props);
@@ -1189,7 +1204,7 @@
 //        console.log(" engine.transform(eventData.area, extracted): " + engine.transform(eventData.area, extracted));
 //        console.log(" eventData.area,): " + eventData.area);
 //        console.log(" extracted): " + extracted);
-        
+
 
         props = $.extend({}, animation);
         if (!zoomout) {

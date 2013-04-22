@@ -55,13 +55,6 @@ $(document).ready(function() {
             // Ratio : prendre en compte la perspective de la grand-mère (hauteur de zoom)
             // + les values de translate3D de la mère (angle de vue) ? 
 
-            /* ESPACE BROUILLON CLAIRE - EN COURS !)
-             var $GMother = $('#slideArea');
-             var dataGM = $GMother.jmpress('dataset');
-             console.log(dataGM);
-             
-             */
-
             //recupération des coord du translate 3D
             var oldposView = $('#slideArea>').css("transform"); 
             oldposView = oldposView.split('(')[1];
@@ -72,18 +65,17 @@ $(document).ready(function() {
                 y: oldposView[5]
             };
             //recupération de la perspective courante -> marche pas encore tout à fait (car notre donnée perspective est trafiquée)
+            // Test 1 : via currentScale GrandMother
 //            var currentScale = getScaleGM();
 //            console.log("current Scale : " + currentScale);
 //            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) / currentScale;
 //            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) / currentScale;
-
+            
+            // Test 2 : via currentPerspective GrandMother
             var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
-            console.log("current prespective : " + currentPerspective);
+//            console.log("current prespective : " + currentPerspective);
             var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) *currentPerspective;
             var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) *currentPerspective;
-
-            console.log("x : " + x + " y : " + y);
-
             var stringText = '{"type": "text", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
             var jsonComponent = JSON.parse(stringText);     // transforme le string 'slide' en objet JSON
             pressjson.component.push(jsonComponent);        // ajout de l'element à pressjson
@@ -136,7 +128,7 @@ $(document).ready(function() {
                 y: oldposView[5]
             };
             var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
-            console.log("current prespective : " + currentPerspective);
+//            console.log("current prespective : " + currentPerspective);
             var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) *currentPerspective;
             var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) *currentPerspective;
             

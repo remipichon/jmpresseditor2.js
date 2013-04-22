@@ -65,7 +65,7 @@
         <div id="slideArea" style="perspective:2000">
    
             
-            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000"><p> en profondeur</div>
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000"><p> en profondeur</p></div>
 
             <!--            <div id='elementStock' class='step'>
                             <div class="element" style="position: relative; left : 300px; top : -650px' " data-scale="">
@@ -82,10 +82,12 @@
             </div>
 
         </script>
+     
 
         <script id="templateElement" type="text/template">
 
-            <div class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' style="transform: translate(0%, 0%) "> <{{hierarchy}} contenteditable="false"> 
+            <div class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}'> 
+            <{{hierarchy}} contenteditable="false" class='element'> 
             {{content}}
             </{{hierarchy}}>
             </div>    

@@ -23,7 +23,6 @@ function getVirtualCoord(event, $slideArea, flag) {   //flag = 0 -> slide
     }
 
 
-    // console.log("scale " + scale);
     var MVH = heightSlide * scale;      //MaxVirtualHeight  //prise en compte deu zoom
     var RTop = event.pageY;      //RealTop (de la souris)
 
@@ -85,8 +84,13 @@ function getRealCoord(element, $slideArea) {        //semble bien fonctionner
     var tab = new Array(RTop, RLeft);
     return tab;
 }
-
-function getScaleGM(){
+/* ======================================================================================
+ * fonction utilitaire : récupération des coord scale de slideGrandMother
+ * argument(s) : /
+ * return : Scale (float) = current scale of grandmother
+ * callBy : creationElement(button-trigger.js)
+ * ====================================================================================== */
+function getScaleGM() {
     var $slideMother = $("#slideArea >");
     var $slideGrandMother = $("#slideArea");
 
@@ -96,12 +100,7 @@ function getScaleGM(){
     oldScale = oldScale.split(')')[0];
     oldScale = oldScale.split(',');
 
-//    var a = 0.1 / 10;
-//    var b = 0;
-//    var coef = a * oldScale[0] + b;
-//    var diff = deltaY * coef;
-//    var newScale = parseFloat(oldScale[0]) + diff;
-    var newScale = parseFloat(oldScale[0]) ;
+    var newScale = parseFloat(oldScale[0]);
 
     if (newScale < 0.001) {
         console.log("zoom out max");
@@ -110,9 +109,9 @@ function getScaleGM(){
         console.log("zomm in max");
         newScale = 10;
     }
-    
+
     return newScale;
-} 
+}
 
 /* ======================================================================================
  * permet de rendre draggable un element sur chacun des axes x,y,z
@@ -120,7 +119,6 @@ function getScaleGM(){
  * $(element).draggableKiki();
  * 
  * ====================================================================================== */
-
 
 /* permet de stocker des positions d'event, utile pour recupérer la distance d'un mousemouve depuis un mousedown */
 var posData = {
@@ -172,7 +170,8 @@ function move(event, $objet) {
 
 
     //mise à jour de la position
-    if ($objet.hasClass("element")) {
+    // CLAIRE : chgt condition ci-dessous (car les éléments ont la classe step ET élément
+    if (!$objet.hasClass("step")) {
 
         $('#slideArea').jmpress('deinit', $objet.parent());
         //TODO màj du json
@@ -205,20 +204,22 @@ function offSet(event, $objet) {
         var $slideArea = $("#slideArea");
     }
 
-    if ($objet.hasClass("form")) {
+    if (!$objet.hasClass("step")) {
         var $slideArea = $objet.parent();
     }
 
     //position virtuelle dans le monde des slides de la souris
+    // CLAIRE : chgt condition ci-dessous (car les éléments ont la classe step ET élément
     if ($objet.hasClass("step")) {
         var flag = 0;
     }
-    else {
+    if (!$objet.hasClass("step")) {
         var flag = 1;
     }
     var tab = getVirtualCoord(event, $slideArea, flag);
     var VTopMouse = tab[0];
     var VLeftMouse = tab[1];
+   
 
 /////////////////////////////////////////////////////////////////////
 ////    DANGER LORS DU PASSAGE a la 3D  data-x va posser de GROS probleme lorsqu'on sera en 3D (il faudra faire des projetÃ©
@@ -228,15 +229,11 @@ function offSet(event, $objet) {
     if ($objet.hasClass("step")) {
         var offTop = $objet.attr("data-y");//$objet.offset().top;          
         var offLeft = $objet.attr("data-x");//$objet.offset().left;
-        console.log( "offTop :"   +offTop + "offLeft" + offLeft);
+    } 
+    if(!$objet.hasClass("step")){
+        var offTop = parseFloat($objet.css("top"));
+        var offLeft = parseFloat($objet.css("left"));
     }
-
-//    if ($objet.hasClass("element")) {
-//        var offTop = parseFloat($objet.css("top"));
-//        var offLeft = parseFloat($objet.css("left"));
-//    }
-////////////////////////////////////:
-
 
     $objet.attr("offX", "" + VLeftMouse - offLeft + "");
     $objet.attr("offY", "" + VTopMouse - offTop + "");
@@ -256,10 +253,7 @@ function moveZ(event, $objet) {
     var $slideGrandMother = $("#slideArea");
 
     var distance = getDistanceMouseMove(event);
-    //console.log("distance " + distance.x + "  " + distance.y);
-
     var newZ = -distance.y * 100;
-
 
     $('#slideArea').jmpress('deinit', $objet);
     //TODO màj du json
@@ -314,7 +308,6 @@ $(document).on('mousemove', function(event) {
         move(event, $(this));
     });
     $(".rotate").each(function() {
-        //console.log("rotate");
         rotate(event, $(this));
     });
 
@@ -326,7 +319,7 @@ $(document).on('mousemove', function(event) {
  * annulation de la mise en mouvement/rotation des objets
  */
 $(document).on('mouseup', function(event) {
-    console.log('mouseup');
+//    console.log('mouseup');
     $('.moveZ').each(function() {
         $(this).removeClass('moveZ');
     });
@@ -383,16 +376,24 @@ jQuery.fn.draggableKiki = function() {
 //        $(this).addClass("moveZ");
 //    });
 
-   
+
 
     $(this).on("mousedown", function(event) {
-        console.log('mousedown draggable kiki');
+//        console.log('mousedown draggable kiki');
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
 
         if (event.which === 1) {
 
-            $(this).addClass("dragged");
-            offSet(event, $(this));
+            // CLAIRE : cas où on clique sur un élément text (il faut que la div step, et non h1 ou p, soit dragged)
+            var $this = $(this);
+            if ($this.is("h1") || $this.is("p"))
+            {
+                $this = $this.parent();
+            }
+            $this.addClass("dragged");
+            offSet(event, $this);
+//            $(this).addClass("dragged");
+//            offSet(event, $(this));
 
 
 
@@ -409,7 +410,7 @@ jQuery.fn.draggableKiki = function() {
 
         }
 
-        
+
 
         // clic droit gère le deplacemen en Z
         if (event.which === 3 && event.ctrlKey === true) {
