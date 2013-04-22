@@ -86,7 +86,33 @@ function getRealCoord(element, $slideArea) {        //semble bien fonctionner
     return tab;
 }
 
+function getScaleGM(){
+    var $slideMother = $("#slideArea >");
+    var $slideGrandMother = $("#slideArea");
 
+    //recupération des coord du transform scale
+    var oldScale = $slideGrandMother.css("transform");
+    oldScale = oldScale.split('(')[1];
+    oldScale = oldScale.split(')')[0];
+    oldScale = oldScale.split(',');
+
+//    var a = 0.1 / 10;
+//    var b = 0;
+//    var coef = a * oldScale[0] + b;
+//    var diff = deltaY * coef;
+//    var newScale = parseFloat(oldScale[0]) + diff;
+    var newScale = parseFloat(oldScale[0]) ;
+
+    if (newScale < 0.001) {
+        console.log("zoom out max");
+        newScale = 0.001;
+    } else if (newScale > 10) {
+        console.log("zomm in max");
+        newScale = 10;
+    }
+    
+    return newScale;
+} 
 
 /* ======================================================================================
  * permet de rendre draggable un element sur chacun des axes x,y,z
@@ -202,12 +228,13 @@ function offSet(event, $objet) {
     if ($objet.hasClass("step")) {
         var offTop = $objet.attr("data-y");//$objet.offset().top;          
         var offLeft = $objet.attr("data-x");//$objet.offset().left;
+        console.log( "offTop :"   +offTop + "offLeft" + offLeft);
     }
 
-    if ($objet.hasClass("element")) {
-        var offTop = parseFloat($objet.css("top"));
-        var offLeft = parseFloat($objet.css("left"));
-    }
+//    if ($objet.hasClass("element")) {
+//        var offTop = parseFloat($objet.css("top"));
+//        var offLeft = parseFloat($objet.css("left"));
+//    }
 ////////////////////////////////////:
 
 
@@ -359,7 +386,7 @@ jQuery.fn.draggableKiki = function() {
    
 
     $(this).on("mousedown", function(event) {
-        //console.log('mousedown draggable kiki');
+        console.log('mousedown draggable kiki');
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
 
         if (event.which === 1) {
@@ -523,6 +550,8 @@ $(document).mousewheel(function(event, delta, deltaX, deltaY) {
     $slideGrandMother.css("perspective", perspective);
 
 });
+
+
 
 
 

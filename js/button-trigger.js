@@ -12,9 +12,10 @@ $(document).ready(function() {
 
 //       initialisation jmpress :
     $('#slideArea').jmpress({
-//        viewPort: {
-//            height: 1000        // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
-//        }
+        viewPort: {
+            height: 1000,        // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
+            zoomable: 10
+        }
     });
 
     /* presentation au format json (initialisation) -> cf architecture-press.json
@@ -50,17 +51,40 @@ $(document).ready(function() {
             if (content === null) {
                 return;
             }
-            
+
             // Ratio : prendre en compte la perspective de la grand-mère (hauteur de zoom)
             // + les values de translate3D de la mère (angle de vue) ? 
-            var $GMother = $('#slideArea');
-            var dataGM = $GMother.jmpress('dataset');
-            console.log(dataGM);
-            
-            var x = -(window.innerWidth / 2 - event.pageX); // ok pour perspective = 1000
-            var y = -(window.innerHeight / 2 - event.pageY);
-          
-            var stringText = '{"type": "text", "pos": {"x" : "' + x + '", "y": "' + y + '"}, "hierarchy":"h1", "content": "' + content + '"}';
+
+            /* ESPACE BROUILLON CLAIRE - EN COURS !)
+             var $GMother = $('#slideArea');
+             var dataGM = $GMother.jmpress('dataset');
+             console.log(dataGM);
+             
+             */
+
+            //recupération des coord du translate 3D
+            var oldposView = $('#slideArea>').css("transform"); 
+            oldposView = oldposView.split('(')[1];
+            oldposView = oldposView.split(')')[0];
+            oldposView = oldposView.split(',');
+            var posView = {
+                x: oldposView[4],
+                y: oldposView[5]
+            };
+            //recupération de la perspective courante -> marche pas encore tout à fait (car notre donnée perspective est trafiquée)
+//            var currentScale = getScaleGM();
+//            console.log("current Scale : " + currentScale);
+//            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) / currentScale;
+//            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) / currentScale;
+
+            var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
+            console.log("current prespective : " + currentPerspective);
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) *currentPerspective;
+            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) *currentPerspective;
+
+            console.log("x : " + x + " y : " + y);
+
+            var stringText = '{"type": "text", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
             var jsonComponent = JSON.parse(stringText);     // transforme le string 'slide' en objet JSON
             pressjson.component.push(jsonComponent);        // ajout de l'element à pressjson
             console.log(pressjson);
@@ -103,8 +127,21 @@ $(document).ready(function() {
     function createSlide() {
         $('.creationSlide').on('click', function(event) {
             $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
-            var x = -(window.innerWidth / 2 - event.pageX);
-            var y = -(window.innerHeight / 2 - event.pageY);
+            var oldposView = $('#slideArea>').css("transform"); 
+            oldposView = oldposView.split('(')[1];
+            oldposView = oldposView.split(')')[0];
+            oldposView = oldposView.split(',');
+            var posView = {
+                x: oldposView[4],
+                y: oldposView[5]
+            };
+            var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
+            console.log("current prespective : " + currentPerspective);
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) *currentPerspective;
+            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) *currentPerspective;
+            
+//            var x = -(window.innerWidth / 2 - event.pageX);
+//            var y = -(window.innerHeight / 2 - event.pageY);
             var stringSlide = '{"type": "slide","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "1", "elements": []}';
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
 //            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
@@ -139,7 +176,7 @@ $(document).ready(function() {
         var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
 //        var $newSlide2 = $('#slideArea').children(); // div step element
         $('#slideArea').jmpress('init', $newSlide); // initilisation step
-
+        $newSlide.draggableKiki();
 
 
         /////////////////////KIKI modifier ce for each car il met draggable toute les step a chaque fois

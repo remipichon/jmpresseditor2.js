@@ -2,27 +2,7 @@
  * jmpress.js v0.4.5
  * http://jmpressjs.github.com/jmpress.js
  *
- * A jQuery plugin to build a website on the infinite canvas.
- *
- * Copyright 2013 Kyle Robinson Young @shama & Tobias Koppers @sokra
- * Licensed MIT
- * http://www.opensource.org/licenses/mit-license.php
- *
- * Based on the foundation laid by Bartek Szopka @bartaz
- *//*!
- * jmpress.js v0.4.5
- * http://jmpressjs.github.com/jmpress.js
- *
- * A jQuery plugin to build a website on the infinite canvas.
- *
- * Copyright 2013 Kyle Robinson Young @shama & Tobias Koppers @sokra
- * Licensed MIT
- * http://www.opensource.org/licenses/mit-license.php
- *
- * Based on the foundation laid by Bartek Szopka @bartaz
- *//*
- * core.js
- * The core of jmpress.js
+ * Infos members : l.160
  */
 (function( $, document, window, undefined ) {
 
@@ -84,6 +64,13 @@
 
 	/**
 	 * Default Settings
+         * 
+         * Identifier ce que sont container, canvas et area ! -> Mother & GrandMother ? 
+         * Cf impress, avec deux div englobante (root et canvas) :
+         *      // And here is why there are two elements: `root` and `canvas` - they are
+                // being animated separately:
+                // `root` is used for scaling and `canvas` for translate and rotations.
+         * 
 	 */
 	var defaults = {
 		/* CLASSES */
@@ -136,8 +123,16 @@
 	/**
 	 * Initialize jmpress
 	 */
-	function init( args ) {
+	function init( args ) {    
+            /*  Use :       $('#slideArea').jmpress('init', $objet);
+            *               $('#slideArea').jmpress();
+            */
 		args = $.extend(true, {}, args || {});
+                /* jQuery.extend( [deep ], target, object1 [, objectN ] )
+                 * DEEP : If true, the merge becomes recursive (aka. deep copy).
+                 * TARGET : The object to extend. It will receive the new properties.
+                 * OBJECT1,N : An object containing additional properties to merge in.
+                 */
 
 		// accept functions and arrays of functions as callbacks
 		var callbackArgs = {};
@@ -158,16 +153,25 @@
 			}
 		}
 
-		/*** MEMBER VARS ***/
+		/*** MEMBER VARS **
+                 * 
+                 * initialisation container, area, canvas : l.590
+                 * 
+                 * Structure générale :
+                 *  $(body)                     -> container
+                 *      $('#slideArea')         -> area == jmpress
+                 *         div canvas
+                 *              steps
+                 */
 
-		var jmpress = $( this )
-			,container = null
-			,area = null
+		var jmpress = $( this )                 // pour nous : $(#slideArea)
+			,container = null               // pour nous : $('body')
+			,area = null                    // pour nous : jmpress, donc $(#slideArea) == GrandMother
 			,oldStyle = {
-				container: ""
-				,area: ""
+				container: ""           
+				,area: ""                
 			}
-			,canvas = null
+			,canvas = null                  // Mother          
 			,current = null
 			,active = false
 			,activeSubstep = null
@@ -183,7 +187,11 @@
 		 * @param element the element of the step
 		 * @param idx number of step
 		 */
-		function doStepInit( element, idx ) {
+		function doStepInit( element, idx ) {    
+                    // Use :    doStepInit.call(this, $(step), current.nextIdNumber++);
+                    //          doStepInit.call(jmpress, this, idx );
+                    //          call : 1st arg est considéré comme "this" dans la fonction
+                    // à utiliser pour draggable & autre ? (action sur une seule step) ?
 			var data = dataset( element );
 			var step = {
 				oldStyle: $(element).attr("style") || ""
@@ -279,6 +287,8 @@
 		 * @param callbackName String callback which should be called
 		 * @param element some arguments to the callback
 		 * @param eventData
+                 * Pour chaque settings du tableau callbackName (l.169),
+                 * chaque valeur "callback" qui se trouve à l'indice "idx" 
 		 */
 		function callCallback( callbackName, element, eventData ) {
 			eventData.settings = settings;
