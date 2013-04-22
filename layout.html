@@ -7,7 +7,9 @@
 
         <title>Editor</title>
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
-
+        <script type='text/javascript' > 
+            var pressjson = {data: null, slide: new Array(), component: new Array()};
+        </script>
 
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/jquery-ui.js"></script>        
@@ -16,7 +18,7 @@
 
         <script type="text/javascript" src="js/layout.js"></script>
         <script type="text/javascript" src="js/button-trigger.js"></script> 
-        <script  src="js/navigable-zoombale-draggable.js"></script>
+        <script type="text/javascript" src="js/navigable-zoombale-draggable.js"></script>
 
         <script type="text/javascript" src="js/jmpress-editor.js"></script>
         <!--<script src="js/editorV2.js"></script>-->
@@ -63,8 +65,8 @@
         </div>
         <div id="layout"></div>
         <div id="slideArea" style="perspective:2000">
-   
-            
+
+
             <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000"><p> en profondeur</p></div>
 
             <!--            <div id='elementStock' class='step'>
@@ -82,7 +84,7 @@
             </div>
 
         </script>
-     
+
 
         <script id="templateStepElement" type="text/template">
 
@@ -93,11 +95,11 @@
             </div>    
 
         </script>
-        
+
         <script id="templateElement" type="text/template">
 
-           <{{hierarchy}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="false"> {{content}}</{{hierarchy}}>
-    
+            <{{hierarchy}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="false"> {{content}}</{{hierarchy}}>
+
         </script>
 
         <!--        <script id="templateElement" type="text/template">

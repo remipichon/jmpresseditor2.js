@@ -114,6 +114,28 @@ function getScaleGM() {
 }
 
 /* ======================================================================================
+ * fonction utilitaire : récupération des coord scale de slideGrandMother
+ * argument(s) : /
+ * return : Scale (float) = current scale of grandmother
+ * callBy : creationElement(button-trigger.js)
+ * ====================================================================================== */
+function getTransformCoord(objet) {
+    var oldposView = objet.css("transform");
+    console.log("oldposView : "+ oldposView);
+    oldposView = oldposView.split('(')[1];
+    oldposView = oldposView.split(')')[0];
+    oldposView = oldposView.split(',');
+    var posView = {
+        x: oldposView[4],
+        y: oldposView[5]
+    };
+
+    return posView;
+}
+
+
+
+/* ======================================================================================
  * permet de rendre draggable un element sur chacun des axes x,y,z
  * 
  * $(element).draggableKiki();
@@ -158,6 +180,7 @@ function move(event, $objet) {
     }
     else {
         var flag = 1;
+        console.log("move txt in slide 1");
     }
 
     var tab = getVirtualCoord(event, $slideArea, flag);      //recupÃ©ration des coord virtuelle de la souris
@@ -182,9 +205,21 @@ function move(event, $objet) {
 
     if ($objet.hasClass("step")) {
         $('#slideArea').jmpress('deinit', $objet);
-        //TODO màj du json
-        $objet.attr("data-x", VLeft);
-        $objet.attr("data-y", VTop);
+        //MaJ du json : 
+        var idObjet = $objet.attr('id');
+        if ($objet.hasClass("slide")){
+//            console.log("pressjson.slide[idObjet].pos.x" + pressjson.slide[idObjet].pos.x);
+            pressjson.slide[idObjet].pos.x = VLeft;
+            pressjson.slide[idObjet].pos.y = VTop;
+        }
+        if ($objet.hasClass("element")){
+//            console.log("pressjson.slide[idObjet].pos.x" + pressjson.slide[idObjet].pos.x);
+            pressjson.component[idObjet].pos.x = VLeft;
+            pressjson.component[idObjet].pos.y = VTop;
+        }
+        
+        $objet.attr("data-x", VLeft)
+                .attr("data-y", VTop);
         $('#slideArea').jmpress('init', $objet);
     }
 }
@@ -199,13 +234,13 @@ function move(event, $objet) {
  */
 function offSet(event, $objet) {
 
-
     if ($objet.hasClass("step")) {
         var $slideArea = $("#slideArea");
     }
 
     if (!$objet.hasClass("step")) {
         var $slideArea = $objet.parent();
+        console.log("offset txt in slide 1");
     }
 
     //position virtuelle dans le monde des slides de la souris
@@ -215,11 +250,12 @@ function offSet(event, $objet) {
     }
     if (!$objet.hasClass("step")) {
         var flag = 1;
+        console.log("offset txt in slide 2");
     }
     var tab = getVirtualCoord(event, $slideArea, flag);
     var VTopMouse = tab[0];
     var VLeftMouse = tab[1];
-   
+
 
 /////////////////////////////////////////////////////////////////////
 ////    DANGER LORS DU PASSAGE a la 3D  data-x va posser de GROS probleme lorsqu'on sera en 3D (il faudra faire des projetÃ©
@@ -229,10 +265,11 @@ function offSet(event, $objet) {
     if ($objet.hasClass("step")) {
         var offTop = $objet.attr("data-y");//$objet.offset().top;          
         var offLeft = $objet.attr("data-x");//$objet.offset().left;
-    } 
-    if(!$objet.hasClass("step")){
+    }
+    if (!$objet.hasClass("step")) {
         var offTop = parseFloat($objet.css("top"));
         var offLeft = parseFloat($objet.css("left"));
+        console.log("offset txt in slide 3");
     }
 
     $objet.attr("offX", "" + VLeftMouse - offLeft + "");
@@ -383,11 +420,13 @@ jQuery.fn.draggableKiki = function() {
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
 
         if (event.which === 1) {
-            // CLAIRE : cas où on clique sur un élément text (il faut que la div step, et non h1 ou p, soit dragged)
+            // CLAIRE : cas où on clique sur un élément text indépendant(il faut que la div step, et non h1 ou p, soit dragged)
             var $this = $(this);
             if ($this.is("h1") || $this.is("p"))
             {
-                $this = $this.parent();
+                if($this.parent().hasClass("element")){
+                    $this = $this.parent();
+                }      
             }
             $this.addClass("dragged");
             offSet(event, $this);
@@ -416,7 +455,8 @@ jQuery.fn.draggableKiki = function() {
 //                //deplacement Z de la slide
 //                moveZ(event, $(this));
 //            });
-        };
+        }
+        ;
     });
 };
 

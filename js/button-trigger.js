@@ -17,7 +17,7 @@ $(document).ready(function() {
 //        }
     });
 
-    var pressjson = {data: null, slide: new Array(), component: new Array()};
+//    var pressjson = {data: null, slide: new Array(), component: new Array()};
     var i = 1; // id unique des slides      -> utile pour conversion json <-> html
     var j = 1; // id unique des éléments    -> utile pour conversion json <-> html
 
@@ -48,7 +48,8 @@ $(document).ready(function() {
 // function Creation text
     function createText() {
         $('.creationText').on('click', function(event) {
-            $(this).unbind('click');                    // permet de désactiver le clic sur la surface
+            var container = $(this);
+            container.unbind('click');                    // permet de désactiver le clic sur la surface
 
             var content = prompt("Entrez le texte : ");
             if (content === null) {
@@ -58,14 +59,10 @@ $(document).ready(function() {
             // + les values de translate3D de la mère (angle de vue) ? 
 
             //recupération des coord du translate 3D
-            var oldposView = $('#slideArea>').css("transform");
-            oldposView = oldposView.split('(')[1];
-            oldposView = oldposView.split(')')[0];
-            oldposView = oldposView.split(',');
-            var posView = {
-                x: oldposView[4],
-                y: oldposView[5]
-            };
+            var posView = getTransformCoord($('#slideArea>'));
+            console.log("coord Slide area x = " + posView.x + "  coordCont y = " + posView.y);
+
+
             //recupération de la perspective courante -> marche pas encore tout à fait (car notre donnée perspective est trafiquée)
             // Test 1 : via currentScale GrandMother
 //            var currentScale = getScaleGM();
@@ -78,27 +75,37 @@ $(document).ready(function() {
 //            console.log("current prespective : " + currentPerspective);
             var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) * currentPerspective;
             var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) * currentPerspective;
+
             var idElement = "element-" + j++;     // id unique élément -> ds json + ds html
 
-            var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
-            var jsonComponent = JSON.parse(stringText);
-
-
-            if ($(this).hasClass("slide"))
+            if (container.hasClass("slide"))      // this = élément sur lequel on a cliqué
             {
-                var idContainer = $(this).attr('id');
-                pressjson.slide[idContainer].element[idElement] = jsonComponent;
-//                console.log("text in slide - pressjson");
-//                console.log(pressjson);
+                var idContainer = container.attr('id');
+                var containerX = pressjson.slide[idContainer].pos.x,
+                        containerY = pressjson.slide[idContainer].pos.y;
 
-            } else {
-//                var stringText = '{"type": "stepText", "id" : "'+idElement+'", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
-//                var jsonComponent = JSON.parse(stringText);    // transforme le string 'slide' en objet JSON
+
+//                console.log("x : " + x + "  , y : "+ y);
+//                var coordContainer = getTransformCoord(container);
+//                console.log("coordCont x = "+ coordContainer.x+ "  coordCont y = "+ coordContainer.y);
+                var containerWidth = Math.floor(container.width()),
+                        containerHeight = Math.floor(container.height());
+                x = x - containerX + (containerWidth / 2);
+                y = y - containerY + (containerHeight / 2);
+//                console.log("width : " + containerWidth + "  , height : "+ containerHeight);
+                console.log("x : " + x + "  , y : " + y);
+
+                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
+                var jsonComponent = JSON.parse(stringText);
+                pressjson.slide[idContainer].element[idElement] = jsonComponent;
+                jsonToHtmlinSlide(jsonComponent, container);
+
+            } else {                            // création élément libre sur layout
+                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
+                var jsonComponent = JSON.parse(stringText);
                 pressjson.component[idElement] = jsonComponent; // ajout de l'element à pressjson, à l'index idElement
                 jsonToHtml(jsonComponent);
             }
-
-
             console.log(pressjson);
 
             $('#layout').removeClass('creationText');
@@ -118,8 +125,6 @@ $(document).ready(function() {
     $('div [contenteditable="false"]').dblclick(function() {
         console.log("contenteditable click");
     });
-
-
 
 
     /* ======================================================================================
@@ -151,14 +156,11 @@ $(document).ready(function() {
 //            console.log("current prespective : " + currentPerspective);
             var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) * currentPerspective;
             var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) * currentPerspective;
-
 //            var x = -(window.innerWidth / 2 - event.pageX);
 //            var y = -(window.innerHeight / 2 - event.pageY);
             var idSlide = "slide-" + i++;
             var stringSlide = '{"type": "slide", "id" : "' + idSlide + '","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "1", "element": {}}';
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
-//            gatherComponentsinSlide(jsonSlide);     // ajoute les éléments dont les coordonnées sont "sous" la slide à la slide
-//            pressjson.slide.push(jsonSlide); // ajout de la slide à pressjson
             pressjson.slide[idSlide] = jsonSlide;
             console.dir(pressjson);
             jsonToHtml(jsonSlide);
@@ -174,34 +176,18 @@ $(document).ready(function() {
 // transforme un objet (une slide ou un element) json en html
 //appelé à chaque création d'instance
     function jsonToHtml(data) {
-//        console.log("getjson");
-//        if (data.type === "text")
-//        {
-//            console.log("Data = texte");
-//            var template = $('#templateElement').html();
-//        }
-
         if (data.type === "text")
         {
-            console.log("Data = texte");
             var template = $('#templateStepElement').html();
         }
-        else {
-            console.log("Data = Slide");
+        if (data.type === "slide") {
             var template = $('#templateSlide').html();
         }
         var html = Mustache.to_html(template, data);
 
         $('#slideArea >').append(html);
         var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
-//        var $newSlide2 = $('#slideArea').children(); // div step element
         $('#slideArea').jmpress('init', $newSlide); // initilisation step
-
-        // récupérer l'id générer et le stocker ds json
-//        var id = $newSlide.attr('id');
-//        data.id = id;
-//        $newSlide.draggableKiki();
-
 
         /////////////////////KIKI modifier ce for each car il met draggable toute les step a chaque fois
         //mise a draggable des slides
@@ -212,6 +198,23 @@ $(document).ready(function() {
             $(this).children().each(function() {
                 $(this).draggableKiki();
             });
+        });
+    }
+    ;
+
+
+
+    function jsonToHtmlinSlide(data, container) {
+
+        var template = $('#templateElement').html();
+        var html = Mustache.to_html(template, data);
+        container.append(html);
+        var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+        $('#slideArea').jmpress('init', container); // initilisation step
+
+        container.draggableKiki();
+        container.children().each(function() {
+            $(this).draggableKiki();
         });
     }
     ;
