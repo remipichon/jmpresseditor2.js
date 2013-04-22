@@ -78,20 +78,26 @@
 
         <script id="templateSlide" type="text/template">
 
-            <div class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
+            <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}' > 
             </div>
 
         </script>
      
 
-        <script id="templateElement" type="text/template">
+        <script id="templateStepElement" type="text/template">
 
-            <div class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}'> 
+            <div id={{id}} class='step element'  data-x = '{{pos.x}}' data-y = '{{pos.y}}'  data-scale = '{{scale}}'> 
             <{{hierarchy}} contenteditable="false" class='element'> 
             {{content}}
             </{{hierarchy}}>
             </div>    
 
+        </script>
+        
+        <script id="templateElement" type="text/template">
+
+           <{{hierarchy}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="false"> {{content}}</{{hierarchy}}>
+    
         </script>
 
         <!--        <script id="templateElement" type="text/template">

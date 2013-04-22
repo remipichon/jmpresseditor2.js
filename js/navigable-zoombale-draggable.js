@@ -383,7 +383,6 @@ jQuery.fn.draggableKiki = function() {
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
 
         if (event.which === 1) {
-
             // CLAIRE : cas où on clique sur un élément text (il faut que la div step, et non h1 ou p, soit dragged)
             var $this = $(this);
             if ($this.is("h1") || $this.is("p"))
@@ -392,9 +391,6 @@ jQuery.fn.draggableKiki = function() {
             }
             $this.addClass("dragged");
             offSet(event, $this);
-//            $(this).addClass("dragged");
-//            offSet(event, $(this));
-
 
 
 //        $(this).on("mousemove.movable", function(event) {
@@ -407,37 +403,21 @@ jQuery.fn.draggableKiki = function() {
             $(this).addClass("rotate");
             posData.x = event.pageX;
             posData.y = event.pageY;
-
         }
-
-
 
         // clic droit gère le deplacemen en Z
         if (event.which === 3 && event.ctrlKey === true) {
             posData.x = event.pageX;
             posData.y = event.pageY;
             console.log("Z edit");
-
-
             $(this).addClass("moveZ");
 
 //            $(this).on("mousemove.moveZ", function(event) {       //ceci ne fonctionne pas car lorsqu'on descend la slide, on ne la survole plus
 //                //deplacement Z de la slide
 //                moveZ(event, $(this));
 //            });
-
-
-        }
-        ;
-
-
-
+        };
     });
-
-
-
-
-
 };
 
 
@@ -473,7 +453,6 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
                 y: oldposView[5]
             };
 
-
             //recupération de déplacement de la souris
             var dReal = {//element différentiel reel
                 x: event.pageX - posData.x,
@@ -487,7 +466,6 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
                 y: dReal.y * scale
             };
 
-
             //console.log(trX + " " + trY + " Virtual event " + event.pageX + "  " + event.pageY + " " + Vevent[1] + " " + Vevent[0]);
 
             //calcul de la nouvelle position du viewport
@@ -500,11 +478,9 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
             posData.x = event.pageX;
             posData.y = event.pageY;
 
-
             $slideMother.css({
                 'transform': 'translate3d(' + newPosView.x + 'px,' + newPosView.y + 'px,0px)'
             });
-
         });
 
         $(this).on("mouseup", function() {
@@ -512,7 +488,6 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
             $(this).off(".navigable");
         });
     }
-
 });
 
 
@@ -540,7 +515,6 @@ $(document).mousewheel(function(event, delta, deltaX, deltaY) {
         newScale = 10;
     }
 
-
     $slideGrandMother.css({
         'transform': 'scaleX(' + newScale + ') scaleY(' + newScale + ') '
     });
@@ -549,20 +523,11 @@ $(document).mousewheel(function(event, delta, deltaX, deltaY) {
     var perspective = Math.round(1 / newScale * 1000);
     //il faudrait augmenter la précision du newScale afin de palier à l'écart de deplacement lors d'un fort dezoom
     $slideGrandMother.css("perspective", perspective);
-
 });
-
-
-
-
-
 
 /* ======================================================================================
  * zone de test
  * ====================================================================================== */
-
-
-
 
 
 //////////test du both click : echec
