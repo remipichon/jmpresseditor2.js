@@ -91,7 +91,6 @@ function getRealCoord(element, $slideArea) {        //semble bien fonctionner
  * callBy : creationElement(button-trigger.js)
  * ====================================================================================== */
 function getScaleGM() {
-    var $slideMother = $("#slideArea >");
     var $slideGrandMother = $("#slideArea");
 
     //recupération des coord du transform scale
@@ -121,7 +120,7 @@ function getScaleGM() {
  * ====================================================================================== */
 function getTransformCoord(objet) {
     var oldposView = objet.css("transform");
-    console.log("oldposView : "+ oldposView);
+    console.log("oldposView : " + oldposView);
     oldposView = oldposView.split('(')[1];
     oldposView = oldposView.split(')')[0];
     oldposView = oldposView.split(',');
@@ -171,7 +170,22 @@ function getDistanceMouseMove(event) {
  * @returns {undefined}
  */
 function move(event, $objet) {
+//    console.log("entree fonction move");
     var $slideArea = $("#slideArea");
+    var idObjet = $objet.attr('id');
+//    console.log(idObjet);
+
+//    console.log("idObjet :" + idObjet);
+//    console.log("move - objet initial : " + $objet.toString());
+//    console.log("move - parent objet initial : " + $objet.parent().toString());
+//    console.log("boolean ? "+ $objet.hasClass("element"));
+//    if ($objet.hasClass("element"))
+//    {
+//        console.log("texte seul texte seul texte seul texte seul texte seul");
+////                 if ($this.parent().hasClass("element")) {
+////                    $this = $this.parent();
+////                }
+//    }
 
     var offX = $objet.attr("offX");
     var offY = $objet.attr("offY");
@@ -180,7 +194,6 @@ function move(event, $objet) {
     }
     else {
         var flag = 1;
-        console.log("move txt in slide 1");
     }
 
     var tab = getVirtualCoord(event, $slideArea, flag);      //recupÃ©ration des coord virtuelle de la souris
@@ -192,32 +205,50 @@ function move(event, $objet) {
     VLeft = VLeft - offX;
 
 
+
+
     //mise à jour de la position
     // CLAIRE : chgt condition ci-dessous (car les éléments ont la classe step ET élément
-    if (!$objet.hasClass("step")) {
-
+    if (!$objet.hasClass("step")) {         // = element dans une slide
+        var idContainer = $objet.parent().attr('id');
         $('#slideArea').jmpress('deinit', $objet.parent());
-        //TODO màj du json
+        //màj du json
+        pressjson.slide[idContainer].element[idObjet].pos.x = VLeft;
+        pressjson.slide[idContainer].element[idObjet].pos.y = VTop;
         $objet.css("left", VLeft);
         $objet.css("top", VTop);
         $('#slideArea').jmpress('init', $objet.parent());
+
+        $objet.parent().on('mouseleave', function() {
+//            console.log("objet : " + $objet.html());
+//            console.log("objet parent: " + $objet.parent().html());
+            console.log("entree mouseleave");
+            $objet = elementToStep($objet); // donnée retour = step element
+            console.log("objet sortie mouseleave" + $objet.html());
+            var ASupp =$('#'+idObjet+'');
+//            console.log('ASupp #idObjet : '+idObjet);
+            console.log('ASupp elem1 : '+ ASupp.html());
+           
+            
+//            $objet.parent().unbind('mouseleave');  
+//            return;
+        });
     }
 
     if ($objet.hasClass("step")) {
         $('#slideArea').jmpress('deinit', $objet);
         //MaJ du json : 
-        var idObjet = $objet.attr('id');
-        if ($objet.hasClass("slide")){
+        if ($objet.hasClass("slide")) {          // cas step slide
 //            console.log("pressjson.slide[idObjet].pos.x" + pressjson.slide[idObjet].pos.x);
             pressjson.slide[idObjet].pos.x = VLeft;
             pressjson.slide[idObjet].pos.y = VTop;
         }
-        if ($objet.hasClass("element")){
+        if ($objet.hasClass("element")) {        // cas step element
+//            console.log("Step element");
 //            console.log("pressjson.slide[idObjet].pos.x" + pressjson.slide[idObjet].pos.x);
             pressjson.component[idObjet].pos.x = VLeft;
             pressjson.component[idObjet].pos.y = VTop;
         }
-        
         $objet.attr("data-x", VLeft)
                 .attr("data-y", VTop);
         $('#slideArea').jmpress('init', $objet);
@@ -240,7 +271,7 @@ function offSet(event, $objet) {
 
     if (!$objet.hasClass("step")) {
         var $slideArea = $objet.parent();
-        console.log("offset txt in slide 1");
+//        console.log("offset txt in slide 1");
     }
 
     //position virtuelle dans le monde des slides de la souris
@@ -250,7 +281,7 @@ function offSet(event, $objet) {
     }
     if (!$objet.hasClass("step")) {
         var flag = 1;
-        console.log("offset txt in slide 2");
+//        console.log("offset txt in slide 2");
     }
     var tab = getVirtualCoord(event, $slideArea, flag);
     var VTopMouse = tab[0];
@@ -269,7 +300,7 @@ function offSet(event, $objet) {
     if (!$objet.hasClass("step")) {
         var offTop = parseFloat($objet.css("top"));
         var offLeft = parseFloat($objet.css("left"));
-        console.log("offset txt in slide 3");
+//        console.log("offset txt in slide 3");
     }
 
     $objet.attr("offX", "" + VLeftMouse - offLeft + "");
@@ -366,6 +397,7 @@ $(document).on('mouseup', function(event) {
     $(".rotate").each(function() {
         $(this).removeClass("rotate");
     });
+    $('.step').unbind('mouseleave');
 });
 
 ///bricolage pour le long press
@@ -424,9 +456,9 @@ jQuery.fn.draggableKiki = function() {
             var $this = $(this);
             if ($this.is("h1") || $this.is("p"))
             {
-                if($this.parent().hasClass("element")){
+                if ($this.parent().hasClass("element")) {
                     $this = $this.parent();
-                }      
+                }
             }
             $this.addClass("dragged");
             offSet(event, $this);

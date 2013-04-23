@@ -49,10 +49,9 @@ $(document).ready(function() {
     function createText() {
         $('.creationText').on('click', function(event) {
             var container = $(this);
-            container.unbind('click');                    // permet de désactiver le clic sur la surface
-
-            var content = prompt("Entrez le texte : ");
-            if (content === null) {
+            (container).unbind('click');                    // permet de désactiver le clic sur la surface
+            var content = prompt("Entrez le texte : ");    
+            if (content === null) {                      // pour annuler l'action si on clique sur annuler ds le prompt
                 return;
             }
             // Ratio : prendre en compte la perspective de la grand-mère (hauteur de zoom)
@@ -61,7 +60,6 @@ $(document).ready(function() {
             //recupération des coord du translate 3D
             var posView = getTransformCoord($('#slideArea>'));
             console.log("coord Slide area x = " + posView.x + "  coordCont y = " + posView.y);
-
 
             //recupération de la perspective courante -> marche pas encore tout à fait (car notre donnée perspective est trafiquée)
             // Test 1 : via currentScale GrandMother
@@ -72,9 +70,8 @@ $(document).ready(function() {
 
             // Test 2 : via currentPerspective GrandMother
             var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
-//            console.log("current prespective : " + currentPerspective);
-            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) * currentPerspective;
-            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) * currentPerspective;
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x))* (currentPerspective);
+            var y = (event.pageY - (window.innerHeight / 2) - parseFloat(posView.y))* (currentPerspective);
 
             var idElement = "element-" + j++;     // id unique élément -> ds json + ds html
 
@@ -83,25 +80,20 @@ $(document).ready(function() {
                 var idContainer = container.attr('id');
                 var containerX = pressjson.slide[idContainer].pos.x,
                         containerY = pressjson.slide[idContainer].pos.y;
-
-
-//                console.log("x : " + x + "  , y : "+ y);
-//                var coordContainer = getTransformCoord(container);
-//                console.log("coordCont x = "+ coordContainer.x+ "  coordCont y = "+ coordContainer.y);
                 var containerWidth = Math.floor(container.width()),
                         containerHeight = Math.floor(container.height());
                 x = x - containerX + (containerWidth / 2);
                 y = y - containerY + (containerHeight / 2);
-//                console.log("width : " + containerWidth + "  , height : "+ containerHeight);
-                console.log("x : " + x + "  , y : " + y);
-
-                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
+                var containerScale = pressjson.slide[idContainer].scale;
+                console.log("scale" + containerScale);
+                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "' + containerScale + ' ", "hierarchy":"h1", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.slide[idContainer].element[idElement] = jsonComponent;
                 jsonToHtmlinSlide(jsonComponent, container);
 
             } else {                            // création élément libre sur layout
-                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : " 1 ", "hierarchy":"h1", "content": "' + content + '"}';
+                var currentScale = getScaleGM();
+                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "'+currentPerspective+'", "hierarchy":"h1", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.component[idElement] = jsonComponent; // ajout de l'element à pressjson, à l'index idElement
                 jsonToHtml(jsonComponent);
@@ -168,56 +160,57 @@ $(document).ready(function() {
         });
     }
 
-    /* ======================================================================================
-     * UTILITAIRES COMMUNS ELEMENTS et SLIDE
-     * ======================================================================================*/
+});
+
+/* ======================================================================================
+ * UTILITAIRES COMMUNS ELEMENTS et SLIDE
+ * ======================================================================================*/
 
 
 // transforme un objet (une slide ou un element) json en html
 //appelé à chaque création d'instance
-    function jsonToHtml(data) {
-        if (data.type === "text")
-        {
-            var template = $('#templateStepElement').html();
-        }
-        if (data.type === "slide") {
-            var template = $('#templateSlide').html();
-        }
-        var html = Mustache.to_html(template, data);
-
-        $('#slideArea >').append(html);
-        var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
-        $('#slideArea').jmpress('init', $newSlide); // initilisation step
-
-        /////////////////////KIKI modifier ce for each car il met draggable toute les step a chaque fois
-        //mise a draggable des slides
-        //si les elements ont une classe qui les identifie, il sera possible de faire une autre fonction de draggable
-        //afin de diffÃ©rencier les deux cas. Par exemple les slides pourraient avoir une restrictions empechant le drop par dessus une autre slide
-        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
-            $(this).draggableKiki();
-            $(this).children().each(function() {
-                $(this).draggableKiki();
-            });
-        });
+function jsonToHtml(data) {
+    if (data.type === "text")
+    {
+        var template = $('#templateStepElement').html();
     }
-    ;
+    if (data.type === "slide") {
+        var template = $('#templateSlide').html();
+    }
+    var html = Mustache.to_html(template, data);
 
+    $('#slideArea >').append(html);
+    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+    $('#slideArea').jmpress('init', $newSlide); // initilisation step
 
-
-    function jsonToHtmlinSlide(data, container) {
-
-        var template = $('#templateElement').html();
-        var html = Mustache.to_html(template, data);
-        container.append(html);
-        var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
-        $('#slideArea').jmpress('init', container); // initilisation step
-
-        container.draggableKiki();
-        container.children().each(function() {
+    /////////////////////KIKI modifier ce for each car il met draggable toute les step a chaque fois
+    //mise a draggable des slides
+    //si les elements ont une classe qui les identifie, il sera possible de faire une autre fonction de draggable
+    //afin de diffÃ©rencier les deux cas. Par exemple les slides pourraient avoir une restrictions empechant le drop par dessus une autre slide
+    $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
+        $(this).draggableKiki();
+        $(this).children().each(function() {
             $(this).draggableKiki();
         });
-    }
-    ;
+    });
+    return($newSlide);
+};
 
-});
+
+
+function jsonToHtmlinSlide(data, container) {
+
+    var template = $('#templateElement').html();
+    var html = Mustache.to_html(template, data);
+    container.append(html);
+    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+    $('#slideArea').jmpress('init', container); // initilisation step
+
+    container.draggableKiki();
+    container.children().each(function() {
+        $(this).draggableKiki();
+    });
+};
+
+
 

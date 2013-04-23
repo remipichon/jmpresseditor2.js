@@ -19,6 +19,8 @@
         <script type="text/javascript" src="js/layout.js"></script>
         <script type="text/javascript" src="js/button-trigger.js"></script> 
         <script type="text/javascript" src="js/navigable-zoombale-draggable.js"></script>
+        <script type="text/javascript" src="js/binding-slide-element.js"></script>
+        
 
         <script type="text/javascript" src="js/jmpress-editor.js"></script>
         <!--<script src="js/editorV2.js"></script>-->
@@ -98,7 +100,7 @@
 
         <script id="templateElement" type="text/template">
 
-            <{{hierarchy}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="false"> {{content}}</{{hierarchy}}>
+            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="false"> {{content}}</{{hierarchy}}>
 
         </script>
 
