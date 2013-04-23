@@ -48,6 +48,7 @@ $(document).ready(function() {
 // function Creation text
     function createText() {
         $('.creationText').on('click', function(event) {
+            event.stopPropagation();
             var container = $(this);
             (container).unbind('click');                    // permet de désactiver le clic sur la surface
             var content = prompt("Entrez le texte : ");    
@@ -101,6 +102,7 @@ $(document).ready(function() {
             console.log(pressjson);
 
             $('#layout').removeClass('creationText');
+            return false;
 
         });
 

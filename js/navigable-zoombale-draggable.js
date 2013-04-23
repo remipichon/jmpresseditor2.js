@@ -170,23 +170,8 @@ function getDistanceMouseMove(event) {
  * @returns {undefined}
  */
 function move(event, $objet) {
-//    console.log("entree fonction move");
     var $slideArea = $("#slideArea");
     var idObjet = $objet.attr('id');
-//    console.log(idObjet);
-
-//    console.log("idObjet :" + idObjet);
-//    console.log("move - objet initial : " + $objet.toString());
-//    console.log("move - parent objet initial : " + $objet.parent().toString());
-//    console.log("boolean ? "+ $objet.hasClass("element"));
-//    if ($objet.hasClass("element"))
-//    {
-//        console.log("texte seul texte seul texte seul texte seul texte seul");
-////                 if ($this.parent().hasClass("element")) {
-////                    $this = $this.parent();
-////                }
-//    }
-
     var offX = $objet.attr("offX");
     var offY = $objet.attr("offY");
     if ($objet.hasClass("step")) {
@@ -204,9 +189,6 @@ function move(event, $objet) {
     VTop = VTop - offY;
     VLeft = VLeft - offX;
 
-
-
-
     //mise à jour de la position
     // CLAIRE : chgt condition ci-dessous (car les éléments ont la classe step ET élément
     if (!$objet.hasClass("step")) {         // = element dans une slide
@@ -219,19 +201,10 @@ function move(event, $objet) {
         $objet.css("top", VTop);
         $('#slideArea').jmpress('init', $objet.parent());
 
-        $objet.parent().on('mouseleave', function() {
-//            console.log("objet : " + $objet.html());
-//            console.log("objet parent: " + $objet.parent().html());
-            console.log("entree mouseleave");
+        $objet.parent().on('mouseleave', function() {   // passage d'element à step-element
+//            console.log("entree mouseleave");
             $objet = elementToStep($objet); // donnée retour = step element
-            console.log("objet sortie mouseleave" + $objet.html());
-            var ASupp =$('#'+idObjet+'');
-//            console.log('ASupp #idObjet : '+idObjet);
-            console.log('ASupp elem1 : '+ ASupp.html());
-           
-            
-//            $objet.parent().unbind('mouseleave');  
-//            return;
+//            console.log("objet sortie mouseleave" + $objet.html());
         });
     }
 
@@ -239,15 +212,16 @@ function move(event, $objet) {
         $('#slideArea').jmpress('deinit', $objet);
         //MaJ du json : 
         if ($objet.hasClass("slide")) {          // cas step slide
-//            console.log("pressjson.slide[idObjet].pos.x" + pressjson.slide[idObjet].pos.x);
             pressjson.slide[idObjet].pos.x = VLeft;
             pressjson.slide[idObjet].pos.y = VTop;
         }
         if ($objet.hasClass("element")) {        // cas step element
-//            console.log("Step element");
-//            console.log("pressjson.slide[idObjet].pos.x" + pressjson.slide[idObjet].pos.x);
             pressjson.component[idObjet].pos.x = VLeft;
             pressjson.component[idObjet].pos.y = VTop;
+            $('.slide').mouseenter(function() {         // passage de step-element à element
+                var $slide = $(this);
+                steptoElement($objet, $slide);
+            });
         }
         $objet.attr("data-x", VLeft)
                 .attr("data-y", VTop);
@@ -398,7 +372,8 @@ $(document).on('mouseup', function(event) {
         $(this).removeClass("rotate");
     });
     $('.step').unbind('mouseleave');
-});
+    $('.slide').unbind('mouseenter');        
+}); 
 
 ///bricolage pour le long press
 
