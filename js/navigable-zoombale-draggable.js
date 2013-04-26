@@ -120,7 +120,7 @@ function getScaleGM() {
  * ====================================================================================== */
 function getTransformCoord(objet) {
     var oldposView = objet.css("transform");
-    console.log("oldposView : " + oldposView);
+//    console.log("oldposView : " + oldposView);
     oldposView = oldposView.split('(')[1];
     oldposView = oldposView.split(')')[0];
     oldposView = oldposView.split(',');
@@ -303,7 +303,7 @@ function moveZ(event, $objet) {
     $('#slideArea').jmpress('init', $objet);
 
 
-}
+};
 
 //rotate x,y
 // deplacement en left (x) rotation -> y

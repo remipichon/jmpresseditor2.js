@@ -33,25 +33,29 @@ $(document).ready(function() {
 // -> créer un élément sur layout (step element) ou dans une slide (element)
     $('#text-tool-title').on('click', function(event) {
         event.preventDefault();
+        event.stopPropagation();
         $('#layout').removeClass().addClass('creationText');
         $(".slide").each(function() {
             $(this).addClass('creationText');
         });
         createText();
-        $('#layout').removeClass();
-        $(".slide").each(function() {
-            $(this).removeClass('creationText');
-        });
+//        $('#layout').removeClass();
+//        $(".slide").each(function() {
+//            $(this).removeClass('creationText');
+//        });
     });
 
 
 // function Creation text
     function createText() {
         $('.creationText').on('click', function(event) {
+//            event.preventDefault();
             event.stopPropagation();
+            $('this').removeClass('creationText');
+//            event.stopImmediatePropagation();
             var container = $(this);
             (container).unbind('click');                    // permet de désactiver le clic sur la surface
-            var content = prompt("Entrez le texte : ");    
+            var content = prompt("Entrez le texte : ");
             if (content === null) {                      // pour annuler l'action si on clique sur annuler ds le prompt
                 return;
             }
@@ -60,7 +64,7 @@ $(document).ready(function() {
 
             //recupération des coord du translate 3D
             var posView = getTransformCoord($('#slideArea>'));
-            console.log("coord Slide area x = " + posView.x + "  coordCont y = " + posView.y);
+//            console.log("coord Slide area x = " + posView.x + "  coordCont y = " + posView.y);
 
             //recupération de la perspective courante -> marche pas encore tout à fait (car notre donnée perspective est trafiquée)
             // Test 1 : via currentScale GrandMother
@@ -71,8 +75,8 @@ $(document).ready(function() {
 
             // Test 2 : via currentPerspective GrandMother
             var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
-            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x))* (currentPerspective);
-            var y = (event.pageY - (window.innerHeight / 2) - parseFloat(posView.y))* (currentPerspective);
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) * (currentPerspective);
+            var y = (event.pageY - (window.innerHeight / 2) - parseFloat(posView.y)) * (currentPerspective);
 
             var idElement = "element-" + j++;     // id unique élément -> ds json + ds html
 
@@ -86,7 +90,7 @@ $(document).ready(function() {
                 x = x - containerX + (containerWidth / 2);
                 y = y - containerY + (containerHeight / 2);
                 var containerScale = pressjson.slide[idContainer].scale;
-                console.log("scale" + containerScale);
+//                console.log("scale" + containerScale);
                 var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "' + containerScale + ' ", "hierarchy":"h1", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.slide[idContainer].element[idElement] = jsonComponent;
@@ -94,31 +98,19 @@ $(document).ready(function() {
 
             } else {                            // création élément libre sur layout
                 var currentScale = getScaleGM();
-                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "'+currentPerspective+'", "hierarchy":"h1", "content": "' + content + '"}';
+                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "' + currentPerspective + '", "hierarchy":"h1", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.component[idElement] = jsonComponent; // ajout de l'element à pressjson, à l'index idElement
                 jsonToHtml(jsonComponent);
             }
             console.log(pressjson);
 
-            $('#layout').removeClass('creationText');
-            return false;
 
         });
 
     }
 
-    /* ======================================================================================
-     * EDITION DES ELEMENTS
-     * ======================================================================================*/
 
-    /*EDITER CONTENU TEXTE
-     * met l'attribut contenteditable à true pour les fichiers texte, sur un doubleclick
-     * En cours ! (marche pas pour le moment)
-     */
-    $('div [contenteditable="false"]').dblclick(function() {
-        console.log("contenteditable click");
-    });
 
 
     /* ======================================================================================
@@ -127,17 +119,18 @@ $(document).ready(function() {
 
 // Trigger sur bouton "creation slide"
     $('#slide-tool').on('click', function(event) {
-        console.log("creation slide enclenchee");
+//        console.log("creation slide enclenchee");
         event.preventDefault();
-        $('#layout').removeClass();
+//        $('#layout').removeClass();
         $('#layout').addClass('creationSlide');
         createSlide();
-        $('#layout').removeClass();
+//        $('#layout').removeClass();
     });
 
     function createSlide() {
         $('.creationSlide').on('click', function(event) {
             $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
+            $('#layout').removeClass();
             var oldposView = $('#slideArea>').css("transform");
             oldposView = oldposView.split('(')[1];
             oldposView = oldposView.split(')')[0];
@@ -162,7 +155,24 @@ $(document).ready(function() {
         });
     }
 
-});
+
+    /* ======================================================================================
+     * EDITION DES ELEMENTS
+     * ======================================================================================*/
+
+    /*EDITER CONTENU TEXTE
+     * met l'attribut contenteditable à true pour les fichiers texte, sur un doubleclick
+     * En cours ! (marche pas pour le moment)
+     */
+    $('.element').click(function() {
+        console.log("contenteditable click");
+    });
+
+
+
+
+});         // fin document.ready
+
 
 /* ======================================================================================
  * UTILITAIRES COMMUNS ELEMENTS et SLIDE
@@ -196,7 +206,8 @@ function jsonToHtml(data) {
         });
     });
     return($newSlide);
-};
+}
+;
 
 
 
@@ -212,7 +223,8 @@ function jsonToHtmlinSlide(data, container) {
     container.children().each(function() {
         $(this).draggableKiki();
     });
-};
+}
+;
 
 
 

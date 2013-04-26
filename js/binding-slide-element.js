@@ -5,8 +5,8 @@
 
 function elementToStep($objet) {
     var $container = $objet.parent();
-    console.log("parent : " + $container.html());     // slide
-    console.log("$objet : " + $objet.html());         // h1
+//    console.log("parent : " + $container.html());     // slide
+//    console.log("$objet : " + $objet.html());         // h1
     var idContainer = $container.attr('id');
     var idObjet = $objet.attr('id');
     if (pressjson.slide[idContainer].element[idObjet]) {
@@ -27,7 +27,7 @@ function elementToStep($objet) {
                 y = jsonComponent.pos.y;
         x = (containerX - (containerWidth / 2) + x);
         y = (containerY - (containerHeight / 2) + y);
-        console.log("x : " + x + "  y : " + y);
+//        console.log("x : " + x + "  y : " + y);
         pressjson.component[idObjet].pos.x = x;
         pressjson.component[idObjet].pos.y = y;
         $objet = jsonToHtml(jsonComponent);         // recupère $newSlide, Step element qui viet d'etre créée
@@ -40,12 +40,12 @@ function elementToStep($objet) {
 }
 
 function steptoElement($objet, $slide) {
-    console.log("arrivee d'un step element sur une slide");
+//    console.log("arrivee d'un step element sur une slide");
     var $container = $slide;
 //    console.log("parent : " + $container.html());     // slide
 //    console.log("$objet : " + $objet.html());         // h1
     var idContainer = $container.attr('id');
-    console.log("idContainer : "+ idContainer);
+//    console.log("idContainer : "+ idContainer);
     var idObjet = $objet.attr('id');
 
 
@@ -67,7 +67,7 @@ function steptoElement($objet, $slide) {
                 y = jsonComponent.pos.y;
         x = (x + (containerWidth / 2) - containerX );
         y = (y + (containerHeight / 2) - containerY);
-        console.log("x : " + x + "  y : " + y);
+//        console.log("x : " + x + "  y : " + y);
         pressjson.slide[idContainer].element[idObjet].pos.x = x;
         pressjson.slide[idContainer].element[idObjet].pos.y = y;
         $objet = jsonToHtmlinSlide(jsonComponent,$container);         // recupère $newSlide, Step element qui viet d'etre créée

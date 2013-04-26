@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Display mode</title>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/displaymode.css" >
+        <script type="text/javascript" src="js/jquery-ui.js"></script>        
+        <script type="text/javascript" src="js/mustache.js"></script>
+        <script type="text/javascript" src="js/jmpress.js"></script>
+    </head>
+    <body>
+        <div id="jmpress">
+
+        </div>
+
+
+        <script id="templateJmpress" type="text/template">
+            {{#slide}}
+            <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-scale = '{{scale}}' > 
+            {{title}}
+            {{#element}} 
+            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px'> {{content}}</{{hierarchy}}>  
+            {{/element}} 
+            </div>   
+            {{/slide}}
+        </script>
+
+
+        <script type="text/javascript">
+            <!--(document).ready(function(){-->
+            var pressjson = JSON.parse(localStorage.getItem('outputjson'));
+            var template = $('#templateJmpress').html();
+            var html = Mustache.to_html(template, pressjson);
+            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
+            $('#jmpress').append(html);
+            $('#jmpress').jmpress();
+            <!--})();-->
+        </script>
+    </body>
+</html>
