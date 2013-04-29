@@ -44,7 +44,7 @@ $(document).on('ready', function() {
     $('#slideArea').jmpress(
             {
                 viewPort: {
-                    height: 2000
+                    height: 1700
 
 
                 }
@@ -101,8 +101,13 @@ $(document).on('ready', function() {
      * click sur bouton snapshot slide -> rend slideArea cliquabe pour creation de slide 
      * récupère data pour json */
     function createSlide(x, y, scale, event) {
-
-        var stringSlide = '{"type": "slide","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" :' + scale + ', "elements": []}';
+        var z = 0;
+        var rotX = 0;
+        var rotY = 0;
+        var rotZ = 0;
+        var stringSlide = '{"type": "slide","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"}, \n\
+                                    "rotate" : {"x":"'+rotX+'", "y":"'+rotY+'", "z":"'+rotZ+'"}, \n\
+                                        "scale" :' + scale + ', "elements": []}';
         var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
 
         pressjson.slide.push(jsonSlide);        // ajout de la slide à pressjson
