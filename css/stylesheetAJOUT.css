@@ -59,6 +59,12 @@ p {
     border-radius:100%;
 }
 
+
+.longclick {
+    border : dashed black 20px;
+    
+}
+
 .slidegroupe {
     
     border: dashed black; 
