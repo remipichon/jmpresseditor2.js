@@ -175,10 +175,26 @@ h1, p
     display:block;
 }
 
-/*.hidden-bar
+#sidebar #time-line
 {
-    margin-left: -200px;
-}*/
+    border-bottom:none;
+}
+
+.nav-button img
+{
+    width: 50%;
+    height:50%;
+    margin: 0 auto;
+    padding: 0;
+    display:block;
+}
+
+
+#previous, #next
+{
+    display:inline-block;
+    width:48%;
+}
 
 
 /* ======================================================================================
