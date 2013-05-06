@@ -59,28 +59,15 @@ $(document).ready(function() {
             if (content === null) {                      // pour annuler l'action si on clique sur annuler ds le prompt
                 return;
             }
-            // Ratio : prendre en compte la perspective de la grand-mère (hauteur de zoom)
-            // + les values de translate3D de la mère (angle de vue) ? 
-
-            //recupération des coord du translate 3D
-            var posView = getTransformCoord($('#slideArea>'));
-//            console.log("coord Slide area x = " + posView.x + "  coordCont y = " + posView.y);
-
-            //recupération de la perspective courante -> marche pas encore tout à fait (car notre donnée perspective est trafiquée)
-            // Test 1 : via currentScale GrandMother
-//            var currentScale = getScaleGM();
-//            console.log("current Scale : " + currentScale);
-//            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) / currentScale;
-//            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) / currentScale;
-
-            // Test 2 : via currentPerspective GrandMother
-            var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
-            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) * (currentPerspective);
-            var y = (event.pageY - (window.innerHeight / 2) - parseFloat(posView.y)) * (currentPerspective);
+            var dico = getTrans3D();
+            var currentScale = dico.scaleZ;
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * (currentScale);
+            var y = (event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1])) * (currentScale);
+            var z = dico.translate3d[2];
 
             var idElement = "element-" + j++;     // id unique élément -> ds json + ds html
 
-            if (container.hasClass("slide"))      // this = élément sur lequel on a cliqué
+            if (container.hasClass("slide"))      // element créé directement dans une slide
             {
                 var idContainer = container.attr('id');
                 var containerX = pressjson.slide[idContainer].pos.x,
@@ -91,19 +78,23 @@ $(document).ready(function() {
                 y = y - containerY + (containerHeight / 2);
                 var containerScale = pressjson.slide[idContainer].scale;
 //                console.log("scale" + containerScale);
-                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "' + containerScale + ' ", "hierarchy":"h1", "content": "' + content + '"}';
+                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"h1", "content": "' + content + '"}';
+                console.log(stringText);
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.slide[idContainer].element[idElement] = jsonComponent;
                 jsonToHtmlinSlide(jsonComponent, container);
 
             } else {                            // création élément libre sur layout
-                var currentScale = getScaleGM();
-                var stringText = '{"type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "' + currentPerspective + '", "hierarchy":"h1", "content": "' + content + '"}';
+                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "hierarchy":"h1", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.component[idElement] = jsonComponent; // ajout de l'element à pressjson, à l'index idElement
                 jsonToHtml(jsonComponent);
             }
             console.log(pressjson);
+
+            $(".slide").each(function() {
+                $(this).removeClass('creationText');
+            });
 
 
         });
@@ -131,22 +122,13 @@ $(document).ready(function() {
         $('.creationSlide').on('click', function(event) {
             $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide (solution temporaire)
             $('#layout').removeClass();
-            var oldposView = $('#slideArea>').css("transform");
-            oldposView = oldposView.split('(')[1];
-            oldposView = oldposView.split(')')[0];
-            oldposView = oldposView.split(',');
-            var posView = {
-                x: oldposView[4],
-                y: oldposView[5]
-            };
-            var currentPerspective = parseFloat($('#slideArea').css("perspective")) / 1000;
-//            console.log("current prespective : " + currentPerspective);
-            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(posView.x)) * currentPerspective;
-            var y = event.pageY - (window.innerHeight / 2) - parseFloat(posView.y) * currentPerspective;
-//            var x = -(window.innerWidth / 2 - event.pageX);
-//            var y = -(window.innerHeight / 2 - event.pageY);
+            var dico = getTrans3D();
+            var currentScale = dico.scaleZ;
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
+            var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
+            var z = dico.translate3d[2];
             var idSlide = "slide-" + i++;
-            var stringSlide = '{"type": "slide", "id" : "' + idSlide + '","pos": {"x" : "' + x + '", "y": "' + y + '"},"scale" : "1", "element": {}}';
+            var stringSlide = '{"type": "slide", "id" : "' + idSlide + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
             pressjson.slide[idSlide] = jsonSlide;
             console.dir(pressjson);
@@ -168,9 +150,6 @@ $(document).ready(function() {
         console.log("contenteditable click");
     });
 
-
-
-
 });         // fin document.ready
 
 
@@ -182,7 +161,7 @@ $(document).ready(function() {
 // transforme un objet (une slide ou un element) json en html
 //appelé à chaque création d'instance
 function jsonToHtml(data) {
-    if (data.type === "text")
+    if (data.class === "element")
     {
         var template = $('#templateStepElement').html();
     }

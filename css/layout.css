@@ -180,6 +180,11 @@ h1, p
     border-bottom:none;
 }
 
+.nav-button
+{
+    height:100px;
+}
+
 .nav-button img
 {
     width: 50%;
