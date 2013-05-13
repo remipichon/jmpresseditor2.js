@@ -102,7 +102,7 @@
         <script id="templateStepElement" type="text/template">
 
             <div id={{id}} class='step'  data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}'> 
-            <{{hierarchy}} id={{id}} contenteditable="false" class='element'> 
+            <{{hierarchy}} id={{id}} contenteditable="true" class='element'> 
             {{content}}
             </{{hierarchy}}>
             </div>    
@@ -111,7 +111,7 @@
 
         <script id="templateElement" type="text/template">
 
-            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="false"> {{content}}</{{hierarchy}}>
+            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="true"> {{content}}</{{hierarchy}}>
 
         </script>
 

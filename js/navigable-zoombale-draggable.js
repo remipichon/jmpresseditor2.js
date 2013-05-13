@@ -404,7 +404,7 @@ function rotateZ(event, $objet) {
         pressjson.slide[idObjet].rotate.z = rotate.z;
     }
     else {        // cas step element
-        pressjson.slide[idObjet].rotate.z = rotate.z;
+        pressjson.component[idObjet].rotate.z = rotate.z;
     }
     $objet.attr("data-rotate-z", rotate.z);
     $('#slideArea').jmpress('init', $objet);
@@ -503,8 +503,11 @@ $(document).on('mouseup', function(event) {
                 if ($container !== undefined)          // = drop de l'element sur slideArea
                     $this = steptoElement($this, $container);
             }
-            $this.draggableKiki();
+            
         }
+        console.log("this avant draggable");
+        console.log($this);
+        $this.draggableKiki();
     });
     $(".rotate").each(function() {
         $(this).removeClass("rotate");
@@ -592,6 +595,7 @@ jQuery.fn.draggableKiki = function() {
 
         if (event.which === 3) {//longpress right
             $(this).data('checkdown', setTimeout(function() {
+                console.log('long left press sur slide');
                 $this.addClass("longclick");
                 //mettre ici les trigger à annuler pour un mousemove sur le meme element
                 //par exemple, ici on supprime le trigger mousemove.simpleclick ddu draggableKiki

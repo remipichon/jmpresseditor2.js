@@ -38,7 +38,21 @@ $(document).ready(function() {
         $(".slide").each(function() {
             $(this).addClass('creationText');
         });
-        createText();
+        createText("h1");
+//        $('#layout').removeClass();
+//        $(".slide").each(function() {
+//            $(this).removeClass('creationText');
+//        });
+    });
+    
+        $('#text-tool-body').on('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $('#layout').removeClass().addClass('creationText');
+        $(".slide").each(function() {
+            $(this).addClass('creationText');
+        });
+        createText("p");
 //        $('#layout').removeClass();
 //        $(".slide").each(function() {
 //            $(this).removeClass('creationText');
@@ -47,7 +61,7 @@ $(document).ready(function() {
 
 
 // function Creation text
-    function createText() {
+    function createText(hierarchy) {
         $('.creationText').on('click', function(event) {
 //            event.preventDefault();
             event.stopPropagation();
@@ -78,14 +92,14 @@ $(document).ready(function() {
                 y = y - containerY + (containerHeight / 2);
                 var containerScale = pressjson.slide[idContainer].scale;
 //                console.log("scale" + containerScale);
-                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"h1", "content": "' + content + '"}';
+                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"'+hierarchy+'", "content": "' + content + '"}';
                 console.log(stringText);
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.slide[idContainer].element[idElement] = jsonComponent;
                 jsonToHtmlinSlide(jsonComponent, container);
 
             } else {                            // création élément libre sur layout
-                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "hierarchy":"h1", "content": "' + content + '"}';
+                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "hierarchy":"'+hierarchy+'", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.component[idElement] = jsonComponent; // ajout de l'element à pressjson, à l'index idElement
                 jsonToHtml(jsonComponent);
@@ -202,6 +216,7 @@ function jsonToHtmlinSlide(data, container) {
     container.children().each(function() {
         $(this).draggableKiki();
     });
+    return($newSlide);
 }
 ;
 
