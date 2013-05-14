@@ -690,8 +690,15 @@ jQuery.fn.draggableKiki = function() {
 function getTrans3D() {
     // ToDO : récupérer le bon VendorPrefix, suivant le navigateur
     // car "webkit" ne fonctionne que sur certains navigateurs (par ex, suis obligée d'utiliser chromium pour utiliser l'editeur, là)
-
-    var trans = $("#slideArea>div")[0].style.webkitTransform.match(/.+?\(.+?\)/g);
+    
+    var trans = (pfx('transform'));
+//    console.log("trans : "+ trans);
+    
+    
+    //style.position == style['position']
+//    var trans = $("#slideArea>div")[0].style.webkitTransform.match(/.+?\(.+?\)/g);
+     var trans = $("#slideArea>div")[0].style[''+trans+''].match(/.+?\(.+?\)/g);
+     console.log(trans);
     var dico = {};
     for (el in trans) {
         var ele = trans[el];
@@ -869,7 +876,38 @@ $(document).mousewheel(function(event, delta, deltaX, deltaY) {
 });
 
 
+/* ======================================================================================
+ * petits utilitaires
+ * from jmpress.js
+ * used to get the right vendor prefix
+ * ====================================================================================== */
 
+
+/**
+ * Set supported prefixes
+ *
+ * @access protected
+ * @return Function to get prefixed property
+ */
+var pfx = (function() {
+    var style = document.createElement('dummy').style,
+            prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+            memory = {};
+    return function(prop) {
+        if (typeof memory[ prop ] === "undefined") {
+            var ucProp = prop.charAt(0).toUpperCase() + prop.substr(1),
+                    props = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+            memory[ prop ] = null;
+            for (var i in props) {
+                if (style[ props[i] ] !== undefined) {
+                    memory[ prop ] = props[i];
+                    break;
+                }
+            }
+        }
+        return memory[ prop ];
+    };
+}());
 
 /* ======================================================================================
  * zone de test
