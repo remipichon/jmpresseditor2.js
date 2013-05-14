@@ -505,8 +505,8 @@ $(document).on('mouseup', function(event) {
             }
             
         }
-        console.log("this avant draggable");
-        console.log($this);
+//        console.log("this avant draggable");
+//        console.log($this);
         $this.draggableKiki();
     });
     $(".rotate").each(function() {
@@ -691,14 +691,12 @@ function getTrans3D() {
     // ToDO : récupérer le bon VendorPrefix, suivant le navigateur
     // car "webkit" ne fonctionne que sur certains navigateurs (par ex, suis obligée d'utiliser chromium pour utiliser l'editeur, là)
     
-    var trans = (pfx('transform'));
-//    console.log("trans : "+ trans);
-    
+    var prefix = (pfx('transform'));
+//    console.log("trans : "+ trans);  
     
     //style.position == style['position']
 //    var trans = $("#slideArea>div")[0].style.webkitTransform.match(/.+?\(.+?\)/g);
-     var trans = $("#slideArea>div")[0].style[''+trans+''].match(/.+?\(.+?\)/g);
-     console.log(trans);
+     var trans = $("#slideArea>div")[0].style[''+prefix+''].match(/.+?\(.+?\)/g);
     var dico = {};
     for (el in trans) {
         var ele = trans[el];

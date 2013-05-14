@@ -10,9 +10,33 @@ $(document).ready(function() {
 //$('#sidebar').toggleClass("hidden-bar");
 //});
 
-/* ======================================================================================
- * rightbar slidding        -   arrow-nav button
- * ====================================================================================== */
+    /* ======================================================================================
+     * top-bar drop down menu        -   parameters button
+     * ====================================================================================== */
+    $('#parameters').on('click', function() {
+        $submenu = $('#topbar-submenu');
+        $submenu.toggleClass('hidden-sub');
+        if ($submenu.hasClass('hidden-sub')) {
+//            $($submenu).animate({marginTop: "-100"}, 300);
+            $($submenu).show();
+        }
+        else {
+            $($submenu).animate({marginTop: "0"}, 300);
+            $($submenu).hide();
+        }
+    });
+    
+    
+    $('#info').on('click', function(){
+        window.open('https://github.com/clairezed/ImpressEdit');
+    });
+
+
+
+
+    /* ======================================================================================
+     * rightbar sliding        -   arrow-nav button
+     * ====================================================================================== */
 
     $('#arrow-nav').on('click', function() {
         $sidebar = $('#sidebar');
@@ -27,11 +51,11 @@ $(document).ready(function() {
         }
     });
 
-/* ======================================================================================
- * DISPLAY MODE        -   present button
- * ouvre dans une nouvelle fenetre la pres' en mode presentation (avec script jmpress originel)
- * utilise les données du json (reformatées) stockées en local storage + export mustache
- * ====================================================================================== */
+    /* ======================================================================================
+     * DISPLAY MODE        -   present button
+     * ouvre dans une nouvelle fenetre la pres' en mode presentation (avec script jmpress originel)
+     * utilise les données du json (reformatées) stockées en local storage + export mustache
+     * ====================================================================================== */
 
     $('#present').on('click', function(event) {
         var outputjson = {data: null, slide: new Array()};

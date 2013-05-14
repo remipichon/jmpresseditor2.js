@@ -27,10 +27,16 @@
 
     <body>
         <div id="topbar">
-            <a href="#" id="present" title="present"><p>present</p></a>
-            <a href="#" id="save" title="save"><p>save</p></a>
-            <a href="#" id="parameters" title="parameters"><p>parameters</p></a>
-
+            <ul>
+                <li><a href="#" id="present" title="launch the presentation"><p>present</p></a></li>
+                <li><a href="#" id="save" title="save your presentation"><p>save</p></a></li>
+                <li><a href="#" id="parameters" title="parameters"><p>parameters</p></a>
+                    <ul id="topbar-submenu">
+                        <li><a href="#" id="info" title="more info on this editor"><p>info</p></a></li>
+                        <li><a href="#" id="theme" title="change presentation theme"><p>theme</p></a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         <!--tag <nav> ?-->
         <div id="sidebar">
@@ -40,7 +46,7 @@
                     <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
                     <ul>
                         <li>
-                            <a href="#" id="text-tool" title="text tools"><p>text</p></a>
+                            <a href="#" id="text-tool" title="create text"><p>text</p></a>
                             <ul class="submenu">
                                 <li>
                                     <a href="#" id="text-tool-title" title="title type"><p>title</p></a>
@@ -51,16 +57,16 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#" id="shape-tool"  title="shape tools"><p>shape</p></a>
+                            <a href="#" id="geek-tool"  ><p>geek mode</p></a>
                         </li>
                         <li>
-                            <a href="#" id="slide-tool" title="slide tools"><p>slide</p></a>
+                            <a href="#" id="slide-tool" title="create a slide"><p>slide</p></a>
                         </li>
                     </ul>
                 </li>
                 <li id="time-line">
                     <h1 id="header-time-line">TIME LINE</h1>
-                    <ul class="nav-button">
+<!--                    <ul class="nav-button">
                         <li id="previous">
                             <a href="#" id="previous-a" title="previous slide">
                                 <img src="images/arrowsTLleftP.png" alt="previous slide">
@@ -71,22 +77,13 @@
                                 <img src="images/arrowsTLrightP.png" alt="next slide">
                             </a>
                         </li>
-                        
-                    </ul>
+                    </ul>-->
                 </li>
             </ul>
         </div>
         <div id="layout"></div>
-        <div id="slideArea" style="perspective:2000">
-
-
-            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000" style="display:none"><p> en profondeur</p></div>
-
-            <!--            <div id='elementStock' class='step'>
-                            <div class="element" style="position: relative; left : 300px; top : -650px' " data-scale="">
-                                <h1 contenteditable="true"> test </h1>
-                            </div>
-                        </div>-->
+        <div id="slideArea" >
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000" style="display:block"><p> en profondeur</p></div>
         </div>
 
 

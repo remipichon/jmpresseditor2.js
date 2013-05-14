@@ -16,6 +16,8 @@ $(document).ready(function() {
 //            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
 //        }
     });
+    
+    $('#profondeur').remove();
 
 //    var pressjson = {data: null, slide: new Array(), component: new Array()};
     var i = 1; // id unique des slides      -> utile pour conversion json <-> html

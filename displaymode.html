@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="css/displaymode.css" >
         <!--<script type="text/javascript" src="js/jquery-ui.js"></script>-->
         <script type="text/javascript" src="js/mustache.js"></script>
-        
+
         <script type="text/javascript" src="js/jquery.js"></script>
 
     </head>
@@ -30,13 +30,20 @@
 
         <script type="text/javascript" src="js/jmpress.js"></script>
         <script type="text/javascript">
+            var config = {
+                viewPort:{
+                    width:800,
+                    height:true
+                }
+            };
             var pressjson = JSON.parse(localStorage.getItem('outputjson'));
             var template = $('#templateJmpress').html();
             var html = Mustache.to_html(template, pressjson);
-//            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
-            $('#jmpress').append(html);
+            //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
+            $('#jmpress').append(html);         
             $('#jmpress').jmpress();
+          
         </script>
-        
+
     </body>
 </html>
