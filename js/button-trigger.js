@@ -46,18 +46,17 @@ $(document).ready(function() {
      * TRIGGERS CREATE TITLE
      * ======================================================================================*/
     $('#text-tool-title').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
         event.preventDefault();
         $('#layout').removeClass().addClass('creationTitle');
         $(".slide").each(function() {
-            $(this).removeClass('creationBody').addClass('creationTitle');
+            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
         });
     });
 
     $(document).on('click', '.creationTitle', function(event) {
-//            event.preventDefault();
         $('.creationTitle').removeClass('creationTitle');
-//        event.stopPropagation();
         createText('h1', event);
     });
 
@@ -65,19 +64,16 @@ $(document).ready(function() {
      * TRIGGERS CREATE BODY
      * ======================================================================================*/
     $('#text-tool-body').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked"); 
         event.preventDefault();
-//        event.stopPropagation();
         $('#layout').removeClass().addClass('creationBody');
         $(".slide").each(function() {
-            $(this).removeClass('creationTitle').addClass('creationBody');
+            $(this).removeClass('creationTitle creationGeek').addClass('creationBody');
         });
     });
 
-//    $('.creationBody').on('click',  function(event) {
     $(document).on('click', '.creationBody', function(event) {
-//            event.preventDefault();
-//        console.log("click sur classe creationBody");
         event.stopPropagation();
         $('.creationBody').removeClass('creationBody');
         createText('p', event);
@@ -140,6 +136,7 @@ $(document).ready(function() {
 
 // Trigger sur bouton "creation slide"
     $('#slide-tool').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
         $('#layout').removeClass().addClass('creationSlide');
@@ -151,8 +148,6 @@ $(document).ready(function() {
         $('.creationSlide').removeClass('creationSlide');
         createSlide();
     });
-
-
 
     function createSlide() {
         $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
@@ -170,6 +165,30 @@ $(document).ready(function() {
         jsonToHtml(jsonSlide);
          $('#slide-tool').parent().removeClass("buttonclicked");
     }
+
+  /* ======================================================================================
+     * GEEK MODE - création d'element libre en html
+     * ======================================================================================*/
+
+$('#geek-tool').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
+        $('#geek-tool').parent().addClass("buttonclicked"); 
+        event.preventDefault();
+        $('#layout').removeClass().addClass('creationGeek');
+        $(".slide").each(function() {
+            $(this).removeClass('creationTitle creationBody').addClass('creationGeek');
+        });
+    });
+
+    $(document).on('click', '.creationGeek', function(event) {
+        event.stopPropagation();
+        $('.creationGeek').removeClass('creationGeek');
+        console.log('creation geek html enclenchee');
+//        createHtml();
+    });
+
+
+
 
 
 }); // fin document.ready
