@@ -18,6 +18,7 @@ function getMouseUpContainer(evt, slide)
     {
         return ($this);
     }
+//    return null;                  // 
 }
 
 

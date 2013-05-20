@@ -12,7 +12,6 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     var MRH = window.innerHeight; //MaxRealHeight
 
 
-
     //var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000); //MaxVirtualHeight //prise en compte deu zoom
     // var scale = ($slideArea.hasClass("step"))? parseInt(parseFloat($slideArea.css("perspective")) / 1000) : 1;
     var scale = $objet.attr("data-scale");
@@ -622,6 +621,7 @@ jQuery.fn.draggableKiki = function() {
      * rotate X et Y (right)
      */
     $(this).on("mousedown.simpleclick", function(event) {
+        $('body').css('cursor', 'move');
 
         var $this = $(this);
         if ($this.hasClass('element'))

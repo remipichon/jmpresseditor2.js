@@ -6,9 +6,33 @@
 $(document).ready(function() {
 
 
+
     /* ======================================================================================
      * VARIABLES GLOBALES
      * ======================================================================================*/
+
+
+    var i = 1; // id unique des slides      -> utile pour conversion json <-> html
+    var j = 1; // id unique des éléments    -> utile pour conversion json <-> html
+
+    // REINITIALISATION DE LA PRESENTATION SAUVEE
+    if (localStorage.getItem('savedPress')) {
+        $('#slideArea').html(localStorage.getItem('savedPress'))
+        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
+            $(this).draggableKiki();
+            $(this).children().each(function() {
+                $(this).draggableKiki();
+            });
+        });
+    };
+    if (localStorage.getItem('savedjson')) {
+        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
+        pressjson = savedjson;
+        i = pressjson.increment['i'];
+        j = pressjson.increment['j'];
+    };
+
+
 
 //       initialisation jmpress :
     $('#slideArea').jmpress({
@@ -16,12 +40,9 @@ $(document).ready(function() {
 //            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
 //        }
     });
-    
+
     $('#profondeur').remove();
 
-//    var pressjson = {data: null, slide: new Array(), component: new Array()};
-    var i = 1; // id unique des slides      -> utile pour conversion json <-> html
-    var j = 1; // id unique des éléments    -> utile pour conversion json <-> html
 
     //  initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
@@ -34,20 +55,21 @@ $(document).ready(function() {
 // Trigger sur bouton "creation text h1"
 // -> créer un élément sur layout (step element) ou dans une slide (element)
     $('#text-tool-title').on('click', function(event) {
+        $('#text-tool').parent().addClass("buttonclicked");
         event.preventDefault();
-        event.stopPropagation();
+
+        console.log("event : " + event);
+        console.log(event);
+//        event.stopPropagation();
         $('#layout').removeClass().addClass('creationText');
         $(".slide").each(function() {
             $(this).addClass('creationText');
         });
         createText("h1");
-//        $('#layout').removeClass();
-//        $(".slide").each(function() {
-//            $(this).removeClass('creationText');
-//        });
+
     });
-    
-        $('#text-tool-body').on('click', function(event) {
+
+    $('#text-tool-body').on('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
         $('#layout').removeClass().addClass('creationText');
@@ -55,6 +77,7 @@ $(document).ready(function() {
             $(this).addClass('creationText');
         });
         createText("p");
+
 //        $('#layout').removeClass();
 //        $(".slide").each(function() {
 //            $(this).removeClass('creationText');
@@ -82,6 +105,7 @@ $(document).ready(function() {
             var z = dico.translate3d[2];
 
             var idElement = "element-" + j++;     // id unique élément -> ds json + ds html
+            pressjson.increment['j'] = j;
 
             if (container.hasClass("slide"))      // element créé directement dans une slide
             {
@@ -94,14 +118,14 @@ $(document).ready(function() {
                 y = y - containerY + (containerHeight / 2);
                 var containerScale = pressjson.slide[idContainer].scale;
 //                console.log("scale" + containerScale);
-                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"'+hierarchy+'", "content": "' + content + '"}';
+                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
                 console.log(stringText);
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.slide[idContainer].element[idElement] = jsonComponent;
                 jsonToHtmlinSlide(jsonComponent, container);
 
             } else {                            // création élément libre sur layout
-                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "hierarchy":"'+hierarchy+'", "content": "' + content + '"}';
+                var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
                 var jsonComponent = JSON.parse(stringText);
                 pressjson.component[idElement] = jsonComponent; // ajout de l'element à pressjson, à l'index idElement
                 jsonToHtml(jsonComponent);
@@ -112,7 +136,7 @@ $(document).ready(function() {
                 $(this).removeClass('creationText');
             });
 
-
+            $('#text-tool').parent().removeClass("buttonclicked");
         });
 
     }
@@ -144,6 +168,7 @@ $(document).ready(function() {
             var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
             var z = dico.translate3d[2];
             var idSlide = "slide-" + i++;
+            pressjson.increment['i'] = i;
             var stringSlide = '{"type": "slide", "id" : "' + idSlide + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
             var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
             pressjson.slide[idSlide] = jsonSlide;
@@ -153,18 +178,6 @@ $(document).ready(function() {
         });
     }
 
-
-    /* ======================================================================================
-     * EDITION DES ELEMENTS
-     * ======================================================================================*/
-
-    /*EDITER CONTENU TEXTE
-     * met l'attribut contenteditable à true pour les fichiers texte, sur un doubleclick
-     * En cours ! (marche pas pour le moment)
-     */
-    $('.element').click(function() {
-        console.log("contenteditable click");
-    });
 
 });         // fin document.ready
 
