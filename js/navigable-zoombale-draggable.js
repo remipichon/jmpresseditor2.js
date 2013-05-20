@@ -440,6 +440,7 @@ $(document).on('mousemove', function(event) {
  * annulation de la mise en mouvement/rotation des objets
  */
 $(document).on('mouseup', function(event) {
+    $('body').css('cursor', 'default');
 //    console.log('mouseup');
     $('.moveZ').each(function() {
         clearTimeout($(this).data("checkdown"));
@@ -621,6 +622,7 @@ jQuery.fn.draggableKiki = function() {
      * rotate X et Y (right)
      */
     $(this).on("mousedown.simpleclick", function(event) {
+        event.originalEvent.preventDefault();
         $('body').css('cursor', 'move');
 
         var $this = $(this);
@@ -737,7 +739,11 @@ function setTrans3D(dico) {
  * 
  * ====================================================================================== */
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
+    // transformation du curseur :
+    event.originalEvent.preventDefault();
+    $('body').css('cursor', 'move');
     //init du posData qui permet de stocker les caractéristiques de l'objet lors du mousedown
+    
     $("#slideArea").data('event', {
         pos: {
             x: event.pageX,
@@ -860,6 +866,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
 
 
     $(this).on("mouseup", function() {
+        $('body').css('cursor', 'default');
         $(this).off(".moveView");
         $(this).off(".rotateView");
     });
