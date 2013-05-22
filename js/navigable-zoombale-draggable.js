@@ -622,6 +622,7 @@ jQuery.fn.draggableKiki = function() {
      * rotate X et Y (right)
      */
     $(this).on("mousedown.simpleclick", function(event) {
+        console.log("simple click on slide");
 
         var $this = $(this);
         if ($this.hasClass('element'))

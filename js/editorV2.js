@@ -136,11 +136,12 @@ $(document).on('ready', function() {
         var html = Mustache.to_html(template, data);
 
 
-
-        $slideMother.append(html);
+        
+        $slideGrandMother.append(html);
         var $slide = $slideMother.children().last();
+        console.log("slide" + $slide);
 
-        $slideGrandMother.jmpress('init', $slide);
+        $slideMother.jmpress('init', $slide);
         $slide.draggableKiki();
         //$slide.MODKiki();
         //$slide.addClass("dragged");
