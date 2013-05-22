@@ -83,6 +83,7 @@ $(document).ready(function() {
         localStorage.setItem('outputjson', stringjson);
         window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
         // location
+        
 
     });
 

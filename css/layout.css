@@ -310,6 +310,8 @@ h1, p
 }
 
 
+
+
 .slide:hover{
     background-color: rgba(150,150,150,.5);
 }
@@ -325,6 +327,7 @@ h1
 {
     /*color:red;*/
     font-size: 2em;
+    z-index: 2;
 }
 
 
@@ -353,5 +356,5 @@ h1
     height:100%;
     /*position:fixed !important;*/
     position:absolute;
-    z-index: 1;
+    /*z-index: 1;*/
 }
