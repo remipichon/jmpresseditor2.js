@@ -25,9 +25,9 @@ $(document).ready(function() {
             $($submenu).hide();
         }
     });
-    
-    
-    $('#info').on('click', function(){
+
+
+    $('#info').on('click', function() {
         window.open('https://github.com/clairezed/ImpressEdit');
     });
 
@@ -59,6 +59,7 @@ $(document).ready(function() {
 
     $('#present').on('click', function(event) {
         var outputjson = {data: null, slide: new Array()};
+        // mise en forme correct du json de sortie : 
         var arrayElement = [];
         $.each(pressjson.slide, function(key1, slide) {
             var slide2 = pressjson.slide[key1];
@@ -83,6 +84,36 @@ $(document).ready(function() {
         window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
         // location
 
+    });
+
+    /* ======================================================================================
+     * SAVE       -   save button
+     * enregistre la présentation en local storage (tjs présente si F5)
+     * + raccourci clavier ? 
+     * + modal d'explication ?
+     * ====================================================================================== */
+
+    $('#save').on('click', function(event) {
+        var savedjson = JSON.stringify(pressjson, null, 2);
+//        console.log("saved json : ");
+//        console.log(savedjson);
+        localStorage.setItem('savedjson', savedjson);
+
+        var savedPress = $("#slideArea>div").html();
+        localStorage.setItem('savedPress', savedPress);
+        console.log('savedPress :');
+        console.log(savedPress);
+
+
+//        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
+        // location
+
+    });
+
+    $('#clear').click(function() {
+        window.localStorage.clear();
+        location.reload();
+        return false;
     });
 
 

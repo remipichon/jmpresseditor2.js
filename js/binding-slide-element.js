@@ -18,6 +18,7 @@ function getMouseUpContainer(evt, slide)
     {
         return ($this);
     }
+    return undefined;                  // 
 }
 
 
@@ -114,7 +115,7 @@ function steptoElement($objet, $slide) {
         delete pressjson.component[idObjet];
         console.log("objet sortie steptoelement :");
         console.log($objet);
-        return  $objet;         // objet = step element
+        return  $objet;         
         
     }
 

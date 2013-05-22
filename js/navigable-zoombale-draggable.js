@@ -12,7 +12,6 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     var MRH = window.innerHeight; //MaxRealHeight
 
 
-
     //var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000); //MaxVirtualHeight //prise en compte deu zoom
     // var scale = ($slideArea.hasClass("step"))? parseInt(parseFloat($slideArea.css("perspective")) / 1000) : 1;
     var scale = $objet.attr("data-scale");
@@ -441,6 +440,7 @@ $(document).on('mousemove', function(event) {
  * annulation de la mise en mouvement/rotation des objets
  */
 $(document).on('mouseup', function(event) {
+    $('body').css('cursor', 'default');
 //    console.log('mouseup');
     $('.moveZ').each(function() {
         clearTimeout($(this).data("checkdown"));
@@ -622,7 +622,8 @@ jQuery.fn.draggableKiki = function() {
      * rotate X et Y (right)
      */
     $(this).on("mousedown.simpleclick", function(event) {
-        console.log("simple click on slide");
+        event.originalEvent.preventDefault();
+        $('body').css('cursor', 'move');
 
         var $this = $(this);
         if ($this.hasClass('element'))
@@ -738,7 +739,11 @@ function setTrans3D(dico) {
  * 
  * ====================================================================================== */
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
+    // transformation du curseur :
+    event.originalEvent.preventDefault();
+    $('body').css('cursor', 'move');
     //init du posData qui permet de stocker les caractéristiques de l'objet lors du mousedown
+    
     $("#slideArea").data('event', {
         pos: {
             x: event.pageX,
@@ -861,6 +866,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
 
 
     $(this).on("mouseup", function() {
+        $('body').css('cursor', 'default');
         $(this).off(".moveView");
         $(this).off(".rotateView");
     });
