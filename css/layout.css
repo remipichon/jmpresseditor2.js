@@ -143,6 +143,7 @@ h1, p
     /*    margin: auto 200px;*/
     top:50%;
     background:url("../images/arrowsWGp.PNG") 0 0 no-repeat;
+    /*background-size: 90%;*/
 }
 /*
 #sidebar #arrow-nav:hover
@@ -312,6 +313,11 @@ h1, p
 
 .slide:hover{
     background-color: rgba(150,150,150,.5);
+}
+
+.slide .longclick
+{
+    background-color: rgba(200,200,200,.5);
 }
 
 

@@ -146,10 +146,10 @@ $(document).ready(function() {
     $(document).on('click','.creationSlide', function(event) {
         event.stopPropagation();
         $('.creationSlide').removeClass('creationSlide');
-        createSlide();
+        createSlide(event);
     });
 
-    function createSlide() {
+    function createSlide(event) {
         $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
         var dico = getTrans3D();
         var currentScale = dico.scaleZ;
