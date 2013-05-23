@@ -500,8 +500,8 @@ $(document).on('mouseup', function(event) {
                     if ($container !== undefined)
                         return false;
                 });
-                if ($container !== undefined)          // = drop de l'element sur slideArea
-                    $this = steptoElement($this, $container);
+    //                if ($container !== undefined)          // = drop de l'element sur slideArea                                                   // KIKI annulation du drop d'un element sur le documentS
+//                    $this = steptoElement($this, $container);
             }
             
         }

@@ -4,6 +4,7 @@
  */
 
 $(document).ready(function() {
+    
 
     /* ======================================================================================
      * VARIABLES GLOBALES
@@ -38,6 +39,7 @@ $(document).ready(function() {
 //            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
 //        }
     });
+    
     $('#profondeur').remove();
     //  initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
@@ -45,6 +47,17 @@ $(document).ready(function() {
     /* ======================================================================================
      * TRIGGERS CREATE TITLE
      * ======================================================================================*/
+    $(document).keypress(function(event) {
+        if (event.which ===116) {
+        $('li').removeClass("buttonclicked");
+        $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
+        
+        $('#layout').removeClass().addClass('creationTitle');
+        $(".slide").each(function() {
+            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
+        });
+        }
+    });
     $('#text-tool-title').on('click', function(event) {
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
@@ -99,7 +112,7 @@ $(document).ready(function() {
         var currentScale = dico.scaleZ;
         var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * (currentScale);
         var y = (event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1])) * (currentScale);
-        var z = dico.translate3d[2];
+        var z = 0;//dico.translate3d[2];
         var idElement = "element-" + j++; // id unique élément -> ds json + ds html
         pressjson.increment['j'] = j;
         if (container.hasClass("slide"))      // element créé directement dans une slide
@@ -135,6 +148,14 @@ $(document).ready(function() {
      * ======================================================================================*/
 
 // Trigger sur bouton "creation slide"
+    $(document).keydown( function(event) {
+        if (event.which === 83) {
+        $('li').removeClass("buttonclicked");
+        $('#slide-tool').parent().addClass("buttonclicked");    // css
+        event.preventDefault();
+        $('#layout').removeClass().addClass('creationSlide');
+        }
+    });
     $('#slide-tool').on('click', function(event) {
         $('li').removeClass("buttonclicked");
         $('#slide-tool').parent().addClass("buttonclicked");    // css
@@ -232,7 +253,7 @@ function jsonToHtmlinSlide(data, container) {
     var template = $('#templateElement').html();
     var html = Mustache.to_html(template, data);
     container.append(html);
-    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
     $('#slideArea').jmpress('init', container); // initilisation step
 
     container.draggableKiki();

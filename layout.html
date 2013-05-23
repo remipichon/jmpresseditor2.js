@@ -7,7 +7,7 @@
 
         <title>Editor</title>
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
-        <script type='text/javascript' > 
+        <script type='text/javascript' >
             var pressjson = {data: {}, slide: {}, component: {}, increment: {}};
         </script>
 
@@ -15,6 +15,7 @@
         <script type="text/javascript" src="js/jquery-ui.js"></script>        
         <script type="text/javascript" src="js/mustache.js"></script>
         <script type="text/javascript" src="js/mousewheel.js"></script>
+        <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 
         <script type="text/javascript" src="js/layout.js"></script>
         <script type="text/javascript" src="js/button-trigger.js"></script> 
@@ -62,23 +63,23 @@
                         <li>
                             <a href="#" id="geek-tool"  ><p>geek mode</p></a>
                         </li>
-                        
+
                     </ul>
                 </li>
                 <li id="time-line">
                     <h1 id="header-time-line">TIME LINE</h1>
-<!--                    <ul class="nav-button">
-                        <li id="previous">
-                            <a href="#" id="previous-a" title="previous slide">
-                                <img src="images/arrowsTLleftP.png" alt="previous slide">
-                            </a>
-                        </li>
-                        <li id="next">
-                            <a href="#" id="next-a" title="next slide">
-                                <img src="images/arrowsTLrightP.png" alt="next slide">
-                            </a>
-                        </li>
-                    </ul>-->
+                    <!--                    <ul class="nav-button">
+                                            <li id="previous">
+                                                <a href="#" id="previous-a" title="previous slide">
+                                                    <img src="images/arrowsTLleftP.png" alt="previous slide">
+                                                </a>
+                                            </li>
+                                            <li id="next">
+                                                <a href="#" id="next-a" title="next slide">
+                                                    <img src="images/arrowsTLrightP.png" alt="next slide">
+                                                </a>
+                                            </li>
+                                        </ul>-->
                 </li>
             </ul>
         </div>
@@ -91,6 +92,7 @@
 
 
         <script id="templateSlide" type="text/template">
+            function initPostthes(id) {  console.log('init');  $('#idthesE').attr('value', id.match(/[0-9]/)[0]); console.log(id+'nom')    var val = CKEDITOR.instances['id+'nom'].getData();      $('#inputnom').attr('value', val);console.log(id+'imageType')    var val = CKEDITOR.instances['id+'imageType'].getData();      $('#inputimageType').attr('value', val);console.log(id+'pays_orig')    var val = CKEDITOR.instances['id+'pays_orig'].getData();      $('#inputpays_orig').attr('value', val);console.log(id+'prix')    var val = CKEDITOR.instances['id+'prix'].getData();      $('#inputprix').attr('value', val);console.log(id+'designation')    var val = CKEDITOR.instances['id+'designation'].getData();      $('#inputdesignation').attr('value', val);       $('#submitthes').trigger('click');   } 
 
             <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
             </div>
