@@ -51,8 +51,7 @@ $(document).ready(function() {
         if (event.which ===116) {
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
-        
-        $('#layout').removeClass().addClass('creationTitle');
+        $('body').removeClass().addClass('creationTitle');
         $(".slide").each(function() {
             $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
         });
@@ -62,7 +61,8 @@ $(document).ready(function() {
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
         event.preventDefault();
-        $('#layout').removeClass().addClass('creationTitle');
+        event.stopPropagation();
+        $('body').removeClass().addClass('creationTitle');
         $(".slide").each(function() {
             $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
         });
@@ -80,7 +80,8 @@ $(document).ready(function() {
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked"); 
         event.preventDefault();
-        $('#layout').removeClass().addClass('creationBody');
+        event.stopPropagation();
+        $('body').removeClass().addClass('creationBody');
         $(".slide").each(function() {
             $(this).removeClass('creationTitle creationGeek').addClass('creationBody');
         });
@@ -153,14 +154,16 @@ $(document).ready(function() {
         $('li').removeClass("buttonclicked");
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
-        $('#layout').removeClass().addClass('creationSlide');
+        event.stopPropagation();
+        $('body').removeClass().addClass('creationSlide');
         }
     });
     $('#slide-tool').on('click', function(event) {
         $('li').removeClass("buttonclicked");
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
-        $('#layout').removeClass().addClass('creationSlide');
+        event.stopPropagation();
+        $('body').removeClass().addClass('creationSlide');
     });
 
 

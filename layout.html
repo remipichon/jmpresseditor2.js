@@ -7,6 +7,7 @@
 
         <title>Editor</title>
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <script type='text/javascript' >
             var pressjson = {data: {}, slide: {}, component: {}, increment: {}};
         </script>
@@ -22,6 +23,7 @@
         <script type="text/javascript" src="js/navigable-zoombale-draggable.js"></script>
         <script type="text/javascript" src="js/jmpress-editor.js"></script>
         <script type="text/javascript" src="js/binding-slide-element.js"></script>
+        <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
         <!--<script src="js/editorV2.js"></script>-->
 
     </head>
@@ -35,6 +37,8 @@
                     <ul id="topbar-submenu">
                         <li><a href="#" id="clear" title="change presentation theme"><p>clear all</p></a></li>
                         <li><a href="#" id="info" title="more info on this editor"><p>info</p></a></li>
+                        <li><a href="helpModal" id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></a></li>
+                        
                     </ul>
                 </li>
             </ul>
@@ -82,8 +86,23 @@
                                         </ul>-->
                 </li>
             </ul>
+
         </div>
-        <div id="layout"></div>
+        <div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">How to use the editor</h3>
+            </div>
+            <div class="modal-body">
+                <p>How to create a slide</p>
+                <p>How to create text</p>
+                <p>How to rotate</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+        <!--<div id="layout"></div>-->
         <!--<span id="trash"><img src="images/trash.png"/> </span>-->
         <div id="slideArea" >
             <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000" style="display:block"><p> en profondeur</p></div>

@@ -231,15 +231,15 @@ body {
 }
 
 a {
-  color: #0088cc;
+  /*color: #0088cc;*/
   text-decoration: none;
 }
-
+/*
 a:hover,
 a:focus {
   color: #005580;
   text-decoration: underline;
-}
+}*/
 
 .img-rounded {
   -webkit-border-radius: 6px;
@@ -650,9 +650,9 @@ a:focus {
   clear: both;
 }
 
-p {
+/*p {
   margin: 0 0 10px;
-}
+}*/
 
 .lead {
   margin-bottom: 20px;
@@ -740,7 +740,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 10px 0;
+  /*margin: 10px 0;*/
   font-family: inherit;
   font-weight: bold;
   line-height: 20px;
@@ -811,12 +811,12 @@ h4 small {
   margin: 20px 0 30px;
   border-bottom: 3px solid #eeeeee;
 }
-
+/*
 ul,
 ol {
   padding: 0;
   margin: 0 0 10px 25px;
-}
+}*/
 
 ul ul,
 ul ol,
@@ -825,9 +825,9 @@ ol ul {
   margin-bottom: 0;
 }
 
-li {
+/*li {
   line-height: 20px;
-}
+}*/
 
 ul.unstyled,
 ol.unstyled {
