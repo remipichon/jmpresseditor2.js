@@ -4,7 +4,7 @@
  */
 
 $(document).ready(function() {
-    
+
 
     /* ======================================================================================
      * VARIABLES GLOBALES
@@ -14,32 +14,32 @@ $(document).ready(function() {
     var i = 1; // id unique des slides      -> utile pour conversion json <-> html
     var j = 1; // id unique des éléments    -> utile pour conversion json <-> html
 
-    // REINITIALISATION DE LA PRESENTATION SAUVEE
-    if (localStorage.getItem('savedPress')) {
-        $('#slideArea').html(localStorage.getItem('savedPress'));
-        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
-            $(this).draggableKiki();
-            $(this).children().each(function() {
-                $(this).draggableKiki();
-            });
-        });
-    }
-    ;
-    if (localStorage.getItem('savedjson')) {
-        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
-        pressjson = savedjson;
-        i = pressjson.increment['i'];
-        j = pressjson.increment['j'];
-    }
-    ;
-    
+//    // REINITIALISATION DE LA PRESENTATION SAUVEE
+//    if (localStorage.getItem('savedPress')) {
+//        $('#slideArea').html(localStorage.getItem('savedPress'));
+//        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
+//            $(this).draggableKiki();
+//            $(this).children().each(function() {
+//                $(this).draggableKiki();
+//            });
+//        });
+//    }
+//    ;
+//    if (localStorage.getItem('savedjson')) {
+//        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
+//        pressjson = savedjson;
+//        i = pressjson.increment['i'];
+//        j = pressjson.increment['j'];
+//    }
+//    ;
+
 //       initialisation jmpress :
     $('#slideArea').jmpress({
 //        viewPort: {
 //            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
 //        }
     });
-    
+
     $('#profondeur').remove();
     //  initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
@@ -48,13 +48,13 @@ $(document).ready(function() {
      * TRIGGERS CREATE TITLE
      * ======================================================================================*/
     $(document).keypress(function(event) {
-        if (event.which ===116) {
-        $('li').removeClass("buttonclicked");
-        $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
-        $('body').removeClass().addClass('creationTitle');
-        $(".slide").each(function() {
-            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
-        });
+        if (event.which === 116) {
+            $('li').removeClass("buttonclicked");
+            $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
+            $('body').removeClass().addClass('creationTitle');
+//            $(".slide").each(function() {
+//                $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
+//            });
         }
     });
     $('#text-tool-title').on('click', function(event) {
@@ -63,9 +63,9 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         $('body').removeClass().addClass('creationTitle');
-        $(".slide").each(function() {
-            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
-        });
+//        $(".slide").each(function() {
+//            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
+//        });
     });
 
     $(document).on('click', '.creationTitle', function(event) {
@@ -78,13 +78,13 @@ $(document).ready(function() {
      * ======================================================================================*/
     $('#text-tool-body').on('click', function(event) {
         $('li').removeClass("buttonclicked");
-        $('#text-tool').parent().addClass("buttonclicked"); 
+        $('#text-tool').parent().addClass("buttonclicked");
         event.preventDefault();
         event.stopPropagation();
         $('body').removeClass().addClass('creationBody');
-        $(".slide").each(function() {
-            $(this).removeClass('creationTitle creationGeek').addClass('creationBody');
-        });
+//        $(".slide").each(function() {
+//            $(this).removeClass('creationTitle creationGeek').addClass('creationBody');
+//        });
     });
 
     $(document).on('click', '.creationBody', function(event) {
@@ -100,15 +100,55 @@ $(document).ready(function() {
      *   "create title/body" button clicked 
      * + layout or slide with ".creationTitle/Body" class clicked
      * ======================================================================================*/
+    jQuery.fn.manageCkeditor = function(bool) {
+        var $this = $(this);
+
+        $this.dblclick(function(event) {
+            $this.attr('contenteditable', 'true');
+            CKEDITOR.disableAutoInline = true;
+            CKEDITOR.inline($this.attr('id'));
+
+            CKEDITOR.instances[$this.attr('id')].on('change', function(e) {
+                console.log("le changement c'est maintenant :" + CKEDITOR.instances[$this.attr('id')].getData());
+                /////METTRE A JOUR LE JSON//////
+            });
+
+
+            $this.on('mousemove', function() {
+                if (!$this.hasClass('cke_focus')) {
+                    $this.unbind('mousemove');
+                    CKEDITOR.instances[$this.attr('id')].destroy(false); //possible de passer un 'false' a destroy pour ne pas update le dom
+                    $this.attr('contenteditable', 'false');
+                    console.log('destroy');
+                }
+                event.stopPropagation();
+                $this.removeClass('move');
+                $this.parent().removeClass('move');
+                console.log('active');
+            });
+        });
+
+//        $this.on('mousemove', function() {
+//            if (!$this.hasClass('cke_focus')) {
+//                $this.unbind('mousemove');
+//                CKEDITOR.instances[$this.attr('id')].destroy(false); //possible de passer un 'false' a destroy pour ne pas update le dom
+//                $this.attr('contenteditable', 'false');
+//                console.log('destroy');
+//            }
+//
+//        });
+
+    };
 
     function createText(hierarchy, event) {
         var container = $(event.target);
         (container).unbind('click'); // permet de désactiver le clic sur la surface
-        var content = prompt("Entrez le texte : ");
-        if (content === null) {                      // pour annuler l'action si on clique sur annuler ds le prompt
-            $('#text-tool').parent().removeClass("buttonclicked");
-            return;
-        }
+        var content = "Entrez du texte";
+//        var content = prompt("Entrez le texte : ");
+//        if (content === null) {                      // pour annuler l'action si on clique sur annuler ds le prompt
+//            $('#text-tool').parent().removeClass("buttonclicked");
+//            return;
+//        }
         var dico = getTrans3D();
         var currentScale = dico.scaleZ;
         var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * (currentScale);
@@ -127,7 +167,7 @@ $(document).ready(function() {
             y = y - containerY + (containerHeight / 2);
             var containerScale = pressjson.slide[idContainer].scale;
 //                console.log("scale" + containerScale);
-            var stringText = '{"class": "element","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
+            var stringText = '{"class": "element text","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
 //            console.log(stringText);
             var jsonComponent = JSON.parse(stringText);
             pressjson.slide[idContainer].element[idElement] = jsonComponent;
@@ -149,13 +189,13 @@ $(document).ready(function() {
      * ======================================================================================*/
 
 // Trigger sur bouton "creation slide"
-    $(document).keydown( function(event) {
+    $(document).keydown(function(event) {
         if (event.which === 83) {
-        $('li').removeClass("buttonclicked");
-        $('#slide-tool').parent().addClass("buttonclicked");    // css
-        event.preventDefault();
-        event.stopPropagation();
-        $('body').removeClass().addClass('creationSlide');
+            $('li').removeClass("buttonclicked");
+            $('#slide-tool').parent().addClass("buttonclicked");    // css
+            event.preventDefault();
+            event.stopPropagation();
+            $('body').removeClass().addClass('creationSlide');
         }
     });
     $('#slide-tool').on('click', function(event) {
@@ -167,7 +207,7 @@ $(document).ready(function() {
     });
 
 
-    $(document).on('click','.creationSlide', function(event) {
+    $(document).on('click', '.creationSlide', function(event) {
         event.stopPropagation();
         $('.creationSlide').removeClass('creationSlide');
         createSlide(event);
@@ -187,16 +227,16 @@ $(document).ready(function() {
         pressjson.slide[idSlide] = jsonSlide;
         console.dir(pressjson);
         jsonToHtml(jsonSlide);
-         $('#slide-tool').parent().removeClass("buttonclicked");
+        $('#slide-tool').parent().removeClass("buttonclicked");
     }
 
-  /* ======================================================================================
+    /* ======================================================================================
      * GEEK MODE - création d'element libre en html
      * ======================================================================================*/
 
-$('#geek-tool').on('click', function(event) {
+    $('#geek-tool').on('click', function(event) {
         $('li').removeClass("buttonclicked");
-        $('#geek-tool').parent().addClass("buttonclicked"); 
+        $('#geek-tool').parent().addClass("buttonclicked");
         event.preventDefault();
         $('#layout').removeClass().addClass('creationGeek');
         $(".slide").each(function() {
@@ -229,11 +269,13 @@ function jsonToHtml(data) {
     if (data.class === "element")
     {
         var template = $('#templateStepElement').html();
+
     }
     if (data.type === "slide") {
         var template = $('#templateSlide').html();
     }
     var html = Mustache.to_html(template, data);
+
     $('#slideArea >').append(html);
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
     $('#slideArea').jmpress('init', $newSlide); // initilisation step
@@ -256,6 +298,13 @@ function jsonToHtmlinSlide(data, container) {
     var template = $('#templateElement').html();
     var html = Mustache.to_html(template, data);
     container.append(html);
+
+    //gestion de ckeditor
+    if (data.type === 'text') {
+        var $newTxt = container.children().last();
+        $newTxt.manageCkeditor(true);
+    }
+
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
     $('#slideArea').jmpress('init', container); // initilisation step
 

@@ -35,4 +35,10 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+        
+        //on change
+        config.extraPlugins = 'onchange';
+        config.minimumChangeMilliseconds = 1000; // 100 milliseconds (default value)
+//        editor.on( 'change', function(e) { console.log(e) });
 };
+

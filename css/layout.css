@@ -36,14 +36,12 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-h1, p 
-{
-    font-family: Arial;
-}
+
 
 body
 {
     background: #DDD;
+        z-index: 100;
 }
 
 /* ======================================================================================
@@ -264,7 +262,7 @@ body
 
 #slideArea
 {
-    z-index: 2;
+    z-index: 10;
 }
 
 
@@ -334,7 +332,16 @@ h1
 {
     font-size: 3.5em;
     font-weight: bold;
+    font-style: italic;
 }
+
+h1, p 
+{
+    font-family: Arial;
+    
+}
+
+
 
 #slideArea p
 {

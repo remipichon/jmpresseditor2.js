@@ -16,8 +16,11 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     // var scale = ($slideArea.hasClass("step"))? parseInt(parseFloat($slideArea.css("perspective")) / 1000) : 1;
     var scale = $objet.attr("data-scale");
     //console.log($qui);
+    var dico = getTrans3D();
+    
     if (flag === 0) {
-        scale = parseFloat($slideArea.css("perspective")) / (1000);
+        scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'));
+        console.log("scale "+scale);
     }
     else {
         scale = 1;
@@ -43,7 +46,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     //console.log("MRH " + MRH + " MVH " + MVH + " VTop " + VTop + " Rtop " + RTop);
     //console.log("MRL " + MRL + " MVL " + MVL + " VLeft " + VLeft + " RLeft " + RLeft);
 
-    var tab = new Array(VTop, VLeft);
+    var tab = new Array(VTop*scale, VLeft*scale);
 //    console.log("sortie getvirtual");
     return tab;
 
@@ -413,6 +416,7 @@ function rotateZ(event, $objet) {
  * mise en mouvement/rotation des objets en fonction de leur classe
  */
 $(document).on('mousemove', function(event) {
+    
     //deplacement Z de la slide
     $('.moveZ').each(function() {
         moveZ(event, $(this));
@@ -646,6 +650,7 @@ jQuery.fn.draggableKiki = function() {
 
         if (event.which === 1) {
             $this.addClass("move");
+            
 //           console.log($this);
             offSet(event, $this);
 //        $(this).on("mousemove.movable", function(event) {
