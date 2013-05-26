@@ -52,6 +52,12 @@
                     <ul>
                         <li>
                             <a href="#" id="slide-tool" title="create a slide"><p>slide</p></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" id="slide-tool-title" title="slide text"><p>With text</p></a>
+                                </li>
+                                
+                            </ul>
                         </li>
                         <li>
                             <a href="#" id="text-tool" title="create text"><p>text</p></a>
@@ -130,7 +136,7 @@
 
         <script id="templateElement" type="text/template">
 
-            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' > {{content}}</{{hierarchy}}>
+            <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
 
         </script>
 

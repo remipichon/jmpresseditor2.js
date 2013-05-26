@@ -42,3 +42,19 @@ CKEDITOR.editorConfig = function( config ) {
 //        editor.on( 'change', function(e) { console.log(e) });
 };
 
+
+// la gestion des style est foireuse, je voulais permettre de créer des zones de textes avec directement un style mais 
+//c'est un echec. Du coup pour appliquer du css il faut passer par des classes appliquées à des span contenu dans les div
+//support du ckeditor. Dans le fichier layout.css il faut donc utiliser .title1 {} ou encore .bodyText{}
+// ce sont ces memes classes qui sont passées via la variable "hiearchy" jusqu'au mustache qui fait son boulot. 
+// Je pense que c'est une bonne idée de ne pas appliquer le css directement à la div support du ckeditor car n'importe quelles
+//modif appliquées au contenu texte d'un champ régit par ckeditor serait affecté.
+CKEDITOR.stylesSet.add( 'styleJmpress',
+[
+     
+    // Inline styles
+    { name : 'Title 1',  element : 'span', attributes : { 'class' : 'title1' } },
+    { name : 'Body', element : 'span', attributes : { 'class' : 'bodyText' } }
+]);
+
+CKEDITOR.config.stylesSet = 'styleJmpress';

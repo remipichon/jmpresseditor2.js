@@ -327,13 +327,36 @@ body
     background-color: rgba(200,200,200,.5);
 }
 
-
-h1
+ /*////////////////Gestion des styles////////////*/
+ /*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
+ span {
+     border : dashed black 10px;
+     
+     
+ }
+.title1
 {
-    font-size: 3.5em;
+   
+     text-align:center;
+     margin: auto;     
+     display: block;
+    
+    
+    font-size: 4em;
     font-weight: bold;
-    font-style: italic;
+    text-align:center;
+
 }
+
+.bodyText
+{
+    font-size:2em;
+    
+    
+}
+
+
+
 
 h1, p 
 {
@@ -343,14 +366,17 @@ h1, p
 
 
 
-#slideArea p
+
+
+#slideArea p    
+/*ne rien mettre comme style pour p car ckeditor met les textes dans une balise p à chaque fois*/
 {
-    /*color:red;*/
+/*    color:red;
     font-size: 2em;
-    z-index: 2;
+    z-index: 2;*/
 }
 
-
+/*Fin de gestion des styles*/
 
 .element:hover
 {
