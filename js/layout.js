@@ -6,9 +6,6 @@
 
 $(document).ready(function() {
 
-//$('#arrow-nav').on('click', function() {
-//$('#sidebar').toggleClass("hidden-bar");
-//});
 
     /* ======================================================================================
      * top-bar drop down menu        -   parameters button
