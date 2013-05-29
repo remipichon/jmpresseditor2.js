@@ -231,7 +231,7 @@ $(document).ready(function() {
         var z = dico.translate3d[2];
         var idSlide = "slide-" + i++;
         pressjson.increment['i'] = i;
-        var stringSlide = '{"type": "slide", "id" : "' + idSlide + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+        var stringSlide = '{"type": "slide", "id" : "' + idSlide + '", "index" : "' + (i-2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
         var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
         if (type === 'slideText') {
             jsonSlide.type = "slideText";

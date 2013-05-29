@@ -4,6 +4,7 @@
  */
 
 
+
 function createTimeLine(idSlide) {
 
     var $slideButton = $('<li class="' + idSlide + '"><p>' + idSlide + '</p></li>');
@@ -13,14 +14,6 @@ function createTimeLine(idSlide) {
         start: function(event, ui) {
             ui.item.startPos = ui.item.index();
         },
-//        start : function(event, ui){
-//            ui.item.bind("click.prevent",
-//                function(event) { 
-//                    event.stopImmediatePropagation(); 
-//                    console.log('sorting stop');
-//                });
-//            },
-//        containment: $('#time-line')
         stop: function(event, ui) {
             var newIndex = ui.item.index();
             var $idSlideSorted = ui.item.attr('class');
@@ -36,19 +29,37 @@ function createTimeLine(idSlide) {
             else
             {
                 $('.slide').eq(newIndex).after($('#' + $idSlideSorted + ''));
-//            console.log("ui.item");
-//            console.log(ui.item);
-//            console.log($idSlideSorted);
             }
+//            var newSlidesJson = {};
+//              var pressjson = {data: {}, slide: {}, component: {}, increment: {}};
+            $(".slide").each(function(index) {
+//                console.log
+                var idSlide = $(this).attr('id');
+                pressjson.slide[idSlide].index = index;     // MaJ de l'index des slide
+
+//                var idSlide = $(this).attr('id');
+//                newSlidesJson[idSlide] = pressjson.slide[idSlide];
+//                delete pressjson.slide[idSlide];
+//                console.log("newSlidesJson");
+//                console.log(newSlidesJson);
+//                console.log("pressjson");
+//                console.log(pressjson);
+////                pressjson.slide[idSlide]= newSlidesJson[idSlide];
+            });
+//            console.log("sortie de boucle");
+////            pressjson["slide"] = newSlidesJson;
+            console.log("pressjson");
+            console.log(pressjson);
 
         },
         axis: "y"
     })
             .disableSelection();
     ;
-
 }
 ;
+
+
 
 
 $(document).ready(function() {
@@ -58,21 +69,15 @@ $(document).ready(function() {
         return false;
     });
 
-    $(" #sortable").children().on('mouseover', function(evt) {
-        console.log($(" #sortable").children());
-        console.log("hover sur li");
-    })
-
     $(" #sortable").on('mouseenter', 'li', function() {
         var $idSlide = $(this).attr('class');
         $('#' + $idSlide + '').addClass('hovered');
-//        console.log($(" #sortable").children());
-        console.log("mouseenter sur li");
+//        console.log("mouseenter sur li");
     })
             .on('mouseleave', 'li', function() {
         var $idSlide = $(this).attr('class');
         $('#' + $idSlide + '').removeClass('hovered');
-        console.log("mouseleave sur li");
+//        console.log("mouseleave sur li");
     });
 
 });

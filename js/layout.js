@@ -76,6 +76,9 @@ $(document).ready(function() {
         });
         console.log("output json : ");
         console.log(outputjson);
+        outputjson.slide.sort(sort_by('index', true, parseInt));
+        console.log("output json sorted : ");
+        console.log(outputjson);
         var stringjson = JSON.stringify(outputjson, null, 2);
         localStorage.setItem('outputjson', stringjson);
         window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
@@ -116,6 +119,17 @@ $(document).ready(function() {
 
 
 });
+
+var sort_by = function(field, reverse, primer){
+
+   var key = function (x) {return primer ? primer(x[field]) : x[field]};
+
+   return function (a,b) {
+       var A = key(a), B = key(b);
+       return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1,1][+!!reverse];                  
+   }
+}
+
 
 /* ======================================================================================
  * PREVIOUS SLIDE- NEXT SLIDE BUTTONS        -   side bar, timelin
