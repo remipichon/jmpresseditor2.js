@@ -68,15 +68,34 @@ h1, p
     background-color: rgba(150,150,150,.5);
 }
 
-h1
+.title1
 {
-    font-size: 3em;
+   
+     text-align:center;
+     margin: auto;     
+     display: block;
+    
+    
+    font-size: 6em;
     font-weight: bold;
+    text-align:center;
+
 }
 
-p
+.bodyText
 {
-    font-size: 2em;
+    font-size:2em;
+    
+    
+}
+
+
+
+
+h1, p 
+{
+    font-family: Arial;
+    
 }
 
 

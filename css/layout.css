@@ -330,7 +330,7 @@ body
  /*////////////////Gestion des styles////////////*/
  /*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
  span {
-     border : dashed black 10px;
+     /*border : dashed black 10px;*/
      
      
  }
@@ -342,7 +342,7 @@ body
      display: block;
     
     
-    font-size: 4em;
+    font-size: 6em;
     font-weight: bold;
     text-align:center;
 

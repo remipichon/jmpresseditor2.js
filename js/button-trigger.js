@@ -89,7 +89,7 @@ $(document).ready(function() {
      * ======================================================================================*/
     function createText(hierarchy, event) {
 
-        var content = "Entrez du texte";
+        var content = "Entrer du texte";
         var dico = getTrans3D();
         var currentScale = dico.scaleZ;
 

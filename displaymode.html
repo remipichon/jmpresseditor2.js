@@ -17,7 +17,7 @@
         </div>
 
 
-        <script id="templateJmpress" type="text/template">
+<!--        <script id="templateJmpress" type="text/template">
             {{#slide}}
             <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
             {{title}}
@@ -26,22 +26,35 @@
             {{/element}} 
             </div>   
             {{/slide}}
+        </script>-->
+        <script id="templateJmpress" type="text/template">
+            {{#slide}}
+            <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+            
+            {{#element}} 
+             <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
+
+            {{/element}} 
+            </div>   
+            {{/slide}}
         </script>
 
         <script type="text/javascript" src="js/jmpress.js"></script>
         <script type="text/javascript">
-            var config = {
+            /*var config = {
                 viewPort:{
-                    width:800,
+                    width:1000,
                     height:true
                 }
-            };
+            };*/
             var pressjson = JSON.parse(localStorage.getItem('outputjson'));
             var template = $('#templateJmpress').html();
             var html = Mustache.to_html(template, pressjson);
             //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
             $('#jmpress').append(html);         
-            $('#jmpress').jmpress();
+            $('#jmpress').jmpress( {
+                    viewport : {
+                    height : 2000} });
           
         </script>
 
