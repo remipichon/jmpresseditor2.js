@@ -327,22 +327,22 @@ body
     background-color: rgba(200,200,200,.5);
 }
 
-/*////////////////Gestion des styles////////////*/
-/*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
-span {
-    border : dashed black 10px;
 
-
-}
+ /*////////////////Gestion des styles////////////*/
+ /*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
+ span {
+     /*border : dashed black 10px;*/
+     
+     
+ }
 .title1
 {
+     text-align:center;
+     margin: auto;     
+     display: block;
 
-    text-align:center;
-    margin: auto;     
-    display: block;
+    font-size: 6em;
 
-
-    font-size: 4em;
     font-weight: bold;
     text-align:center;
 

@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="test.css" >
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>        
+        <script type="text/javascript" src="js/mustache.js"></script>
+        <script type="text/javascript" src="js/mousewheel.js"></script>
+        <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+
+    </head>
+
+    <body>
+        <textarea id='editor'>
+
+
+        </textarea>
+
+        <div id="tree">
+            <ol id="niv1">
+
+                <li><span class='li' contenteditable='true'>titre</span></li>
+                <li><span class='li' contenteditable='true'>titre</span>
+                    <ol id="niv11">
+                        <li><span class='li' contenteditable='true'>sous</span></li>
+                        <li><span class='li' contenteditable='true'>sous</span>
+                            <ol id="niv111">
+                                <li><span class='li' contenteditable='true'>sous sous</span></li>
+                                <li><span class='li' contenteditable='true'>sous sous</span></li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li><span class='li' contenteditable='true'>titre</span></li>
+
+
+
+            </ol>
+
+
+        </div>
+        <script type="text/javascript"> //pour créer l'arboresence des slides
+            
+            //stocke le nombre de siblings par niveau de profondeur (independament des parents)
+            //ex : si on a sibPerLevel[2] = 4 cela signifie qu'en tout il y a 4 sous titre de niveau 2 (mais il est possible que que chacun de ces sous titres soient dans une partie mère différente
+            var sibPerLevel = new Array();
+ 
+
+            $('li').each(function() {
+                //compteur de niveau
+                var depth = $($(this), "#tree").parents('ol').length;
+
+                //compteur d'element par niveau
+                var siblings = $(this).parent().children('li').length;
+
+                if (sibPerLevel[depth] === undefined ) {
+                    sibPerLevel.push(0);
+                } else {
+                    sibPerLevel[depth] = sibPerLevel[depth] + siblings ;
+                }
+
+                $(this).children('span').html('depth : ' + depth + '  siblings : ' + siblings);
+            });
+
+
+
+
+
+        </script>
+
+        <script type="text/javascript"> //pour gérer l'arboresence 
+            cpt = 0;
+            //reflechir à l'ergonomie de la suppression
+            jQuery.fn.addLiButton = function() {
+                //ajout meme niveau après chaque li
+                var button = "<div class='addLevel'> Add meme level " + cpt++ + " </div>";
+                $(button).insertAfter($(this));
+
+                $(this).next().on('click', function() {
+
+                    var same = $("<li> <span class='li' contenteditable='true' id='" + cpt + "'> same level " + cpt++ + "  </span>  </li>");
+                    same.insertAfter($(this));
+                    same.addLiButton();
+                    var del = $("<div class='delete'> Delete </div>");
+                    del.on('click', function() {
+                        $(this).parent().remove();
+                    });
+                    same.append(del);
+                });
+
+
+                //ajout niveau au sein d'une li
+                var button = "<div class='addLevel'> Add level " + cpt++ + "</div>";
+                $(this).append(button);
+                //transforme ajoute ol à la li, supprime le add level
+                var buttonAdd = $(this).children('.addLevel');
+                buttonAdd.on('click', function() {
+                    var level = $("<ol> <li> <span class='li' contenteditable='true' id='" + cpt + "'>level plus ba " + cpt++ + " <div class='delete'> Delete (inactif)</div> </span> </li> </ol>");
+                    level.addLiButton();
+                    $(this).parent().append(level);
+                    $(this).remove();
+                });
+            };
+
+
+            $('li').each(function() {
+                $(this).addLiButton();
+            });
+
+        </script>
+    </body>
+
+
+
+</html>
