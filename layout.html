@@ -23,6 +23,7 @@
         <script type="text/javascript" src="js/navigable-zoombale-draggable.js"></script>
         <script type="text/javascript" src="js/jmpress-editor.js"></script>
         <script type="text/javascript" src="js/binding-slide-element.js"></script>
+        <script type="text/javascript" src="js/time-line.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
         <!--<script src="js/editorV2.js"></script>-->
 
@@ -52,6 +53,12 @@
                     <ul>
                         <li>
                             <a href="#" id="slide-tool" title="create a slide"><p>slide</p></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" id="slide-tool-title" title="slide text"><p>With text</p></a>
+                                </li>
+                                
+                            </ul>
                         </li>
                         <li>
                             <a href="#" id="text-tool" title="create text"><p>text</p></a>
@@ -72,6 +79,8 @@
                 </li>
                 <li id="time-line">
                     <h1 id="header-time-line">TIME LINE</h1>
+                    <ul id="sortable">
+                    </ul>
                     <!--                    <ul class="nav-button">
                                             <li id="previous">
                                                 <a href="#" id="previous-a" title="previous slide">
@@ -111,8 +120,7 @@
 
 
         <script id="templateSlide" type="text/template">
-            function initPostthes(id) {  console.log('init');  $('#idthesE').attr('value', id.match(/[0-9]/)[0]); console.log(id+'nom')    var val = CKEDITOR.instances['id+'nom'].getData();      $('#inputnom').attr('value', val);console.log(id+'imageType')    var val = CKEDITOR.instances['id+'imageType'].getData();      $('#inputimageType').attr('value', val);console.log(id+'pays_orig')    var val = CKEDITOR.instances['id+'pays_orig'].getData();      $('#inputpays_orig').attr('value', val);console.log(id+'prix')    var val = CKEDITOR.instances['id+'prix'].getData();      $('#inputprix').attr('value', val);console.log(id+'designation')    var val = CKEDITOR.instances['id+'designation'].getData();      $('#inputdesignation').attr('value', val);       $('#submitthes').trigger('click');   } 
-
+           
             <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
             </div>
 
@@ -122,22 +130,22 @@
         <script id="templateStepElement" type="text/template">
 
             <div id={{id}} class='step'  data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}'> 
-            <{{hierarchy}} id={{id}} contenteditable='true' class='element'> 
+            <div id={{id}}  class='element'> 
             {{content}}
-            </{{hierarchy}}>
+            </div>
             </div>    
 
         </script>
 
         <script id="templateElement" type="text/template">
 
-            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px' contenteditable="true"> {{content}}</{{hierarchy}}>
+            <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
 
         </script>
 
         <!--        <script id="templateElement" type="text/template">
         
-                    <div class='element'  data-scale = '{{scale}}' style="position: relative; left : {{pos.x}}px; top : {{pos.y}}px' "> <{{hierarchy}} contenteditable="true"> 
+                    <div class='element'  data-scale = '{{scale}}' style="position: relative; left : {{pos.x}}px; top : {{pos.y}}px' "> <{{hierarchy}}> 
                     {{content}}
                     </{{hierarchy}}>
                     </div>    

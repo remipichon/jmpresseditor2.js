@@ -36,14 +36,12 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-h1, p 
-{
-    font-family: Arial;
-}
+
 
 body
 {
     background: #DDD;
+    z-index: 100;
 }
 
 /* ======================================================================================
@@ -107,7 +105,7 @@ body
 #topbar ul ul li
 {
     display:block;
-    
+
 }
 
 #topbar-submenu
@@ -264,7 +262,7 @@ body
 
 #slideArea
 {
-    /*z-index: 2;*/
+    z-index: 10;
 }
 
 
@@ -329,21 +327,51 @@ body
     background-color: rgba(200,200,200,.5);
 }
 
+/*////////////////Gestion des styles////////////*/
+/*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
+span {
+    border : dashed black 10px;
 
-h1
+
+}
+.title1
 {
-    font-size: 3.5em;
+
+    text-align:center;
+    margin: auto;     
+    display: block;
+
+
+    font-size: 4em;
     font-weight: bold;
+    text-align:center;
+
 }
 
-#slideArea p
+.bodyText
 {
-    /*color:red;*/
-    font-size: 2em;
-    z-index: 2;
+    font-size:2em;
 }
 
 
+h1, p 
+{
+    font-family: Arial;
+}
+
+
+
+
+
+#slideArea p    
+/*ne rien mettre comme style pour p car ckeditor met les textes dans une balise p à chaque fois*/
+{
+    /*    color:red;
+        font-size: 2em;
+        z-index: 2;*/
+}
+
+/*Fin de gestion des styles*/
 
 .element:hover
 {
@@ -354,20 +382,33 @@ h1
 
 
 /* ======================================================================================
- * DISPLAY JMPRESS OUTPUT
+ * TIME LINE SORTABLE
  * css s'appliquant à displaymode.html (à mettre ds fichier à part ?)
  * ====================================================================================== */
 
-
-#jmpress
-{
-    background: #DDD;
-    left: 0px;
-    top: 0px;
-    right:0;
-    bottom:0;
-    height:100%;
-    /*position:fixed !important;*/
-    position:absolute;
-    /*z-index: 1;*/
+#sortable 
+{ 
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
+    /*width: 60%;*/ 
 }
+
+#sortable li 
+{ 
+    /*margin: 0 3px 3px 3px;*/ 
+    padding: 0.4em; 
+    /*padding-left: 1.5em;*/ 
+    font-size: 1.4em; 
+    height: 18px; 
+    background: #999;
+    text-align: center;
+    color: #FFF;
+    font-size: 1.4em;
+}
+
+/*  #sortable li span 
+  { 
+      position: absolute; 
+      margin-left: -1.3em; 
+  }*/
