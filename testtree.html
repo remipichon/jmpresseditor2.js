@@ -1,8 +1,10 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="test.css" >
+        <!--<link rel="stylesheet" type="text/css" href="test.css" >-->
+        <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/jquery-ui.js"></script>        
+        <script type="text/javascript" src="js/jquery-ui.js"></script>           
+        <script type="text/javascript" src="js/jmpress.js"></script>
         <script type="text/javascript" src="js/mustache.js"></script>
         <script type="text/javascript" src="js/mousewheel.js"></script>
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
@@ -10,27 +12,25 @@
     </head>
 
     <body>
-        <textarea id='editor'>
 
-
-        </textarea>
 
         <div id="tree">
             <ol id="niv1">
 
-                <li><span class='li' contenteditable='true'>titre</span></li>
-                <li><span class='li' contenteditable='true'>titre</span>
+                <li><span class='li' contenteditable='true'>1</span></li>
+                <li><span class='li' contenteditable='true'>2</span>
                     <ol id="niv11">
-                        <li><span class='li' contenteditable='true'>sous</span></li>
-                        <li><span class='li' contenteditable='true'>sous</span>
+                        <li><span class='li' contenteditable='true'>2.1</span></li>
+                        <li><span class='li' contenteditable='true'>2.2</span>
                             <ol id="niv111">
-                                <li><span class='li' contenteditable='true'>sous sous</span></li>
-                                <li><span class='li' contenteditable='true'>sous sous</span></li>
+                                <li><span class='li' contenteditable='true'>2.2.1</span></li>
+                                <li><span class='li' contenteditable='true'>2.2.2</span></li>
                             </ol>
                         </li>
+                        <li><span class='li' contenteditable='true'>2.3</span>
                     </ol>
                 </li>
-                <li><span class='li' contenteditable='true'>titre</span></li>
+                <li><span class='li' contenteditable='true'>3</span></li>
 
 
 
@@ -38,28 +38,139 @@
 
 
         </div>
+        <div onclick='goJmpress();'> GO JMPRESS </div>
+        <div onclick='goDepth();'> GO DEPTH </div>
+
+        <div id="slideArea">
+
+
+
+
+        </div>
+
+
         <script type="text/javascript"> //pour créer l'arboresence des slides
-            
-            //stocke le nombre de siblings par niveau de profondeur (independament des parents)
-            //ex : si on a sibPerLevel[2] = 4 cela signifie qu'en tout il y a 4 sous titre de niveau 2 (mais il est possible que que chacun de ces sous titres soient dans une partie mère différente
-            var sibPerLevel = new Array();
- 
+            function max(array) {
+                    var m = 0;
+                    for (var val in array) {
+                        if (array[val] >= m) {
+                            m = array[val];
+                        }
+                        ;
 
-            $('li').each(function() {
-                //compteur de niveau
-                var depth = $($(this), "#tree").parents('ol').length;
-
-                //compteur d'element par niveau
-                var siblings = $(this).parent().children('li').length;
-
-                if (sibPerLevel[depth] === undefined ) {
-                    sibPerLevel.push(0);
-                } else {
-                    sibPerLevel[depth] = sibPerLevel[depth] + siblings ;
+                    }
+                    return m;
                 }
+                
+                sibPerLevel = new Array();
+            function goDepth() {
 
-                $(this).children('span').html('depth : ' + depth + '  siblings : ' + siblings);
-            });
+                
+
+                //stocke le nombre de siblings par niveau de profondeur (independament des parents)
+                //ex : si on a sibPerLevel[2] = 4 cela signifie qu'en tout il y a 4 sous titre de niveau 2 (mais il est possible que que chacun de ces sous titres soient dans une partie mère différente
+
+                
+
+                //determintation des niveaux de profondeur et nombre de siblings de chaque partie/sous partie
+                $('li').each(function() {
+                    //compteur de niveau
+                    var depth = $($(this), "#tree").parents('ol').length;
+
+                    //compteur d'element par niveau
+                    var siblings = $(this).parent().children('li').length;
+
+                    //compteur d'enfant li
+                    var nbChild = $(this).children('ol').children('li').length;
+
+                    if (sibPerLevel[depth] === undefined) {
+                        sibPerLevel.push(0);
+                    } else {
+                        sibPerLevel[depth] = sibPerLevel[depth] + siblings;
+                    }
+
+                    //$(this).children('span').html('nb enfant ' + nbChild);
+                    $(this).attr('depth', depth).attr('siblings', siblings).attr('nbChild', nbChild);
+                });
+
+
+                $('li').each(function() {
+
+                    if ($(this).attr('depth') === '1') {
+
+                        var delta = 1000;
+                        var x = 2000 * $(this).index();
+                        var y = 500 * $(this).index();
+                        var z = 0;
+
+
+                        $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
+                        //$(this).children('span').html('x ' + x + ' y ' + y + ' z ' + z);
+                    }
+
+
+                });
+
+                deltaZ = 2000;
+                $('li').each(function() {
+                    if ($(this).attr('depth') === '2') {
+                        var delta = 1000;
+                        var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
+                        var z = -deltaZ;
+                        if ($(this).index() === 0) {
+                            var y = parseFloat($(this).parent().parent().attr('data-y')) + delta; //pour atteindre la li qui la stocke                      
+
+                        } else {
+                            var y = parseFloat($(this).parent().parent().attr('data-y')) + delta * ($(this).index() + 1) + delta * $(this).siblings('li').last().attr('nbChild');
+                        }
+                        $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
+                        //$(this).children('span').html('x ' + x + ' y ' + y + ' z ' + z);
+                    } else if ($(this).attr('depth') === '3') {
+                        var delta = 1000;
+                        var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
+                        var z = -deltaZ * 2;
+                        var y = parseFloat($(this).parent().parent().attr('data-y')) + delta * ($(this).index() + 1);
+                        $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
+                        //$(this).children('span').html('x ' + x + ' y ' + y + ' z ' + z);
+
+                    } //else {              //gerer les autres level (ceux de content)
+//                        var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
+//                        var y = $(this).parent().parent().attr('data-y');
+//                        var z = parseFloat($(this).parent().parent().attr('data-y')) - $(this).index() * deltaZ;
+//                        $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
+//
+//                    }
+
+                });
+            }
+
+            function goJmpress() {
+
+                var Ox = sibPerLevel[1] * 2000 / 2;
+                var Oy = max(sibPerLevel) * 1000 / 2;
+                var Oz = 0;
+                var overview = "<div class='step' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " ' data-scale='15'></div>";
+                $('#slideArea').append(overview);
+                Ox = -sibPerLevel[1] / 2 * 2000 + 2000;
+                Oy = max(sibPerLevel) * 1000 / 2;
+                Oz = -3 * deltaZ / 2; //recupérer ici la profondeur max
+                var overview2 = "<div class='step' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " '  data-rotate-z='0' data-rotate-y='-45' data-scale='15'></div>";
+                $('#slideArea').append(overview2);
+
+                //creation jmpress
+                $('li').each(function() {
+
+                    var titre = "<div  class='element' style='position: relative; left: 40px; top: 300px' > <span class=title1> " + $(this).children('span').html() + " </span> </div> ";
+
+                    var slide = "<div  class='step slide' data-x = ' " + $(this).attr('data-x') + " ' data-y = '  " + $(this).attr('data-y') + " ' data-z = '  " + $(this).attr('data-z') + " ' data-rotate-x='0' data-rotate-y='0' data-rotate-z='0' data-scale = '1' > " + titre + " </div> ";
+                    $('#slideArea').append(slide);
+
+                });
+
+                $('#tree').remove();
+                $('#slideArea').jmpress();
+                console.log('go jmpress');
+            }
 
 
 
