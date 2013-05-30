@@ -7,7 +7,7 @@
 
 function createTimeLine(idSlide) {
 
-    var $slideButton = $('<li class="' + idSlide + '">' + idSlide + '    <a class="cross" href="#">x</a></li>');
+    var $slideButton = $('<li class="' + idSlide + '"><span>' + idSlide + '</span>    <a class="cross" href="#">x</a></li>');
     $('#sortable').append($slideButton);
 
     $('#sortable').sortable({
@@ -66,14 +66,14 @@ $(document).ready(function() {
 
     var $sortableList = $("#sortable");
     var $removeLink = $('#sortable li a');
-    
-    
+
+
     // pour que le tri ne déclanche pas navigable sur surface travail
     $sortableList.mousedown(function(evt) {
         evt.stopPropagation();
         return false;
     });
-    
+
     // événements hover buuton navigable
     $sortableList.on('mouseenter', 'li', function() {
         var $link = $(this).find('a');              // apparition croix
@@ -90,41 +90,16 @@ $(document).ready(function() {
 //        console.log("mouseleave sur li");
     });
 
-    $sortableList.on('click', 'li a', function(e){
+// remove slides
+    $sortableList.on('click', 'li a', function(e) {
         var $link = $(this);
         e.preventDefault();
-        console.log("link  "+$link);
-         $link.parent().fadeOut(function() {
-             $link.parent().remove();
-         })
-
+        console.log("link  " + $link);
+        $link.parent().fadeOut(function() {
+            $link.parent().remove();
+            var $idSlide = $(this).attr('class');
+            $('#' + $idSlide + '').remove();
+            delete pressjson.slide[$idSlide];
+        });
+    });
 });
-
-});
-
-//
-// var $removeLink = $('#show-items li a'),
-//      $itemList = $('#show-items');
-// 
-//// Remove todo
-//$itemList.delegate("a", "click", function(e) {
-//    var $this = $(this);
-// 
-//    e.preventDefault();
-//    $.publish('/remove/', [$this]);
-//});
-// 
-//$.subscribe('/remove/', function($this) {
-//    var parentId = $this.parent().attr('id');
-//     
-//    // Remove todo list from localStorage based on the id of the clicked parent element
-//    localStorage.removeItem(
-//        "'" + parentId + "'"
-//    );
-//     
-//    // Fade out the list item then remove from DOM
-//    $this.parent().fadeOut(function() { 
-//        $this.parent().remove();
-//         
-//        $.publish('/regenerate-list/', []);
-//    });

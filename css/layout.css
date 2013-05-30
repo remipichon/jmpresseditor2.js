@@ -331,18 +331,18 @@ body
 }
 
 
- /*////////////////Gestion des styles////////////*/
- /*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
- span {
-     /*border : dashed black 10px;*/
-     
-     
- }
+/*////////////////Gestion des styles////////////*/
+/*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
+span {
+    /*border : dashed black 10px;*/
+
+
+}
 .title1
 {
-     text-align:center;
-     margin: auto;     
-     display: block;
+    text-align:center;
+    margin: auto;     
+    display: block;
 
     font-size: 6em;
 
@@ -357,7 +357,7 @@ body
 }
 
 
-h1, p 
+h1, p
 {
     font-family: Arial;
 }
@@ -402,16 +402,28 @@ h1, p
     /*margin: 0 3px 3px 3px;*/ 
     padding: 0.4em; 
     /*padding-left: 1.5em;*/ 
-    font-size: 1.4em; 
+    /*font-size: 1.4em;*/ 
     height: 18px; 
     background: #999;
     text-align: center;
     color: #FFF;
-    font-size: 1.4em;
+    font-family: Arial;
 }
 
-/*  #sortable li span 
+  #sortable li span,   #sortable li a  
   { 
-      position: absolute; 
-      margin-left: -1.3em; 
-  }*/
+      padding:0; 
+  }
+  #sortable li a  
+  {
+      display:none;
+      float:right;
+      color: #f03;
+      font-weight: 900;
+      padding: 0.1em;
+      /*vertical-align:auto;*/
+      font-size: 1.8em;
+      line-height: 0;
+  }
+  
+        

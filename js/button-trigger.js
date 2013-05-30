@@ -19,24 +19,24 @@ $(document).ready(function() {
         event.stopPropagation(); 
     });
 
-//    // REINITIALISATION DE LA PRESENTATION SAUVEE
-//    if (localStorage.getItem('savedPress')) {
-//        $('#slideArea').html(localStorage.getItem('savedPress'));
-//        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
-//            $(this).draggableKiki();
-//            $(this).children().each(function() {
-//                $(this).draggableKiki();
-//            });
-//        });
-//    }
-//    ;
-//    if (localStorage.getItem('savedjson')) {
-//        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
-//        pressjson = savedjson;
-//        i = pressjson.increment['i'];
-//        j = pressjson.increment['j'];
-//    }
-//    ;
+    // REINITIALISATION DE LA PRESENTATION SAUVEE
+    if (localStorage.getItem('savedPress')) {
+        $('#slideArea').html(localStorage.getItem('savedPress'));
+        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
+            $(this).draggableKiki();
+            $(this).children().each(function() {
+                $(this).draggableKiki();
+            });
+        });
+    }
+    ;
+    if (localStorage.getItem('savedjson')) {
+        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
+        pressjson = savedjson;
+        i = pressjson.increment['i'];
+        j = pressjson.increment['j'];
+    }
+    ;
 
 //       initialisation jmpress :
     $('#slideArea').jmpress({
