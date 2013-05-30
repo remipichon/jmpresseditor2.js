@@ -341,14 +341,10 @@ span {
 .title1
 {
     text-align:center;
-    margin: auto;     
+    /*margin: auto;*/     
     display: block;
-
     font-size: 6em;
-
     font-weight: bold;
-    text-align:center;
-
 }
 
 .bodyText

@@ -17,10 +17,10 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     var scale = $objet.attr("data-scale");
     //console.log($qui);
     var dico = getTrans3D();
-    
+
     if (flag === 0) {
         scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'));
-        console.log("scale "+scale);
+//        console.log("scale "+scale);
     }
     else {
         scale = 1;
@@ -46,7 +46,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     //console.log("MRH " + MRH + " MVH " + MVH + " VTop " + VTop + " Rtop " + RTop);
     //console.log("MRL " + MRL + " MVL " + MVL + " VLeft " + VLeft + " RLeft " + RLeft);
 
-    var tab = new Array(VTop*scale, VLeft*scale);
+    var tab = new Array(VTop * scale, VLeft * scale);
 //    console.log("sortie getvirtual");
     return tab;
 
@@ -416,7 +416,7 @@ function rotateZ(event, $objet) {
  * mise en mouvement/rotation des objets en fonction de leur classe
  */
 $(document).on('mousemove', function(event) {
-    
+
     //deplacement Z de la slide
     $('.moveZ').each(function() {
         moveZ(event, $(this));
@@ -444,7 +444,7 @@ $(document).on('mousemove', function(event) {
  * annulation de la mise en mouvement/rotation des objets
  */
 $(document).on('mouseup', function(event) {
-//    $('body').css('cursor', 'default');
+    $('body').css('cursor', 'default');
 //    console.log('mouseup');
     $('.moveZ').each(function() {
         clearTimeout($(this).data("checkdown"));
@@ -504,10 +504,10 @@ $(document).on('mouseup', function(event) {
                     if ($container !== undefined)
                         return false;
                 });
-    //                if ($container !== undefined)          // = drop de l'element sur slideArea                                                   // KIKI annulation du drop d'un element sur le documentS
+                //                if ($container !== undefined)          // = drop de l'element sur slideArea                                                   // KIKI annulation du drop d'un element sur le documentS
 //                    $this = steptoElement($this, $container);
             }
-            
+
         }
 //        console.log("this avant draggable");
 //        console.log($this);
@@ -626,10 +626,14 @@ jQuery.fn.draggableKiki = function() {
      * rotate X et Y (right)
      */
     $(this).on("mousedown.simpleclick", function(event) {
-//        event.originalEvent.preventDefault();
-//        $('body').css('cursor', 'move');
+
 
         var $this = $(this);
+        if ($this.hasClass('slide')) {
+            event.originalEvent.preventDefault();
+            $('body').css('cursor', 'move');
+        }
+
         if ($this.hasClass('element'))
         {
             if (!$this.parent().hasClass("slide"))
@@ -650,7 +654,7 @@ jQuery.fn.draggableKiki = function() {
 
         if (event.which === 1) {
             $this.addClass("move");
-            
+
 //           console.log($this);
             offSet(event, $this);
 //        $(this).on("mousemove.movable", function(event) {
@@ -697,13 +701,13 @@ jQuery.fn.draggableKiki = function() {
 function getTrans3D() {
     // ToDO : récupérer le bon VendorPrefix, suivant le navigateur
     // car "webkit" ne fonctionne que sur certains navigateurs (par ex, suis obligée d'utiliser chromium pour utiliser l'editeur, là)
-    
+
     var prefix = (pfx('transform'));
 //    console.log("trans : "+ trans);  
-    
+
     //style.position == style['position']
 //    var trans = $("#slideArea>div")[0].style.webkitTransform.match(/.+?\(.+?\)/g);
-     var trans = $("#slideArea>div")[0].style[''+prefix+''].match(/.+?\(.+?\)/g);
+    var trans = $("#slideArea>div")[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};
     for (el in trans) {
         var ele = trans[el];
@@ -744,11 +748,9 @@ function setTrans3D(dico) {
  * 
  * ====================================================================================== */
 $(document).on('mousedown', function(event) {           //le fucking probleme avec cette methode c'est que le mousemove et mouseup sont absorbé par une autre slide si notre draggable passe dessous
-    // transformation du curseur :
-//    event.originalEvent.preventDefault();
-//    $('body').css('cursor', 'move');
+
     //init du posData qui permet de stocker les caractéristiques de l'objet lors du mousedown
-    
+
     $("#slideArea").data('event', {
         pos: {
             x: event.pageX,
@@ -871,7 +873,7 @@ $(document).on('mousedown', function(event) {           //le fucking probleme av
 
 
     $(this).on("mouseup", function() {
-//        $('body').css('cursor', 'default');
+        $('body').css('cursor', 'default');
         $(this).off(".moveView");
         $(this).off(".rotateView");
     });

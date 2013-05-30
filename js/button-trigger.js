@@ -13,10 +13,10 @@ $(document).ready(function() {
 
     var i = 1; // id unique des slides      -> utile pour conversion json <-> html
     var j = 1; // id unique des éléments    -> utile pour conversion json <-> html
-    
-    $("#sortable").click(function(event) { 
+
+    $("#sortable").click(function(event) {
         console.log('sorting stop prop');
-        event.stopPropagation(); 
+        event.stopPropagation();
     });
 
     // REINITIALISATION DE LA PRESENTATION SAUVEE
@@ -57,7 +57,9 @@ $(document).ready(function() {
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
         event.preventDefault();
         event.stopPropagation();
+        $('body').css('cursor', 'crosshair');
         $('body').removeClass().addClass('creationTitle');
+
 //        $(".slide").each(function() {
 //            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
 //        });
@@ -65,6 +67,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.creationTitle', function(event) {
         $('.creationTitle').removeClass('creationTitle');
+        $('body').css('cursor', 'default');
         createText('title1', event);
     });
 
@@ -76,6 +79,7 @@ $(document).ready(function() {
         $('#text-tool').parent().addClass("buttonclicked");
         event.preventDefault();
         event.stopPropagation();
+        $('body').css('cursor', 'crosshair');
         $('body').removeClass().addClass('creationBody');
     });
 
@@ -83,6 +87,7 @@ $(document).ready(function() {
         event.stopPropagation();
         $('.creationBody').removeClass('creationBody');
         createText('bodyText', event);
+        $('body').css('cursor', 'default');
     });
 
 
@@ -110,7 +115,7 @@ $(document).ready(function() {
             (container).unbind('click'); // permet de désactiver le clic sur la surface
             var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * (currentScale);
             var y = (event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1])) * (currentScale);
-            var z = 0;//dico.translate3d[2];
+            var z = dico.translate3d[2];
         }
 
         var idElement = "element-" + j++; // id unique élément -> ds json + ds html
@@ -118,16 +123,22 @@ $(document).ready(function() {
         if (container.hasClass("slide"))      // element créé directement dans une slide
         {
             var idContainer = container.attr('id');
-            
-            if (event.type !== "code"){
-            var containerX = pressjson.slide[idContainer].pos.x,
-                    containerY = pressjson.slide[idContainer].pos.y;
-            var containerWidth = Math.floor(container.width()),
-                    containerHeight = Math.floor(container.height());
-            x = x - containerX + (containerWidth / 2);
-            y = y - containerY + (containerHeight / 2);
+
+            if (event.type !== "code") {
+                var parentOffset = container.offset();
+                //or $(this).offset(); if you really just want the current element's offset
+                x = event.pageX - parentOffset.left;
+                y = event.pageY - parentOffset.top;
+
+//
+//                var containerX = pressjson.slide[idContainer].pos.x,
+//                        containerY = pressjson.slide[idContainer].pos.y;
+//                var containerWidth = Math.floor(container.width()),
+//                        containerHeight = Math.floor(container.height());
+//                x = x - containerX + (containerWidth / 2);
+//                y = y - containerY + (containerHeight / 2);
             }
-            
+
             var containerScale = pressjson.slide[idContainer].scale;
 //                console.log("scale" + containerScale);
             var stringText = '{"class": "element text","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
@@ -200,6 +211,7 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         $('body').removeClass().addClass('creationSlide');
+        $('body').css('cursor', 'crosshair');
     });
 
     $('#slide-tool-title').on('click', function(event) {
@@ -208,18 +220,21 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         $('body').removeClass().addClass('creationSlideTitle');
+        $('body').css('cursor', 'crosshair');
     });
 
     $(document).on('click', '.creationSlide', function(event) {
         event.stopPropagation();
         $('.creationSlide').removeClass('creationSlide');
         createSlide('slide', event);
+        $('body').css('cursor', 'default');
     });
 
     $(document).on('click', '.creationSlideTitle', function(event) {
         event.stopPropagation();
         $('.creationSlideTitle').removeClass('creationSlideTitle');
         createSlide('slideText', event);
+        $('body').css('cursor', 'default');
     });
 
     function createSlide(type, event) {
@@ -231,7 +246,7 @@ $(document).ready(function() {
         var z = dico.translate3d[2];
         var idSlide = "slide-" + i++;
         pressjson.increment['i'] = i;
-        var stringSlide = '{"type": "slide", "id" : "' + idSlide + '", "index" : "' + (i-2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+        var stringSlide = '{"type": "slide", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
         var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
         if (type === 'slideText') {
             jsonSlide.type = "slideText";
