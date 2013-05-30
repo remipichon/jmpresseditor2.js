@@ -14,20 +14,21 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
 
     //var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000); //MaxVirtualHeight //prise en compte deu zoom
     // var scale = ($slideArea.hasClass("step"))? parseInt(parseFloat($slideArea.css("perspective")) / 1000) : 1;
-    var scale = $objet.attr("data-scale");
+    scale = $objet.attr("data-scale");
     //console.log($qui);
     var dico = getTrans3D();
-
+    
     if (flag === 0) {
         scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'));
-//        console.log("scale "+scale);
+        //console.log("scale "+scale);
     }
     else {
         scale = 1;
     }
 
 //    console.log("scale " + scale + " " + parseFloat($slideArea.css("perspective")) + " " + $objet.attr("data-scale"));
-    var MVH = parseFloat($slideArea.css("perspective"));//heightSlide * scale; //MaxVirtualHeight //prise en compte deu zoom
+    var MVH = 800*scale;//parseFloat($slideArea.css("perspective"));//heightSlide * scale; //MaxVirtualHeight //prise en compte deu zoom
+    console.log(MVH);
     var RTop = event.pageY; //RealTop (de la souris)
 
     //VirtualTop (position dans le monde des slides)
@@ -46,7 +47,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     //console.log("MRH " + MRH + " MVH " + MVH + " VTop " + VTop + " Rtop " + RTop);
     //console.log("MRL " + MRL + " MVL " + MVL + " VLeft " + VLeft + " RLeft " + RLeft);
 
-    var tab = new Array(VTop * scale, VLeft * scale);
+    var tab = new Array(VTop, VLeft);
 //    console.log("sortie getvirtual");
     return tab;
 
