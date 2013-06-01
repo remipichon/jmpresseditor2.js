@@ -12,22 +12,24 @@
             var pressjson = {data: {}, slide: {}, component: {}, increment: {}};
         </script>
 
-        <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/jquery-ui.js"></script>        
-        <script type="text/javascript" src="js/mustache.js"></script>
-        <script type="text/javascript" src="js/mousewheel.js"></script>
+        <script type="text/javascript" src="js/plugin/jquery.js"></script>
+        <script type="text/javascript" src="js/plugin/jquery-ui.js"></script>        
+        <script type="text/javascript" src="js/plugin/mustache.js"></script>
+        <script type="text/javascript" src="js/plugin/mousewheel.js"></script>
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+
+        <script type="text/javascript" src="js/plugin/jmpress-editor.js"></script>
 
         <script type="text/javascript" src="js/layout.js"></script>
         <script type="text/javascript" src="js/button-trigger.js"></script> 
-        <script type="text/javascript" src="js/documentTools.js"></script>
+        <script type="text/javascript" src="js/3dTools.js"></script>
         <script type="text/javascript" src="js/elementTools.js"></script>
         <script type="text/javascript" src="js/documentTools.js"></script>
-        <script type="text/javascript" src="js/jmpress-editor.js"></script>
+
         <script type="text/javascript" src="js/binding-slide-element.js"></script>
         <script type="text/javascript" src="js/time-line.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
-        <!--<script src="js/editorV2.js"></script>-->
+
 
     </head>
 
@@ -41,7 +43,7 @@
                         <li><a href="#" id="clear" title="change presentation theme"><p>clear all</p></a></li>
                         <li><a href="#" id="info" title="more info on this editor"><p>info</p></a></li>
                         <li><a href="helpModal" id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></a></li>
-                        
+
                     </ul>
                 </li>
             </ul>
@@ -59,7 +61,7 @@
                                 <li>
                                     <a href="#" id="slide-tool-title" title="slide text"><p>With text</p></a>
                                 </li>
-                                
+
                             </ul>
                         </li>
                         <li>
@@ -122,7 +124,7 @@
 
 
         <script id="templateSlide" type="text/template">
-           
+
             <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
             </div>
 
