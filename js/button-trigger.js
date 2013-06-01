@@ -19,24 +19,48 @@ $(document).ready(function() {
         event.stopPropagation();
     });
 
+
     // REINITIALISATION DE LA PRESENTATION SAUVEE
-    if (localStorage.getItem('savedPress')) {
-        $('#slideArea').html(localStorage.getItem('savedPress'));
-        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
-            $(this).draggableKiki();
-            $(this).children().each(function() {
-                $(this).draggableKiki();
-            });
+    if (localStorage.getItem('savedJson')) {
+        savedJsonTruc = JSON.parse(localStorage.getItem('savedJson'));
+         //console.log(savedJsonTruc);
+        
+        //parser le json, pour chaque slide
+        var evCodeSlide = ({
+            type: 'code',
+            rotateX: 0,
+            rotateY: 0,
+            rotateZ: 0,
+            scale: 0,
+            x: 10,
+            y: 90,
+            z: 0,
+            id: 0,
+            typeEl: 'slide'
         });
+
+        var evCodeText = ({
+            type: 'code',
+            container: 'parent',
+            x: 10,
+            y: 90,
+            z: 0
+        });
+
+       
+        
+        //il n'y a que les increment à recuperer
+//       
     }
-    ;
-    if (localStorage.getItem('savedjson')) {
-        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
-        pressjson = savedjson;
-        i = pressjson.increment['i'];
-        j = pressjson.increment['j'];
-    }
-    ;
+
+    //plus besoin de renseigner le json, ce sont les appels de fonctions createSlide et createText qui s'en charge
+//    if (localStorage.getItem('savedJson')) {
+//        var savedjson = JSON.parse(localStorage.getItem('savedJson'));
+//        pressjson = savedjson;
+//        i = pressjson.increment['i'];
+//        j = pressjson.increment['j'];
+//    }
+
 
 //       initialisation jmpress :
     $('#slideArea').jmpress({
@@ -238,15 +262,35 @@ $(document).ready(function() {
     });
 
     function createSlide(type, event) {
-        $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
-        var dico = getTrans3D();
-        var currentScale = dico.scaleZ;
-        var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
-        var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
-        var z = dico.translate3d[2];
-        var idSlide = "slide-" + i++;
-        pressjson.increment['i'] = i;
-        var stringSlide = '{"type": "slide", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+
+        if (event.type === 'code') {
+            var dico = {
+                rotateX: event.rotateX,
+                rotateY: event.rotateY,
+                rotateZ: event.rotateZ
+            };
+            var currentScale = event.scale;
+            var x = event.x;
+            var y = event.y;
+            var z = event.z;
+            var idSlide = event.id;
+            var type = event.typeEl;
+
+        } else {
+            $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
+            var dico = getTrans3D();
+            var currentScale = dico.scaleZ;
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
+            var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
+            var z = dico.translate3d[2];
+            var idSlide = "slide-" + i++;
+            pressjson.increment['i'] = i;
+            var type = "slide";
+
+        }
+
+        
+        var stringSlide = '{"type": "'+type+'", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
         var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
         if (type === 'slideText') {
             jsonSlide.type = "slideText";

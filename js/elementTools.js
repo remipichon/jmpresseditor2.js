@@ -24,8 +24,8 @@ function move(event, $objet) {
     }
     var $slideArea = $("#slideArea");
 
-    var offX = $objet.attr("offX");
-    var offY = $objet.attr("offY");
+    var offX = $objet.data('off').x;
+    var offY = $objet.data('off').y;
     if ($objet.hasClass("step")) {
         var flag = 0;
     }
@@ -106,7 +106,11 @@ function offSet(event, $objet) {
         var offLeft = parseFloat($objet.css("left"));
     }
 
-
+    $objet.data('off', {
+        x: VLeftMouse - offLeft,
+        y: VTopMouse - offTop
+    });
+ 
     $objet.attr("offX", "" + VLeftMouse - offLeft + "");
     $objet.attr("offY", "" + VTopMouse - offTop + "");
 }

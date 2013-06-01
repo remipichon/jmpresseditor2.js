@@ -98,7 +98,7 @@ $(document).ready(function() {
         var savedjson = JSON.stringify(pressjson, null, 2);
 //        console.log("saved json : ");
 //        console.log(savedjson);
-        localStorage.setItem('savedjson', savedjson);
+        localStorage.setItem('savedJson', savedjson);
 
         var savedPress = $("#slideArea>div").html();
         localStorage.setItem('savedPress', savedPress);
