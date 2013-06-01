@@ -3,6 +3,20 @@
  * and open the template in the editor.
  */
 
+
+/*/////////////////////////////////////////////////////////////
+ 
+ CONCERNANT L'orgaNISATION DU FICHIER
+ Je te conseille de mettre toutes les fonction au début du script
+ et tous les listeners au même endroit, à la suite
+ ainsi il sera plus facile de factoriser les listener si c'est possible
+ et surtout ca evitera de naviguer dans le fichier à chaque fois (penible !)
+ 
+ 
+ 
+ 
+ //////////////////////////////////////////////////////////*/
+
 $(document).ready(function() {
 
 
@@ -19,36 +33,61 @@ $(document).ready(function() {
         event.stopPropagation();
     });
 
+    //       initialisation jmpress :
+    $('#slideArea').jmpress({
+//        viewPort: {
+//            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
+//        }
+    });
+
+    $('#profondeur').remove();
+
 
     // REINITIALISATION DE LA PRESENTATION SAUVEE
     if (localStorage.getItem('savedJson')) {
         savedJsonTruc = JSON.parse(localStorage.getItem('savedJson'));
-         //console.log(savedJsonTruc);
-        
-        //parser le json, pour chaque slide
-        var evCodeSlide = ({
-            type: 'code',
-            rotateX: 0,
-            rotateY: 0,
-            rotateZ: 0,
-            scale: 0,
-            x: 10,
-            y: 90,
-            z: 0,
-            id: 0,
-            typeEl: 'slide'
-        });
 
-        var evCodeText = ({
-            type: 'code',
-            container: 'parent',
-            x: 10,
-            y: 90,
-            z: 0
-        });
+        for (var slide in savedJsonTruc.slide) {
+            //parser le json, pour chaque slide
+            var evCodeSlide = ({
+                type: 'code',
+                rotateX: savedJsonTruc.slide[slide].rotate.x,
+                rotateY: savedJsonTruc.slide[slide].rotate.y,
+                rotateZ: savedJsonTruc.slide[slide].rotate.z,
+                scale: savedJsonTruc.slide[slide].scale,
+                x: savedJsonTruc.slide[slide].pos.x,
+                y: savedJsonTruc.slide[slide].pos.y,
+                z: savedJsonTruc.slide[slide].pos.z,
+                id: savedJsonTruc.slide[slide].id,
+                typeEl: savedJsonTruc.slide[slide].type
+            });
 
-       
-        
+            createSlide('inutile', evCodeSlide);
+
+            for (var elmt in savedJsonTruc.slide[slide].element) {
+                var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+
+                var evCodeText = ({
+                    type: 'code',
+                    container: $newSlide,
+                    x: savedJsonTruc.slide[slide].element[elmt].pos.x,
+                    y: savedJsonTruc.slide[slide].element[elmt].pos.y,
+                    z: savedJsonTruc.slide[slide].element[elmt].pos.z,
+                    content: savedJsonTruc.slide[slide].element[elmt].content
+                });
+                
+                createText(savedJsonTruc.slide[slide].element[elmt].hierarchy,evCodeText);
+
+            }
+
+        }
+
+
+
+
+
+
+
         //il n'y a que les increment à recuperer
 //       
     }
@@ -62,14 +101,7 @@ $(document).ready(function() {
 //    }
 
 
-//       initialisation jmpress :
-    $('#slideArea').jmpress({
-//        viewPort: {
-//            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
-//        }
-    });
 
-    $('#profondeur').remove();
     //  initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
 
@@ -122,6 +154,7 @@ $(document).ready(function() {
      * + layout or slide with ".creationTitle/Body" class clicked
      * ======================================================================================*/
     function createText(hierarchy, event) {
+        
 
         var content = "Entrer du texte";
         var dico = getTrans3D();
@@ -133,6 +166,7 @@ $(document).ready(function() {
             var x = event.x;
             var y = event.y;
             var z = event.z;
+            var content = event.content;
         } else {
             //si le texte est crée via un vrai event
             var container = $(event.target);
@@ -258,10 +292,12 @@ $(document).ready(function() {
         event.stopPropagation();
         $('.creationSlideTitle').removeClass('creationSlideTitle');
         createSlide('slideText', event);
+
         $('body').css('cursor', 'default');
     });
 
-    function createSlide(type, event) {
+    function createSlide(typeCreation, event) {
+
 
         if (event.type === 'code') {
             var dico = {
@@ -274,7 +310,7 @@ $(document).ready(function() {
             var y = event.y;
             var z = event.z;
             var idSlide = event.id;
-            var type = event.typeEl;
+
 
         } else {
             $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
@@ -282,17 +318,18 @@ $(document).ready(function() {
             var currentScale = dico.scaleZ;
             var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
             var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
-            var z = dico.translate3d[2];
+            var z = 1000; //dico.translate3d[2];
             var idSlide = "slide-" + i++;
             pressjson.increment['i'] = i;
-            var type = "slide";
+
 
         }
+        var type = "slide";
 
-        
-        var stringSlide = '{"type": "'+type+'", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+
+        var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
         var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
-        if (type === 'slideText') {
+        if (false) {//(typeCreation === 'slideText') {
             jsonSlide.type = "slideText";
         }
         pressjson.slide[idSlide] = jsonSlide;
@@ -393,7 +430,7 @@ $(document).ready(function() {
         //gestion de ckeditor
         if (data.type === 'text') {
             var $newTxt = container.children().last();
-            $newTxt.manageCkeditor(true);
+            //$newTxt.manageCkeditor(true);   KIKI
         }
 
         var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
