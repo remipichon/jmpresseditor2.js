@@ -95,10 +95,10 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#save').on('click', function(event) {
-        var savedjson = JSON.stringify(pressjson, null, 2);
+        var savedJson = JSON.stringify(pressjson, null, 2);
 //        console.log("saved json : ");
 //        console.log(savedjson);
-        localStorage.setItem('savedJson', savedjson);
+        localStorage.setItem('savedJson', savedJson);
 
         var savedPress = $("#slideArea>div").html();
         localStorage.setItem('savedPress', savedPress);

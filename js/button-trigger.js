@@ -12,9 +12,6 @@
  ainsi il sera plus facile de factoriser les listener si c'est possible
  et surtout ca evitera de naviguer dans le fichier à chaque fois (penible !)
  
- 
- 
- 
  //////////////////////////////////////////////////////////*/
 
 $(document).ready(function() {
@@ -56,7 +53,8 @@ $(document).ready(function() {
         y: restoreJson.slide[slide].pos.y,
         z: restoreJson.slide[slide].pos.z,
         id: restoreJson.slide[slide].id,
-        typeEl: restoreJson.slide[slide].type
+        typeEl: restoreJson.slide[slide].type,
+        index: restoreJson.slide[slide].index
       });
 
       createSlide('inutile', evCodeSlide);
@@ -105,10 +103,6 @@ $(document).ready(function() {
     event.stopPropagation();
     $('body').css('cursor', 'crosshair');
     $('body').removeClass().addClass('creationTitle');
-
-//        $(".slide").each(function() {
-//            $(this).removeClass('creationBody creationGeek').addClass('creationTitle');
-//        });
   });
 
   $(document).on('click', '.creationTitle', function(event) {
@@ -281,6 +275,8 @@ $(document).ready(function() {
       var y = event.y;
       var z = event.z;
       var idSlide = event.id;
+      var index = event.index;
+      i++;
     } else {
       $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
       var dico = getTrans3D();
@@ -289,11 +285,12 @@ $(document).ready(function() {
       var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
       var z = 1000; //dico.translate3d[2];
       var idSlide = "slide-" + i++;
-      pressjson.increment['i'] = i;
+      var index = i -2;
+//      pressjson.increment['i'] = i;
     }
     var type = "slide";
 
-    var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+    var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + index + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
     var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
     if (false) {//(typeCreation === 'slideText') {
       jsonSlide.type = "slideText";
@@ -301,7 +298,7 @@ $(document).ready(function() {
     pressjson.slide[idSlide] = jsonSlide;
     console.dir(pressjson);
     jsonToHtml(jsonSlide);
-    createTimeLine(idSlide);
+    createTimeLine(idSlide, index);
     $('#slide-tool').parent().removeClass("buttonclicked");
   }
 
