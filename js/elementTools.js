@@ -22,8 +22,9 @@ function move(event, $objet) {
 //    }
     var $slideArea = $("#slideArea");
 
-    var offX = $objet.attr("offX");
-    var offY = $objet.attr("offY");
+// $objet.attr("data-x", VLeft);
+    var offX = $objet.data('off').x;
+    var offY = $objet.data('off').y;
     if ($objet.hasClass("slide")) {
         var flag = 0;
     }
@@ -105,8 +106,11 @@ function offSet(event, $objet) {
         var offLeft = parseFloat($objet.css("left"));
     }
 
-    $objet.attr("offX", "" + VLeftMouse - offLeft + "");
-    $objet.attr("offY", "" + VTopMouse - offTop + "");
+    $objet.data('off', {
+        x: VLeftMouse - offLeft,
+        y: VTopMouse - offTop
+    });
+
 }
 ;
 
@@ -172,7 +176,7 @@ function resize(event, $objet) {
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
 //    if ($objet.hasClass("slide")) {          // cas step slide
-        pressjson.slide[idObjet].scale = newScale;
+    pressjson.slide[idObjet].scale = newScale;
 //    }
 //    else {        // cas step element
 //        pressjson.component[idObjet].scale = newScale;
@@ -212,8 +216,8 @@ function rotate(event, $objet) {
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
 //    if ($objet.hasClass("slide")) {          // cas step slide
-        pressjson.slide[idObjet].rotate.x = rotate.x;
-        pressjson.slide[idObjet].rotate.y = rotate.y;
+    pressjson.slide[idObjet].rotate.x = rotate.x;
+    pressjson.slide[idObjet].rotate.y = rotate.y;
 //    }
 //    else {        // cas step element
 //        pressjson.slide[idObjet].rotate.x = rotate.x;
@@ -253,7 +257,7 @@ function rotateZ(event, $objet) {
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
 //    if ($objet.hasClass("slide")) {          // cas step slide
-        pressjson.slide[idObjet].rotate.z = rotate.z;
+    pressjson.slide[idObjet].rotate.z = rotate.z;
 //    }
 //    else {        // cas step element
 //        pressjson.component[idObjet].rotate.z = rotate.z;
@@ -327,25 +331,25 @@ $(document).on('mouseup', function(event) {
         $this.removeClass("move");
 //        if (!$this.hasClass("slide"))                   // EN FAIRE UNE FONCTION BIND ELEMENT ??
 //        {
-            if ($this.hasClass("element"))              // = element dans slide
-            {
-                var $container;
+        if ($this.hasClass("element"))              // = element dans slide
+        {
+            var $container;
 //                console.log($container !== undefined);
-                $(".slide").each(function() {
-                    $container = getMouseUpContainer(event, $(this));
+            $(".slide").each(function() {
+                $container = getMouseUpContainer(event, $(this));
 //                    console.log($container);
-                    if ($container !== undefined)
-                        return false;
-                });
-                if ($container === undefined) {         // = drop de l'element sur slideArea -> retour à position originale
+                if ($container !== undefined)
+                    return false;
+            });
+            if ($container === undefined) {         // = drop de l'element sur slideArea -> retour à position originale
 //                    $this = elementToStep($this);
-                       $this.css("left", $this.attr("offX"));
-                       $this.css("top", $this.attr("offY"));
-                }
-                else {                                  // = drop de l'element sur une slide
-                    $this = elementToElement($this, $container, event);
-                }
+                $this.css("left", $this.attr("offX"));
+                $this.css("top", $this.attr("offY"));
             }
+            else {                                  // = drop de l'element sur une slide
+                $this = elementToElement($this, $container, event);
+            }
+        }
 //            else {                                      // = element libre
 //                var $container;
 ////                console.log($container !== undefined);

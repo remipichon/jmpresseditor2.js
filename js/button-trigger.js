@@ -3,6 +3,20 @@
  * and open the template in the editor.
  */
 
+
+/*/////////////////////////////////////////////////////////////
+ 
+ CONCERNANT L'orgaNISATION DU FICHIER
+ Je te conseille de mettre toutes les fonction au début du script
+ et tous les listeners au même endroit, à la suite
+ ainsi il sera plus facile de factoriser les listener si c'est possible
+ et surtout ca evitera de naviguer dans le fichier à chaque fois (penible !)
+ 
+ 
+ 
+ 
+ //////////////////////////////////////////////////////////*/
+
 $(document).ready(function() {
 
 
@@ -12,33 +26,14 @@ $(document).ready(function() {
 
 
     var i = 1; // id unique des slides      -> utile pour conversion json <-> html
-    var j = 1; // id unique des éléments    -> utile pour conversion json <-> html
+    var j = 1; // id unique des éléments    
 
+    // empêcher le parasitage de navigable par sortable
     $("#sortable").click(function(event) {
-        console.log('sorting stop prop');
         event.stopPropagation();
     });
 
-    // REINITIALISATION DE LA PRESENTATION SAUVEE
-    if (localStorage.getItem('savedPress')) {
-        $('#slideArea').html(localStorage.getItem('savedPress'));
-        $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
-            $(this).draggableKiki();
-            $(this).children().each(function() {
-                $(this).draggableKiki();
-            });
-        });
-    }
-    ;
-    if (localStorage.getItem('savedjson')) {
-        var savedjson = JSON.parse(localStorage.getItem('savedjson'));
-        pressjson = savedjson;
-        i = pressjson.increment['i'];
-        j = pressjson.increment['j'];
-    }
-    ;
-
-//       initialisation jmpress :
+    // initialisation jmpress :
     $('#slideArea').jmpress({
 //        viewPort: {
 //            height: 1000       // permet d'avoir vue d'ensemble + large. Se déclenche que à partir 1er navigable
@@ -46,6 +41,60 @@ $(document).ready(function() {
     });
 
     $('#profondeur').remove();
+
+
+    // REINITIALISATION DE LA PRESENTATION SAUVEE
+    if (localStorage.getItem('savedJson')) {
+        restoreJson = JSON.parse(localStorage.getItem('savedJson'));
+
+        for (var slide in restoreJson.slide) {
+            //parser le json, pour chaque slide
+            var evCodeSlide = ({
+                type: 'code',
+                rotateX: restoreJson.slide[slide].rotate.x,
+                rotateY: restoreJson.slide[slide].rotate.y,
+                rotateZ: restoreJson.slide[slide].rotate.z,
+                scale: restoreJson.slide[slide].scale,
+                x: restoreJson.slide[slide].pos.x,
+                y: restoreJson.slide[slide].pos.y,
+                z: restoreJson.slide[slide].pos.z,
+                id: restoreJson.slide[slide].id,
+                typeEl: restoreJson.slide[slide].type
+            });
+
+            createSlide('inutile', evCodeSlide);
+
+            for (var elmt in restoreJson.slide[slide].element) {
+                var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+
+                var evCodeText = ({
+                    type: 'code',
+                    container: $newSlide,
+                    x: restoreJson.slide[slide].element[elmt].pos.x,
+                    y: restoreJson.slide[slide].element[elmt].pos.y,
+                    z: restoreJson.slide[slide].element[elmt].pos.z,
+                    content: restoreJson.slide[slide].element[elmt].content
+                });
+                
+                createText(restoreJson.slide[slide].element[elmt].hierarchy,evCodeText);
+            }
+        }
+
+
+        //il n'y a que les increment à recuperer
+//       
+    }
+
+    //plus besoin de renseigner le json, ce sont les appels de fonctions createSlide et createText qui s'en charge
+//    if (localStorage.getItem('savedJson')) {
+//        var savedjson = JSON.parse(localStorage.getItem('savedJson'));
+//        pressjson = savedjson;
+//        i = pressjson.increment['i'];
+//        j = pressjson.increment['j'];
+//    }
+
+
+
     //  initPresent();  //decommenter/commenter cette ligne pour activer ou non l'initialisation depuis le fichier architecture-pressOLD.json (pour debug plus rapide)
 
 
@@ -98,6 +147,7 @@ $(document).ready(function() {
      * + layout or slide with ".creationTitle/Body" class clicked
      * ======================================================================================*/
     function createText(hierarchy, event) {
+        
 
         var content = "Entrer du texte";
         var dico = getTrans3D();
@@ -109,6 +159,7 @@ $(document).ready(function() {
             var x = event.x;
             var y = event.y;
             var z = event.z;
+            var content = event.content;
         } else {
             //si le texte est crée via un vrai event
             var container = $(event.target);
@@ -234,21 +285,44 @@ $(document).ready(function() {
         event.stopPropagation();
         $('.creationSlideTitle').removeClass('creationSlideTitle');
         createSlide('slideText', event);
+
         $('body').css('cursor', 'default');
     });
 
-    function createSlide(type, event) {
-        $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
-        var dico = getTrans3D();
-        var currentScale = dico.scaleZ;
-        var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
-        var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
-        var z = dico.translate3d[2];
-        var idSlide = "slide-" + i++;
-        pressjson.increment['i'] = i;
-        var stringSlide = '{"type": "slide", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+    function createSlide(typeCreation, event) {
+
+
+        if (event.type === 'code') {
+            var dico = {
+                rotateX: event.rotateX,
+                rotateY: event.rotateY,
+                rotateZ: event.rotateZ
+            };
+            var currentScale = event.scale;
+            var x = event.x;
+            var y = event.y;
+            var z = event.z;
+            var idSlide = event.id;
+
+
+        } else {
+            $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
+            var dico = getTrans3D();
+            var currentScale = dico.scaleZ;
+            var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
+            var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
+            var z = 1000; //dico.translate3d[2];
+            var idSlide = "slide-" + i++;
+            pressjson.increment['i'] = i;
+
+
+        }
+        var type = "slide";
+
+
+        var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + (i - 2) + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
         var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
-        if (type === 'slideText') {
+        if (false) {//(typeCreation === 'slideText') {
             jsonSlide.type = "slideText";
         }
         pressjson.slide[idSlide] = jsonSlide;
@@ -349,7 +423,7 @@ $(document).ready(function() {
         //gestion de ckeditor
         if (data.type === 'text') {
             var $newTxt = container.children().last();
-            $newTxt.manageCkeditor(true);
+            //$newTxt.manageCkeditor(true);   KIKI
         }
 
         var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
