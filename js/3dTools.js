@@ -1,5 +1,5 @@
 /* 
- * Contient l'ensemble des outils communs à elementTools et documentTools
+ * Contient l'ensemble des outils communs Ã  elementTools et documentTools
  */
 
 
@@ -11,29 +11,26 @@
  * return : Array[ virtualTop, virtualLeft]
  * callBy : draggableKiki
  * ====================================================================================== */
-function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slide
+function getVirtualCoord(event, $objet) {   
 //    console.log("entree getvirtual");
-//    var heightSlide = 700; //pour le moment la hauteur de la slide conditionne la hauteur "vue" Ã l'Ã©cran, lorsque zoomable fonctionnera il faudra un autre repere
+//    var heightSlide = 700; //pour le moment la hauteur de la slide conditionne la hauteur "vue" Ãƒ l'ÃƒÂ©cran, lorsque zoomable fonctionnera il faudra un autre repere
     var MRH = window.innerHeight; //MaxRealHeight
 
 
     //var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000); //MaxVirtualHeight //prise en compte deu zoom
     // var scale = ($slideArea.hasClass("step"))? parseInt(parseFloat($slideArea.css("perspective")) / 1000) : 1;
-    scale = $objet.attr("data-scale");
+    //scale = $objet.attr("data-scale");
     //console.log($qui);
     var dico = getTrans3D();
 
-    if (flag === 0) {
-        scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'));
-        //console.log("scale "+scale);
-    }
-    else {
-        scale = 1;
-    }
+
+    var scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'));
+    //console.log("scale "+scale);
+
 
 //    console.log("scale " + scale + " " + parseFloat($slideArea.css("perspective")) + " " + $objet.attr("data-scale"));
-    var MVH = $objet.height() * scale;//parseFloat($slideArea.css("perspective"));//heightSlide * scale; //MaxVirtualHeight //prise en compte deu zoom
-//    console.log(MVH);
+    var MVH = scale *  700;//$objet.height();//parseFloat($slideArea.css("perspective"));//heightSlide * scale; //MaxVirtualHeight //prise en compte deu zoom
+    console.log( MVH + "  "+ scale + "  " + $objet.attr('data-z') + "  " + $objet.height() );
     var RTop = event.pageY; //RealTop (de la souris)
 
     //VirtualTop (position dans le monde des slides)
@@ -41,7 +38,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
     VTop = Math.round(VTop);
 
     var MRL = window.innerWidth; //MaxRealWidth
-    var ratio = MRL / MRH; //rapport de zone d'Ã©cran du navigateur
+    var ratio = MRL / MRH; //rapport de zone d'ÃƒÂ©cran du navigateur
     var MVL = ratio * MVH; //MaxVirtualWidth
     var RLeft = event.pageX; //RealTop (de la souris)
 
@@ -60,7 +57,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
 //
 //
 ///* ======================================================================================
-// * position de l'element dans le monde reel (de l'Ã©cran du navigateur (virtualto real)
+// * position de l'element dans le monde reel (de l'ÃƒÂ©cran du navigateur (virtualto real)
 // * argument(s) : *element
 // *               *div qui contient les slides (en object Jquery)
 // * return : Array[ virtualTop, virtualLeft]
@@ -69,7 +66,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
 //function getRealCoord(element, $slideArea) {        //semble bien fonctionner
 //    //console.log("element select :" + element.html());
 //
-//    var heightSlide = 700;      //pour le moment la hauteur de la slide conditionne la hauteur "vue" Ã  l'Ã©cran, lorsque zoomable fonctionnera il faudra un autre repere
+//    var heightSlide = 700;      //pour le moment la hauteur de la slide conditionne la hauteur "vue" Ãƒ  l'ÃƒÂ©cran, lorsque zoomable fonctionnera il faudra un autre repere
 //    var MRH = window.innerHeight; //MaxRealHeight
 //    var MVH = heightSlide * parseInt(parseFloat($slideArea.css("perspective")) / 1000);      //MaxVirtualHeight
 //    var VTop = element.offset().top * parseInt(parseFloat($slideArea.css("perspective")) / 1000);      //VirtualTop (de l'element)
@@ -80,7 +77,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
 //
 //
 //    var MRL = window.innerWidth; //MaxRealWidth
-//    var ratio = MRL / MRH;  //rapport de zone d'Ã©cran du navigateur
+//    var ratio = MRL / MRH;  //rapport de zone d'ÃƒÂ©cran du navigateur
 //    var MVL = ratio * MVH;    //MaxVirtualWidth
 //    var VLeft = element.offset().left * parseInt(parseFloat($slideArea.css("perspective")) / 1000);      //RealTop (de la souris)
 //
@@ -89,8 +86,8 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
 //    RLeft = Math.round(RLeft);  //prise en compte du zoom
 //
 //
-//    //console.log("position de element calculÃ© ds l'Ã©cran MRH " + MRH + " MVH " + MVH + " VTop " + VTop + " Rtop " + RTop + "     fameux coef : " + parseInt(parseFloat($slideArea.css('perspective')) / 1000));
-//    //console.log("position de element calculÃ© ds l'Ã©cran MRL " + MRL + " MVL " + MVL + " VLeft " + VLeft + " RLeft " + RLeft);
+//    //console.log("position de element calculÃƒÂ© ds l'ÃƒÂ©cran MRH " + MRH + " MVH " + MVH + " VTop " + VTop + " Rtop " + RTop + "     fameux coef : " + parseInt(parseFloat($slideArea.css('perspective')) / 1000));
+//    //console.log("position de element calculÃƒÂ© ds l'ÃƒÂ©cran MRL " + MRL + " MVL " + MVL + " VLeft " + VLeft + " RLeft " + RLeft);
 //
 //    var tab = new Array(RTop, RLeft);
 //    return tab;
@@ -105,14 +102,14 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
  * ====================================================================================== */
 
 /* 
- * obtenir la distance depuis un evenement (event stocké dans .data() de chaque element)
+ * obtenir la distance depuis un evenement (event stockÃ© dans .data() de chaque element)
  * @param {type} event
  * @returns {getDistanceMouseMove.distance}
  */
 function getDistanceMouseMove(event) {
 
-    //recupération de déplacement de la souris
-    var distance = {//element différentiel reel
+    //recupÃ©ration de dÃ©placement de la souris
+    var distance = {//element diffÃ©rentiel reel
         x: event.pageX - $("#slideArea").data('event').pos.x,
         y: event.pageY - $("#slideArea").data('event').pos.y
     };
@@ -142,7 +139,7 @@ function getDistanceMouseMove(event) {
  2: 
  */
 function getTrans3D() {
-    
+
     var prefix = (pfx('transform'));
     var trans = $("#slideArea>div")[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};

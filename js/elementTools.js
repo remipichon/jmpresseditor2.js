@@ -1,6 +1,8 @@
 /* 
- * Ensemble des outils ne gérant que le déplacement et la rotation des slides et des elements
+ * Ensemble des outils ne gÃ©rant que le dÃ©placement et la rotation des slides et des elements
  */
+
+
 
 
 
@@ -13,26 +15,19 @@
  */
 function move(event, $objet) {
     var idObjet = $objet.attr('id');
-//    if ($objet.hasClass('element'))
-//    {
-//        if (!$objet.parent().hasClass("slide"))
-//        {
-//            $objet = $objet.parent();           // element libre -> selectionne la div englobante
-//        }
-//    }
     var $slideArea = $("#slideArea");
 
-// $objet.attr("data-x", VLeft);
     var offX = $objet.data('off').x;
     var offY = $objet.data('off').y;
-    if ($objet.hasClass("slide")) {
-        var flag = 0;
+    
+    if ($objet.hasClass('element')){
+        var tab = getVirtualCoord(event,$objet.parent());   
+    } else {
+        var tab = getVirtualCoord(event,$objet);      //recupÃƒÂ©ration des coord virtuelle de la souris
     }
-    else {
-        var flag = 1;
-    }
+   
 
-    var tab = getVirtualCoord(event, $slideArea, flag, $objet);      //recupÃ©ration des coord virtuelle de la souris
+    
     var VTop = tab[0];
     var VLeft = tab[1];
 
@@ -40,12 +35,12 @@ function move(event, $objet) {
     VTop = VTop - offY;
     VLeft = VLeft - offX;
 
-    //mise à jour de la position
+    //mise Ã  jour de la position
     if ($objet.hasClass("element")) {           // element dans slide
         var $container = $objet.parent();
         var idContainer = $container.attr('id');
         $('#slideArea').jmpress('deinit', $container);
-        //màj du json :
+        //mÃ j du json :
         pressjson.slide[idContainer].element[idObjet].pos.x = VLeft;                /////////////////////////
         pressjson.slide[idContainer].element[idObjet].pos.y = VTop;
         $objet.css("left", VLeft);
@@ -53,20 +48,11 @@ function move(event, $objet) {
         $('#slideArea').jmpress('init', $container);
     }
 
-    if ($objet.hasClass("slide")) {                     // cas slide
+    if ($objet.hasClass("step")) {
         $('#slideArea').jmpress('deinit', $objet);
-        // màj du json
-        pressjson.slide[idObjet].pos.x = VLeft;                                 /////////////////////////
-        pressjson.slide[idObjet].pos.y = VTop;
-
-//        if ($objet.hasClass("slide")) {
-//
-//        }
-//        else {                                  // cas step element libre
-//            pressjson.component[idObjet].pos.x = VLeft;
-//            pressjson.component[idObjet].pos.y = VTop;
-//
-//        }
+        // mÃ j du json
+            pressjson.slide[idObjet].pos.x = VLeft;                                 /////////////////////////
+            pressjson.slide[idObjet].pos.y = VTop;
         $objet.attr("data-x", VLeft);
         $objet.attr("data-y", VTop);
         $('#slideArea').jmpress('init', $objet);
@@ -86,20 +72,21 @@ function offSet(event, $objet) {
     var $slideArea = $("#slideArea");
 
     //position virtuelle dans le monde des slides de la souris
-    if ($objet.hasClass("slide")) {
+    if ($objet.hasClass("step")) {
         var flag = 0;
     }
     else {
         var flag = 1;
     }
-    var tab = getVirtualCoord(event, $slideArea, flag, $objet);
+    var tab = getVirtualCoord(event, $objet);
     var VTopMouse = tab[0];
     var VLeftMouse = tab[1];
 
-    if ($objet.hasClass("slide")) {
+    if ($objet.hasClass("step")) {
         var offTop = $objet.attr("data-y");
         var offLeft = $objet.attr("data-x");
     }
+
 
     if ($objet.hasClass("element")) {
         var offTop = parseFloat($objet.css("top"));
@@ -110,7 +97,9 @@ function offSet(event, $objet) {
         x: VLeftMouse - offLeft,
         y: VTopMouse - offTop
     });
-
+ 
+    $objet.attr("offX", "" + VLeftMouse - offLeft + "");
+    $objet.attr("offY", "" + VTopMouse - offTop + "");
 }
 ;
 
@@ -129,7 +118,7 @@ function moveZ(event, $objet) {
     var ratio = 100;
     /* explication du bout de code ci dessous :
      * idem que pour rotate, sauf que cette fois ci on ne permet pas de distance en diagonale (ceci afin de permettre d'assigner
-     * un autre comportement à distance.x)
+     * un autre comportement Ã  distance.x)
      */
     var newZ = ((Math.abs(distance.y) - tolerance) >= 0 && Math.abs(distance.x) < tolerance ?
             $objet.data('pos').z - (distance.y - tolerance * Math.abs(distance.y) / distance.y) * ratio
@@ -139,14 +128,8 @@ function moveZ(event, $objet) {
 
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
-    pressjson.slide[idObjet].pos.z = newZ;
+        pressjson.slide[idObjet].pos.z = newZ;
 
-//    if ($objet.hasClass("slide")) {          // cas step slide
-//
-//    }
-//    else {        // cas step element
-//        pressjson.component[idObjet].pos.z = newZ;
-//    }
 
     $objet.attr("data-z", newZ);
     $('#slideArea').jmpress('init', $objet);
@@ -175,12 +158,12 @@ function resize(event, $objet) {
 
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
-//    if ($objet.hasClass("slide")) {          // cas step slide
-    pressjson.slide[idObjet].scale = newScale;
-//    }
-//    else {        // cas step element
-//        pressjson.component[idObjet].scale = newScale;
-//    }
+    if ($objet.hasClass("slide")) {          // cas step slide
+        pressjson.slide[idObjet].scale = newScale;
+    }
+    else {        // cas step element
+        pressjson.component[idObjet].scale = newScale;
+    }
 
     $objet.attr("data-scale", newScale);
     $('#slideArea').jmpress('init', $objet);
@@ -199,14 +182,14 @@ function rotate(event, $objet) {
 
     var distance = getDistanceMouseMove(event);
 
-    //tolerance de 20 pixel de deplacement reel, peut etre faudrait il connecter cette tolerance à la taille de l'écran -> ergonomie
+    //tolerance de 20 pixel de deplacement reel, peut etre faudrait il connecter cette tolerance Ã  la taille de l'Ã©cran -> ergonomie
     var tolerance = 20;
     var ratioX = 1;
     var ratioY = ratioX;
     var rotate = {
         /* explication du bout de code ci dessous :
-         * condition ternaire, si la distance est inférieur à la tolérance, aucune rotation
-         * sinon on soustrait à la distance la tolérance doté du signe de la distance (abs(x)/x = signe de x)
+         * condition ternaire, si la distance est infÃ©rieur Ã  la tolÃ©rance, aucune rotation
+         * sinon on soustrait Ã  la distance la tolÃ©rance dotÃ© du signe de la distance (abs(x)/x = signe de x)
          */
         x: ((Math.abs(distance.y) - tolerance) >= 0 ? $objet.data('rotate').x - (distance.y - tolerance * Math.abs(distance.y) / distance.y) * ratioX : $objet.data('rotate').x),
         y: ((Math.abs(distance.x) - tolerance) >= 0 ? $objet.data('rotate').y - (distance.x - tolerance * Math.abs(distance.x) / distance.x) * ratioY : $objet.data('rotate').y)
@@ -215,14 +198,14 @@ function rotate(event, $objet) {
 
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
-//    if ($objet.hasClass("slide")) {          // cas step slide
-    pressjson.slide[idObjet].rotate.x = rotate.x;
-    pressjson.slide[idObjet].rotate.y = rotate.y;
-//    }
-//    else {        // cas step element
-//        pressjson.slide[idObjet].rotate.x = rotate.x;
-//        pressjson.slide[idObjet].rotate.y = rotate.y;
-//    }
+    if ($objet.hasClass("slide")) {          // cas step slide
+        pressjson.slide[idObjet].rotate.x = rotate.x;
+        pressjson.slide[idObjet].rotate.y = rotate.y;
+    }
+    else {        // cas step element
+        pressjson.slide[idObjet].rotate.x = rotate.x;
+        pressjson.slide[idObjet].rotate.y = rotate.y;
+    }
     $objet.attr("data-rotate-x", rotate.x);
     $objet.attr("data-rotate-y", rotate.y);
     $('#slideArea').jmpress('init', $objet);
@@ -242,12 +225,12 @@ function rotateZ(event, $objet) {
 
     var distance = getDistanceMouseMove(event);
 
-    //tolerance de 40 pixel de deplacement reel, peut etre faudrait il connecter cette tolerance à la taille de l'écran -> ergonomie
+    //tolerance de 40 pixel de deplacement reel, peut etre faudrait il connecter cette tolerance Ã  la taille de l'Ã©cran -> ergonomie
     var tolerance = 40;
     var rotate = {
         /* explication du bout de code ci dessous :
-         * condition ternaire, si la distance en y est supérieur à la tolérance, aucune rotation
-         * ceci car le rotateZ n'est commandé que par le deplacement en X (le depalcement en Y est dispo pour autre chose
+         * condition ternaire, si la distance en y est supÃ©rieur Ã  la tolÃ©rance, aucune rotation
+         * ceci car le rotateZ n'est commandÃ© que par le deplacement en X (le depalcement en Y est dispo pour autre chose
          */
         z: ((Math.abs(distance.x) - tolerance) >= 0 && Math.abs(distance.y) < tolerance ?
                 $objet.data('rotate').z - (distance.x - tolerance * Math.abs(distance.x) / distance.x) / 10
@@ -256,12 +239,12 @@ function rotateZ(event, $objet) {
 
     $('#slideArea').jmpress('deinit', $objet);
     var idObjet = $objet.attr('id');
-//    if ($objet.hasClass("slide")) {          // cas step slide
-    pressjson.slide[idObjet].rotate.z = rotate.z;
-//    }
-//    else {        // cas step element
-//        pressjson.component[idObjet].rotate.z = rotate.z;
-//    }
+    if ($objet.hasClass("slide")) {          // cas step slide
+        pressjson.slide[idObjet].rotate.z = rotate.z;
+    }
+    else {        // cas step element
+        pressjson.component[idObjet].rotate.z = rotate.z;
+    }
 
     $objet.attr("data-rotate-z", rotate.z);
     $('#slideArea').jmpress('init', $objet);
@@ -302,7 +285,7 @@ $(document).on('mouseup', function(event) {
     $('.moveZ').each(function() {
         clearTimeout($(this).data("checkdown"));
         $(this).off('longclick');
-        //suppression du listener particulier à la slide (pas utile mais dans l'idéal c'est comme ca qu'il faudrait faire
+        //suppression du listener particulier Ã  la slide (pas utile mais dans l'idÃ©al c'est comme ca qu'il faudrait faire
         $(this).off('.moveZ');
         $(this).removeClass('moveZ');
         $(this).removeClass('longclick');
@@ -326,44 +309,42 @@ $(document).on('mouseup', function(event) {
     });
     $(".move").each(function() {
 // Gestion du bind element : en fonction des coord du curseur lors du mouseup, 
-// lier un element à l'element du Dom sur lequel il se trouve (slideArea ou slide)
+// lier un element Ã  l'element du Dom sur lequel il se trouve (slideArea ou slide)
         var $this = $(this);
         $this.removeClass("move");
-//        if (!$this.hasClass("slide"))                   // EN FAIRE UNE FONCTION BIND ELEMENT ??
-//        {
-        if ($this.hasClass("element"))              // = element dans slide
+        if (!$this.hasClass("slide"))                   // EN FAIRE UNE FONCTION BIND ELEMENT ??
         {
-            var $container;
+            if ($this.hasClass("element"))              // = element dans slide
+            {
+                var $container;
 //                console.log($container !== undefined);
-            $(".slide").each(function() {
-                $container = getMouseUpContainer(event, $(this));
+                $(".slide").each(function() {
+                    $container = getMouseUpContainer(event, $(this));
 //                    console.log($container);
-                if ($container !== undefined)
-                    return false;
-            });
-            if ($container === undefined) {         // = drop de l'element sur slideArea -> retour à position originale
-//                    $this = elementToStep($this);
-                $this.css("left", $this.attr("offX"));
-                $this.css("top", $this.attr("offY"));
+                    if ($container !== undefined)
+                        return false;
+                });
+                if ($container === undefined) {         // = drop de l'element sur slideArea
+                    $this = elementToStep($this);
+                }
+                else {                                  // = drop de l'element sur une slide
+                    $this = elementToElement($this, $container, event);
+                }
             }
-            else {                                  // = drop de l'element sur une slide
-                $this = elementToElement($this, $container, event);
+            else {                                      // = element libre
+                var $container;
+//                console.log($container !== undefined);
+                $(".slide").each(function() {
+                    $container = getMouseUpContainer(event, $(this));
+//                    console.log($container);
+                    if ($container !== undefined)
+                        return false;
+                });
+                //                if ($container !== undefined)          // = drop de l'element sur slideArea                                                   // KIKI annulation du drop d'un element sur le documentS
+//                    $this = steptoElement($this, $container);
             }
+
         }
-//            else {                                      // = element libre
-//                var $container;
-////                console.log($container !== undefined);
-//                $(".slide").each(function() {
-//                    $container = getMouseUpContainer(event, $(this));
-////                    console.log($container);
-//                    if ($container !== undefined)
-//                        return false;
-//                });
-//                //                if ($container !== undefined)          // = drop de l'element sur slideArea                                                   // KIKI annulation du drop d'un element sur le documentS
-////                    $this = steptoElement($this, $container);
-//            }
-//
-//        }
 //        console.log("this avant draggable");
 //        console.log($this);
         $this.draggableKiki();
@@ -392,7 +373,7 @@ jQuery.fn.draggableKiki = function() {
     }
 
 
-    //init du posData qui permet de stocker les caractéristiques de l'objet lors du mousedown
+    //init du posData qui permet de stocker les caractÃ©ristiques de l'objet lors du mousedown
     $(this).data('pos', {
         x: $this.attr('data-x'),
         y: $this.attr('data-y'),
@@ -424,8 +405,8 @@ jQuery.fn.draggableKiki = function() {
             $(this).data('checkdown', setTimeout(function() {
                 console.log('long right press sur slide');
                 $this.addClass("longclick");
-                //mettre ici les classes à supprimer pour un mousemove sur le meme element
-                //par exemple, ici on supprime la classe move qui a été mit par le mousedown simple
+                //mettre ici les classes Ã  supprimer pour un mousemove sur le meme element
+                //par exemple, ici on supprime la classe move qui a Ã©tÃ© mit par le mousedown simple
                 $this.removeClass("move");
                 $this.on('mousemove.moveZ', function(event) {       //si on move penant un click long
                     $(this).addClass("moveZ");
@@ -484,7 +465,7 @@ jQuery.fn.draggableKiki = function() {
         });
 
 
-        event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'à la slide mère et le document, ainsi pas de conflits avec le navigable
+        event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'Ã  la slide mÃ¨re et le document, ainsi pas de conflits avec le navigable
 
         if (event.which === 1) {
             $this.addClass("move");

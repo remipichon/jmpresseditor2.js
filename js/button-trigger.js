@@ -108,7 +108,11 @@ $(document).ready(function() {
   $(document).on('click', '.creationTitle', function(event) {
     $('.creationTitle').removeClass('creationTitle');
     $('body').css('cursor', 'default');
-    createText('title1', event);
+    if ($(event.target).hasClass("slide")) {
+      createText('title1', event);
+    } else {              // texte créé sur slideArea
+      alert("le texte doit être créé sur une diapositive");  // moche mais manque de temps
+    }
   });
 
   /* ======================================================================================
@@ -126,7 +130,7 @@ $(document).ready(function() {
   $(document).on('click', '.creationBody', function(event) {
     event.stopPropagation();
     $('.creationBody').removeClass('creationBody');
-    if (event.target.hasClass("slide")) {
+    if ($(event.target).hasClass("slide")) {
       createText('bodyText', event);
     } else {              // texte créé sur slideArea
       alert("le texte doit être créé sur une diapositive");  // moche mais manque de temps
@@ -278,17 +282,28 @@ $(document).ready(function() {
       var index = event.index;
       i++;
     } else {
-      $(this).unbind('click'); // pour obliger à reappuyer sur bouton pour rajouter une slide
+      $(this).unbind('click'); // pour obliger Ã  reappuyer sur bouton pour rajouter une slide
       var dico = getTrans3D();
-      var currentScale = dico.scaleZ;
-      var x = (event.pageX - (window.innerWidth / 2) - parseFloat(dico.translate3d[0])) * currentScale;
-      var y = event.pageY - (window.innerHeight / 2) - parseFloat(dico.translate3d[1]) * currentScale;
+      var currentScale = 1;
+
+      var $slideTemp = $("<div style='height:700' data-z='1000'></div>");
+      var posVirtuel = getVirtualCoord(event, $slideTemp);
+
+      var eventMagouille = ({
+        pageX: window.innerWidth / 2,
+        pageY: window.innerHeight / 2
+      });
+      var off = getVirtualCoord(eventMagouille, $slideTemp);
+
+      var x = posVirtuel[1] - off[1];
+      var y = posVirtuel[0] - off[0];
       var z = 1000; //dico.translate3d[2];
       var idSlide = "slide-" + i++;
-      var index = i -2;
-//      pressjson.increment['i'] = i;
+      console.log(x + " " + y);
+      var index = i - 2;
     }
     var type = "slide";
+
 
     var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + index + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
     var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
@@ -296,9 +311,9 @@ $(document).ready(function() {
       jsonSlide.type = "slideText";
     }
     pressjson.slide[idSlide] = jsonSlide;
-    console.dir(pressjson);
+    //console.dir(pressjson);
     jsonToHtml(jsonSlide);
-    createTimeLine(idSlide, index);
+    createTimeLine(idSlide);
     $('#slide-tool').parent().removeClass("buttonclicked");
   }
 
