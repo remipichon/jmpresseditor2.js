@@ -24,13 +24,13 @@ function getVirtualCoord(event, $objet) {
     var dico = getTrans3D();
 
 
-    var scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'));
+    var scale = Math.abs(dico.translate3d[2] / $objet.attr('data-z'))   * 1/1.18;
     //console.log("scale "+scale);
 
 
 //    console.log("scale " + scale + " " + parseFloat($slideArea.css("perspective")) + " " + $objet.attr("data-scale"));
     var MVH = scale *  700;//$objet.height();//parseFloat($slideArea.css("perspective"));//heightSlide * scale; //MaxVirtualHeight //prise en compte deu zoom
-    console.log( MVH + "  "+ scale + "  " + $objet.attr('data-z') + "  " + $objet.height() );
+    //console.log( MVH + "  "+ scale + "  " + $objet.attr('data-z') + "  " + $objet.height() );
     var RTop = event.pageY; //RealTop (de la souris)
 
     //VirtualTop (position dans le monde des slides)
@@ -53,6 +53,17 @@ function getVirtualCoord(event, $objet) {
 //    console.log("sortie getvirtual");
     return tab;
 
+}
+
+/*
+ * getVirtualCoord fonctionne lorsqu'il s'agit d'un deplacement, getVirtualPos fonctionne pour la creation
+ * @param {type} event
+ * @param {type} $objet
+ * @returns {undefined}
+ */
+function getVirtualPos(event, $objet) {
+    //le code à factoriser se trouve dans createSlide et createText
+    
 }
 //
 //
