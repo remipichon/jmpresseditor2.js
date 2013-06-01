@@ -33,7 +33,7 @@ function getVirtualCoord(event, $slideArea, flag, $objet) {   //flag = 0 -> slid
 
 //    console.log("scale " + scale + " " + parseFloat($slideArea.css("perspective")) + " " + $objet.attr("data-scale"));
     var MVH = $objet.height() * scale;//parseFloat($slideArea.css("perspective"));//heightSlide * scale; //MaxVirtualHeight //prise en compte deu zoom
-    console.log(MVH);
+//    console.log(MVH);
     var RTop = event.pageY; //RealTop (de la souris)
 
     //VirtualTop (position dans le monde des slides)
