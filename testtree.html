@@ -88,6 +88,8 @@
 
 
         <script type="text/javascript"> //pour créer l'arboresence des slides
+            deltaZ = 1000;
+            
             function goCK() {
                 $('#slideArea').html('');
                 var editor_data = CKEDITOR.instances.editor1.getData();
@@ -168,7 +170,7 @@
 
                 });
 
-                deltaZ = 1000;
+                
                 $('li').each(function() {
                     if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
                         var delta = 1000;
@@ -225,6 +227,8 @@
                 });
 
                 $('#tree').remove();
+                CKEDITOR.instances.editor1.destroy();
+                $('#editor1').remove();
                 $('#slideArea').jmpress();
                 console.log('go jmpress');
 
