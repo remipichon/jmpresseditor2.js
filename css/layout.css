@@ -258,12 +258,59 @@ body
     z-index: 1;
 }*/
 
-
-
 #slideArea
 {
     z-index: 10;
 }
+
+
+/* ======================================================================================
+ * MODAL
+ * ====================================================================================== */
+
+#helpModal h2,h3,p
+{
+    font-family: Arial;
+}
+
+#helpModal .modal-body h2
+{
+    font-size: 1.6em;
+    margin-top: 5px;
+    padding-top: 5px;
+    color :#333;
+    line-height: 30px;
+}
+
+#helpModal .modal-body h3
+{
+    font-family: Arial;
+    font-size: 1.2em;
+    color:#777;
+    margin-top: 3px;
+    padding-bottom: 0px;
+    margin-bottom:0px;
+    line-height: 30px;
+
+}
+
+#helpModal ul 
+{
+    list-style: none;
+}
+
+#helpModal ul li ul
+{
+    padding-left: 5px;
+}
+
+#helpModal ul li ul li li
+{
+    padding-left: 5px;
+    list-style-type: circle;
+}
+
+
 
 
 
@@ -359,9 +406,6 @@ h1, p
 }
 
 
-
-
-
 #slideArea p    
 /*ne rien mettre comme style pour p car ckeditor met les textes dans une balise p à chaque fois*/
 {
@@ -406,20 +450,20 @@ h1, p
     font-family: Arial;
 }
 
-  #sortable li span,   #sortable li a  
-  { 
-      padding:0; 
-  }
-  #sortable li a  
-  {
-      display:none;
-      float:right;
-      color: #f03;
-      font-weight: 900;
-      padding: 0.1em;
-      /*vertical-align:auto;*/
-      font-size: 1.8em;
-      line-height: 0;
-  }
-  
-        
+#sortable li span,   #sortable li a  
+{ 
+    padding:0; 
+}
+#sortable li a  
+{
+    display:none;
+    float:right;
+    color: #f03;
+    font-weight: 900;
+    padding: 0.1em;
+    /*vertical-align:auto;*/
+    font-size: 1.8em;
+    line-height: 0;
+}
+
+
