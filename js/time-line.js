@@ -39,8 +39,8 @@ function createTimeLine(idSlide, index) {
         var idSlide = $(this).attr('id');
         pressjson.slide[idSlide].index = index;     // MaJ de l'index des slide
       });
-      console.log("pressjson");
-      console.log(pressjson);
+      //console.log("pressjson");
+      //console.log(pressjson);
     },
     axis: "y"
   })
@@ -83,7 +83,7 @@ $(document).ready(function() {
   $sortableList.on('click', 'li a', function(e) {
     var $link = $(this);
     e.preventDefault();
-    console.log("link  " + $link);
+    //console.log("link  " + $link);
     $link.parent().fadeOut(function() {
       $link.parent().remove();
       var $idSlide = $(this).attr('class');

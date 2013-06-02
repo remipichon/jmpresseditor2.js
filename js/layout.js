@@ -1,10 +1,121 @@
 /* 
  * Scripts regarding only animation of layout (slidding menu, etc)
+ * listeners de tous les boutons
  * 
  */
 
 
 $(document).ready(function() {
+
+
+    /* ======================================================================================
+     * TRIGGERS CREATE TITLE1
+     * ======================================================================================*/
+    $('#text-tool-title').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
+        $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
+        event.preventDefault();
+        event.stopPropagation();
+        $('body').css('cursor', 'crosshair');
+        $('body').removeClass().addClass('creationTitle');
+    });
+
+    $(document).on('click', '.creationTitle', function(event) {
+        $('.creationTitle').removeClass('creationTitle');
+        $('body').css('cursor', 'default');
+        if ($(event.target).hasClass("slide")) {
+            createText('title1', event);
+        } else {              // texte créé sur slideArea
+            alert("le texte doit être créé sur une diapositive");  // moche mais manque de temps
+        }
+    });
+
+    /* ======================================================================================
+     * TRIGGERS CREATE BODYTEXT
+     * ======================================================================================*/
+    $('#text-tool-body').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
+        $('#text-tool').parent().addClass("buttonclicked");
+        event.preventDefault();
+        event.stopPropagation();
+        $('body').css('cursor', 'crosshair');
+        $('body').removeClass().addClass('creationBody');
+    });
+
+    $(document).on('click', '.creationBody', function(event) {
+        event.stopPropagation();
+        $('.creationBody').removeClass('creationBody');
+        if ($(event.target).hasClass("slide")) {
+            createText('bodyText', event);
+        } else {              // texte créé sur slideArea
+            alert("le texte doit être créé sur une diapositive");  // moche mais manque de temps
+        }
+        $('body').css('cursor', 'default');
+    });
+
+
+
+    /* ======================================================================================
+     * CREATION DES SLIDES
+     * ======================================================================================*/
+
+// Trigger sur bouton "creation slide"
+    $('#slide-tool').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
+        $('#slide-tool').parent().addClass("buttonclicked");    // css
+        event.preventDefault();
+        event.stopPropagation();
+        $('body').removeClass().addClass('creationSlide');
+        $('body').css('cursor', 'crosshair');
+    });
+
+    $('#slide-tool-title').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
+        $('#slide-tool').parent().addClass("buttonclicked");    // css
+        event.preventDefault();
+        event.stopPropagation();
+        $('body').removeClass().addClass('creationSlideTitle');
+        $('body').css('cursor', 'crosshair');
+    });
+
+    $(document).on('click', '.creationSlide', function(event) {
+        event.stopPropagation();
+        $('.creationSlide').removeClass('creationSlide');
+        createSlide('slide', event);
+        $('body').css('cursor', 'default');
+    });
+
+    $(document).on('click', '.creationSlideTitle', function(event) {
+        event.stopPropagation();
+        $('.creationSlideTitle').removeClass('creationSlideTitle');
+        createSlide('slideText', event);
+        $('body').css('cursor', 'default');
+    });
+
+
+
+    /* ======================================================================================
+     * GEEK MODE - création d'element libre en html
+     * ======================================================================================*/
+
+    $('#geek-tool').on('click', function(event) {
+        $('li').removeClass("buttonclicked");
+        $('#geek-tool').parent().addClass("buttonclicked");
+        event.preventDefault();
+        $('#layout').removeClass().addClass('creationGeek');
+
+    });
+
+    $(document).on('click', '.creationGeek', function(event) {
+        event.stopPropagation();
+        $('.creationGeek').removeClass('creationGeek');
+        console.log('creation geek html enclenchee');
+//        createHtml();
+    });
+
+
+
+
 
 
     /* ======================================================================================
@@ -83,7 +194,7 @@ $(document).ready(function() {
         localStorage.setItem('outputjson', stringjson);
         window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
         // location
-        
+
 
     });
 
@@ -111,6 +222,12 @@ $(document).ready(function() {
 
     });
 
+
+    /* ======================================================================================
+     * CLEAR
+     * pour vider les présentations sauvergarder
+     * ====================================================================================== */
+
     $('#clear').click(function() {
         window.localStorage.clear();
         location.reload();
@@ -120,14 +237,16 @@ $(document).ready(function() {
 
 });
 
-var sort_by = function(field, reverse, primer){
+var sort_by = function(field, reverse, primer) {
 
-   var key = function (x) {return primer ? primer(x[field]) : x[field]};
+    var key = function(x) {
+        return primer ? primer(x[field]) : x[field]
+    };
 
-   return function (a,b) {
-       var A = key(a), B = key(b);
-       return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1,1][+!!reverse];                  
-   }
+    return function(a, b) {
+        var A = key(a), B = key(b);
+        return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1, 1][+!!reverse];
+    }
 }
 
 
