@@ -77,10 +77,11 @@ function goDepth() {
             var delta = 1000;
             var x = 2000 * $(this).index();
             var y = 500 * $(this).index();
-            var z = 10000;
+            var z = 5000;
 
 
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
+             $(this).attr('type', 'title');
             //$(this).children('span').html('x ' + x + ' y ' + y + ' z ' + z);
         }
 
@@ -148,10 +149,32 @@ function goJmpress() {
             z: $(this).attr('data-z'),
             id: "slide-" + id++,
             typeEl: 'slide title',
-            index: id
+            index: id,
+            scale: 1
         });
 
         createSlide('slide', evCodeSlide);
+
+        var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+        
+
+        var evCodeText = ({
+            type: 'code',
+            container: $newSlide,
+            x: '40',
+            y: '200',
+            z: '0',
+            content: $(this).children('span').html()
+        });
+        
+        j = 0;  //pas très algorythmique cela
+
+        if ($(this).attr('type') === 'title') {
+            createText('title1', evCodeText);
+        } else if ($(this).attr('type') === 'content') {
+            createText('bodyText', evCodeText);
+        }
+
         //var titre = "<div  class='element' style='position: relative; left: 40px; top: 300px' > <span class=title1> " + $(this).children('span').html() + " </span> </div> ";
 
 

@@ -74,7 +74,7 @@ function createText(hierarchy, event) {
     }
 
     var idElement = "element-" + j++; // id unique élément -> ds json + ds html
-    pressjson.increment['j'] = j;
+    /////////////////////////// KIKI                              pressjson.increment['j'] = j;
     var idContainer = container.attr('id');
     var containerScale = pressjson.slide[idContainer].scale;
     var stringText = '{"class": "element text","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
