@@ -176,7 +176,7 @@ function createSlide(typeCreation, event) {
         var z = 1000; //dico.translate3d[2];
         var idSlide = "slide-" + i++;
         //console.log(x + " " + y);
-        var index = i - 2;
+            var index = i - 2;
     }
     var type = "slide";
 

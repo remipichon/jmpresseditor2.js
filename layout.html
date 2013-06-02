@@ -26,6 +26,7 @@
         <script type="text/javascript" src="js/elementTools.js"></script>
         <script type="text/javascript" src="js/documentTools.js"></script>
         <script type="text/javascript" src="js/init.js"></script>
+        <script type="text/javascript" src="js/treeToPresentation.js"></script>
 
         <script type="text/javascript" src="js/binding-slide-element.js"></script>
         <script type="text/javascript" src="js/time-line.js"></script>
@@ -264,7 +265,7 @@
 
         <script id="templateElement" type="text/template">
 
-                            <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
+            <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
 
         </script>
 
@@ -276,6 +277,122 @@
                     </div>    
         
                 </script>-->
+
+
+
+        <!--zone de stockage pour la liste à puce ordonnée contenant le plan     (c'est temporaire)-->
+        <div id='tree'  style='display:none'>
+
+            <ol>
+                <li>Intro - Un &eacute;diteur graphique pour impress.js ! &nbsp;
+                    <ol>
+                        <li>impress.js : une biblioth&egrave;que permettant de cr&eacute;er des pr&eacute;sentations dynamiques</li>
+                        <li>impress.js : un outil sans interface graphique</li>
+                        <li>enjeu : cr&eacute;er un &eacute;diteur graphique &agrave; partir de technologies web</li>
+                    </ol>
+                </li>
+                <li>Cahier des charges - une interface mettant en avant la richesse d&rsquo;impress &nbsp;
+                    <ol>
+                        <li>a/ fonctionnalit&eacute;s de base pour ce type d&rsquo;outils
+                            <ol>
+                                <li>cr&eacute;ation / &eacute;dition / suppression de slide</li>
+                                <li>organisation de slides</li>
+                                <li>sauvegarde et mode pr&eacute;sentation</li>
+                            </ol>
+                        </li>
+                        <li>b/ une surface de travail infinie // &agrave; la prezi
+                            <ol>
+                                <li>plein &eacute;cran et barre d&rsquo;outils minimaliste</li>
+                                <li>pr&eacute;voir la possibilit&eacute; de se d&eacute;placer sur la surface // fonctionnalit&eacute; li&eacute;e</li>
+                            </ol>
+                        </li>
+                        <li>c/ penser les pr&eacute;sentations en 3d
+                            <ol>
+                                <li>wysiwyg : avoir une sortie &eacute;diteur aussi proche que possible de la pr&eacute;sentation</li>
+                                <li>pr&eacute;voir rotation et d&eacute;placement sur les 3 axes / zoomable // fonctionnalit&eacute;s li&eacute;es</li>
+                            </ol>
+                        </li>
+                        <li>d/ permettre une r&eacute;exploitation des donn&eacute;es
+                            <ol>
+                                <li>&eacute;viter autant que possible l&rsquo;injection de html</li>
+                                <li>anticiper la possibilit&eacute; d&rsquo;exploiter les donn&eacute;es de la pr&eacute;sentation ailleurs</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>Une gestion de projet flexible et r&eacute;active
+                    <ol>
+                        <li>a/ un contexte contraignant la gestion de projet
+                            <ol>
+                                <li>m&eacute;connaissance des techno</li>
+                                <li>appropriation d&rsquo;une biblioth&egrave;que tiers</li>
+                                <li>difficile d&rsquo;anticiper d&eacute;coupage des t&acirc;ches, temps &agrave; leur consacrer et difficult&eacute;</li>
+                            </ol>
+                        </li>
+                        <li>b/ une premi&egrave;re phase d&rsquo;exp&eacute;rimentation indispensableappropriation des technos
+                            <ol>
+                                <li>veille des outils similaires</li>
+                                <li>cahier des charges up to date !</li>
+                            </ol>
+                        </li>
+                        <li>c/ un suivi adaptatif
+                            <ol>
+                                <li>outils : calendrier, etc - r&eacute;partition des t&acirc;ches en fonction des envies / capacit&eacute;s</li>
+                                <li>concertation et prise de d&eacute;cision &nbsp;(rdv hebdo)</li>
+                                <li>adaptation tout au long du projet (gestion retards de calendrier, ou difficult&eacute;s techniques)</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>L&rsquo;application finale
+                    <ol>
+                        <li>a/ les technologies utilis&eacute;es (Florence)
+                            <ol>
+                                <li>jquery, jquery-ui, mustache, ckeditor, bootstrap, mousewheel,</li>
+                                <li>json, localstorage</li>
+                            </ol>
+                        </li>
+                        <li>b/ Navigation et manipulation (R&eacute;mi)
+                            <ol>
+                                <li>gestion 3D</li>
+                                <li>navigable / zoomable</li>
+                                <li>manipulation d&rsquo;objets : agrandir / rotate / move</li>
+                                <li>ckeditor</li>
+                            </ol>
+                        </li>
+                        <li>c/ Edition et ergonomie
+                            <ol>
+                                <li>cr&eacute;ation slide et groupement</li>
+                                <li>sauvegarde / pr&eacute;sentation</li>
+                                <li>timeline</li>
+                                <li>ergo / graphisme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>Bilans
+                    <ol>
+                        <li>a/ bilan projet
+                            <ol>
+                                <li>r&eacute;ussites : ensemble de fonctionnalit&eacute; large m&ecirc;me si chacune est sommaire / exploitation de technos int&eacute;ressantes</li>
+                                <li>points d&rsquo;am&eacute;lioration : compatibilit&eacute; navigateur / gestion 3d</li>
+                            </ol>
+                        </li>
+                        <li>b/ bilans personnels (&agrave; tour de r&ocirc;le)
+                            <ol>
+                                <li>principales difficult&eacute;s rencontr&eacute;es</li>
+                                <li>principales &ldquo;satisfactions&rdquo;</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+
+         
+
+
+
+        </div>
 
     </body>
 </html>

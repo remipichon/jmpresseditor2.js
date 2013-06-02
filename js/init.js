@@ -35,9 +35,16 @@ $(document).ready(function() {
     // REINITIALISATION DE LA PRESENTATION SAUVEE
     if (localStorage.getItem('savedJson')) {
         var restoreJson = JSON.parse(localStorage.getItem('savedJson'));
-
         restorePressJson(restoreJson);
            
+    }
+    
+    //INITIALISATION DE LA PRESENTATION DEPUIS LA LISTE A PUCE ORDONNEE
+    if ( $('#tree').lenght !== 0 ) {
+        goCK();
+        goDepth();
+        goJmpress();
+        
     }
 
    
