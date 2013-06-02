@@ -21,7 +21,7 @@ function createText(hierarchy, event) {
     var container = $(event.target);
 
     //si le texte est crée depuis du code
-    if (event.type === "code") {
+    if (event.type === "code") {  
         container = event.container;
         var x = event.x;
         var y = event.y;
@@ -169,7 +169,7 @@ function createSlide(typeCreation, event) {
 
     var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + index + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
     var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
-    if (false) {//(typeCreation === 'slideText') {
+    if (typeCreation === 'slideText') {
         jsonSlide.type = "slideText";
     }
     pressjson.slide[idSlide] = jsonSlide;
@@ -208,6 +208,7 @@ function jsonToHtml(data) {
         //creation du titre1
         var evCode = ({
             type: 'code',
+            content: 'Entrer du texte',
             container: $newSlide,
             x: 10,
             y: 90,
@@ -223,16 +224,12 @@ function jsonToHtml(data) {
 
     $('#slideArea').jmpress('init', $newSlide); // initilisation step
 
-    /////////////////////KIKI modifier ce for each car il met draggable toute les step a chaque fois
-    //mise a draggable des slides
-    //si les elements ont une classe qui les identifie, il sera possible de faire une autre fonction de draggable
-    //afin de diffÃ©rencier les deux cas. Par exemple les slides pourraient avoir une restrictions empechant le drop par dessus une autre slide
-    $(".step").each(function() {     //ce n'est pas forcément un .each dansc ette fonction (ajout d'une seule slide)
+
+    $newSlide.draggableKiki();
+    $newSlide.children().each(function() {
         $(this).draggableKiki();
-        $(this).children().each(function() {
-            $(this).draggableKiki();
-        });
     });
+
     return($newSlide);
 }
 ;
@@ -246,7 +243,7 @@ function jsonToHtmlinSlide(data, container) {
     //gestion de ckeditor
     if (data.type === 'text') {
         var $newTxt = container.children().last();
-//            $newTxt.manageCkeditor(true);   KIKI
+            $newTxt.manageCkeditor(true);  // KIKI
     }
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
     $('#slideArea').jmpress('init', container); // initilisation step
@@ -258,6 +255,8 @@ function jsonToHtmlinSlide(data, container) {
     return($newSlide);
 }
 ;
+
+
 
 function restorePressJson(restoreJson) {
     for (var slide in restoreJson.slide) {

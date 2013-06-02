@@ -213,8 +213,8 @@ $(document).ready(function() {
 
         var savedPress = $("#slideArea>div").html();
         localStorage.setItem('savedPress', savedPress);
-        console.log('savedPress :');
-        console.log(savedPress);
+        //console.log('savedPress :');
+        //console.log(savedPress);
 
 
 //        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
