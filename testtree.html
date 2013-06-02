@@ -15,9 +15,13 @@
 
         <textarea id="editor1" name="editor1"></textarea>
 
-        <script type="text/javascript">
-            CKEDITOR.replace('editor1');
-        </script>
+
+        <p style="margin-left:18.0pt">&nbsp;</p>
+
+
+                <script type="text/javascript">
+                    CKEDITOR.replace('editor1');
+                </script>
 
         <div id="tree" style="display: none">
             <ol id="niv1">
@@ -73,11 +77,14 @@
 
 
         </div>
-        
-        
-        <div onclick='goCK();'> GO CK ! </div>
-        <div onclick='goDepth();'> GO DEPTH </div>
-        <div onclick='goJmpress();'> GO JMPRESS </div>
+
+
+                <div onclick='goCK();'> GO CK ! </div>
+                <div onclick='goDepth();'> GO DEPTH </div>
+                <div onclick='goJmpress();'> GO JMPRESS </div>
+                <div onclick='goCK();
+                        goDepth();
+                        goJmpress();'> GO ALL </div>
 
         <div id="slideArea">
 
@@ -89,21 +96,21 @@
 
         <script type="text/javascript"> //pour créer l'arboresence des slides
             deltaZ = 1000;
-            
+
             function goCK() {
                 $('#slideArea').html('');
                 var editor_data = CKEDITOR.instances.editor1.getData();
                 $('#tree').html(editor_data);
-                
-                $('li').each( function() {
+
+                $('li').each(function() {
                     //var span = "<span class='li' contenteditable='true'> texte </span>";
-                    var span = "<span class='li' contenteditable='true'> "+$(this).html().match(/.*/)[0]+" </span>";
+                    var span = "<span class='li' contenteditable='true'> " + $(this).html().match(/.*/)[0] + " </span>";
                     //$(this).html('');
                     $(this).prepend(span);
-                    
+
                 });
-                
-                
+
+
             }
 
 
@@ -160,7 +167,7 @@
                         var delta = 1000;
                         var x = 2000 * $(this).index();
                         var y = 500 * $(this).index();
-                        var z = 0;
+                        var z = 10000;
 
 
                         $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
@@ -170,7 +177,7 @@
 
                 });
 
-                
+
                 $('li').each(function() {
                     if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
                         var delta = 1000;
@@ -193,7 +200,7 @@
 
                         var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
                         var y = $(this).parent().parent().attr('data-y');
-                        var z = parseFloat($(this).parent().parent().attr('data-z')) - ($(this).index() + 1) * 1000;
+                        var z = parseFloat($(this).parent().parent().attr('data-z')) - ($(this).index() + 1) * 1500;
                         $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
 
                     }
@@ -208,19 +215,21 @@
                 var Ox = 0;//sibPerLevel[1] * 2000 / 2;
                 var Oy = 2000;//max(sibPerLevel) * 1000 / 2;
                 var Oz = 0;
-                var overview = "<div class='step' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " ' data-scale='10'></div>";
+                var overview = "<div class='step overview' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " ' data-scale='10'></div>";
                 $('#slideArea').append(overview);
                 Ox = 0;//-sibPerLevel[1] / 2 * 2000 + 2000;
                 Oy = 2000;//max(sibPerLevel) * 1000 / 2;
                 Oz = -3 * deltaZ / 2; //recupérer ici la profondeur max
-                var overview2 = "<div class='step' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " '  data-rotate-z='0' data-rotate-y='-45' data-scale='15'></div>";
+                var overview2 = "<div class='step overview' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " '  data-rotate-z='0' data-rotate-y='-45' data-scale='15'></div>";
                 $('#slideArea').append(overview2);
 
                 //creation jmpress
                 $('li').each(function() {
 
                     var titre = "<div  class='element' style='position: relative; left: 40px; top: 300px' > <span class=title1> " + $(this).children('span').html() + " </span> </div> ";
-
+                    
+                    
+                    //ici il faut agrementer un fichier json et appeller la fonction qui crée la présentation à partir d'un fichier json (factoriser ce traitement)
                     var slide = "<div  class='step slide' data-x = ' " + $(this).attr('data-x') + " ' data-y = '  " + $(this).attr('data-y') + " ' data-z = '  " + $(this).attr('data-z') + " ' data-rotate-x='0' data-rotate-y='0' data-rotate-z='0' data-scale = '1' > " + titre + " </div> ";
                     $('#slideArea').append(slide);
 
@@ -232,13 +241,14 @@
                 $('#slideArea').jmpress();
                 console.log('go jmpress');
 
-                $('step').each(function() {
-                    $(this).mouseenter(function(event) {
-                        console.log($(this).html());
-                    });
-                });
+                
             }
 
+//
+//            $(document).ready(function() {
+//                goDepth();
+//                goJmpress();
+//            });
 
 
 
@@ -344,3 +354,113 @@
 
 
 -->
+
+
+
+
+<!--        <div id='plan'>
+            <ol>
+                <li>Intro - Un &eacute;diteur graphique pour impress.js ! &nbsp;
+                    <ol>
+                        <li>impress.js : une biblioth&egrave;que permettant de cr&eacute;er des pr&eacute;sentations dynamiques</li>
+                        <li>impress.js : un outil sans interface graphique</li>
+                        <li>enjeu : cr&eacute;er un &eacute;diteur graphique &agrave; partir de technologies web</li>
+                    </ol>
+                </li>
+                <li>Cahier des charges - une interface mettant en avant la richesse d&rsquo;impress &nbsp;
+                    <ol>
+                        <li>a/ fonctionnalit&eacute;s de base pour ce type d&rsquo;outils
+                            <ol>
+                                <li>cr&eacute;ation / &eacute;dition / suppression de slide</li>
+                                <li>organisation de slides</li>
+                                <li>sauvegarde et mode pr&eacute;sentation</li>
+                            </ol>
+                        </li>
+                        <li>b/ une surface de travail infinie // &agrave; la prezi
+                            <ol>
+                                <li>plein &eacute;cran et barre d&rsquo;outils minimaliste</li>
+                                <li>pr&eacute;voir la possibilit&eacute; de se d&eacute;placer sur la surface // fonctionnalit&eacute; li&eacute;e</li>
+                            </ol>
+                        </li>
+                        <li>c/ penser les pr&eacute;sentations en 3d
+                            <ol>
+                                <li>wysiwyg : avoir une sortie &eacute;diteur aussi proche que possible de la pr&eacute;sentation</li>
+                                <li>pr&eacute;voir rotation et d&eacute;placement sur les 3 axes / zoomable // fonctionnalit&eacute;s li&eacute;es</li>
+                            </ol>
+                        </li>
+                        <li>d/ permettre une r&eacute;exploitation des donn&eacute;es
+                            <ol>
+                                <li>&eacute;viter autant que possible l&rsquo;injection de html</li>
+                                <li>anticiper la possibilit&eacute; d&rsquo;exploiter les donn&eacute;es de la pr&eacute;sentation ailleurs</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>Une gestion de projet flexible et r&eacute;active
+                    <ol>
+                        <li>a/ un contexte contraignant la gestion de projet
+                            <ol>
+                                <li>m&eacute;connaissance des techno</li>
+                                <li>appropriation d&rsquo;une biblioth&egrave;que tiers</li>
+                                <li>difficile d&rsquo;anticiper d&eacute;coupage des t&acirc;ches, temps &agrave; leur consacrer et difficult&eacute;</li>
+                            </ol>
+                        </li>
+                        <li>b/ une premi&egrave;re phase d&rsquo;exp&eacute;rimentation indispensableappropriation des technos
+                            <ol>
+                                <li>veille des outils similaires</li>
+                                <li>cahier des charges up to date !</li>
+                            </ol>
+                        </li>
+                        <li>c/ un suivi adaptatif
+                            <ol>
+                                <li>outils : calendrier, etc - r&eacute;partition des t&acirc;ches en fonction des envies / capacit&eacute;s</li>
+                                <li>concertation et prise de d&eacute;cision &nbsp;(rdv hebdo)</li>
+                                <li>adaptation tout au long du projet (gestion retards de calendrier, ou difficult&eacute;s techniques)</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>L&rsquo;application finale
+                    <ol>
+                        <li>a/ les technologies utilis&eacute;es (Florence)
+                            <ol>
+                                <li>jquery, jquery-ui, mustache, ckeditor, bootstrap, mousewheel,</li>
+                                <li>json, localstorage</li>
+                            </ol>
+                        </li>
+                        <li>b/ Navigation et manipulation (R&eacute;mi)
+                            <ol>
+                                <li>gestion 3D</li>
+                                <li>navigable / zoomable</li>
+                                <li>manipulation d&rsquo;objets : agrandir / rotate / move</li>
+                                <li>ckeditor</li>
+                            </ol>
+                        </li>
+                        <li>c/ Edition et ergonomie
+                            <ol>
+                                <li>cr&eacute;ation slide et groupement</li>
+                                <li>sauvegarde / pr&eacute;sentation</li>
+                                <li>timeline</li>
+                                <li>ergo / graphisme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>Bilans
+                    <ol>
+                        <li>a/ bilan projet
+                            <ol>
+                                <li>r&eacute;ussites : ensemble de fonctionnalit&eacute; large m&ecirc;me si chacune est sommaire / exploitation de technos int&eacute;ressantes</li>
+                                <li>points d&rsquo;am&eacute;lioration : compatibilit&eacute; navigateur / gestion 3d</li>
+                            </ol>
+                        </li>
+                        <li>b/ bilans personnels (&agrave; tour de r&ocirc;le)
+                            <ol>
+                                <li>principales difficult&eacute;s rencontr&eacute;es</li>
+                                <li>principales &ldquo;satisfactions&rdquo;</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>-->
