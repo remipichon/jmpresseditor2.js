@@ -80,6 +80,12 @@ function createText(hierarchy, event) {
     var stringText = '{"class": "element text","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
     var jsonComponent = JSON.parse(stringText);
     pressjson.slide[idContainer].element[idElement] = jsonComponent;
+    
+    //pour savoir s'il faut vider le champ de texte lorsqu'on clic
+    (content === 'Entrer du texte') ? jsonComponent.newCreated = 'true' :  jsonComponent.newCreated = 'false';
+    
+    
+    
     jsonToHtmlinSlide(jsonComponent, container);
 
     //console.log(pressjson);
@@ -96,13 +102,21 @@ function createText(hierarchy, event) {
  * @param {type} bool
  * 
  */
-jQuery.fn.manageCkeditor = function(bool) {
+jQuery.fn.manageCkeditor = function() {
     var $this = $(this);
 
     $this.dblclick(function(event) {
         $this.attr('contenteditable', 'true');
         CKEDITOR.disableAutoInline = true;
         CKEDITOR.inline($this.attr('id'));
+        $this.focus();
+        
+        console.log($this.data('newCreated'));
+        
+        $this.on('click', function() {
+           //($this.data('newCreated')) ? CKEDITOR.instances[$this.attr('id')].setData("<span class='"+$this.data('hierarchy')+"'>  Ici  </span>") : 0 ; 
+           ($this.data('newCreated')) ? console.log('instance ck éditée pour la première fois (que faire ?)') : 0 ; 
+        });
 
         CKEDITOR.instances[$this.attr('id')].on('change', function(e) {
             console.log("le changement c'est maintenant :" + CKEDITOR.instances[$this.attr('id')].getData());
@@ -243,8 +257,12 @@ function jsonToHtmlinSlide(data, container) {
     //gestion de ckeditor
     if (data.type === 'text') {
         var $newTxt = container.children().last();
-            $newTxt.manageCkeditor(true);  // KIKI
+            $newTxt.manageCkeditor();
+            console.log(data.newCreated);
+            (data.newCreated === 'true') ?  $newTxt.data('newCreated','true') :  $newTxt.data('newCreated','false') ;  //pour savoir si on vide le champ texte 
+            $newTxt.data('hierarchy',data.hierarchy);
     }
+    
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
     $('#slideArea').jmpress('init', container); // initilisation step
 
