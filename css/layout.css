@@ -214,6 +214,11 @@ body
     border-bottom:none;
 }
 
+#geek-tool p
+{
+    color:#888;
+}
+
 .nav-button
 {
     height:80px;

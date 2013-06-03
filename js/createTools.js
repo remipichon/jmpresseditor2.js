@@ -83,11 +83,9 @@ function createText(hierarchy, event) {
     //pour savoir s'il faut vider le champ de texte lorsqu'on clic
     (content === 'Entrer du texte') ? jsonComponent.newCreated = 'true' :  jsonComponent.newCreated = 'false';
     
-    
-    
     jsonToHtmlinSlide(jsonComponent, container);
 
-    //console.log(pressjson);
+    console.log(pressjson);
     $('#text-tool').parent().removeClass("buttonclicked");  // mise en forme css
 }
 ;

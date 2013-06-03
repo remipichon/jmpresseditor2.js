@@ -309,19 +309,19 @@ $(document).on('mouseup', function(event) {
         if ($this.hasClass("element"))              // = element dans slide
         {
             var $container;
-            $(".slide").each(function() {
+            $($(".slide").get().reverse()).each(function() {            // reverse = parcourir le DOM par la fin (les slides en surface sont les dernières dans le DOM)
                 $container = getMouseUpContainer(event, $(this));       // détermination d'où a été droppé l'élément
                 if ($container !== 0)
                     return false;
             });
             if ($container === 0) {                         // = drop de l'element hors slide -> retour à position initiale
-//                console.log("drop hors slide");
+                console.log("drop hors slide");
 //                console.log("css top : " + $this.css("top") + ", dataoffy : " + $this.data('pos').y);
                 $this.css("top", $this.data('pos').y);
                 $this.css("left", $this.data('pos').x);
             }
             else {                                          // = drop de l'element sur une slide
-//                console.log("drop dans slide");
+                console.log("drop dans slide");
                 $this = elementToElement($this, $container, event);
             }
         }
