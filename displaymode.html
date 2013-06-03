@@ -10,10 +10,15 @@
         <script type="text/javascript" src="js/plugin/mustache.js"></script>
 
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
+        
+        <!--Pour la fonction goAutoAlign-->
+        <script type="text/javascript" src="js/treeToPresentation.js"></script>  
 
     </head>
     <body>
-        <div id="jmpress">
+        
+        <!--Kiki : je me suis permis de modifier l'id parce que displaymode partage une fonction avec l'éditeur (la fonction autoAlign-->
+        <div id="slideArea">
         </div>
 
 
@@ -40,6 +45,7 @@
         </script>
 
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
+        
         <script type="text/javascript">
             /*var config = {
                 viewPort:{
@@ -51,10 +57,14 @@
             var template = $('#templateJmpress').html();
             var html = Mustache.to_html(template, pressjson);
             //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
-            $('#jmpress').append(html);         
-            $('#jmpress').jmpress( {
+            $('#slideArea').append(html);         
+            $('#slideArea').jmpress( {
                     viewport : {
                     height : 2000} });
+           
+            goAutoAlign();
+            
+            
           
         </script>
 

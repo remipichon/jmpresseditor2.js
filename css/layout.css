@@ -347,7 +347,7 @@ body
     height: 700px;          /* taille réelle : 700 */
     padding: 40px 60px;
 
-    background-color: rgba(100,100,100,.5);
+     background-color: rgba(100,100,100,.8);
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 10px;
     /*    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
@@ -380,17 +380,38 @@ body
 
 /*////////////////Gestion des styles////////////*/
 /*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
-span {
+.slide span {
     /*border : dashed black 10px;*/
-
+    font-family: Arial;
 
 }
+
+.slide .element{
+     border : dashed black 10px;
+     margin: auto;
+     position: relative;
+     
+}
+
 .title1
 {
     text-align:center;
+    padding-top: 20px;
+    padding-bottom: 20px;
     /*margin: auto;*/     
     display: block;
     font-size: 6em;
+    font-weight: bold;
+}
+
+.title2
+{
+     padding-top: 20px;
+    padding-bottom: 70px;
+    text-align:center;
+    /*margin: auto;*/     
+    display: block;
+    font-size: 4em;
     font-weight: bold;
 }
 
@@ -400,19 +421,8 @@ span {
 }
 
 
-h1, p
-{
-    font-family: Arial;
-}
 
 
-#slideArea p    
-/*ne rien mettre comme style pour p car ckeditor met les textes dans une balise p à chaque fois*/
-{
-    /*    color:red;
-        font-size: 2em;
-        z-index: 2;*/
-}
 
 /*Fin de gestion des styles*/
 
