@@ -173,10 +173,8 @@ function goAutoAlign() {
             }
         }
 
-
+        //positionnement à proprement dit
         $($(this).children('.element')).each(function() {
-
-
 
             console.log("totpourtous " + totHeight);
 
@@ -245,27 +243,41 @@ function goJmpress() {
 
         var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
 
-        //contenu de rappel de la partie mère
+        //contenu de rappel de la partie mère avec partie tronqué par /br
+        var string = $(this).parent().parent().children('span').html();
+        var reg = new RegExp("[@]+", "g");
+        var tabTxt = string.split(reg);
+        console.log("titre accourci "+tabTxt);
         var evCodeText = ({
             type: 'code',
             container: $newSlide,
             x: '0',
             y: '0',
             z: '0',
-            content: $(this).parent().parent().attr('number') + " - " + $(this).parent().parent().children('span').html()
+            content: $(this).parent().parent().attr('number') + " - " + tabTxt[0]
         });
         createText('title2', evCodeText);
 
 
 
         //contenu 'normal'//
+        string = $(this).children('span').html();
+        tabTxt = string.split(reg);
+        if( $(this).attr('type') === 'content' ) {
+            var content = "<p>" + tabTxt.join('</p> <p>') + "</p>";
+        } else {
+            var content = tabTxt.join('');
+        }
+        
+        
+        
         var evCodeText = ({
             type: 'code',
             container: $newSlide,
             x: '0',
             y: '0',
             z: '0',
-            content: $(this).attr('number') + " - " + $(this).children('span').html()
+            content: $(this).attr('number') + " - " + content
         });
 
 

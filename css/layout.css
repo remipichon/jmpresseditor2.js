@@ -402,11 +402,12 @@ body
 {
     text-align:center;
     padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
     /*margin: auto;*/     
     display: block;
     font-size: 6em;
     font-weight: bold;
+   
 }
 
 .title2
@@ -418,6 +419,7 @@ body
     display: block;
     font-size: 4em;
     font-weight: bold;
+    border-bottom: 10px dotted white;
 }
 
 .bodyText

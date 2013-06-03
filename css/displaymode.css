@@ -67,36 +67,39 @@ time, mark, audio, video {
 }
 
 .slide .element{
-     border : dashed black 10px;
-     margin: auto;
-     position: relative;
-     
+    /*border : dashed black 10px;*/
+    margin: auto;
+    position: relative;
+
 }
 
 .title1
 {
     text-align:center;
-    padding-top: 20px;
+    padding-top: 30px;
     padding-bottom: 20px;
     /*margin: auto;*/     
     display: block;
     font-size: 6em;
     font-weight: bold;
+
 }
 
 .title2
 {
-     padding-top: 20px;
-    padding-bottom: 70px;
+    padding-top: 20px;
+    padding-bottom: 60px;
     text-align:center;
     /*margin: auto;*/     
     display: block;
     font-size: 4em;
     font-weight: bold;
+    border-bottom: 10px dotted white;
 }
 
 .bodyText
 {
+    margin-top: 30px;
     font-size:2em;
 }
 
