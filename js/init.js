@@ -40,7 +40,7 @@ $(document).ready(function() {
     }
     
     //INITIALISATION DE LA PRESENTATION DEPUIS LA LISTE A PUCE ORDONNEE
-    // /*           Il suffit d'enlever le commentaire de ligne pour desactiver le chargement de la présentation
+//     /*           Il suffit d'enlever le commentaire de ligne pour desactiver le chargement de la présentation
     if ( $('#tree').lenght !== 0 ) {
         goCK();
         goDepth();

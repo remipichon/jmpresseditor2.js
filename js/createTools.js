@@ -74,7 +74,6 @@ function createText(hierarchy, event) {
     }
 
     var idElement = "element-" + j++; // id unique élément -> ds json + ds html
-    /////////////////////////// KIKI                              pressjson.increment['j'] = j;
     var idContainer = container.attr('id');
     var containerScale = pressjson.slide[idContainer].scale;
     var stringText = '{"class": "element text","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
@@ -84,11 +83,9 @@ function createText(hierarchy, event) {
     //pour savoir s'il faut vider le champ de texte lorsqu'on clic
     (content === 'Entrer du texte') ? jsonComponent.newCreated = 'true' :  jsonComponent.newCreated = 'false';
     
-    
-    
     jsonToHtmlinSlide(jsonComponent, container);
 
-    //console.log(pressjson);
+    console.log(pressjson);
     $('#text-tool').parent().removeClass("buttonclicked");  // mise en forme css
 }
 ;

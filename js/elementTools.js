@@ -45,7 +45,7 @@ function move(event, $objet) {
         $('#slideArea').jmpress('init', $container);
     }
 
-    if ($objet.hasClass("step")) {
+    if ($objet.hasClass("slide")) {
         $('#slideArea').jmpress('deinit', $objet);
         pressjson.slide[idObjet].pos.x = VLeft;                                 /////////////////////////
         pressjson.slide[idObjet].pos.y = VTop;
@@ -64,17 +64,14 @@ function move(event, $objet) {
  * @returns {undefined}
  */
 function offSet(event, $objet) {
-
-   
-
     //position virtuelle dans le monde des slides de la souris
-    
+
     var tab = getVirtualCoord(event, $objet);
-    
+
     if ($objet.hasClass("element")) {
         var tab = getVirtualCoord(event, $objet.parent());
     }
-    
+
     var VTopMouse = tab[0];
     var VLeftMouse = tab[1];
 
@@ -83,7 +80,7 @@ function offSet(event, $objet) {
         var offLeft = $objet.attr("data-x");
     }
 
-    
+
     if ($objet.hasClass("element")) {
         var offTop = parseFloat($objet.css("top"));  //parseFloat parce top:343px
         var offLeft = parseFloat($objet.css("left"));
@@ -309,41 +306,28 @@ $(document).on('mouseup', function(event) {
 // lier un element Ã  l'element du Dom sur lequel il se trouve (slideArea ou slide)
         var $this = $(this);
         $this.removeClass("move");
-        if (!$this.hasClass("slide"))                   // EN FAIRE UNE FONCTION BIND ELEMENT ??
+        if ($this.hasClass("element"))              // = element dans slide
         {
-            if ($this.hasClass("element"))              // = element dans slide
-            {
-                var $container;
-//                console.log($container !== undefined);
-                $(".slide").each(function() {
-                    $container = getMouseUpContainer(event, $(this));
-//                    console.log($container);
-                    if ($container !== undefined)
-                        return false;
-                });
-                if ($container === undefined) {         // = drop de l'element sur slideArea
-                    $this = elementToStep($this);
-                }
-                else {                                  // = drop de l'element sur une slide
-                    $this = elementToElement($this, $container, event);
-                }
+            var $container;
+            $($(".slide").get().reverse()).each(function() {            // reverse = parcourir le DOM par la fin (les slides en surface sont les dernières dans le DOM)
+                $container = getMouseUpContainer(event, $(this));       // détermination d'où a été droppé l'élément
+                if ($container !== 0)
+                    return false;
+            });
+            if ($container === 0) {                         // = drop de l'element hors slide -> retour à position initiale
+                console.log("drop hors slide");
+//                console.log("css top : " + $this.css("top") + ", dataoffy : " + $this.data('pos').y);
+                $this.css("top", $this.data('pos').y);
+                $this.css("left", $this.data('pos').x);
             }
-            else {                                      // = element libre
-                var $container;
-//                console.log($container !== undefined);
-                $(".slide").each(function() {
-                    $container = getMouseUpContainer(event, $(this));
-//                    console.log($container);
-                    if ($container !== undefined)
-                        return false;
-                });
-               
+            else {                                          // = drop de l'element sur une slide
+                console.log("drop dans slide");
+                $this = elementToElement($this, $container, event);
             }
-
         }
-
         $this.draggableKiki();
     });
+    
     $(".rotate").each(function() {
         $(this).removeClass("rotate");
     });
@@ -355,30 +339,27 @@ $(document).on('mouseup', function(event) {
  */
 jQuery.fn.draggableKiki = function() {
 
-
-
     var $this = $(this); // .data ne fait pas traverser this
 
+        //init du posData qui permet de stocker les caractÃ©ristiques de l'objet lors du mousedown
     if ($this.hasClass('element'))
     {
-        if (!$this.parent().hasClass("slide"))
-        {
-            $this = $this.parent();           // element libre -> selectionne la div englobante
-        }
+        $(this).data('pos', {
+            x: $this.css('left'),
+            y: $this.css('top')
+        });
     }
-
-
-    //init du posData qui permet de stocker les caractÃ©ristiques de l'objet lors du mousedown
-    $(this).data('pos', {
-        x: $this.attr('data-x'),
-        y: $this.attr('data-y'),
-        z: $this.attr('data-z')});
-    $(this).data('rotate', {
-        x: $this.attr('data-rotate-x'),
-        y: $this.attr('data-rotate-y'),
-        z: $this.attr('data-rotate-z')});
-    $(this).data('scale', $this.attr('data-scale'));
-
+    else {                  // slide
+        $(this).data('pos', {
+            x: $this.attr('data-x'),
+            y: $this.attr('data-y'),
+            z: $this.attr('data-z')});
+        $(this).data('rotate', {
+            x: $this.attr('data-rotate-x'),
+            y: $this.attr('data-rotate-y'),
+            z: $this.attr('data-rotate-z')});
+        $(this).data('scale', $this.attr('data-scale'));
+    }
 
     /*
      * gestion des long press click
@@ -437,19 +418,10 @@ jQuery.fn.draggableKiki = function() {
      */
     $(this).on("mousedown.simpleclick", function(event) {
 
-
         var $this = $(this);
-        if ($this.hasClass('slide')) {
+        if ($this.hasClass('slide')) {      // transformation du cursor en "move"
             event.originalEvent.preventDefault();
             $('body').css('cursor', 'move');
-        }
-
-        if ($this.hasClass('element'))
-        {
-            if (!$this.parent().hasClass("slide"))
-            {
-                $this = $this.parent();           // element libre -> selectionne la div englobante
-            }
         }
 
         $("#slideArea").data('event', {
@@ -458,7 +430,6 @@ jQuery.fn.draggableKiki = function() {
                 y: event.pageY
             }
         });
-
 
         event.stopImmediatePropagation();           //empeche l'event de bubble jusqu'Ã  la slide mÃ¨re et le document, ainsi pas de conflits avec le navigable
 
