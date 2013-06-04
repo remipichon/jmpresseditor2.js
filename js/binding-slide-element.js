@@ -51,6 +51,7 @@ function elementToElement(element, slideDest, evt)
     // MaJ json
     if (pressjson.slide[idSlideSource].element[idElement])
     {
+        console.log("maj json binding slide");
         pressjson.slide[idSlideDest].element[idElement] = pressjson.slide[idSlideSource].element[idElement];
         pressjson.slide[idSlideDest].element[idElement].pos.x = elementLeft;
         pressjson.slide[idSlideDest].element[idElement].pos.y = elementTop;
