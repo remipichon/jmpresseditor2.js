@@ -8,13 +8,16 @@ function getMouseUpContainer(evt, slide)
 {
     var mouseX = evt.pageX;
     var mouseY = evt.pageY;
+//    var mouseX = element.css("left");
+//    var mouseY = element.css("top");
+    
     var i = 0;
     var $this = slide;
     var scale = $this.attr("data-scale");
     var o = $this.offset();
     var w = $this.width() * scale;
     var h = $this.height() * scale;
-    if (evt.pageX >= o.left && evt.pageX <= o.left + w && evt.pageY >= o.top && evt.pageY <= o.top + h)
+    if (mouseX >= o.left && mouseX <= o.left + w && mouseY >= o.top && mouseY <= o.top + h)
     {
         return ($this);
     }
