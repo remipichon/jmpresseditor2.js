@@ -107,17 +107,28 @@ jQuery.fn.manageCkeditor = function() {
         CKEDITOR.disableAutoInline = true;
         CKEDITOR.inline($this.attr('id'));
         $this.focus();
+        console.log("ck this : "+ $this);
+        console.log($this);
 
         console.log($this.data('newCreated'));
 
         $this.on('click', function() {
             //($this.data('newCreated')) ? CKEDITOR.instances[$this.attr('id')].setData("<span class='"+$this.data('hierarchy')+"'>  Ici  </span>") : 0 ; 
-            ($this.data('newCreated')) ? console.log('instance ck éditée pour la première fois (que faire ?)') : 0;
+//            ($this.data('newCreated')) ? console.log('instance ck éditée pour la première fois (que faire ?)') : 0;
         });
 
+
+// on n'entre jamais dedans ???? Mise à jour des contenus gérée ds layout.js, avant sauvegarde et mode présentation
         CKEDITOR.instances[$this.attr('id')].on('change', function(e) {
             console.log("le changement c'est maintenant :" + CKEDITOR.instances[$this.attr('id')].getData());
             /////METTRE A JOUR LE JSON//////
+//            var element = CKEDITOR.instances[$this.attr('id')];
+//            console.log()
+//            var idElement = CKEDITOR.instances[$this.attr('id')].getData();
+//            console.log("idElement" + idElement);
+//            var idSlide = element.parent().attr('id');
+//            console.log("idSlide" + idSlide);
+//            pressjson.slide[idSlide].element[idElement].content = $this.text();
         });
 
 
