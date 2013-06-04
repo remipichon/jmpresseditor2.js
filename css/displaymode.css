@@ -54,7 +54,14 @@ time, mark, audio, video {
     height: 700px;          /* taille réelle : 700 */
     padding: 40px 60px;
 
-    background-color: rgba(100,100,100,.9);
+    /*background-color: rgba(100,100,100,.9);*/
+      background: rgb(215, 215, 215);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 10px;
 }
@@ -115,7 +122,14 @@ time, mark, audio, video {
 
 body
 {
-    background: #DDD;
+    /*background: #EEE;*/
+    /*background: rgb(255, 255, 255);*/
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(255, 255, 255)), to(rgb(230, 230, 230)));
+    background: -webkit-radial-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background: -moz-radial-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background: -ms-radial-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background: -o-radial-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background: radial-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
     z-index: 100;
 }
 
