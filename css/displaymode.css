@@ -37,10 +37,7 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-h1, p 
-{
-    font-family: Arial;
-}
+
 
 /* ======================================================================================
  * TEMPLATE JMPRESS LIGHT
@@ -57,47 +54,57 @@ h1, p
     height: 700px;          /* taille réelle : 700 */
     padding: 40px 60px;
 
-    background-color: rgba(100,100,100,.5);
+    background-color: rgba(100,100,100,.9);
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 10px;
 }
 
 
-.slide:hover
-{
-    background-color: rgba(150,150,150,.5);
+.slide span {
+    /*border : dashed black 10px;*/
+    font-family: Arial;
+
+}
+
+.slide .element{
+    /*border : dashed black 10px;*/
+    margin: auto;
+    position: relative;
+
 }
 
 .title1
 {
-   
-     text-align:center;
-     margin: auto;     
-     display: block;
     
-    
+    text-align:center;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    /*margin: auto;*/     
+    display: block;
     font-size: 6em;
     font-weight: bold;
-    text-align:center;
 
+}
+
+.title2
+{
+    /*border : dashed black 10px;*/
+    padding-top: 20px;
+    padding-bottom: 60px;
+    text-align:center;
+    /*margin: auto;*/     
+    display: block;
+    font-size: 3.5em;
+    font-weight: bold;
+    border-bottom: 10px dotted white;
 }
 
 .bodyText
 {
+    padding-top:20px;
+    margin-top: 30px;
     font-size:2em;
-    
-    
 }
-
-
-
-
-h1, p 
-{
-    font-family: Arial;
-    
-}
-
 
 
 /* ======================================================================================
@@ -109,5 +116,9 @@ h1, p
 body
 {
     background: #DDD;
-    z-index: 1;
+    z-index: 100;
+}
+
+#progressbar {
+    z-index: 1200;
 }

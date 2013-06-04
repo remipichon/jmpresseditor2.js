@@ -185,11 +185,11 @@ $(document).ready(function() {
             });
             outputjson.slide.push(slide2);
         });
-        console.log("output json : ");
-        console.log(outputjson);
+        //console.log("output json : ");
+        //console.log(outputjson);
         outputjson.slide.sort(sort_by('index', true, parseInt));
-        console.log("output json sorted : ");
-        console.log(outputjson);
+        //console.log("output json sorted : ");
+        //console.log(outputjson);
         var stringjson = JSON.stringify(outputjson, null, 2);
         localStorage.setItem('outputjson', stringjson);
         window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");

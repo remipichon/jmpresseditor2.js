@@ -6,30 +6,62 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Display mode</title>
         <link rel="stylesheet" type="text/css" href="css/displaymode.css" >
-        <!--<script type="text/javascript" src="js/jquery-ui.js"></script>-->
+        <link rel="stylesheet" href="css/jquery-ui.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+        
         <script type="text/javascript" src="js/plugin/mustache.js"></script>
 
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
+        <script type="text/javascript" src="js/plugin/jquery-ui.js"></script>
+
+        <!--Pour la fonction goAutoAlign-->
+        <script type="text/javascript" src="js/treeToPresentation.js"></script>  
 
     </head>
     <body>
-        <div id="jmpress">
+
+        <!--Kiki : je me suis permis de modifier l'id parce que displaymode partage une fonction avec l'éditeur (la fonction autoAlign-->
+        <div id="slideArea">
         </div>
 
+        <div id="progressbar"></div>
+        <script>
 
-<!--        <script id="templateJmpress" type="text/template">
-            {{#slide}}
-            <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
-            {{title}}
-            {{#element}} 
-            <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px'> {{content}}</{{hierarchy}}>  
-            {{/element}} 
-            </div>   
-            {{/slide}}
-        </script>-->
+
+            $(document).keydown(function() {
+                var nbSlide = $('#slideArea').children().children().length;
+                var pos = parseInt($('.active').index() / nbSlide * 100);
+                console.log(nbSlide + " " + pos);
+
+                $("#progressbar").progressbar({
+                    value: pos
+                });
+
+            });
+
+
+            $(function() {
+                $("#progressbar").progressbar({
+                    value: true
+                });
+            });
+
+        </script>
+
+
+        <!--        <script id="templateJmpress" type="text/template">
+                    {{#slide}}
+                    <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+                    {{title}}
+                    {{#element}} 
+                    <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px'> {{content}}</{{hierarchy}}>  
+                    {{/element}} 
+                    </div>   
+                    {{/slide}}
+                </script>-->
         <script id="templateJmpress" type="text/template">
             {{#slide}}
-            <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+            <div id={{id}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
             
             {{#element}} 
              <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
@@ -40,22 +72,27 @@
         </script>
 
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
+
         <script type="text/javascript">
             /*var config = {
-                viewPort:{
-                    width:1000,
-                    height:true
-                }
-            };*/
+             viewPort:{
+             width:1000,
+             height:true
+             }
+             };*/
             var pressjson = JSON.parse(localStorage.getItem('outputjson'));
             var template = $('#templateJmpress').html();
             var html = Mustache.to_html(template, pressjson);
             //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
-            $('#jmpress').append(html);         
-            $('#jmpress').jmpress( {
-                    viewport : {
-                    height : 2000} });
-          
+            $('#slideArea').append(html);
+            $('#slideArea').jmpress({
+                viewport: {
+                    height: 2000}});
+
+            goAutoAlign();
+
+
+
         </script>
 
     </body>
