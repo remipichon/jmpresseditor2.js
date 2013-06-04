@@ -8,6 +8,8 @@
         <title>Editor</title>
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
+        <link rel="stylesheet" href="css/jquery-ui.css" />
+        
         <script type='text/javascript' >
             var pressjson = {data: {}, slide: {}};
         </script>
@@ -36,6 +38,9 @@
     </head>
 
     <body>
+        
+         
+        
         <div id="topbar">
             <ul>
                 <li><a href="#" id="present" title="launch the presentation"><p>present</p></a></li>
@@ -247,7 +252,7 @@
 
         <script id="templateSlide" type="text/template">
 
-            <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+            <div id={{id}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
             </div>
 
         </script>
@@ -255,7 +260,7 @@
 
         <script id="templateStepElement" type="text/template">
 
-            <div id={{id}} class='step'  data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}'> 
+            <div id={{id}} class='step {{type}}'  data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}'> 
             <div id={{id}}  class='element'> 
             {{content}}
             </div>
@@ -283,36 +288,36 @@
         <!--zone de stockage pour la liste à puce ordonnée contenant le plan     (c'est temporaire)-->
         <div id='tree'  style='display:none'>
 
-        <ol>
-	<li>Intro - Un &eacute;diteur graphique pour impress.js&nbsp; &nbsp;(Florence) (3min)
+   <ol>
+	<li>Intro @- Un &eacute;diteur graphique pour impress.js
 	<ol>
-		<li>impress.js : une biblioth&egrave;que @ permettant de cr&eacute;er des pr&eacute;sentations dynamiques</li>
-		<li>impress.js : un outil sans interface graphique</li>
-		<li>enjeu : cr&eacute;er un &eacute;diteur graphique @ &agrave; partir de technologies web</li>
+		<li>impress.js : @une biblioth&egrave;que permettant de cr&eacute;er des pr&eacute;sentations dynamiques</li>
+		<li>impress.js : @un outil sans interface graphique</li>
+		<li>enjeu : @cr&eacute;er un &eacute;diteur graphique &agrave; partir de technologies web</li>
 	</ol>
 	</li>
-	<li>Cahier des charges @ - une interface mettant en avant la richesse d&rsquo;impress &nbsp;(5min)
+	<li>Cahier des charges @ - une interface mettant en avant la richesse d&rsquo;impress
 	<ol>
-		<li>fonctionnalit&eacute;s de base (Claire)
+		<li>fonctionnalit&eacute;s de base
 		<ol>
-			<li>cr&eacute;ation d&rsquo;&eacute;l&eacute;ments @ &eacute;dition d&eacute;l&eacute;ments @ suppression d&rsquo;&eacute;l&eacute;ments</li>
+			<li>cr&eacute;ation d&rsquo;&eacute;l&eacute;ments @ &eacute;dition d&#39;&eacute;l&eacute;ments @ suppression d&rsquo;&eacute;l&eacute;ments</li>
 			<li>organisation des diapositives</li>
 			<li>mode pr&eacute;sentation @ sauvegarde</li>
 		</ol>
 		</li>
-		<li>une surface de travail infinie (Florence)
+		<li>une surface de travail infinie
 		<ol>
 			<li>plein &eacute;cran et barre d&rsquo;outils minimaliste</li>
 			<li>pr&eacute;voir la possibilit&eacute; de se d&eacute;placer sur la surface</li>
 		</ol>
 		</li>
-		<li>penser les pr&eacute;sentations en 3d (R&eacute;mi)
+		<li>penser les pr&eacute;sentations en 3d
 		<ol>
-			<li>wysiwyg : avoir une sortie &eacute;diteur aussi proche que possible de la pr&eacute;sentation</li>
-			<li>pr&eacute;voir rotation et d&eacute;placement sur les 3 axes / zoomable</li>
+			<li>wysiwyg : @avoir une sortie &eacute;diteur aussi proche que possible de la pr&eacute;sentation</li>
+			<li>pr&eacute;voir rotation et d&eacute;placement sur les 3 axes@ zoomable</li>
 		</ol>
 		</li>
-		<li>permettre une r&eacute;exploitation des donn&eacute;es (Claire)
+		<li>permettre une r&eacute;exploitation des donn&eacute;es
 		<ol>
 			<li>&eacute;viter l&rsquo;injection de html @ anticiper l&rsquo;export des donn&eacute;es&nbsp;</li>
 			<li>gestion du flux de donn&eacute;es @click - Json - mustache.js - html</li>
@@ -320,66 +325,66 @@
 		</li>
 	</ol>
 	</li>
-	<li>Gestion de projet @ flexible et r&eacute;active (5min)
+	<li>Gestion de projet @ flexible et r&eacute;active
 	<ol>
-		<li>un contexte contraignant la gestion de projet&nbsp; (Florence)
+		<li>un contexte contraignant la gestion de projet
 		<ol>
 			<li>m&eacute;connaissance des technologies</li>
 			<li>appropriation d&rsquo;une biblioth&egrave;que tiers</li>
 			<li>difficile d&rsquo;anticiper d&eacute;coupage des t&acirc;ches, temps &agrave; leur consacrer et difficult&eacute;</li>
 		</ol>
 		</li>
-		<li>une premi&egrave;re phase d&rsquo;exp&eacute;rimentation indispensable @: appropriation des technos (R&eacute;mi)
+		<li>une premi&egrave;re phase d&rsquo;exp&eacute;rimentation indispensable @: appropriation des technos
 		<ol>
 			<li>veille des outils similaires</li>
 			<li>cahier des charges up to date</li>
 		</ol>
 		</li>
-		<li>un suivi adaptatif (Claire)
+		<li>un suivi adaptatif
 		<ol>
-			<li>des principes de gestion indispensables : @ - souplesse @ r&eacute;activit&eacute;</li>
+			<li>des principes de gestion indispensables : @ - souplesse @ -r&eacute;activit&eacute;</li>
 			<li>outils : @ identification des t&acirc;ches @ planning@ r&eacute;partition des missions</li>
 			<li>temps de concertation @ prise de d&eacute;cision en commun</li>
 		</ol>
 		</li>
 	</ol>
 	</li>
-	<li>L&rsquo;application finale (5min)
+	<li>L&rsquo;application finale
 	<ol>
-		<li>les technologies utilis&eacute;es (Florence)
+		<li>les technologies utilis&eacute;es
 		<ol>
 			<li>jquery, @&nbsp; jquery-ui, @ mustache, c@ keditor, @ bootstrap, mousewheel,</li>
 			<li>json, @ localstorage</li>
 		</ol>
 		</li>
-		<li>Navigation et manipulation (R&eacute;mi)
+		<li>Navigation et manipulation
 		<ol>
-			<li>gestion 3D : le transform et tranfom3d</li>
+			<li>gestion 3D : @le transform et tranfom3d</li>
 			<li>navigable &amp;&nbsp; zoomable</li>
 			<li>manipulation d&rsquo;objets : scale,&nbsp; rotate,&nbsp; move</li>
 			<li>ckeditor et style</li>
 		</ol>
 		</li>
-		<li>Edition et ergonomie (Claire)
+		<li>Edition et ergonomie
 		<ol>
 			<li>cr&eacute;ation de diapositives @ cr&eacute;ation de texte</li>
 			<li>sauvegarde @ pr&eacute;sentation</li>
 			<li>timeline @ suppression de diapositives</li>
-			<li>graphisme @ ergonomie&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>graphisme @ ergonomie</li>
 		</ol>
 		</li>
 	</ol>
 	</li>
 	<li>Bilans
 	<ol>
-		<li>bilan projet (R&eacute;mi) (3min)
+		<li>Bilan projet
 		<ol>
-			<li>r&eacute;ussites : ensemble de fonctionnalit&eacute; large m&ecirc;me si chacune est sommaire / exploitation de technos int&eacute;ressantes</li>
-			<li>points d&rsquo;am&eacute;lioration : compatibilit&eacute; navigateur / gestion 3d</li>
+			<li>r&eacute;ussites : @ensemble de fonctionnalit&eacute; large m&ecirc;me si chacune est sommaire / exploitation de technos int&eacute;ressantes</li>
+			<li>points d&rsquo;am&eacute;lioration : @compatibilit&eacute; navigateur / gestion 3d</li>
 			<li>suite</li>
 		</ol>
 		</li>
-		<li>bilans personnels (&agrave; tour de r&ocirc;le)
+		<li>Bilans personnels
 		<ol>
 			<li>principales difficult&eacute;s rencontr&eacute;es</li>
 			<li>principales &ldquo;satisfactions&rdquo;</li>
@@ -388,6 +393,7 @@
 	</ol>
 	</li>
 </ol>
+
 
 
         </div>

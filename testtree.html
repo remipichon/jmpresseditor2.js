@@ -3,16 +3,28 @@
         <!--<link rel="stylesheet" type="text/css" href="test.css" >-->
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
-        <script type="text/javascript" src="js/jquery-ui.js"></script>           
+        <script type="text/javascript" src="js/plugin/jquery-ui.js"></script>           
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
         <script type="text/javascript" src="js/mustache.js"></script>
         <script type="text/javascript" src="js/mousewheel.js"></script>
         <script type="text/javascript" src="ckeditorTree/ckeditor.js"></script>
+        
+        <link rel="stylesheet" href="css/jquery-ui.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+  
+  
 
     </head>
 
     <body>
-
+        <div id="progressbar"></div>
+        <script>
+            $(function() {
+                $("#progressbar").progressbar({
+                    value: false
+                });
+            });
+        </script>
         <textarea id="editor1" name="editor1"></textarea>
 
 
@@ -83,8 +95,8 @@
         <div onclick='goDepth();'> GO DEPTH </div>
         <div onclick='goJmpress();'> GO JMPRESS </div>
         <div onclick='goCK();
-                        goDepth();
-                        goJmpress();'> GO ALL </div>
+                goDepth();
+                goJmpress();'> GO ALL </div>
 
         <div id="slideArea">
 
@@ -94,7 +106,7 @@
         </div>
 
 
-     
+
 
         <script type="text/javascript"> //pour gérer l'arboresence 
             cpt = 0;

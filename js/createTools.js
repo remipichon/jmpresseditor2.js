@@ -21,7 +21,7 @@ function createText(hierarchy, event) {
     var container = $(event.target);
 
     //si le texte est crée depuis du code
-    if (event.type === "code") {  
+    if (event.type === "code") {
         container = event.container;
         var x = event.x;
         var y = event.y;
@@ -79,13 +79,13 @@ function createText(hierarchy, event) {
     var stringText = '{"class": "element text","type": "text", "id" : "' + idElement + '", "pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + containerScale + '", "hierarchy":"' + hierarchy + '", "content": "' + content + '"}';
     var jsonComponent = JSON.parse(stringText);
     pressjson.slide[idContainer].element[idElement] = jsonComponent;
-    
+
     //pour savoir s'il faut vider le champ de texte lorsqu'on clic
-    (content === 'Entrer du texte') ? jsonComponent.newCreated = 'true' :  jsonComponent.newCreated = 'false';
-    
+    (content === 'Entrer du texte') ? jsonComponent.newCreated = 'true' : jsonComponent.newCreated = 'false';
+
     jsonToHtmlinSlide(jsonComponent, container);
 
-    console.log(pressjson);
+    //console.log(pressjson);
     $('#text-tool').parent().removeClass("buttonclicked");  // mise en forme css
 }
 ;
@@ -107,12 +107,12 @@ jQuery.fn.manageCkeditor = function() {
         CKEDITOR.disableAutoInline = true;
         CKEDITOR.inline($this.attr('id'));
         $this.focus();
-        
+
         console.log($this.data('newCreated'));
-        
+
         $this.on('click', function() {
-           //($this.data('newCreated')) ? CKEDITOR.instances[$this.attr('id')].setData("<span class='"+$this.data('hierarchy')+"'>  Ici  </span>") : 0 ; 
-           ($this.data('newCreated')) ? console.log('instance ck éditée pour la première fois (que faire ?)') : 0 ; 
+            //($this.data('newCreated')) ? CKEDITOR.instances[$this.attr('id')].setData("<span class='"+$this.data('hierarchy')+"'>  Ici  </span>") : 0 ; 
+            ($this.data('newCreated')) ? console.log('instance ck éditée pour la première fois (que faire ?)') : 0;
         });
 
         CKEDITOR.instances[$this.attr('id')].on('change', function(e) {
@@ -141,6 +141,7 @@ jQuery.fn.manageCkeditor = function() {
 
 
 function createSlide(typeCreation, event) {
+    //console.log('typeCreation '+typeCreation);
     if (event.type === 'code') {
         var dico = {
             rotateX: event.rotateX,
@@ -173,12 +174,12 @@ function createSlide(typeCreation, event) {
         var z = 1000; //dico.translate3d[2];
         var idSlide = "slide-" + i++;
         //console.log(x + " " + y);
-            var index = i - 2;
+        var index = i - 2;
     }
-    var type = "slide";
 
 
-    var stringSlide = '{"type": "' + type + '", "id" : "' + idSlide + '", "index" : "' + index + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
+
+    var stringSlide = '{"type": "' + typeCreation + '", "id" : "' + idSlide + '", "index" : "' + index + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
     var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
     if (typeCreation === 'slideText') {
         jsonSlide.type = "slideText";
@@ -211,6 +212,8 @@ function jsonToHtml(data) {
         var template = $('#templateSlide').html();
     }
     var html = Mustache.to_html(template, data);
+    html = html.replace('&lt;p&gt;', '<p>');
+    html = html.replace('&lt;&#x2F;p&gt;', '</p>');
     $('#slideArea >').append(html);
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
 
@@ -248,18 +251,24 @@ function jsonToHtml(data) {
 function jsonToHtmlinSlide(data, container) {
 
     var template = $('#templateElement').html();
-    var html = Mustache.to_html(template, data);
-    container.append(html);
+    
+    //KIKI     ici un petit test pour tenter de parser le retour à la ligne
+    var htmlBIS = Mustache.to_html(template, data);
+    var html = htmlBIS.replace('&lt;p&gt;', '<p>');
+    html = html.replace('&lt;&#x2F;p&gt;', '</p>');
+    console.log( "avt " + htmlBIS);
+    console.log( "après " + html);
+    container.append(htmlBIS);
 
     //gestion de ckeditor
     if (data.type === 'text') {
         var $newTxt = container.children().last();
-            $newTxt.manageCkeditor();
-            console.log(data.newCreated);
-            (data.newCreated === 'true') ?  $newTxt.data('newCreated','true') :  $newTxt.data('newCreated','false') ;  //pour savoir si on vide le champ texte 
-            $newTxt.data('hierarchy',data.hierarchy);
+        $newTxt.manageCkeditor();
+        //console.log(data.newCreated);
+        (data.newCreated === 'true') ? $newTxt.data('newCreated', 'true') : $newTxt.data('newCreated', 'false');  //pour savoir si on vide le champ texte 
+        $newTxt.data('hierarchy', data.hierarchy);
     }
-    
+
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
     $('#slideArea').jmpress('init', container); // initilisation step
 
@@ -290,7 +299,7 @@ function restorePressJson(restoreJson) {
             index: restoreJson.slide[slide].index
         });
 
-        createSlide('inutile', evCodeSlide);
+        createSlide('slide', evCodeSlide);
 
         for (var elmt in restoreJson.slide[slide].element) {
             var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)

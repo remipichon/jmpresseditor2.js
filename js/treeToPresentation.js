@@ -132,95 +132,69 @@ function goDepth() {
 
 }
 
-function goAutoAlign() {
-
-    //$('#slideArea .slide').each(function() {
-    $('#slideArea .slide').each(function() {
-        var sizeMax = parseInt($(this).height());
-
-        var totHeight = 0;
-        $(this).children('.element').each(function() {
-            totHeight += parseInt($(this).height());
-
-            if ($(this).children()[0].className === 'bodyText') {
-                totHeight = -10000;
-            }
-
-        });
-
-        //compensation pour les trop gros
-        if (totHeight > sizeMax) {     //si depassement de la slide
-            $($(this).children()[0]).children().css('padding-bottom', 20).css('font-size', '3em');     //reduction de l'espace titreslide/contenu
-            $($(this).children()[1]).children().css('font-size', '5em');
-            totHeight = 0;
-            $(this).children('.element').each(function() {
-                totHeight += parseInt($(this).height());
-
-            });
-            console.log(totHeight);
-
-            if (totHeight > sizeMax) {     //si encore depassement de la slide
-                $($(this).children()[0]).children().css('padding-bottom', 10).css('font-size', '1em');     //reduction de l'espace titreslide/contenu
-                $($(this).children()[1]).children().css('font-size', '1em');
-
-
-                var totHeight = 0;
-                $(this).children('.element').each(function() {
-                    totHeight += parseInt($(this).height());
-
-                });
-
-            }
-        }
-
-        //positionnement à proprement dit
-        $($(this).children('.element')).each(function() {
-
-            console.log("totpourtous " + totHeight);
-
-
-            if (totHeight > 0) {        //permet d'exclure les slides de content
-                var height = parseInt($(this).height());
-                var midAllText = sizeMax / 2 - totHeight / 2;
-                var top = midAllText + height / 2;
-                var top = (sizeMax - totHeight) / 2;
-                console.log(totHeight + " " + height + " " + midAllText + " " + top);
-
-                $(this).css('top', top);
-
-            }
-        });
-    });
-
-    $('#slideArea').jmpress('deinit');
-    $('#slideArea').jmpress();
-
-}
 
 
 function goJmpress() {
+
+    //slide permettant d'init la position de la zone de vue 
+    var overview = "<div class='step overview' data-x = '1000' data-y =' 1000 ' data-z =' 0 ' data-scale='10'></div>";
+    $('#slideArea').children().append(overview);
+    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
+    $('#slideArea').jmpress('init', $newSlide);
 
     j = 0;  //pas très algorythmique cela
 
     //////////////////////créer les overview dans le json
     var id = 0;
-    var Ox = 0;//sibPerLevel[1] * 2000 / 2;
-    var Oy = 2000;//max(sibPerLevel) * 1000 / 2;
-    var Oz = 0;
-    var overview = "<div class='step overview' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " ' data-scale='10'></div>";
-    $('#slideArea').children().append(overview);
+    var Ox = 4300;//sibPerLevel[1] * 2000 / 2;
+    var Oy = 1000;//max(sibPerLevel) * 1000 / 2;
+    var Oz = 2700;
+    var scale = 9.5;
 
-    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
-    $('#slideArea').jmpress('init', $newSlide); // initilisation step
+    //creation des overwiews de départ
+    var evCodeSlide = ({
+        type: 'code',
+        x: 2000,
+        y: 2000,
+        z: 3000,
+        rotateX: 0,
+        rotateY: 320,
+        rotateZ: 0,
+        id: "slide-" + id++,
+        typeEl: 'overview',
+        index: id,
+        scale: scale
+    });    
+    createSlide('overview', evCodeSlide);
 
-    Ox = 0;//-sibPerLevel[1] / 2 * 2000 + 2000;
-    Oy = 2000;//max(sibPerLevel) * 1000 / 2;
-    Oz = -3 * deltaZ / 2; //recupérer ici la profondeur max
-    var overview2 = "<div class='step overview' data-x = '" + Ox + "' data-y =' " + Oy + " ' data-z =' " + Oz + " '  data-rotate-z='0' data-rotate-y='-45' data-scale='15'></div>";
-    $('#slideArea').children().append(overview2);
+    var evCodeSlide = ({
+        type: 'code',
+        rotateX: -45,
+        rotateY: 0,
+        rotateZ: 0,
+        x: Ox,
+        y: Oy,
+        z: Oz,
+        id: "slide-" + id++,
+        typeEl: 'overview',
+        index: id,
+        scale: scale
+    });
+    createSlide('overview', evCodeSlide);
 
-    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
-    $('#slideArea').jmpress('init', $newSlide); // initilisation step
+//    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
+//    var cont = $('#tree').children('span').html();
+//    var evCodeText = ({
+//        type: 'code',
+//        container: $newSlide,
+//        x: '0',
+//        y: '0',
+//        z: '0',
+//        content: cont
+//    });
+//    createText('title2', evCodeText);
+
+
 
     //creation jmpress
     $('#tree li').each(function() {
@@ -247,7 +221,7 @@ function goJmpress() {
         var string = $(this).parent().parent().children('span').html();
         var reg = new RegExp("[@]+", "g");
         var tabTxt = string.split(reg);
-        console.log("titre accourci "+tabTxt);
+        //console.log("titre accourci " + tabTxt);
         var evCodeText = ({
             type: 'code',
             container: $newSlide,
@@ -263,25 +237,40 @@ function goJmpress() {
         //contenu 'normal'//
         string = $(this).children('span').html();
         tabTxt = string.split(reg);
-        if( $(this).attr('type') === 'content' ) {
-            var content = "<p>" + tabTxt.join('</p> <p>') + "</p>";
+        if ($(this).attr('type') === 'content') {
+            //var content = "<p>" + tabTxt.join('</p> <p>') + "</p>";
+            var content = tabTxt.join('');
+            var y = 100;        //KIKI magouille pour décaler les textes de contenus
         } else {
             var content = tabTxt.join('');
+            var y = 0;
         }
-        
-        
-        
+
+
+
         var evCodeText = ({
             type: 'code',
             container: $newSlide,
             x: '0',
-            y: '0',
+            y: y,
             z: '0',
-            content: $(this).attr('number') + " - " + content
-        });
+            content: $(this).attr('number') //KIKI+ " - " + content
+        });        
 
 
-
+        if ($(this).attr('type') === 'title1') {
+            createText('title1', evCodeText);
+        } else if ($(this).attr('type') === 'title2') {
+            createText('title2', evCodeText);
+        } else if ($(this).attr('type') === 'content') {
+            createText('bodyText', evCodeText);
+        }
+        
+        evCodeText.content = "  "+content;
+        
+        //KIKI   alors ici, grosse magouille, pour que le numéro soit à la ligne du content
+        
+        
         if ($(this).attr('type') === 'title1') {
             createText('title1', evCodeText);
         } else if ($(this).attr('type') === 'title2') {
@@ -296,5 +285,71 @@ function goJmpress() {
     goAutoAlign();  //-> le probleme sur lequel je buttais depuis une demie heure
     //c'était que cet appel de fonction n'es pas bon, il manque  ()  !!
 
+
+}
+
+
+function goAutoAlign() {
+
+    //$('#slideArea .slide').each(function() {
+    $('#slideArea .slide').each(function() {
+        var sizeMax = parseInt($(this).height());
+
+        var totHeight = 0;
+        $(this).children('.element').each(function() {
+            totHeight += parseInt($(this).height());
+
+            if ($(this).children()[0].className === 'bodyText') {
+                totHeight = -10000;
+            }
+
+        });
+
+        //compensation pour les trop gros
+        if (totHeight > sizeMax) {     //si depassement de la slide
+            $($(this).children()[0]).children().css('padding-bottom', 60).css('font-size', '3em');     //reduction de l'espace titreslide/contenu
+            $($(this).children()[1]).children().css('font-size', '5em');
+            totHeight = 0;
+            $(this).children('.element').each(function() {
+                totHeight += parseInt($(this).height());
+
+            });
+            //console.log(totHeight);
+
+            if (totHeight > sizeMax) {     //si encore depassement de la slide
+                $($(this).children()[0]).children().css('padding-bottom', 10).css('font-size', '2em');     //reduction de l'espace titreslide/contenu
+                $($(this).children()[1]).children().css('font-size', '4em');
+
+
+                var totHeight = 0;
+                $(this).children('.element').each(function() {
+                    totHeight += parseInt($(this).height());
+
+                });
+
+            }
+        }
+
+        //positionnement à proprement dit
+        $($(this).children('.element')).each(function() {
+
+            //console.log("totpourtous " + totHeight);
+
+
+            if (totHeight > 0) {        //permet d'exclure les slides de content
+                var height = parseInt($(this).height());
+                var midAllText = sizeMax / 2 - totHeight / 2;
+                var top = midAllText + height / 2;
+                var top = (sizeMax - totHeight) / 2;
+                //console.log(totHeight + " " + height + " " + midAllText + " " + top);
+
+                $(this).css('top', top);
+
+            }
+        });
+    });
+
+    $('#slideArea').jmpress('deinit');
+    $('#slideArea').jmpress();
 
 }
