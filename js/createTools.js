@@ -256,8 +256,8 @@ function jsonToHtmlinSlide(data, container) {
     var htmlBIS = Mustache.to_html(template, data);
     var html = htmlBIS.replace('&lt;p&gt;', '<p>');
     html = html.replace('&lt;&#x2F;p&gt;', '</p>');
-    console.log( "avt " + htmlBIS);
-    console.log( "après " + html);
+    //console.log( "avt " + htmlBIS);
+    //console.log( "après " + html);
     container.append(htmlBIS);
 
     //gestion de ckeditor
