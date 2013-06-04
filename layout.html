@@ -288,19 +288,19 @@
         <!--zone de stockage pour la liste à puce ordonnée contenant le plan     (c'est temporaire)-->
         <div id='tree'  style='display:none'>
 
-   <ol>
+ <ol>
 	<li>Intro @- Un &eacute;diteur graphique pour impress.js
 	<ol>
 		<li>impress.js : @une biblioth&egrave;que permettant de cr&eacute;er des pr&eacute;sentations dynamiques</li>
 		<li>impress.js : @un outil sans interface graphique</li>
-		<li>enjeu : @cr&eacute;er un &eacute;diteur graphique &agrave; partir de technologies web</li>
+		<li>enjeu : cr&eacute;er un &eacute;diteur graphique &agrave; partir de technologies web</li>
 	</ol>
 	</li>
 	<li>Cahier des charges @ - une interface mettant en avant la richesse d&rsquo;impress
 	<ol>
 		<li>fonctionnalit&eacute;s de base
 		<ol>
-			<li>cr&eacute;ation d&rsquo;&eacute;l&eacute;ments @ &eacute;dition d&#39;&eacute;l&eacute;ments @ suppression d&rsquo;&eacute;l&eacute;ments</li>
+			<li>cr&eacute;ation d&rsquo;&eacute;l&eacute;ments @ &eacute;dition d&eacute;l&eacute;ments @ suppression d&rsquo;&eacute;l&eacute;ments</li>
 			<li>organisation des diapositives</li>
 			<li>mode pr&eacute;sentation @ sauvegarde</li>
 		</ol>
@@ -313,19 +313,19 @@
 		</li>
 		<li>penser les pr&eacute;sentations en 3d
 		<ol>
-			<li>wysiwyg : @avoir une sortie &eacute;diteur aussi proche que possible de la pr&eacute;sentation</li>
-			<li>pr&eacute;voir rotation et d&eacute;placement sur les 3 axes@ zoomable</li>
+			<li>WYSIWYG : @avoir une sortie &eacute;diteur aussi proche que possible de la pr&eacute;sentation</li>
+			<li>Pr&eacute;voir rotation et d&eacute;placement dans l&#39;espace</li>
 		</ol>
 		</li>
 		<li>permettre une r&eacute;exploitation des donn&eacute;es
 		<ol>
-			<li>&eacute;viter l&rsquo;injection de html @ anticiper l&rsquo;export des donn&eacute;es&nbsp;</li>
-			<li>gestion du flux de donn&eacute;es @click - Json - mustache.js - html</li>
+			<li>&eacute;viter l&rsquo;injection de html @ anticiper l&rsquo;export des donn&eacute;es</li>
+			<li>gestion du flux de donn&eacute;es</li>
 		</ol>
 		</li>
 	</ol>
 	</li>
-	<li>Gestion de projet @ flexible et r&eacute;active
+	<li>Gestion de projet @flexible et r&eacute;active
 	<ol>
 		<li>un contexte contraignant la gestion de projet
 		<ol>
@@ -342,8 +342,8 @@
 		</li>
 		<li>un suivi adaptatif
 		<ol>
-			<li>des principes de gestion indispensables : @ - souplesse @ -r&eacute;activit&eacute;</li>
-			<li>outils : @ identification des t&acirc;ches @ planning@ r&eacute;partition des missions</li>
+			<li>des principes de gestion indispensables : @ - souplesse @ - r&eacute;activit&eacute;</li>
+			<li>outils : @ identification des t&acirc;ches @ planning @ r&eacute;partition des missions</li>
 			<li>temps de concertation @ prise de d&eacute;cision en commun</li>
 		</ol>
 		</li>
@@ -353,21 +353,21 @@
 	<ol>
 		<li>les technologies utilis&eacute;es
 		<ol>
-			<li>jquery, @&nbsp; jquery-ui, @ mustache, c@ keditor, @ bootstrap, mousewheel,</li>
-			<li>json, @ localstorage</li>
+			<li>jquery @jquery-ui @mustache @c keditor@ bootstrap @mousewheel</li>
+			<li>json@ localstorage</li>
 		</ol>
 		</li>
 		<li>Navigation et manipulation
 		<ol>
-			<li>gestion 3D : @le transform et tranfom3d</li>
-			<li>navigable &amp;&nbsp; zoomable</li>
-			<li>manipulation d&rsquo;objets : scale,&nbsp; rotate,&nbsp; move</li>
+			<li>gestion 3D : @le transform et tranfom3d@ @ transform: translate(-50%, -50%) scaleX(1) scaleY(1) scaleZ(1) translate3d(0px, 0px, 0px) scaleX(1) scaleY(1) scaleZ(1) rotateZ(0deg) rotateY(0deg) rotateX(0deg) translate3d(0px, 0px, -6000px)</li>
+			<li>navigable et zoomable</li>
+			<li>manipulation d&rsquo;objets : @ -scale@ -rotate@ -move</li>
 			<li>ckeditor et style</li>
 		</ol>
 		</li>
 		<li>Edition et ergonomie
 		<ol>
-			<li>cr&eacute;ation de diapositives @ cr&eacute;ation de texte</li>
+			<li>flux de donn&eacute;es @ cr&eacute;ation de d&#39;&eacute;l&eacute;ments</li>
 			<li>sauvegarde @ pr&eacute;sentation</li>
 			<li>timeline @ suppression de diapositives</li>
 			<li>graphisme @ ergonomie</li>
@@ -377,22 +377,28 @@
 	</li>
 	<li>Bilans
 	<ol>
-		<li>Bilan projet
+		<li>bilan projet
 		<ol>
-			<li>r&eacute;ussites : @ensemble de fonctionnalit&eacute; large m&ecirc;me si chacune est sommaire / exploitation de technos int&eacute;ressantes</li>
-			<li>points d&rsquo;am&eacute;lioration : @compatibilit&eacute; navigateur / gestion 3d</li>
-			<li>suite</li>
+			<li>r&eacute;ussites :@ensemble de fonctionnalit&eacute; large m&ecirc;me si chacune est sommaire @exploitation de technos int&eacute;ressantes</li>
+			<li>points d&rsquo;am&eacute;lioration : @-- compatibilit&eacute;@-- navigateur @-- gestion 3d @-- aide utilisateur</li>
+			<li>suites et &agrave; venir</li>
 		</ol>
 		</li>
-		<li>Bilans personnels
+		<li>bilans personnels
 		<ol>
-			<li>principales difficult&eacute;s rencontr&eacute;es</li>
-			<li>principales &ldquo;satisfactions&rdquo;</li>
+			<li>principales satisfactions @principales difficult&eacute;s</li>
 		</ol>
 		</li>
+		<li>remerciements
+		<ol>
+			<li>Pierre Antoine Champin pour son soutien tout au long@Gabriel Bondaz pour ses conseils sur les technologies@Sylvain Gizard pour les expressions r&eacute;guli&egrave;res et le transform@ Bartek Szopka pour son outils Impress.js@ Tobias Koppers et Kyle Robinson Young pour l&#39;outil Jmpress.js@et</a> bien sur toute la communaut&eacute; de l&#39;open source&hellip;</li>
+		</ol>
+		</li>
+		<li>Now, let&#39;s rock the editor !</li>
 	</ol>
 	</li>
 </ol>
+
 
 
 

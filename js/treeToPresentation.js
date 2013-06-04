@@ -71,7 +71,7 @@ function goDepth() {
 
     //////calcul des positions 
     $('#tree').attr('number', '');
-    $('#tree').prepend("<span style='display:none'>Titre presentation</span>");
+    $('#tree').prepend("<span style='display:none'>Jmpress Editor -</span>");
     //premiers niveaux
     $('#tree li').each(function() {
 
