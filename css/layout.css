@@ -352,7 +352,14 @@ body
     height: 700px;          /* taille réelle : 700 */
     padding: 40px 60px;
 
-     background-color: rgba(150,150,150,.8);
+         background: rgb(215, 215, 215);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+    background: -webkit-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190));
+    background: -moz-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190));
+    background: -ms-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190,0.8));
+    background: -o-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190));
+    background: radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190,0.8));
+    
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 10px;
     /*    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);

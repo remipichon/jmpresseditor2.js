@@ -4,88 +4,42 @@
             "title": ""
         }],
     "slide": [
+    ......
         {
-            "type" : "slide",
-            "pos": 
-                {
-                "x": 100,
-                "y": 200,
-                "z": "0"
-                },
-            "scale": 1,
+            "type": "slide",
+            "hierarchy" : 2.3
+            "pos":
+                    {
+                        "x": 100,
+                        "y": 200,
+                        "z": 0
+                    },
+            "scale": 2,
             "element": [
                 {
-                    "type" : "text",
+                    "type": "text",
                     "pos": {
-                        "x": "50",
-                        "y": "50",
-                        "z": ""
+                        "x": 50,
+                        "y": 50,
+                        "z": 0
                     },
                     "rotate": {
-                        "x": "0",
-                        "y": "0",
-                        "z": ""
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
                     },
-                    "hierarchy" : "h1",
-                    "content": "SLIDE 1",
+                    "hierarchy": "h1",
+                    "content": "Deuxieme Partie, Petit C",
                     "attributes": []
                 }
             ]
         },
-        {
-            "pos": {
-                "x": "-200",
-                "y": "50",
-                "z": ""
-            },
-            "scale": "1",
-            "element": [
-                {
-                    "pos": {
-                        "x": "340",
-                        "y": "100"
-                    },
-                    "content": "SLIDE 2"
-
-                },
-                {
-                    "pos": {
-                        "x": "100",
-                        "y": "100"
-                    },
-                    "content": "Bonjour Jmpress"
-                }
-            ]
-        },
-        {
-            "pos": {
-                "x": "400",
-                "y": "500",
-                "z": ""
-            },
-            "scale": "1",
-            "element": [
-                {
-                    "pos": {
-                        "x": "500",
-                        "y": "300"
-                    },
-                    "content": "SLIDE 3"
-
-                },
-                {
-                    "pos": {
-                        "x": "250",
-                        "y": "250"
-                    },
-                    "content": "Hello Sweetie"
-                }
-            ]
-        }
         
-        
+   .......
+
+
     ]
-    
+
 
 }
 

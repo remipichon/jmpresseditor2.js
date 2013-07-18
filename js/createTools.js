@@ -193,7 +193,7 @@ function createSlide(typeCreation, event) {
     var stringSlide = '{"type": "' + typeCreation + '", "id" : "' + idSlide + '", "index" : "' + index + '","pos": {"x" : "' + x + '", "y": "' + y + '", "z": "' + z + '"},"rotate" : {"x" : "' + dico.rotateX + '", "y": "' + dico.rotateY + '", "z": "' + dico.rotateZ + '"}, "scale" : "' + currentScale + '", "element": {}}';
     var jsonSlide = JSON.parse(stringSlide); // transforme le string 'slide' en objet JSON
     if (typeCreation === 'slideText') {
-        jsonSlide.type = "slideText";
+        jsonSlide.type = "slide Text";
     }
     pressjson.slide[idSlide] = jsonSlide;
     //console.dir(pressjson);
@@ -219,7 +219,7 @@ function jsonToHtml(data) {
     {
         var template = $('#templateStepElement').html();
     }
-    if (data.type === "slide" || data.type === "slideText") {
+    if (data.type === "slide" || data.type === "slide Text") {
         var template = $('#templateSlide').html();
     }
     var html = Mustache.to_html(template, data);
@@ -229,7 +229,7 @@ function jsonToHtml(data) {
     var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
 
     //ajout des elements textes
-    if (data.type === "slideText") {
+    if (data.type === "slide Text") {
         //creation du titre1
         var evCode = ({
             type: 'code',

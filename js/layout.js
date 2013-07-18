@@ -173,9 +173,10 @@ $(document).ready(function() {
             var idElement = $this.attr('id');
             var idSlide = $this.parent().attr('id');
 //            console.log("idElement : " + idElement + " / idSlide"+ idSlide);
+console.log(idElement + " " + idSlide+" ");
              pressjson.slide[idSlide].element[idElement].content = $this.text();
 //             console.log(pressjson);
-        })
+        });
         
         
         

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <title>Editor</title>
+        <link rel="stylesheet" type="text/css" href="css/layout.css" >
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
+        <link rel="stylesheet" href="css/jquery-ui.css" />
+        
+        <script type='text/javascript' >
+            pressjson = {metadata: {}, slide: {}};
+        </script>
+
+        <script type="text/javascript" src="js/plugin/watch1.3.0.js"></script>
+        <script type="text/javascript" src="js/plugin/simpleJsInheritance.js"></script>
+        <script type="text/javascript" src="js/plugin/jquery.js"></script>
+        <script type="text/javascript" src="js/plugin/jquery-ui.js"></script>        
+        <script type="text/javascript" src="js/plugin/mustache.js"></script>
+        <script type="text/javascript" src="js/plugin/mousewheel.js"></script>
+        <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+
+        <script type="text/javascript" src="js/plugin/jmpress.js"></script>
+
+        
+                        <!--les modules-->
+        <script type="text/javascript" src="js/guiEditor.js"></script>
+        <script type="text/javascript" src="js/model.js"></script> 
+        <script type="text/javascript" src="js/slideshowEditor.js"></script>
+        <script type="text/javascript" src="js/translator.js"></script>
+        <script type="text/javascript" src="js/automaticEditor.js"></script>
+        
+        
+                            <!--les boites a outils-->
+        <script type="text/javascript" src="js/3dTools.js"></script>
+        <script type="text/javascript" src="js/3dToolsCam.js"></script>
+        <script type="text/javascript" src="js/transformTools.js"></script>
+
+        
+
+
+    </head>
+
+    <body>
+        
+         
+        <div id="slideArea" >
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000" style="display:block"><p> en profondeur</p></div>
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-x="1000" data-z ="-1000" style="display:block"><p> en profondeur</p></div>
+        </div>
+        
+        <script>
+            
+            $(document).ready(function(){
+               $('#slideArea').jmpress(); 
+            });
+        </script>
+
+
+
+        <script id="templateSlide" type="text/template">
+
+            <div id={{matricule}} matricule={{matricule}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+            </div>
+
+        </script>
+
+
+        <script id="templateStepElement" type="text/template">
+
+            <div id={{id}} class='step {{type}}'  data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}'> 
+            <div id={{id}}  class='element'> 
+            {{content}}
+            </div>
+            </div>    
+
+        </script>
+
+        <script id="templateElement" type="text/template">
+
+            <div id={{matricule}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
+
+        </script>
+
+    </body>
+</html>
