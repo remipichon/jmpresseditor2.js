@@ -11,10 +11,25 @@ Object.size = function(obj) {
     }
     return size;
 };
-//hum
+
+/******************************************************/
+/*******         definition des clases         ********/
+
 globalCpt = 0;
 container = {metadata: {}, slide: {}};
-//definition des classes slide
+
+/* classe slide
+ * matricule
+ * type
+ * pos
+ * rotate
+ * properties
+ *      scale
+ *      hierarchy
+ * watches
+ * show
+ * destroy
+ */
 Slide = Class.extend({
     init: function(params) {
         //default value
@@ -79,7 +94,7 @@ Slide = Class.extend({
 
         });
 
-        watch(this.properties,'scale', function(attr, action, newVal, oldVal) {
+        watch(this.properties, 'scale', function(attr, action, newVal, oldVal) {
             //mise à jour du DOM
             var $slide = $('#' + matricule);
             $('#slideArea').jmpress('deinit', $slide);
@@ -88,12 +103,12 @@ Slide = Class.extend({
             $('#slideArea').jmpress('init', $slide);
 
         });
-        
-        watch(this.properties,'hierarchy', function(attr, action, newVal, oldVal) {
+
+        watch(this.properties, 'hierarchy', function(attr, action, newVal, oldVal) {
             //mise à jour du DOM
             var $slide = $('#' + matricule);
 //            $('#slideArea').jmpress('deinit', $slide);
-            var attribut = 'data-scale';
+            var attribut = 'hierarchy';
             $slide.attr(attribut, newVal);
 //            $('#slideArea').jmpress('init', $slide);
 
@@ -113,9 +128,17 @@ Slide = Class.extend({
         var $newSlide = $('#slideArea >').children().last();
         $('#slideArea').jmpress('init', $newSlide);
 
+        console.log('Nouvelle slide: ', this.show(24));
+
+
+
     },
-    show: function() {
-        console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.scale.scale, '}, nb elements :', Object.size(this.element), '}');
+    show: function(i) {
+        if (typeof i === 'undefined') {
+            console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.properties.scale, '}, nb elements :', Object.size(this.element), '}');
+        } else {
+            return '{matricule: ' + this.matricule + ', pos:{x: ' + this.pos.x + ', y: ' + this.pos.y + ', z:' + this.pos.z + '}, rotate:{x: ' + this.rotate.x + ', y: ' + this.rotate.y + ', z: ' + this.rotate.z + '}, properties:{scale: ' + this.properties.scale + '}, nb elements :' + Object.size(this.element) + '}';
+        }
     },
     destroy: function() {
         $('#' + this.matricule).remove();
@@ -126,12 +149,18 @@ Slide = Class.extend({
 
 });
 
-//en fait une slide avec du texte c'est une slide jmpress puis du texte dedans (c'est du simple css)
+/* Interface Element : doit être instancié
+ * matricule
+ * pos
+ * rotate
+ * watches
+ * show
+ * destroy
+ * 
+ */
 Element = Class.extend({
-    init: function(params, slide) {
-
+    init: function(params, slide, matricule) {
         //default values
-        this.type = 'text';
         this.pos = {
             x: 300, //connecter à la moitié de la largeur de la slide type
             y: 300, //idem pour la hauteur
@@ -145,9 +174,88 @@ Element = Class.extend({
         };
 
         this.properties = {
+        };
+
+        //user values
+        if (typeof params !== 'undefined') {
+            for (var param in params) {
+                if (typeof params[param] === 'object') {
+                    for (var paramNested in param) {
+                        this[param][paramNested] = param[paramNested];
+                    }
+                }
+                this[param] = params[param];
+            }
+        }
+
+        //definition des watch qui permettent d'agir sur le DOM lorsqu'on agit sur les objets des slides
+        watch(this.pos, function(attr, action, newVal, oldVal) {
+            //mise à jour du DOM
+            console.log('hu', matricule);
+            var $element = $('#' + matricule);
+
+            var attribut;
+            switch (attr) {
+                case 'x':
+                    attribut = 'left';
+                    break;
+                case 'y' :
+                    attribut = 'top';
+                    break;
+                default :
+                    return;
+            }
+            $element.css(attribut, newVal);
+        });
+
+        watch(this.rotate, function(attr, action, newVal, oldVal) {
+            return;
+        });
+
+        //ajout à la slide 
+        container.slide[slide].element[matricule] = this;
+
+    },
+    show: function() {
+        console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.scale.scale, '}, nb elements :', Object.size(this.element), '}');
+    },
+    destroy: function() {
+        $('#' + this.matricule).remove();
+        delete container.slide[this.matricule];
+    }
+
+    /* Important
+     * Ne pas oublier d'appeler une fonction 'initHtml' à la fin du constructeur 'init'
+     * 'initHtml se charge d'écrire l'objet dans le DOM à partir d'un template Mustache propre à la fille
+     */
+});
+
+
+/* Class Texte
+ * properties :
+ *      hierarchy
+ *      content
+ * changement matricule
+ */
+Texte = Element.extend({
+    init: function(params, slide) {
+        // Appelle du constructeur de la mere
+        // Il écrit la totalité des objets de params dans les attributs de la mere
+        // Il prend en compte les attributs qui ne sont pas dans la mère, il faut alors
+        // définir des watches au besoin.
+
+        var matricule = 'texteelement' + globalCpt++;
+        this.matricule = matricule;
+        
+        this._super(params, slide, matricule);
+
+       
+        //attribut propre aux textes
+        this.properties = {
             hierarchy: 'bodyText',
             content: 'Type text here'
         };
+
 
 
         //user values
@@ -161,16 +269,15 @@ Element = Class.extend({
                 this[param] = params[param];
             }
         }
-        //ajout à la slide            
-        container.slide[slide].element['texte' + globalCpt] = this;
+
+
         //ajout dans le DOM
         var template = $('#templateElement').html();
         var html = Mustache.to_html(template, this);
         $('#' + slide).append(html);
         console.log('adtexte', slide);
-
-
     }
+
 });
 
 

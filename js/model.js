@@ -35,7 +35,10 @@ function test() {
 ////    });
 //    //avec coord et texte (several)
 //
-//    var e1 = new Element({content: 'bonjour'}, 'slide0');
+   var e1 = new Texte({pos: {x:10}}, 'slide0');
+   
+   new Element( {pos :{y:300}  }, 'slide0');
+   new Texte( { properties:{content : 'test'}, pos :{y:500}  }, 'slide0');
 
 
     //s1.show();
