@@ -11,7 +11,7 @@ Object.size = function(obj) {
     }
     return size;
 };
-
+//hum
 globalCpt = 0;
 container = {metadata: {}, slide: {}};
 //definition des classes slide
