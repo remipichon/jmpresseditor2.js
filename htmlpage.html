@@ -54,7 +54,10 @@ z
         <script>
             
             $(document).ready(function(){
-               $('#slideArea').jmpress(); 
+               $('#slideArea').jmpress();
+               
+               test();
+               
             });
         </script>
 
@@ -83,6 +86,14 @@ z
             <div id={{matricule}} matricule={{matricule}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{properties.hierarchy}} >{{properties.content}}</span> </div>
 
         </script>
+        
+        
+       <script id="templateImage" type="text/template">
+
+            <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > 
+
+        </script>
+       
 
     </body>
 </html>

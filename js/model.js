@@ -4,24 +4,114 @@
  */
 
 
-function callModel(objetEvent) {
-   //analyse du type
-   if( objetEvent.matricule === 'createSlide'){
-       if( objetEvent.action === 'keyboard'){
-           var slide = new Slide();
-       }
-       
-   }
-   
-   if( objetEvent.matricule === 'createTexte'){
-       if( objetEvent.action === 'keyboard'){
-           var txt = new Element({content:'bonjou'},'slide'+parseInt(globalCpt-1));
-       }
-       
-   }
+
+/* Controler de slideshowEditor
+ * permet de diriger les interactions avec les composants
+ * deplacement, rotation, édition (texte, image)
+ * 
+ */
+function callModel(objectEvent) {
+    console.log(objectEvent);
+
+    if (objectEvent.matricule === '') {
+        //creation de composant
+        console.log('warning : mauvais appel de fonction (callModel instead of callModelGui');
+        callModelGUI(objectEvent);
+    } else {
+        //modification de composant
+        var composant = container.slide[objectEvent.matricule];
+//        console.log('avant', composant.show());
+        if (objectEvent.action === 'move') {
+            var attr;
+            var val = objectEvent.event.cran;
+            switch (objectEvent.event.direction) {
+                case 'z+':
+                    attr = 'z';
+                    val = val;
+                    break;
+                case 'z-':
+                    attr = 'z';
+                    val = -val;
+                    break;
+                case 'x+':
+                    attr = 'x';
+                    val = val;
+                    break;
+                case 'x-':
+                    attr = 'x';
+                    val = -val;
+                    break;
+                case 'y+':
+                    attr = 'y';
+                    val = val;
+                    break;
+                case 'y-':
+                    attr = 'y';
+                    val = -val;
+                    break;
+            }
+
+            composant.pos[attr] += val;
+//            console.log('après', composant.show());
+
+
+        } else if (objectEvent.action === 'rotate') {
+            var attr;
+            var val = objectEvent.event.cran;
+            switch (objectEvent.event.direction) {
+                case 'z+':
+                    attr = 'z';
+                    val = val;
+                    break;
+                case 'z-':
+                    attr = 'z';
+                    val = -val;
+                    break;
+                case 'x+':
+                    attr = 'x';
+                    val = val;
+                    break;
+                case 'x-':
+                    attr = 'x';
+                    val = -val;
+                    break;
+                case 'y+':
+                    attr = 'y';
+                    val = val;
+                    break;
+                case 'y-':
+                    attr = 'y';
+                    val = -val;
+                    break;
+            }
+
+            composant.rotate[attr] += val;
+//            console.log('après', composant.show());
+
+
+        }
+
+    }
+
 
 
 }
+
+/* Controler de gestion de l'interface
+ * navigable, bouton creation
+ * 
+ */
+function callModelGUI(objectEvent) {;
+    console.log(objectEvent)
+    if (objectEvent.action === 'createSlide') {
+        new Slide();
+        console.log('new slide');
+    } else if (objectEvent.action === 'createText') {
+        new Text({}, '');  //Text by default
+        console.log('new text');
+    }
+}
+
 
 
 function test() {
@@ -35,10 +125,12 @@ function test() {
 ////    });
 //    //avec coord et texte (several)
 //
-   var e1 = new Texte({pos: {x:10}}, 'slide0');
-   
-   new Element( {pos :{y:300}  }, 'slide0');
-   new Texte( { properties:{content : 'test'}, pos :{y:500}  }, 'slide0');
+    var e1 = new Text({pos: {x: 10}}, 'slide0');
+
+    new Element({pos: {y: 300}}, 'slide0');
+    new Text({properties: {content: 'test'}, pos: {y: 500}}, 'slide0');
+
+//    new Image({pos: {y: 500}}, 'slide0');
 
 
     //s1.show();
@@ -53,4 +145,5 @@ function test() {
 //    
 //    container.slide['slide1'].show();
 
-};
+}
+;
