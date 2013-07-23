@@ -1,0 +1,67 @@
+/* CSS des composants au sein des slides*/
+
+
+/*////////////////Gestion des styles de texte////////////*/
+/*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
+.slide span {
+    /*border : dashed black 10px;*/
+    font-family: Arial;
+
+}
+
+.slide .element{
+     /*border : dashed black 10px;*/
+     margin: auto;
+     position: relative;
+     
+}
+
+.H1text
+{
+    
+    text-align:center;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    /*margin: auto;*/     
+    display: block;
+    font-size: 6em;
+    font-weight: bold;
+
+}
+
+.H2text
+{
+    /*border : dashed black 10px;*/
+    padding-top: 20px;
+    padding-bottom: 60px;
+    text-align:center;
+    /*margin: auto;*/     
+    display: block;
+    font-size: 3.5em;
+    font-weight: bold;
+    border-bottom: 10px dotted white;
+}   
+
+.H3text
+{
+    /*border : dashed black 10px;*/
+    padding-top: 20px;
+    padding-bottom: 60px;
+    text-align:center;
+    /*margin: auto;*/     
+    display: block;
+    font-size: 3em;
+    font-weight: bold;
+    border-bottom: 10px dotted white;
+}   
+
+.bodyText
+{
+    font-size:2em;
+}
+
+
+
+
+
+/*Fin de gestion des styles*/

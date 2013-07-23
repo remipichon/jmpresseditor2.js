@@ -5,6 +5,7 @@
 
 /*
  * mapper keyboard
+ * move
  * a 97
  * z 122
  * qs 113 115
@@ -13,6 +14,7 @@
  * 
  * et
  * 
+ * rotate
  * r 114
  * t 116
  * fg 102 103
@@ -26,13 +28,16 @@
 /*
  * call après l'insertion dans le DOM
  */
-function handlerSlide($slide) {
-    $slide.on('mouseenter', function() {
+function handlerComposant($composant) {
+    $composant.on('mouseenter', function(event) {
+        composantCatchEvent = true;
+        event.stopPropagation();
         var $target = $(this);
         console.log('hover', $target.attr('matricule'));
         $(document).on('keypress.keySlide', function(event) {
-            console.log('key');
+            console.log('key ', $(this).attr('id'));
             var matricule = $target.attr('matricule');
+            var obj = findObjectOfComposant(matricule);
 
 
 
@@ -99,7 +104,11 @@ function handlerSlide($slide) {
 
             switch (objEvt.action) {
                 case 'move':
-                    objEvt.event.cran = 100;
+                    if (obj.type === 'slide') {
+                        objEvt.event.cran = 100;
+                    } else {
+                        objEvt.event.cran = 10;
+                    }
                     break;
                 case 'rotate' :
                     objEvt.event.cran = 10;
@@ -112,9 +121,13 @@ function handlerSlide($slide) {
         });
 
 
-
-        $slide.mouseleave(function() {
-            $(document).off('.keySlide');
-        });
     });
+    
+    $composant.mouseleave(function() {
+        var $target = $(this);
+        $(document).off('.keySlide');
+        console.log('fin hover', $target.attr('matricule'));
+        composantCatchEvent = false;
+    });
+
 }

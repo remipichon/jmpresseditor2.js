@@ -4,8 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=1024" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-z
+
         <title>Editor</title>
+        <link rel="stylesheet" type="text/css" href="css/element.css" >
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <link rel="stylesheet" href="css/jquery-ui.css" />
@@ -55,6 +56,8 @@ z
             
             $(document).ready(function(){
                $('#slideArea').jmpress();
+//                alert();
+               transform3D = new Transform3D();
                
                test();
                
@@ -81,9 +84,11 @@ z
 
         </script>
 
-        <script id="templateElement" type="text/template">
+           <!--ajouter position: relative; dans le style pour que les elements ne puissent pas se superposer (utile pour automatic editor)-->
 
-            <div id={{matricule}} matricule={{matricule}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{properties.hierarchy}} >{{properties.content}}</span> </div>
+        <script id="templateElement" type="text/template">
+            
+            <div id={{matricule}} matricule={{matricule}} class='element' style='position:absolute; left: {{pos.x}}px; top: {{pos.y}}px' > <span class='{{properties.hierarchy}}' >{{properties.content}}</span> </div>
 
         </script>
         

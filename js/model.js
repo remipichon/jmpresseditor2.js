@@ -4,6 +4,26 @@
  */
 
 
+/* trouve l'object en fonction du matricule (que ce soit une slide ou un composant
+ * 
+ * @type object composant
+ */
+function findObjectOfComposant(matricule) {
+
+    if (typeof container.slide[matricule] === 'undefined') {
+        for (var slide in container.slide) {
+            if (typeof container.slide[slide].element[matricule] === 'undefined') {
+                console.log('pas dans la slide ', slide);
+            } else {
+                return container.slide[slide].element[matricule];
+            }
+        }
+    } else {
+        return container.slide[matricule];
+    }
+    return 'Error : matricule doesn\'t existe';
+}
+
 
 /* Controler de slideshowEditor
  * permet de diriger les interactions avec les composants
@@ -19,7 +39,7 @@ function callModel(objectEvent) {
         callModelGUI(objectEvent);
     } else {
         //modification de composant
-        var composant = container.slide[objectEvent.matricule];
+        var composant = findObjectOfComposant(objectEvent.matricule);
 //        console.log('avant', composant.show());
         if (objectEvent.action === 'move') {
             var attr;
@@ -96,20 +116,105 @@ function callModel(objectEvent) {
 
 
 }
+/* Class gerant la navigation en agissant sur l'attribut CSS transform
+ * 
+ */
+//transform3D = new Transform3D();
+
+
 
 /* Controler de gestion de l'interface
  * navigable, bouton creation
  * 
  */
-function callModelGUI(objectEvent) {;
+function callModelGUI(objectEvent) {
+    ;
     console.log(objectEvent)
     if (objectEvent.action === 'createSlide') {
         new Slide();
         console.log('new slide');
-    } else if (objectEvent.action === 'createText') {
-        new Text({}, '');  //Text by default
+    } else if (objectEvent.action === 'createH1Text') {
+        new Text({properties: {hierarchy: 'H1Text'}}, '');
         console.log('new text');
+    } else if (objectEvent.action === 'createH2Text') {
+        new Text({properties: {hierarchy: 'H2Text'}}, '');
+        console.log('new text');
+    } else if (objectEvent.action === 'createH3Text') {
+        new Text({properties: {hierarchy: 'H2Text'}}, '');
+        console.log('new text');
+    } else if (objectEvent.action === 'createBodyText') {
+        new Text({}, '');
+        console.log('new text');
+    } else if (objectEvent.action === 'navigable') {
+        var attr;
+        var val = objectEvent.event.cran;
+        switch (objectEvent.event.direction) {
+            case 'z+':
+                attr = 'z';
+                val = val;
+                break;
+            case 'z-':
+                attr = 'z';
+                val = -val;
+                break;
+            case 'x+':
+                attr = 'x';
+                val = val;
+                break;
+            case 'x-':
+                attr = 'x';
+                val = -val;
+                break;
+            case 'y+':
+                attr = 'y';
+                val = val;
+                break;
+            case 'y-':
+                attr = 'y';
+                val = -val;
+                break;
+        }
+
+
+        transform3D.pos[attr] = val;
+
+        console.log('navigable');
+        
+    } else if (objectEvent.action === 'rotate') {
+        var attr;
+        var val = objectEvent.event.cran;
+        switch (objectEvent.event.direction) {
+            case 'z+':
+                attr = 'z';
+                val = val;
+                break;
+            case 'z-':
+                attr = 'z';
+                val = -val;
+                break;
+            case 'x+':
+                attr = 'x';
+                val = val;
+                break;
+            case 'x-':
+                attr = 'x';
+                val = -val;
+                break;
+            case 'y+':
+                attr = 'y';
+                val = val;
+                break;
+            case 'y-':
+                attr = 'y';
+                val = -val;
+                break;
+        }
+        
+        transform3D.rotate[attr] = val;
+
+        console.log('rotate');
     }
+
 }
 
 

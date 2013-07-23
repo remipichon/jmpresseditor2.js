@@ -64,14 +64,16 @@ Slide = Class.extend({
 
         this.element = {};
 
+        //prise en compte des parametres utilisteurs
         if (typeof params !== 'undefined') {
             for (var param in params) {
                 if (typeof params[param] === 'object') {
-                    for (var paramNested in param) {
-                        this[param][paramNested] = param[paramNested];
+                    for (var paramNested in params[param]) {
+                        this[param][paramNested] = params[param][paramNested];
                     }
+                } else {
+                    this[param] = params[param];
                 }
-                this[param] = params[param];
             }
         }
 
@@ -133,7 +135,7 @@ Slide = Class.extend({
         var $newSlide = $('#slideArea >').children().last();
         $('#slideArea').jmpress('init', $newSlide);
 
-        handlerSlide($newSlide);
+        handlerComposant($newSlide);
 
         console.log('Nouvelle slide: ', this.show(24));
 
@@ -173,22 +175,28 @@ function selectSlide(matricule, composant, callback) {
         var slide = $(this).attr('matricule');
         console.log('select ', slide);
         alert('slide selectionnée' + slide);
-        callback(slide, matricule, composant);
+        if (typeof callback !== 'undefined') {
+            callback(slide, matricule, composant);
+        } else {
+            return slide;
+        }
     });
-
 }
 
-/*
+
+
+/*  Ebauche de tentative de gestion par la Class Element d'un mauvais matricule
+ * entrainant le demande de selection d'une slide de la part d'user.
  * 
  * @param {type} slide (matricule)
  * @param {type} matricule (du composant)
  * @param {type} composant (instance of Element)
  * @returns {undefined}
- */
+ */ /*
 function addComposantToSlide(slide, matricule, composant) {
     container.slide[slide].element[matricule] = composant;
     composant.DOM(slide);
-}
+}*/
 
 
 /* Interface Element : doit être instancié
@@ -222,17 +230,21 @@ Element = Class.extend({
         this.properties = {
         };
 
-        //user values
-        if (typeof params !== 'undefined') {
-            for (var param in params) {
-                if (typeof params[param] === 'object') {
-                    for (var paramNested in param) {
-                        this[param][paramNested] = param[paramNested];
-                    }
-                }
-                this[param] = params[param];
-            }
-        }
+//        //prise en compte des parametres utilisteurs
+//        if (typeof params !== 'undefined') {
+//            for (var param in params) {
+//                if (typeof params[param] === 'object') {
+//                    console.log(params[param]);
+//                    truc = params[param];
+//                    for (var paramNested in params[param]) {
+//                        this[param][paramNested] = params[param][paramNested];
+//                    }
+//                } else {
+//                    this[param] = params[param];
+//                }
+//            }
+//        }
+
 
         //definition des watch qui permettent d'agir sur le DOM lorsqu'on agit sur les objets des slides
         watch(this.pos, function(attr, action, newVal, oldVal) {
@@ -258,21 +270,43 @@ Element = Class.extend({
             return;
         });
 
-        //s'il y a une erreur de slide destination (inexistante ou bien la cible est un composant
-        //on demande à l'user de sélectionner une slide
+        /* ce bout de code est une tentative pour que la classe Element prenne en charge
+         * la selection par l'user d'une slide s'il y a une erreur sur le matricule.
+         * Cela posait des problemes d'insertion dans le DOM car les constructeurs se terminent sans 
+         * que le listener (click sur .slide) ne se soit déclenché.
+         * Le bricollage que je pouvais mettre en oeuvre dénaturait l'usage des classes et des
+         * construceurs.
+         * A voir si plus tard je trouve une belle solution;
+         */
+//
+//        //s'il y a une erreur de slide destination (inexistante ou bien la cible est un composant
+//        //on demande à l'user de sélectionner une slide
+//        if (container.slide[slide] === undefined) {
+//            console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
+//            selectSlide(matricule, this, addComposantToSlide);
+//        } else if (container.slide[slide].type !== 'slide') {
+//            console.log('Error : Le composant cible doit être une slide ', slide);
+//            selectSlide(matricule, this, addComposantToSlide);
+//        } else {
+//            //ajout à la slide 
+//            addComposantToSlide(slide, matricule, this);
+////            container.slide[slide].element[matricule] = this;
+//        }
+//
+//        //return 1;
+
+
+        //gestion de l'erreur de matricule
         if (container.slide[slide] === undefined) {
             console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
-            selectSlide(matricule, this, addComposantToSlide);
+            return 0;
         } else if (container.slide[slide].type !== 'slide') {
             console.log('Error : Le composant cible doit être une slide ', slide);
-            selectSlide(matricule, this, addComposantToSlide);
+            return 0;
         } else {
-            //ajout à la slide 
-            addComposantToSlide(slide, matricule, this);
-//            container.slide[slide].element[matricule] = this;
+            container.slide[slide].element[matricule] = this;
+            return 1;
         }
-
-        //return 1;
 
     },
     show: function(i) {
@@ -311,7 +345,9 @@ Text = Element.extend({
         var matricule = 'texteelement' + globalCpt++;
         this.matricule = matricule;
 
-        this._super(params, slide, matricule);
+        if (!this._super(params, slide, matricule)) {
+            return 0;
+        }
 
 
         //attribut propre aux textes
@@ -321,33 +357,44 @@ Text = Element.extend({
         };
 
 
+//        console.log('params', params);
 
-        //user values
+//        truc = params;
+
+
+        //prise en compte des parametres utilisteurs
         if (typeof params !== 'undefined') {
             for (var param in params) {
                 if (typeof params[param] === 'object') {
-                    for (var paramNested in param) {
-                        this[param][paramNested] = param[paramNested];
+                    console.log(params[param]);
+                    truc = params[param];
+                    for (var paramNested in params[param]) {
+                        this[param][paramNested] = params[param][paramNested];
                     }
+                } else {
+                    this[param] = params[param];
                 }
-                this[param] = params[param];
             }
         }
-
+        console.log('avant ajout dans le DOM');
+        
 
         //ajout dans le DOM
         this.DOM(slide);
 
     },
-    
     //ajout dans le DOM
-    DOM: function(slide){
+    //cette fonction est appelé deux fois huhu
+    DOM: function(slide) {
+        console.log('ajout de DOM');
+        this.show();
         //ajout dans le DOM
         var template = $('#templateElement').html();
         var html = Mustache.to_html(template, this);
-        console.log('html',html);
+        console.log('html', html);
         $('#' + slide).append(html);
         console.log('adtexte', slide);
+        handlerComposant($('#'+this.matricule));
 
     },
     show: function(i) {
@@ -366,7 +413,6 @@ Text = Element.extend({
 });
 
 //les images sont en pixel
-
 Image = Element.extend({
     init: function(params, slide) {
         var matricule = 'imageelement' + globalCpt++;
@@ -386,17 +432,21 @@ Image = Element.extend({
         this.source = '/images/bleu_twitter.png';
 
 
-        //user values
+        //prise en compte des parametres utilisteurs
         if (typeof params !== 'undefined') {
             for (var param in params) {
                 if (typeof params[param] === 'object') {
-                    for (var paramNested in param) {
-                        this[param][paramNested] = param[paramNested];
+                    console.log(params[param]);
+                    truc = params[param];
+                    for (var paramNested in params[param]) {
+                        this[param][paramNested] = params[param][paramNested];
                     }
+                } else {
+                    this[param] = params[param];
                 }
-                this[param] = params[param];
             }
         }
+
 
         truc = this;
         //ajout dans le DOM
