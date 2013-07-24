@@ -16,7 +16,7 @@
      
 }
 
-.H1text
+.H1Text
 {
     
     text-align:center;
@@ -29,7 +29,7 @@
 
 }
 
-.H2text
+.H2Text
 {
     /*border : dashed black 10px;*/
     padding-top: 20px;
@@ -42,7 +42,7 @@
     border-bottom: 10px dotted white;
 }   
 
-.H3text
+.H3Text
 {
     /*border : dashed black 10px;*/
     padding-top: 20px;

@@ -40,6 +40,7 @@ Slide = Class.extend({
         var matricule = 'slide' + globalCpt++;
         this.matricule = matricule;
 
+
         this.type = 'slide';
 
         this.pos = {
@@ -166,18 +167,20 @@ Slide = Class.extend({
 });
 
 /* selection d'une slide par click, 
- * 
+ *  
  * @returns {string}
  */
-function selectSlide(matricule, composant, callback) {
+function selectSlide(callback, param1, composant) {
     alert('Il faut selectionner une slide');
     $('.slide').one('click', function(event) {
         var slide = $(this).attr('matricule');
         console.log('select ', slide);
         alert('slide selectionnée' + slide);
         if (typeof callback !== 'undefined') {
-            callback(slide, matricule, composant);
+            callback(slide, param1, composant);
+            return slide;
         } else {
+            console.log('in select', slide);
             return slide;
         }
     });
@@ -193,10 +196,10 @@ function selectSlide(matricule, composant, callback) {
  * @param {type} composant (instance of Element)
  * @returns {undefined}
  */ /*
-function addComposantToSlide(slide, matricule, composant) {
-    container.slide[slide].element[matricule] = composant;
-    composant.DOM(slide);
-}*/
+  function addComposantToSlide(slide, matricule, composant) {
+  container.slide[slide].element[matricule] = composant;
+  composant.DOM(slide);
+  }*/
 
 
 /* Interface Element : doit être instancié
@@ -345,9 +348,11 @@ Text = Element.extend({
         var matricule = 'texteelement' + globalCpt++;
         this.matricule = matricule;
 
+
         if (!this._super(params, slide, matricule)) {
             return 0;
         }
+
 
 
         //attribut propre aux textes
@@ -376,8 +381,20 @@ Text = Element.extend({
                 }
             }
         }
+
+
+        //definition des watch qui permettent d'agir sur le DOM lorsqu'on agit sur les objets des slides
+        watch(this.properties, function(attr, action, newVal, oldVal) {
+            //mise à jour du DOM
+//            console.log('hu', matricule);
+            var $element = $('#' + matricule);
+
+            //redondant si le texte est édité via contenteditable
+            $element.html(newVal);
+        });
+
         console.log('avant ajout dans le DOM');
-        
+
 
         //ajout dans le DOM
         this.DOM(slide);
@@ -394,7 +411,7 @@ Text = Element.extend({
         console.log('html', html);
         $('#' + slide).append(html);
         console.log('adtexte', slide);
-        handlerComposant($('#'+this.matricule));
+        handlerComposant($('#' + this.matricule));
 
     },
     show: function(i) {
@@ -429,7 +446,7 @@ Image = Element.extend({
             width: 100
         };
 
-        this.source = '/images/bleu_twitter.png';
+        this.source = 'images/bleu_twitter.png';
 
 
         //prise en compte des parametres utilisteurs
@@ -448,16 +465,39 @@ Image = Element.extend({
         }
 
 
-        truc = this;
+//        truc = this;
         //ajout dans le DOM
-        template = $('#templateElement');
+        var template = $('#templateImage').html();
         var test = {src: 'opuet'};
-        html = Mustache.to_html(template, test);
+        var html = Mustache.to_html(template, this);
 //        html = Mustache.to_html(template,this);
         $('#' + slide).append(html);
+        handlerComposant($('#' + this.matricule));
         console.log('adimg', slide);
 
     }
 });
 
 
+/* trouver le matricule de la slide contenant le composant
+ * Si le composant est déjà une slide, retourne le matricule de la slide 
+ * input : matricule d'un composant
+ * output : matricule de la slide le contenant
+ */
+function getSlideMother(matricule) {
+
+    if (typeof container.slide[matricule] === 'undefined') {   //si le matricule n'est pas celui d'une slide
+        for (var slide in container.slide) {                //parcours des slides
+            if (typeof container.slide[slide].element[matricule] === 'undefined') {
+                console.log('pas dans la slide ', slide);
+            } else {    //si le matricule est un element de la slide, on return le matricule de sa mere
+                return container.slide[slide].matricule;
+            }
+        }
+    } else {                                            //si le matricule est celui d'une slide
+        return matricule;
+    }
+
+    return 'Error : matricule doesn\'t existe';
+
+}

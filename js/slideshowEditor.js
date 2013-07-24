@@ -34,6 +34,21 @@ function handlerComposant($composant) {
         event.stopPropagation();
         var $target = $(this);
         console.log('hover', $target.attr('matricule'));
+        
+       
+        //fire contenteditable
+        if( $target.hasClass('texte') ){  //si c'est du texte on place un trigger pour rendre le contenu editable via un click
+            
+            $target.on('click', function(){
+               console.log('click texte');
+               $target.attr('contenteditable','true');
+               
+            });
+        }
+        
+        
+        
+        //fire keyboard event
         $(document).on('keypress.keySlide', function(event) {
             console.log('key ', $(this).attr('id'));
             var matricule = $target.attr('matricule');
@@ -125,9 +140,23 @@ function handlerComposant($composant) {
     
     $composant.mouseleave(function() {
         var $target = $(this);
+        var matricule = $target.attr('matricule');
         $(document).off('.keySlide');
         console.log('fin hover', $target.attr('matricule'));
         composantCatchEvent = false;
+        
+        //unfire contenteditable
+        if( $target.hasClass('texte') ){  //si c'est du texte on place un trigger pour rendre le contenu editable via un click            
+            
+               $target.attr('contenteditable','false');
+               
+               var $slideMother = getSlideMother(matricule);
+               //mise à jour de l'objet dans le conteneur
+               container.slide[$slideMother].element[matricule].properties.content = $target.children('span').html();
+              console.log('maj texte dans container');
+               
+           
+        }
     });
 
 }

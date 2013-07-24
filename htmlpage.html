@@ -48,7 +48,7 @@
         
          
         <div id="slideArea" >
-            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000" style="display:block"><p> en profondeur</p></div>
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>
             <div id="profondeur" class="step overview" data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
         </div>
         
@@ -88,14 +88,14 @@
 
         <script id="templateElement" type="text/template">
             
-            <div id={{matricule}} matricule={{matricule}} class='element' style='position:absolute; left: {{pos.x}}px; top: {{pos.y}}px' > <span class='{{properties.hierarchy}}' >{{properties.content}}</span> </div>
+            <div id={{matricule}} matricule={{matricule}} class='element texte' style='position:absolute; left: {{pos.x}}px; top: {{pos.y}}px' > <span class='{{properties.hierarchy}}' >{{properties.content}}</span> </div>
 
         </script>
         
         
        <script id="templateImage" type="text/template">
 
-            <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > 
+            <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
 
         </script>
        

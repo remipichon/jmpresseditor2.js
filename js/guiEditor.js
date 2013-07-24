@@ -164,11 +164,8 @@ var composantCatchEvent = false;
 //var documentCatchEvent = false;
 
 $(document).keypress(function(event) {
-    console.log(event.which);
-    if (composantCatchEvent) {
-        console.log('document capte event mais ne fait rien');
-        return;
-    }
+//    console.log(event.which);
+
 
     var objEvt = new ObjectEvent({
         matricule: '',
@@ -196,9 +193,19 @@ $(document).keypress(function(event) {
         case 249 :
             objEvt.action = 'createBodyText';
             break;
+        case 42 :
+            objEvt.action = 'createImage';
+            break;
+    }
+    
+    if (composantCatchEvent) {
+        console.log('document capte event mais ne fait rien');
+        return;
+    }
 
-            //gestion navigation
-            //deplacement      
+    switch (event.which) {
+        //gestion navigation
+        //deplacement      
         case 97:
             objEvt.action = 'navigable';
             objEvt.event.direction = 'z+';

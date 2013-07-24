@@ -10,17 +10,18 @@
  */
 function findObjectOfComposant(matricule) {
 
-    if (typeof container.slide[matricule] === 'undefined') {
-        for (var slide in container.slide) {
+    if (typeof container.slide[matricule] === 'undefined') {   //si le matricule n'est pas celui d'une slide
+        for (var slide in container.slide) {                //parcours des slides
             if (typeof container.slide[slide].element[matricule] === 'undefined') {
                 console.log('pas dans la slide ', slide);
             } else {
-                return container.slide[slide].element[matricule];
+                return container.slide[slide].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
             }
         }
-    } else {
+    } else {                                            //si le matricule est celui d'une slide
         return container.slide[matricule];
     }
+
     return 'Error : matricule doesn\'t existe';
 }
 
@@ -121,6 +122,31 @@ function callModel(objectEvent) {
  */
 //transform3D = new Transform3D();
 
+/*
+ * probleme d'asynchronisme lors de la selection de la slide cible avec le clavier
+ * du coup, petite magouille, createComposant est appellée une fois la slide selectionnée
+ * 
+ */
+function createComposant($target, objectEvent) {
+    if (objectEvent.action === 'createH1Text') {
+        new Text({properties: {hierarchy: 'H1Text'}}, $target);
+//        console.log('new text H1');
+    } else if (objectEvent.action === 'createH2Text') {
+        new Text({properties: {hierarchy: 'H2Text'}}, $target);
+//        console.log('new text');
+    } else if (objectEvent.action === 'createH3Text') {
+        new Text({properties: {hierarchy: 'H2Text'}}, $target);
+//        console.log('new text');
+    } else if (objectEvent.action === 'createBodyText') {
+        new Text({}, $target);
+//        console.log('new text');
+    } else if (objectEvent.action === 'createImage') {
+        new Image({source:objectEvent.source}, $target);
+//        console.log('new ');
+    }
+}
+
+
 
 
 /* Controler de gestion de l'interface
@@ -128,24 +154,37 @@ function callModel(objectEvent) {
  * 
  */
 function callModelGUI(objectEvent) {
-    ;
-    console.log(objectEvent)
+
+    //en attente de trouver une meilleure méthode pour récupérer la slide destination d'un element
+    if (objectEvent.action === 'createImage' || objectEvent.action === 'createH3Text' || objectEvent.action === 'createH2Text' || objectEvent.action === 'createH1Text' || objectEvent.action === 'createBodyText') {
+        if (objectEvent.action === 'createImage') {  //infos suplémentaires propre aux images
+            var source = prompt('Sélectionner l\'adresse de votre image (adresse fichier, ou adresse url', 'images/bleu_twitter.png');
+            objectEvent.source = source;
+        }
+        var $target = selectSlide(createComposant, objectEvent);
+        console.log('after selectc', $target);
+    }
+
+
+//    console.log(objectEvent);
     if (objectEvent.action === 'createSlide') {
         new Slide();
         console.log('new slide');
-    } else if (objectEvent.action === 'createH1Text') {
-        new Text({properties: {hierarchy: 'H1Text'}}, '');
-        console.log('new text');
-    } else if (objectEvent.action === 'createH2Text') {
-        new Text({properties: {hierarchy: 'H2Text'}}, '');
-        console.log('new text');
-    } else if (objectEvent.action === 'createH3Text') {
-        new Text({properties: {hierarchy: 'H2Text'}}, '');
-        console.log('new text');
-    } else if (objectEvent.action === 'createBodyText') {
-        new Text({}, '');
-        console.log('new text');
-    } else if (objectEvent.action === 'navigable') {
+    }
+//    else if (objectEvent.action === 'createH1Text') {                 //voir fonction createComposant
+//        new Text({properties: {hierarchy: 'H1Text'}}, $target);
+//        console.log('new text H1');
+//    } else if (objectEvent.action === 'createH2Text') {
+//        new Text({properties: {hierarchy: 'H2Text'}}, $target);
+//        console.log('new text');
+//    } else if (objectEvent.action === 'createH3Text') {
+//        new Text({properties: {hierarchy: 'H2Text'}}, $target);
+//        console.log('new text');
+//    } else if (objectEvent.action === 'createBodyText') {
+//        new Text({}, $target);
+//        console.log('new text');
+//    } 
+    else if (objectEvent.action === 'navigable') {
         var attr;
         var val = objectEvent.event.cran;
         switch (objectEvent.event.direction) {
@@ -179,7 +218,7 @@ function callModelGUI(objectEvent) {
         transform3D.pos[attr] = val;
 
         console.log('navigable');
-        
+
     } else if (objectEvent.action === 'rotate') {
         var attr;
         var val = objectEvent.event.cran;
@@ -209,7 +248,7 @@ function callModelGUI(objectEvent) {
                 val = -val;
                 break;
         }
-        
+
         transform3D.rotate[attr] = val;
 
         console.log('rotate');
