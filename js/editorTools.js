@@ -133,6 +133,7 @@ function orthogonalProjection(current, init,coef) {
 
 
 
+
 /* Pour faire les choses bien : 
  * https://github.com/sebastien-p/jquery.hasEventListener
  * Permet de savoir si un element du DOM a déjà un listener
@@ -153,7 +154,6 @@ $(document).on('mousedown', function(event) {
         var matricule = 'document';
     } else {
         var matricule = $this.attr('matricule');
-
 
         //stockage des données initiales
         var composant = findObjectOfComposant(matricule);

@@ -34,7 +34,7 @@ function findObjectOfComposant(matricule) {
 function callModel(objectEvent) {
     console.log(objectEvent);
 
-    if (objectEvent.matricule === '') {
+    if (objectEvent.matricule === '' || objectEvent.matricule === 'document') {
         //creation de composant
         console.log('warning : mauvais appel de fonction (callModel instead of callModelGui');
         callModelGUI(objectEvent);
@@ -184,9 +184,9 @@ function callModelGUI(objectEvent) {
 //        new Text({}, $target);
 //        console.log('new text');
 //    } 
-    else if (objectEvent.action === 'navigable') {
+    else if (objectEvent.action === 'move') {
         var attr;
-        var val = objectEvent.event.cran;
+        var val = objectEvent.event.cran*10;
         switch (objectEvent.event.direction) {
             case 'z+':
                 attr = 'z';

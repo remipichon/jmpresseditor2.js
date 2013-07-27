@@ -65,3 +65,15 @@
 
 
 /*Fin de gestion des styles*/
+
+
+/* gestion du joystick */
+#joystick {
+    height: 100px;
+    width: 100px;
+    position: relative;
+    color: #002a80;
+    left: 100px;
+    top: 100px;
+    z-index: 1300;
+}
