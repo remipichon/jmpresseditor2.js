@@ -161,7 +161,7 @@ longHasMouseMove = false;
  * Un mousedown n'importe 
  * 
  */
-$(document).on('moufsedown', function(event) {
+$(document).on('mouseKIKIdown', function(event) {
     console.log('target mousedown', event.target);
     var $this = $(event.target);
 

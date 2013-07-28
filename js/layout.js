@@ -9,9 +9,9 @@ $(document).ready(function() {
 
 
     /* ======================================================================================
-     * TRIGGERS CREATE TITLE1
+     * TRIGGERS CREATE TEXT
      * ======================================================================================*/
-    $('#text-tool-title').on('click', function(event) {
+    $('.text-tool-button').on('click', function(event) {
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
         event.preventDefault();
@@ -19,22 +19,7 @@ $(document).ready(function() {
         $('body').css('cursor', 'crosshair');
 
         $('body').removeClass().addClass('selectSlide');
-        $('body').data('action', 'createH1Text');
-    });
-
-
-    /* ======================================================================================
-     * TRIGGERS CREATE BODYTEXT
-     * ======================================================================================*/
-    $('#text-tool-body').on('click', function(event) {
-        $('li').removeClass("buttonclicked");
-        $('#text-tool').parent().addClass("buttonclicked");
-        event.preventDefault();
-        event.stopPropagation();
-        $('body').css('cursor', 'crosshair');
-
-        $('body').removeClass().addClass('selectSlide');
-        $('body').data('action', 'createH1Text');
+        $('body').data('action', $(this).attr('target') );
     });
 
 
