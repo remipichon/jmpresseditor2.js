@@ -1,6 +1,16 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Classes :
+ *          Slide
+ *          Element
+ *              Text
+ *              Image
+ * Méthode :
+ *      Object.size
+ *      selectSlide(callback, param1, composant)     return slide's matricule
+ *      getSlideMother(matricule)       return slide's matricule
+ * Global:
+ *       container
+ *       
  */
 //pour connaitre la taille d'un objet
 Object.size = function(obj) {

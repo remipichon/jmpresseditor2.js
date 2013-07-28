@@ -1,10 +1,18 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Recupère objEvt et en fonction de ses paramètres, effectue le traitement adéquat directement sur les instances des 
+ * classes composants (Slide, Texte et Image héritées de Element
+ * 
+ * Contient : 
+ *      findObjectOfComposant(matricule)   return object
+ *      callModel(objectEvent)
+ *      createComposant($target, objectEvent)    appelé une fois la Slide cible sélectionnée
+ *      callModelGUI(objectEvent)
+ *      test
+ *          
  */
 
 
-/* trouve l'object en fonction du matricule (que ce soit une slide ou un composant
+/* trouve l'object en fonction du matricule (que ce soit une slide ou un composant)
  * 
  * @type object composant
  */
@@ -184,7 +192,7 @@ function callModelGUI(objectEvent) {
 //        new Text({}, $target);
 //        console.log('new text');
 //    } 
-    else if (objectEvent.action === 'move') {
+    else if (objectEvent.action === 'move' || objectEvent.action === 'navigable') {
         var attr;
         var val = objectEvent.event.cran*10;
         switch (objectEvent.event.direction) {

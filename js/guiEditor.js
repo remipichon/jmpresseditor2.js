@@ -1,6 +1,10 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * gestion de la partie interface utilisateur de l'editeur (navigable, creation) :
+ *      listerner keyboard :
+ *          creation
+ *          navigable
+ *      class Transform3D
+ *  
  */
 
 

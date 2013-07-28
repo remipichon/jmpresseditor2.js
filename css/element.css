@@ -1,8 +1,10 @@
-/* CSS des composants au sein des slides*/
+/********************************************************************************************/
+/****************************** CSS des composants au sein des slides************************/
+/********************************************************************************************/
 
 
 /*////////////////Gestion des styles de texte////////////*/
-/*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
+
 .slide span {
     /*border : dashed black 10px;*/
     font-family: Arial;
@@ -10,15 +12,15 @@
 }
 
 .slide .element{
-     /*border : dashed black 10px;*/
-     margin: auto;
-     position: relative;
-     
+    /*border : dashed black 10px;*/
+    margin: auto;
+    position: relative;
+
 }
 
 .H1Text
 {
-    
+
     text-align:center;
     padding-top: 30px;
     padding-bottom: 20px;
@@ -60,20 +62,42 @@
     font-size:2em;
 }
 
-
-
-
-
 /*Fin de gestion des styles*/
 
 
-/* gestion du joystick */
+/********************************************************************************************/
+/****************************** CSS du joystick ********************************************/
+/********************************************************************************************/
 #joystick {
-    height: 100px;
-    width: 100px;
-    position: relative;
-    color: #002a80;
-    left: 100px;
-    top: 100px;
-    z-index: 1300;
+    height: 300px;
+    width: 300px;
+    position: absolute;
+    background-color: rgba(14,5,206,0.2); 
+    display: none;
+    /*    left: 100px;
+        top: 100px;*/
+    z-index: 100;
+}
+
+
+.zone-tolerance-joystick {
+    background-color: rgba(227,4,35,0.5);
+    position: absolute;
+    z-index: 101;
+}
+
+#zone-tolerance-x {
+    width: 300px;
+    height: 40px;
+    top: 130px;
+    left: 0px;
+    
+}
+
+#zone-tolerance-y {
+    height: 300px;
+    width: 40px;
+    left: 130px;
+    top: 0px;
+    
 }

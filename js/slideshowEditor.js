@@ -1,28 +1,9 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Gère l'édition de la présentation (des composants, après création) :
+ *      handlerComposant : listener de hover et keyboard pour le deplatement/rotation des composants
+ *      
  */
 
-/*
- * mapper keyboard
- * move
- * a 97
- * z 122
- * qs 113 115
- * w 119
- * x 120
- * 
- * et
- * 
- * rotate
- * r 114
- * t 116
- * fg 102 103
- * v 118
- * b 98
- * 
- * i : new slide
- */
 
 
 /*

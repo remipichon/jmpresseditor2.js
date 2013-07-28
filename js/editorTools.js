@@ -2,7 +2,9 @@
  * Contient les élements communs à slideShowEditor et GUIEditor à savoir les outils permettant à l'Editor en lui même de fonctionner
  * Contient :
  *      class objectEvent
- *      class joystick
+ *      listener joystick
+ *              appel directement Model avec un objEvt 
+ *      orthogonalProjection
  *      
  */
 
@@ -131,7 +133,17 @@ function orthogonalProjection(current, init,coef) {
 }
 
 
-
+function setJoystick($this){
+    var heightJ = parseInt($('#joystick').css('height'));
+    var widthJ = parseInt($('#joystick').css('width'));
+    $('#joystick').css({
+        'top': $this.data('posInitMouse').pageY - heightJ/2,
+        'left': $this.data('posInitMouse').pageX - widthJ/2,
+        'display': 'inline'
+        
+    });
+   
+}
 
 
 /* Pour faire les choses bien : 
@@ -145,7 +157,10 @@ function orthogonalProjection(current, init,coef) {
 simpleHasMouseMove = false;
 longHasMouseMove = false;
 
-
+/* listeners pour le joystick
+ * Un mousedown n'importe 
+ * 
+ */
 $(document).on('mousedown', function(event) {
     console.log('target mousedown', event.target);
     var $this = $(event.target);
@@ -184,6 +199,7 @@ $(document).on('mousedown', function(event) {
         }
     });
 
+    setJoystick($this);
 
     /*
      * gestion des long press click
@@ -292,6 +308,7 @@ $(document).on('mousedown', function(event) {
         $(this).off('.simpleLeft');
         $(this).off('.simpleRight');
         console.log('annulation des events mouse');
+        $('#joystick').css('display','none');
 
     });
 
