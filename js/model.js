@@ -30,7 +30,8 @@ function findObjectOfComposant(matricule) {
         return container.slide[matricule];
     }
 
-    return 'Error : matricule doesn\'t existe';
+    console.log('Error : matricule doesn\'t existe');
+    return false;
 }
 
 
@@ -149,7 +150,7 @@ function createComposant($target, objectEvent) {
         new Text({}, $target);
 //        console.log('new text');
     } else if (objectEvent.action === 'createImage') {
-        new Image({source:objectEvent.source}, $target);
+        new Image({source: objectEvent.source}, $target);
 //        console.log('new ');
     }
 }
@@ -169,8 +170,23 @@ function callModelGUI(objectEvent) {
             var source = prompt('Sélectionner l\'adresse de votre image (adresse fichier, ou adresse url', 'images/bleu_twitter.png');
             objectEvent.source = source;
         }
+
+        //s'il y a un matricule
+        if (objectEvent.matricule !== '') {
+            //si ce matricule existe
+            var slide = findObjectOfComposant(objectEvent.matricule);
+            if (slide != false) { // pas de !== ivi  
+                //si le composant est une slide
+                if (slide.type === 'slide') {
+                    //alors on peut ajouter directement l'element
+                    createComposant(objectEvent.matricule,objectEvent);                   
+                    return;
+                }
+            }
+        }
         var $target = selectSlide(createComposant, objectEvent);
         console.log('after selectc', $target);
+        return;
     }
 
 
@@ -194,7 +210,7 @@ function callModelGUI(objectEvent) {
 //    } 
     else if (objectEvent.action === 'move' || objectEvent.action === 'navigable') {
         var attr;
-        var val = objectEvent.event.cran*10;
+        var val = objectEvent.event.cran * 10;
         switch (objectEvent.event.direction) {
             case 'z+':
                 attr = 'z';

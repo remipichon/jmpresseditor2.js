@@ -17,18 +17,11 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         $('body').css('cursor', 'crosshair');
-        $('body').removeClass().addClass('creationTitle');
+
+        $('body').removeClass().addClass('selectSlide');
+        $('body').data('action', 'createH1Text');
     });
 
-    $(document).on('click', '.creationTitle', function(event) {
-        $('.creationTitle').removeClass('creationTitle');
-        $('body').css('cursor', 'default');
-        if ($(event.target).hasClass("slide")) {
-            createText('title1', event);
-        } else {              // texte créé sur slideArea
-            alert("le texte doit être créé sur une diapositive");  // moche mais manque de temps
-        }
-    });
 
     /* ======================================================================================
      * TRIGGERS CREATE BODYTEXT
@@ -39,19 +32,26 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         $('body').css('cursor', 'crosshair');
-        $('body').removeClass().addClass('creationBody');
+
+        $('body').removeClass().addClass('selectSlide');
+        $('body').data('action', 'createH1Text');
     });
 
-    $(document).on('click', '.creationBody', function(event) {
-        event.stopPropagation();
-        $('.creationBody').removeClass('creationBody');
-        if ($(event.target).hasClass("slide")) {
-            createText('bodyText', event);
-        } else {              // texte créé sur slideArea
-            alert("le texte doit être créé sur une diapositive");  // moche mais manque de temps
-        }
+
+    //listener pour créer un élement directement sur une slide
+    $(document).on('click', '.selectSlide', function(event) {
+        $('body').removeClass();
+        $('li').removeClass("buttonclicked");
         $('body').css('cursor', 'default');
+
+        var objEvt = new ObjectEvent({
+            matricule: $(event.target).attr('matricule'),
+            action: $('body').data('action'),
+            event: {}
+        });
+        callModelGUI(objEvt);
     });
+
 
 
 
@@ -65,8 +65,10 @@ $(document).ready(function() {
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
         event.stopPropagation();
-        $('body').removeClass().addClass('creationSlide');
         $('body').css('cursor', 'crosshair');
+
+        $('body').removeClass().addClass('creationSlide');
+        $('body').data('action', 'slide');
     });
 
     $('#slide-tool-title').on('click', function(event) {
@@ -74,22 +76,49 @@ $(document).ready(function() {
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
         event.stopPropagation();
-        $('body').removeClass().addClass('creationSlideTitle');
         $('body').css('cursor', 'crosshair');
+
+        $('body').removeClass().addClass('creationSlide');
+        $('body').data('action', 'slideText');
     });
 
     $(document).on('click', '.creationSlide', function(event) {
+        $('li').removeClass("buttonclicked");
         event.stopPropagation();
-        $('.creationSlide').removeClass('creationSlide');
-        createSlide('slide', event);
+        $('body').removeClass();
         $('body').css('cursor', 'default');
-    });
 
-    $(document).on('click', '.creationSlideTitle', function(event) {
-        event.stopPropagation();
-        $('.creationSlideTitle').removeClass('creationSlideTitle');
-        createSlide('slideText', event);
-        $('body').css('cursor', 'default');
+        var action = $('body').data('action');
+        if (action === 'slide') {
+            new Slide({});
+        } else if (action === 'slideText') {
+
+            var slide = new Slide({
+                pos: {
+                    x: 1000
+                }
+            });
+            var matricule = slide.matricule;
+            new Text({
+                properties: {
+                    hierarchy: 'H1Text'
+                },
+                pos: {
+                    x: 40,
+                    y: 10
+                }
+            }, matricule);
+            new Text({
+                properties: {
+                    hierarchy: 'bodyText'
+                },
+                pos: {
+                    y: 200,
+                    x: 50
+                }
+            }, matricule);
+        }
+
     });
 
 
@@ -166,20 +195,20 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#present').on('click', function(event) {
-        
+
         // sauvegarde des bons contenus texte en attendant que ckeditor "change" fonctionne
-        $.each($('.element'), function(){
+        $.each($('.element'), function() {
             var $this = $(this);
             var idElement = $this.attr('id');
             var idSlide = $this.parent().attr('id');
 //            console.log("idElement : " + idElement + " / idSlide"+ idSlide);
-console.log(idElement + " " + idSlide+" ");
-             pressjson.slide[idSlide].element[idElement].content = $this.text();
+            console.log(idElement + " " + idSlide + " ");
+            pressjson.slide[idSlide].element[idElement].content = $this.text();
 //             console.log(pressjson);
         });
-        
-        
-        
+
+
+
         var outputjson = {data: null, slide: new Array()};
         // mise en forme correct du json de sortie : 
         var arrayElement = [];
@@ -220,15 +249,15 @@ console.log(idElement + " " + idSlide+" ");
      * ====================================================================================== */
 
     $('#save').on('click', function(event) {
-        
-          $.each($('.element'), function(){
+
+        $.each($('.element'), function() {
             var $this = $(this);
             var idElement = $this.attr('id');
             var idSlide = $this.parent().attr('id');
-             pressjson.slide[idSlide].element[idElement].content = $this.text();
+            pressjson.slide[idSlide].element[idElement].content = $this.text();
         })
-        
-        
+
+
         var savedJson = JSON.stringify(pressjson, null, 2);
 //        console.log("saved json : ");
 //        console.log(savedjson);
@@ -263,12 +292,12 @@ console.log(idElement + " " + idSlide+" ");
 var sort_by = function(field, reverse, primer) {
 
     var key = function(x) {
-        return primer ? primer(x[field]) : x[field]
+        return primer ? primer(x[field]) : x[field];
     };
 
     return function(a, b) {
         var A = key(a), B = key(b);
         return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1, 1][+!!reverse];
-    }
-}
+    };
+};
 
