@@ -181,13 +181,16 @@ Slide = Class.extend({
  * @returns {string}
  */
 function selectSlide(callback, param1, composant) {
+    $('#sidebar').parent().addClass("buttonclicked");   //pour empecher le joystick d'apparaitre
     alert('Il faut selectionner une slide');
     $('.slide').one('click', function(event) {
+        $('.buttonclicked').removeClass("buttonclicked");       //pour redonner le droit au joystick d'apparaitre
         var slide = $(this).attr('matricule');
         console.log('select ', slide);
         alert('slide selectionnée' + slide);
         if (typeof callback !== 'undefined') {
             callback(slide, param1, composant);
+            console.log('in select', slide);
             return slide;
         } else {
             console.log('in select', slide);
@@ -363,6 +366,8 @@ Text = Element.extend({
             return 0;
         }
 
+        //pour mustache
+        this.texte = 'true';
 
 
         //attribut propre aux textes
@@ -446,6 +451,9 @@ Image = Element.extend({
         this.matricule = matricule;
 
         this._super(params, slide, matricule);
+
+        //pour mustache
+        this.image = true;
 
         //attributs
         this.properties = {

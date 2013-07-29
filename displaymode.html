@@ -5,9 +5,10 @@
         <meta name="viewport" content="width=1024"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Display mode</title>
-        <link rel="stylesheet" type="text/css" href="css/displaymode.css" >
+        
         <link rel="stylesheet" href="css/jquery-ui.css" />
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="css/displaymode.css" >
         
         <script type="text/javascript" src="js/plugin/mustache.js"></script>
 
@@ -48,24 +49,20 @@
 
         </script>
 
-
-        <!--        <script id="templateJmpress" type="text/template">
-                    {{#slide}}
-                    <div id={{id}} class='step slide' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
-                    {{title}}
-                    {{#element}} 
-                    <{{hierarchy}} id={{id}} class='element' style='position: absolute; left: {{pos.x}}px; top: {{pos.y}}px'> {{content}}</{{hierarchy}}>  
-                    {{/element}} 
-                    </div>   
-                    {{/slide}}
-                </script>-->
         <script id="templateJmpress" type="text/template">
             {{#slide}}
-            <div id={{id}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+            <div id={{matricule}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{properties.scale}}' > 
             
             {{#element}} 
-             <div id={{id}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
-
+                
+               {{#texte}}
+                    <div id={{matricule}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' ><span class={{properties.hierarchy}} >{{properties.content}}</span> </div>
+               {{/texte}}
+               
+               {{#image}}               
+                    <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
+               {{/image}}
+               
             {{/element}} 
             </div>   
             {{/slide}}
@@ -80,16 +77,16 @@
              height:true
              }
              };*/
-            var pressjson = JSON.parse(localStorage.getItem('outputjson'));
-            var template = $('#templateJmpress').html();
-            var html = Mustache.to_html(template, pressjson);
+            var pressjsonX = JSON.parse(localStorage.getItem('outputjson'));
+            var templateX = $('#templateJmpress').html();
+            var htmlX = Mustache.to_html(templateX, pressjsonX);
             //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
-            $('#slideArea').append(html);
+            $('#slideArea').append(htmlX);
             $('#slideArea').jmpress({
                 viewport: {
                     height: 2000}});
 
-            goAutoAlign();
+//            goAutoAlign();
 
 
 

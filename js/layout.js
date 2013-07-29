@@ -11,7 +11,7 @@ $(document).ready(function() {
     /* ======================================================================================
      * TRIGGERS CREATE TEXT
      * ======================================================================================*/
-    $('.text-tool-button').on('click', function(event) {        
+    $('.text-tool-button').on('click', function(event) {
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
         event.preventDefault();
@@ -19,7 +19,7 @@ $(document).ready(function() {
         $('body').css('cursor', 'crosshair');
 
         $('body').removeClass().addClass('selectSlide');
-        $('body').data('action', $(this).attr('target') );
+        $('body').data('action', $(this).attr('target'));
     });
 
 
@@ -30,7 +30,7 @@ $(document).ready(function() {
         $('body').css('cursor', 'default');
 
         var objEvt = new ObjectEvent({
-            matricule: $(event.target).attr('matricule'),       //le body stocke l'action du bouton qui l'avait mit en selectSlide
+            matricule: $(event.target).attr('matricule'), //le body stocke l'action du bouton qui l'avait mit en selectSlide
             action: $('body').data('action'),
             event: {}
         });
@@ -56,7 +56,7 @@ $(document).ready(function() {
         $('body').data('action', $(this).attr('target'));
     });
 
-    
+
     $(document).on('click', '.creationSlide', function(event) {
         $('li').removeClass("buttonclicked");
         event.stopPropagation();
@@ -126,7 +126,7 @@ $(document).ready(function() {
      * top-bar drop down menu        -   parameters button
      * ====================================================================================== */
     $('#parameters').on('click', function() {
-        $submenu = $('#topbar-submenu');
+        var $submenu = $('#topbar-submenu');
         $submenu.toggleClass('hidden-sub');
         if ($submenu.hasClass('hidden-sub')) {
 //            $($submenu).animate({marginTop: "-100"}, 300);
@@ -151,7 +151,7 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#arrow-nav').on('click', function() {
-        $sidebar = $('#sidebar');
+        var $sidebar = $('#sidebar');
         $sidebar.toggleClass('hidden-bar');
         if ($sidebar.hasClass('hidden-bar')) {
             $('#sidebar').animate({marginLeft: "-200"}, 300);
@@ -171,24 +171,12 @@ $(document).ready(function() {
 
     $('#present').on('click', function(event) {
 
-        // sauvegarde des bons contenus texte en attendant que ckeditor "change" fonctionne
-        $.each($('.element'), function() {
-            var $this = $(this);
-            var idElement = $this.attr('id');
-            var idSlide = $this.parent().attr('id');
-//            console.log("idElement : " + idElement + " / idSlide"+ idSlide);
-            console.log(idElement + " " + idSlide + " ");
-            pressjson.slide[idSlide].element[idElement].content = $this.text();
-//             console.log(pressjson);
-        });
-
-
 
         var outputjson = {data: null, slide: new Array()};
         // mise en forme correct du json de sortie : 
         var arrayElement = [];
-        $.each(pressjson.slide, function(key1, slide) {
-            var slide2 = pressjson.slide[key1];
+        $.each(container.slide, function(key1, slide) {
+            var slide2 = container.slide[key1];
             $.each(slide, function(key2, element) {
                 if (key2 === 'element') {
                     var arrayElement = [];
@@ -219,21 +207,13 @@ $(document).ready(function() {
     /* ======================================================================================
      * SAVE       -   save button
      * enregistre la présentation en local storage (tjs présente si F5)
-     * + raccourci clavier ? 
-     * + modal d'explication ?
      * ====================================================================================== */
 
     $('#save').on('click', function(event) {
 
-        $.each($('.element'), function() {
-            var $this = $(this);
-            var idElement = $this.attr('id');
-            var idSlide = $this.parent().attr('id');
-            pressjson.slide[idSlide].element[idElement].content = $this.text();
-        })
 
 
-        var savedJson = JSON.stringify(pressjson, null, 2);
+        var savedJson = JSON.stringify(container, null, 2);
 //        console.log("saved json : ");
 //        console.log(savedjson);
         localStorage.setItem('savedJson', savedJson);
@@ -249,6 +229,39 @@ $(document).ready(function() {
 
     });
 
+    /* ======================================================================================
+     * LOAD       -   load button
+     * charge la présentation en local storage 
+     * ====================================================================================== */
+
+    $('#load').on('click', function(event) {
+
+        pressjson = JSON.parse(localStorage.getItem('savedJson'));
+        console.log(pressjson);
+
+        for (var matS in pressjson.slide) {
+            var slide = pressjson.slide[matS];
+            var slide = new Slide({         
+                //'matricule': slide.matricule,
+                'pos': slide.pos                //a voir si je mets une boucle pour renseigner tous les champs existant, l'existence de l'adaptateur serait ici
+            });
+            var matriculeSlide = slide.matricule;
+            for (var matEl in pressjson.slide[matS].element) {
+                var element = pressjson.slide[matS].element[matEl];
+                new Text({
+                 //   'matricule': element.matricule,
+                    'pos': element.pos,
+                    'properties': {'content': element.properties.content}
+                }, matriculeSlide);
+            }
+        }
+
+
+    });
+
+
+
+
 
     /* ======================================================================================
      * CLEAR
@@ -257,7 +270,8 @@ $(document).ready(function() {
 
     $('#clear').click(function() {
         window.localStorage.clear();
-        location.reload();
+        //location.reload();
+        $('#slideArea').html('');
         return false;
     });
 

@@ -83,9 +83,9 @@ time, mark, audio, video {
 
 }
 
-.title1
+.H1Text
 {
-    
+
     text-align:center;
     padding-top: 30px;
     padding-bottom: 20px;
@@ -96,7 +96,7 @@ time, mark, audio, video {
 
 }
 
-.title2
+.H2Text
 {
     /*border : dashed black 10px;*/
     padding-top: 20px;
@@ -107,12 +107,23 @@ time, mark, audio, video {
     font-size: 3.5em;
     font-weight: bold;
     border-bottom: 10px dotted white;
-}
+}   
+
+.H3Text
+{
+    /*border : dashed black 10px;*/
+    padding-top: 20px;
+    padding-bottom: 60px;
+    text-align:center;
+    /*margin: auto;*/     
+    display: block;
+    font-size: 3em;
+    font-weight: bold;
+    border-bottom: 10px dotted white;
+}   
 
 .bodyText
 {
-    padding-top:20px;
-    margin-top: 30px;
     font-size:2em;
 }
 

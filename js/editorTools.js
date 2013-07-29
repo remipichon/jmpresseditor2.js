@@ -162,7 +162,7 @@ longHasMouseMove = false;
  * 
  */
 $(document).on('mousedown', function(event) {
-    if( $('#sidebar:hover').length !== 0 || $('.buttonclicked').length !== 0){ //on n'affiche pas le joystick sur la barre d'outils on lorsqu'on selectionne un point de chute pour la creation d'element (probleme sous chrome)
+    if( $('#sidebar:hover').length !== 0 || $('.buttonclicked').length !== 0 ){//|| $('.noJoystick').length !== 0){ //on n'affiche pas le joystick sur la barre d'outils on lorsqu'on selectionne un point de chute pour la creation d'element (probleme sous chrome)
 //        console.log('hover de slide bar');
         return;
     }
@@ -303,6 +303,7 @@ $(document).on('mousedown', function(event) {
 
 //annulation des listeners sur mouseup
     $(document).on('mouseup', function(event) {
+//        $('.buttonclicked"').removeClass("buttonclicked");
         simpleHasMouseMove = false;
         longHasMouseMove = false;
         $(this).off('.longClick');
