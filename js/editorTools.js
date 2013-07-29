@@ -161,7 +161,11 @@ longHasMouseMove = false;
  * Un mousedown n'importe 
  * 
  */
-$(document).on('mouseKIKIdown', function(event) {
+$(document).on('mousedown', function(event) {
+    if( $('#sidebar:hover').length !== 0 || $('.buttonclicked').length !== 0){ //on n'affiche pas le joystick sur la barre d'outils on lorsqu'on selectionne un point de chute pour la creation d'element (probleme sous chrome)
+//        console.log('hover de slide bar');
+        return;
+    }
     console.log('target mousedown', event.target);
     var $this = $(event.target);
 

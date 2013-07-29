@@ -11,6 +11,7 @@
  */
 function handlerComposant($composant) {
     $composant.on('mouseenter', function(event) {
+//        ('#sidebar:hover').length
         composantCatchEvent = true;
         event.stopPropagation();
         var $target = $(this);

@@ -11,7 +11,7 @@ $(document).ready(function() {
     /* ======================================================================================
      * TRIGGERS CREATE TEXT
      * ======================================================================================*/
-    $('.text-tool-button').on('click', function(event) {
+    $('.text-tool-button').on('click', function(event) {        
         $('li').removeClass("buttonclicked");
         $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
         event.preventDefault();
@@ -23,14 +23,14 @@ $(document).ready(function() {
     });
 
 
-    //listener pour créer un élement directement sur une slide
+    //listener pour créer un élement directement sur une slide lorsque le body est en selectSlide
     $(document).on('click', '.selectSlide', function(event) {
         $('body').removeClass();
         $('li').removeClass("buttonclicked");
         $('body').css('cursor', 'default');
 
         var objEvt = new ObjectEvent({
-            matricule: $(event.target).attr('matricule'),
+            matricule: $(event.target).attr('matricule'),       //le body stocke l'action du bouton qui l'avait mit en selectSlide
             action: $('body').data('action'),
             event: {}
         });
@@ -45,7 +45,7 @@ $(document).ready(function() {
      * ======================================================================================*/
 
 // Trigger sur bouton "creation slide"
-    $('#slide-tool').on('click', function(event) {
+    $('.slide-tool-button').on('click', function(event) {
         $('li').removeClass("buttonclicked");
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
@@ -53,20 +53,10 @@ $(document).ready(function() {
         $('body').css('cursor', 'crosshair');
 
         $('body').removeClass().addClass('creationSlide');
-        $('body').data('action', 'slide');
+        $('body').data('action', $(this).attr('target'));
     });
 
-    $('#slide-tool-title').on('click', function(event) {
-        $('li').removeClass("buttonclicked");
-        $('#slide-tool').parent().addClass("buttonclicked");    // css
-        event.preventDefault();
-        event.stopPropagation();
-        $('body').css('cursor', 'crosshair');
-
-        $('body').removeClass().addClass('creationSlide');
-        $('body').data('action', 'slideText');
-    });
-
+    
     $(document).on('click', '.creationSlide', function(event) {
         $('li').removeClass("buttonclicked");
         event.stopPropagation();
@@ -74,9 +64,9 @@ $(document).ready(function() {
         $('body').css('cursor', 'default');
 
         var action = $('body').data('action');
-        if (action === 'slide') {
+        if (action === 'createSlide') {
             new Slide({});
-        } else if (action === 'slideText') {
+        } else if (action === 'createSlideText') {
 
             var slide = new Slide({
                 pos: {
