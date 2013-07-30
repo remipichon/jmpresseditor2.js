@@ -6,6 +6,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <title>Editor</title>
+        <link rel="stylesheet" type="text/css" href="css/element.css" >
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <link rel="stylesheet" href="css/jquery-ui.css" />
@@ -26,6 +27,8 @@
 
         
                         <!--les modules-->
+        <script type="text/javascript" src="js/layout.js"></script>
+        <script type="text/javascript" src="js/editorTools.js"></script>
         <script type="text/javascript" src="js/guiEditor.js"></script>
         <script type="text/javascript" src="js/model.js"></script> 
         <script type="text/javascript" src="js/slideshowEditor.js"></script>
@@ -44,17 +47,246 @@
     </head>
 
     <body>
+      
+        
+        
+         <div  id="topbar">
+            <ul class='noJoystick' >
+                <li><a href="#" id="present" title="launch the presentation"><p>present</p></a></li>
+                <li><a href="#" id="save" title="save your presentation"><p>save</p></a></li>
+                <li><a href="#" id="parameters" title="parameters"><p>options</p></a>
+                    <ul id="topbar-submenu">
+                        <li><a href="#" id="clear" title="change presentation theme"><p>clear all</p></a></li>
+                        <li><a href="#" id="info" title="more info on this editor"><p>info</p></a></li>
+                        <li><a href="helpModal" id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></a></li>
+                        <li><a  id="load" title="load presentation"><p>load</p></a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!--tag <nav> ?-->
+        <div class='noJoystick' id="sidebar">
+            
+            <div id="arrow-nav"></div>
+            <ul>  
+                <li id="tools">
+                    <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
+                    <ul>
+                        <li>
+                            <a href="#" target='createSlide' class="slide-tool-button" id='slide-tool' title="create a slide"><p>slide</p></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" target='createSlideText' class="slide-tool-button" title="slide text"><p>With text</p></a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" id="text-tool" target="createBodyText" class="text-tool-button" title="create text"><p>text</p></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" target="createH1Text" class="text-tool-button" id="text-tool-title" title="title type"><p>title 1</p></a>
+                                </li>
+                                <li>
+                                    <a href="#" target="createH2Text" class="text-tool-button" id="text-tool-title" title="title type"><p>title 2</p></a>
+                                </li>
+                                <li>
+                                    <a href="#" target="createH3Text" class="text-tool-button" id="text-tool-title" title="title type"><p>title 3</p></a>
+                                </li>
+                                <li>
+                                    <a href="#" target="createBodyText" class="text-tool-button" id="text-tool-body" title="body type"><p>body</p></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" id="geek-tool"  ><p>geek mode</p></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li id="time-line">
+                    <h1 id="header-time-line">TIME LINE</h1>
+                    <ul id="sortable">
+                    </ul>
+                    <!--                    <ul class="nav-button">
+                                            <li id="previous">
+                                                <a href="#" id="previous-a" title="previous slide">
+                                                    <img src="images/arrowsTLleftP.png" alt="previous slide">
+                                                </a>
+                                            </li>
+                                            <li id="next">
+                                                <a href="#" id="next-a" title="next slide">
+                                                    <img src="images/arrowsTLrightP.png" alt="next slide">
+                                                </a>
+                                            </li>
+                                        </ul>-->
+                </li>
+            </ul>
+
+        </div>
+        <div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 id="myModalLabel">How to use the editor</h2>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>
+                        <h2> How to create things ? </h2>
+                        <ul>
+                            <li>
+                                <h3>Create a slide</h3>
+                                <ul>
+                                    <li><p>click on one of the "slide" buttons </p></li>
+                                    <li><p>click anywhere in the window</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Create text</h3>
+                                <ul>
+                                    <li><p>click on one of the "text" buttons</p></li>
+                                    <li><p>click on a slide</p></li>
+                                    <li><p>caution : text can only be created on a slide</p></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>How to manipulate a slide ?</h2>
+                        <ul> 
+                            <li>
+                                <h3>Move a slide :</h3>
+                                <ul>
+                                    <li><p>short left click on a slide</p></li>
+                                    <li><p>hold your click and move</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Rotation of a slide (axis x and y) :</h3>
+                                <ul>
+                                    <li><p>short right click on a slide</p></li>
+                                    <li><p>hold your click and move</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Rotation of a slide (axis z) :</h3>
+                                <ul>
+                                    <li><p>long right click on a slide</p></li>
+                                    <li><p>hold your click and move</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Scale of a slide: </h3>
+                                <ul> 
+                                    <li><p>long left click on a slide</p></li>
+                                    <li><p>hold your click and move up (extend) or down (shrink)</p></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>How to edit things ?</h2>
+                        <ul>
+                            <li>
+                                <h3>Edit text :</h3>
+                                <ul>
+                                    <li><p>double click on a text</p></li>
+                                    <li><p>have fun with the text menu bar</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Delete a slide :</h3>
+                                <ul>
+                                    <li><p>in the time line, hover on the slide you want to delete</p></li>
+                                    <li><p>click on the red cross that has appeared</p></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    <li>
+                        <h2>How to navigate ?</h2>
+                        <ul>
+                            <li>
+                                <h3>Move in the presentation</h3>
+                                <ul>
+                                    <li><p>short left click anywhere on the screen (but on slides)</p></li>
+                                    <li><p>hold your click and move</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Zoom</h3>
+                                <ul>
+                                    <li><p>use your mousewheel !</p></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>How to edit a presentation ?</h2>
+                        <ul>
+                            <li>
+                                <h3>Organise your slides</h3>
+                                <ul>
+                                    <li><p>reorganise timeline buttons with drag and drop</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Save a presentation</h3>
+                                <ul>
+                                    <li><p>click on the save button</p></li>
+                                    <li><p>one presentation at a time can be saved at a time, in your browser</p></li>
+                                    <li><p>you can shut your browser or your computer down, and find your presentation in the state you left it</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Launch a presentation</h3>
+                                <ul>
+                                    <li><p>click on the present button</p></li>
+                                    <li><p>the presentation is launched in a new window</p></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Delete a presentation</h3>
+                                <ul>
+                                    <li><p>click on the option button, then click on clear all</p></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+        <!--<div id="layout"></div>-->
+        
+        <div id='joystick'> 
+            <div id="zone-tolerance-x" class ="zone-tolerance-joystick"></div>
+            <div id="zone-tolerance-y" class ="zone-tolerance-joystick"></div>
+            
+        </div>
+        
+        
+        
         
          
         <div id="slideArea" >
-            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-1000" style="display:block"><p> en profondeur</p></div>
-            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-x="1000" data-z ="-1000" style="display:block"><p> en profondeur</p></div>
+            <!--<div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>-->
+            <div id="profondeur" class="step overview" data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
         </div>
         
         <script>
             
             $(document).ready(function(){
-               $('#slideArea').jmpress(); 
+                
+               $('#slideArea').jmpress();
+              
+//                alert();
+               transform3D = new Transform3D();
+               
+               test();
+               
             });
         </script>
 
@@ -78,11 +310,21 @@
 
         </script>
 
-        <script id="templateElement" type="text/template">
+           <!--ajouter position: relative; dans le style pour que les elements ne puissent pas se superposer (utile pour automatic editor)-->
 
-            <div id={{matricule}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' > <span class={{hierarchy}} >{{content}}</span> </div>
+        <script id="templateElement" type="text/template">
+            
+            <div id={{matricule}} matricule={{matricule}} class='element texte' style='position:absolute; left: {{pos.x}}px; top: {{pos.y}}px' > <span class='{{properties.hierarchy}}' >{{properties.content}}</span> </div>
 
         </script>
+        
+        
+       <script id="templateImage" type="text/template">
+
+            <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
+
+        </script>
+       
 
     </body>
 </html>
