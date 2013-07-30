@@ -285,7 +285,23 @@ function callModelGUI(objectEvent) {
 function test() {
     //differents moyen de créer une slide
     //juste avec les coord
-    new Slide({rotate: {x: 10, y: 5, z: 0}});
+    //$('#slideArea>').html('');
+    var X = 0;
+    var Y = 0;
+    var I = 0;
+    var slide = new Slide({pos: {x: X, y: Y, z: 0}});
+    new Text( {properties: { content: 'slide : '+I }},slide.matricule);
+    var slide = new Slide({pos: {x: X, y: Y+1000, z: 0}});
+    new Text( {properties: { content: 'slide : '+I+2 }},slide.matricule);
+    var slide = new Slide({pos: {x: X+1000, y: Y, z: 0}});
+    new Text( {properties: { content: 'slide : '+I+4 }},slide.matricule);
+    var slide = new Slide({pos: {x: X+1000, y: Y+1000, z: 0}});
+    new Text( {properties: { content: 'slide : '+I+6 }},slide.matricule);
+    var slide = new Slide({pos: {x: X+1000, y: Y+2000, z: 0}});
+    new Text( {properties: { content: 'slide : '+I+8 }},slide.matricule);
+    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
+    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
+    
 //    //avec coord et rotate
 //    var s2 = new Slide({pos: {x: 900, y: 5, z: 0}});
 ////    s2.watch('pos', function(attribut, newVal, oldVal){

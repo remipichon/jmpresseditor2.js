@@ -150,6 +150,74 @@ Slide = Class.extend({
 
         console.log('Nouvelle slide: ', this.show(24));
 
+        //ajout à la timeline
+
+        var idSlide = matricule;
+        var $slideButton = $('<li matricule=' + idSlide + '><span>' + idSlide + '</span>    <a class="cross" href="#">x</a></li>');
+        $('#sortable').append($slideButton);
+
+
+        $('#sortable').sortable({
+            start: function(event, ui) {
+                ui.item.startPos = ui.item.index();
+            },
+            stop: function(event, ui) {
+                var newIndex = ui.item.index();                                    //nouvelle place
+                var matriculeSorted = ui.item.attr('matricule');                    //pour la slide qui vient prendre la place de
+                var slide = container.slide[matriculeSorted];     //+ 2 car il y a pour le moment deux slides dans le DOM dès le départ
+                var slideAfter = $($('#slideArea>').children()[newIndex + 0 + 1]).attr('matricule');  //cette slide
+
+                if (newIndex > ui.item.startPos) { //maintenant
+                    slide.reOrder(slideAfter, false);
+                }
+                else {
+                    slide.reOrder(slideAfter, true);
+                }
+
+//                if (ui.item.startPos > newIndex)
+//                {
+//                    $('.slide').eq(newIndex).before($('#' + $idSlideSorted + ''));
+//                }
+//                else
+//                {
+//                    $('.slide').eq(newIndex).after($('#' + $idSlideSorted + ''));
+//                }
+//                $(".slide").each(function(index) {
+//                    var idSlide = $(this).attr('id');
+//                    //pressjson.slide[idSlide].index = index;     // MaJ de l'index des slide
+//                });
+                console.log(newIndex, slide.matricule, slideAfter);
+
+            },
+            axis: "y"
+        })
+                .disableSelection();
+
+        $("#sortable").on("sortupdate", function(event, ui) {
+            //console.log(event, ui);
+        });
+    },
+    reOrder: function(slideAfter, isBefore) {
+        //deplace la slide avant slideAfter
+        if (isBefore == false) {
+            $('#' + this.matricule).insertAfter($('#' + slideAfter));
+        }
+        else {
+            $('#' + this.matricule).insertBefore($('#' + slideAfter));
+        }
+
+        //deplace le slide dans le container en s'appuyant sur le DOM
+        var newContainer = {
+            metadata: container.metadata, 
+                    slide: {}
+        };
+        $('#slideArea>').children().each(function() {
+            if ($(this).attr('id') != 'profondeur') {
+                newContainer.slide[$(this).attr('matricule')] = container.slide[$(this).attr('matricule')];
+            }
+        });
+        container = newContainer;
+
 
 
     },
