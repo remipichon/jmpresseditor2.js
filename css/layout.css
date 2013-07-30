@@ -212,6 +212,7 @@ body
 #sidebar #time-line
 {
     border-bottom:none;
+    height: 500px;   /* KIKI pas du tout responsive ! La div ne doit pas dépasser le bas de l'écran !!! */
 }
 
 #geek-tool p
