@@ -64,7 +64,8 @@ $(document).ready(function() {
 //  });
 
     // événements hover button navigable
-    $sortableList.on('mouseenter', 'li', function() {
+    $sortableList.on('mouseenter', 'li',function() {
+        console.log('hoverred');
         var $link = $(this).find('a');              // apparition croix
         $link.stop(true, true).fadeIn();
         var $idSlide = $(this).attr('matricule');       // surbrillance slide

@@ -301,61 +301,7 @@ function test() {
     new Text( {properties: { content: 'slide : '+I+8 }},slide.matricule);
     var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
     new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-    var slide = new Slide({pos: {x: X+1000, y: Y+3000, z: 0}});
-    new Text( {properties: { content: 'slide : '+I+10 }},slide.matricule);
-        
-    
-//    //avec coord et rotate
-//    var s2 = new Slide({pos: {x: 900, y: 5, z: 0}});
-////    s2.watch('pos', function(attribut, newVal, oldVal){
-////       console.log(this, attribut, newVal, oldVal); 
-////    });
-//    //avec coord et texte (several)
-//
-    var e1 = new Text({pos: {x: 10}}, 'slide0');
-
-    new Element({pos: {y: 300}}, 'slide0');
-    new Text({properties: {content: 'test'}, pos: {y: 500}}, 'slide0');
+  
 
 //    new Image({pos: {y: 500}}, 'slide0');
 
