@@ -1,5 +1,5 @@
 /* 
- * Recupère objEvt et en fonction de ses paramètres, effectue le traitement adéquat directement sur les instances des 
+ * Recupère objEvt et, en fonction de ses paramètres, effectue le traitement adéquat directement sur les instances des 
  * classes composants (Slide, Texte et Image héritées de Element
  * 
  * Contient : 
@@ -281,8 +281,161 @@ function callModelGUI(objectEvent) {
 }
 
 
+function test(){
+//function testcos(){
+    var i = 0;
+    var X = 1000;
+    var Y = 1000;
+    var Z = 0;
+    var RX = 0;
+    var RY = 0;
+    var RZ = 0;
+    var r = 5000; //rayon
+    var alpha = 0; //cran de position des slides sur le cercle      //en degré
+    var beta;       //orientation de la slide (en z) pour qu'elle soit tangente au cercle  // en degré
+    
+    var prevX = 0;
+    var prevY = 0;
+    
+   truc = [];
+    while( i < 100){
+        
+        //calcul de la position sur la fonction
+        
+        //verification de la distance minimum
+        while( Math.sqrt(  Math.pow((X-prevX),2) + Math.pow((Y-prevY),2) ) < 1000  ){
+             X = X + 100;
+             Y = 3000*Math.cos(X/1000);
+             console.log(X,Y,Math.sqrt(  Math.pow((X-prevX),2) + Math.pow((Y-prevY),2) ));
+             //alert( X+' '+ Y+' '+Math.sqrt(  Math.pow((X-prevX),2) + Math.pow((Y-prevY),2) ) );
+             
+        }
+        
+              
+        truc.push([X,Y]);
+        
+        var slide = new Slide({
+            pos : {
+                x: X,
+                y: Y,
+                z: Z
+            },
+            rotate : {
+                x: RX,
+                y: RY,
+                z: RZ
+            }
+        });
+        
+        
+        Z = Z - 1000;
+        prevX = X;
+        prevY = Y;
+        i++;
+    }
+    
+}
 
-function test() {
+
+
+function testCircle(){
+//function test(){
+     var i = 0;
+    var X = 0;
+    var Y = 0;
+    var Z = 0;
+    var RX = 0;
+    var RY = 0;
+    var RZ = 0;
+    var r = 5000; //rayon
+    var alpha = 0; //cran de position des slides sur le cercle      //en degré
+    var beta;       //orientation de la slide (en z) pour qu'elle soit tangente au cercle  // en degré
+    
+    var smaller = true;
+   truc = [];
+    while( i < 100){
+        
+        
+        
+        //calcul de la position autour du cercle 
+        var alphaRad = alpha*Math.PI/180;
+        X = Math.sin(alphaRad)*r;
+        Y = Math.cos(alphaRad)*r;
+        
+        //calcul de la rotation en Z
+//        var signeX = X / Math.abs(X);
+//        var a = 2*X / Math.sqrt( Math.pow(r,2) - Math.pow(X,2) ); //coef directeur de la tangent
+//        
+//        beta = Math.acos(   signeX / Math.sqrt(  Math.pow(a,2) + 1  )   );
+////        beta = Math.atan( coef * 2*X / Math.sqrt( Math.pow(r,2) - Math.pow(X,2) ) ) * 180/ Math.PI ;
+//        RZ = beta * 180/Math.PI;
+//        truc.push(beta);
+       
+        
+        var slide = new Slide({
+            pos : {
+                x: X,
+                y: Y,
+                z: Z
+            },
+            rotate : {
+                x: RX,
+                y: RY,
+                z: RZ
+            }
+        });
+        
+        Z = Z - 1000;
+        if (smaller) {
+            r = r - 300;
+        } else {
+            r = r + 300;           
+        }
+        var limite = 1000;
+        if ( r < limite ){
+            smaller = false;
+//            r = limite + 10;
+        }
+        console.log('RAYON             ',r);
+        
+        alpha +=20; //en degré
+        i++;
+    }
+    
+    
+}
+
+
+function test3(){
+    var i = 0;
+    var X = 0;
+    var Y = 0;
+    var Z = 0;
+    var RX = 0;
+    var RY = 0;
+    var RZ = 0;
+    
+    while( i < 10){
+        
+        var slide = new Slide({
+            pos : {
+                x: X,
+                y: Y,
+                z: Z
+            },
+            rotate : {
+                x: RX,
+                y: RY,
+                z: RZ
+            }
+        });
+        Y += 1000;        
+        RY +=45;
+        i++;
+    }
+}
+
+function test2() {
     //differents moyen de créer une slide
     //juste avec les coord
     //$('#slideArea>').html('');

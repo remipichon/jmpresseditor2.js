@@ -1,7 +1,7 @@
 /* 
  * Scripts regarding only animation of layout (slidding menu, etc)
  * listeners de tous les boutons
- * 
+ *  a deplacer dans GUIEditor
  */
 
 
