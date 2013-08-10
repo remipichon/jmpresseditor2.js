@@ -304,7 +304,8 @@ function selectSlide(callback, param1, composant) {
  * 
  */
 Element = Class.extend({
-    init: function(params, slide, matricule) {
+    init: function(slide, params,  matricule) {
+        //ce sont les filles qui se chargent de params !
 
         //default values
         this.pos = {
@@ -428,17 +429,24 @@ Element = Class.extend({
  * changement matricule
  */
 Text = Element.extend({
-    init: function(params, slide) {
+    init: function(slide, params) {
         // Appelle du constructeur de la mere
         // Il écrit la totalité des objets de params dans les attributs de la mere
         // Il prend en compte les attributs qui ne sont pas dans la mère, il faut alors
         // définir des watches au besoin.
+        if( typeof params === 'undefined' ){
+            params = {};
+        }
+        if( typeof slide === 'undefined' ){
+            slide = 'null';
+        }
+        
 
         var matricule = 'texteelement' + globalCpt++;
         this.matricule = matricule;
 
 
-        if (!this._super(params, slide, matricule)) {
+        if (!this._super(slide, params, matricule)) {
             return 0;
         }
 
@@ -448,7 +456,7 @@ Text = Element.extend({
 
         //attribut propre aux textes
         this.properties = {
-            hierarchy: 'bodyText',
+            hierarchy: 'H1Text',//'bodyText',
             content: 'Type text here'
         };
 
@@ -522,11 +530,18 @@ Text = Element.extend({
 
 //les images sont en pixel
 Image = Element.extend({
-    init: function(params, slide) {
+    init: function(slide, params) {
+        if( typeof params === 'undefined' ){
+            params = {};
+        }
+         if( typeof slide === 'undefined' ){
+            slide = 'null';
+        }
+      
         var matricule = 'imageelement' + globalCpt++;
         this.matricule = matricule;
 
-        this._super(params, slide, matricule);
+        this._super(slide, params, matricule);
 
         //pour mustache
         this.image = true;

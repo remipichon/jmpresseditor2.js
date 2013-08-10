@@ -15,6 +15,7 @@ function goCK() {
     $('#tree li').each(function() {
         //var span = "<span class='li' contenteditable='true'> texte </span>";
         var span = "<span class='li' contenteditable='true'> " + $(this).html().match(/.*/)[0] + " </span>";
+//        var span = "<span class='li' contenteditable='true'> " + '$(this).html()' + " </span>";
         //$(this).html('');
         $(this).prepend(span);
 
@@ -35,6 +36,8 @@ function max(array) {
     }
     return m;
 }
+
+//function maxDepth
 
 sibPerLevel = new Array();
 function goDepth() {
@@ -66,9 +69,47 @@ function goDepth() {
         //$(this).children('span').html('nb enfant ' + nbChild);
         $(this).attr('depth', depth).attr('siblings', siblings).attr('nbChild', nbChild);
     });
+}
+
+/*
+ * supber fonction recursive qui permet de determiner la profondeur max d'une li !
+ */
+//$node  => li de la liste
+// max  => 0
+function maxDepth($node,max) {
+
+//    $($('li')[95]).prev();
+    // condition de sortie
+//    alert($node.attr('nbchild'));
+    if ($node.attr('nbchild') == 0) {
+        console.log($node.attr('depth'));
+//        alert();
+        if( $node.attr('depth') > max )   return $node.attr('depth');
+        
+        return max;
+    }
+
+    //recursivité
+    var $lis = $($node.children('ol')[0]).children(); 
+    
+    
+//    var $ols = $node.children()[parseInt($node.attr('nbchild')-1)];;
+    var $ols = $lis;
+    for( var i=0,len=$ols.length; i<len; i++){ 
+        var $li = $($ols[i]);
+        max = maxDepth($li,max);
+    }
+    
+    
+    return max;
+
+}
 
 
-
+function goPosition() {
+    var cranY = 500;
+    var cranZ = -1000;
+    var cranX = 1200;
     //////calcul des positions 
     $('#tree').attr('number', '');
     $('#tree').prepend("<span style='display:none'>Jmpress Editor -</span>");
@@ -78,10 +119,21 @@ function goDepth() {
         if ($(this).attr('depth') === '1') {
 
             var delta = 1000;
-            var x = 2000 * $(this).index();
-            var y = 500 * $(this).index();
-            var z = 5000;
-
+            var x = -1500 + parseInt($(this).index()) * cranX;
+            var y = 0;
+//            var z = 1213;//parseInt($(this).attr('data-z')) + cranZ;
+//            var z = parseInt($(this).index()) * cranZ;
+//            var z = parseInt($(this).prev().attr('data-z')) + (parseInt(maxDepth($(this).prev(),0))+1)*cranZ;
+//            var z =  (parseInt(maxDepth($(this).prev(),0)))*cranZ;
+            if( $(this).index() == 0 ){
+//                alert(0);
+                 var z =  (parseInt(maxDepth($(this).prev(),0))+1)*cranZ;
+            } else {
+//                alert(parseInt($(this).prev().attr('data-z')));
+                var z = parseInt($(this).prev().attr('data-z')) + (parseInt(maxDepth($(this).prev(),0)))*cranZ;
+            }
+            
+//            alert(maxDepth($(this).prev(),0));
 
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z).attr('data-rotate-x', '-45');
             $(this).attr('type', 'title1');
@@ -97,17 +149,20 @@ function goDepth() {
     $('#tree li').each(function() {
         if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
             var delta = 1000;
-            var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
-            var z = $(this).parent().parent().attr('data-z') - deltaZ;
-            if ($(this).index() === 0) {
-                var y = parseFloat($(this).parent().parent().attr('data-y')) + delta; //pour atteindre la li qui la stocke                      
+            var x = $(this).parent().parent().attr('data-x'); //va changer
+            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+            var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
+            if ($(this).index() === 0) { //si première fille
+//                var y = parseFloat($(this).parent().parent().attr('data-y')) + delta; //pour atteindre la li qui la stocke                      
+                var x = x;
 
             } else {                                                                    //compensation de deplacement en fn du nb d'enfant non mit verticalement ! il faut le prendre en compte 
-
-                var y = parseFloat($(this).parent().parent().attr('data-y')) + delta * ($(this).index() + 1);
-                if ($($(this).prev('li').children('ol').children('li')[0]).attr('nbChild') !== '0') { //si le precedent siblings a des enfants qui ont des enfants, ces enfants (au sibling) ne sont pas du contenu, il faut donc leur laisser la place de se mettre en y 
-                    y += delta * 1.5 * $(this).prev('li').attr('nbChild');
-                }
+                var x = parseInt($($(this).prev()).attr('data-x')) + cranX; //position de sa grande soeur
+//                var y = $($(this).prev()).attr('data-y');
+//                var y = parseFloat($(this).parent().parent().attr('data-y')) + delta * ($(this).index() + 1);
+//                if ($($(this).prev('li').children('ol').children('li')[0]).attr('nbChild') !== '0') { //si le precedent siblings a des enfants qui ont des enfants, ces enfants (au sibling) ne sont pas du contenu, il faut donc leur laisser la place de se mettre en y 
+//                    y += delta * 1.5 * $(this).prev('li').attr('nbChild');
+//                }
             }
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
             $(this).attr('type', 'title1');
@@ -115,11 +170,16 @@ function goDepth() {
             $(this).attr('number', $(this).parent().parent().attr('number') + "." + indice);
 
 
-        } else if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') === '0') {       //si pas d'enfants, c'est du contenu, slides verticales                        
-
-            var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
-            var y = $(this).parent().parent().attr('data-y');
-            var z = parseFloat($(this).parent().parent().attr('data-z')) - ($(this).index() + 1) * 1500;
+        } else if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') === '0') {       //si pas d'enfants, c'est du contenu, slides horizontales                        
+            
+            
+            var x = parseInt($(this).parent().parent().attr('data-x')) + $(this).index()*cranX/2 ; 
+            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+            var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
+//            
+//            var x = $(this).parent().parent().attr('data-x'); //pour atteindre la li qui la stocke
+//            var y = $(this).parent().parent().attr('data-y');
+//            var z = parseFloat($(this).parent().parent().attr('data-z')) - ($(this).index() + 1) * 1500;
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
             $(this).attr('type', 'content');
             var indice = parseFloat($(this).index()) + 1;
@@ -128,19 +188,16 @@ function goDepth() {
         }
 
     });
-
-
 }
+
+
+
 
 
 
 function goJmpress() {
 
-    //slide permettant d'init la position de la zone de vue 
-    var overview = "<div class='step overview' data-x = '1000' data-y =' 1000 ' data-z =' 0 ' data-scale='10'></div>";
-    $('#slideArea').children().append(overview);
-    var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)                
-    $('#slideArea').jmpress('init', $newSlide);
+
 
     j = 0;  //pas très algorythmique cela
 
@@ -150,38 +207,6 @@ function goJmpress() {
     var Oy = 1000;//max(sibPerLevel) * 1000 / 2;
     var Oz = 2700;
     var scale = 9.5;
-
-    //creation des overwiews de départ
-    var evCodeSlide = ({
-        type: 'code',
-        x: 2000,
-        y: 2000,
-        z: 3000,
-        rotateX: 0,
-        rotateY: 320,
-        rotateZ: 0,
-        id: "slide-" + id++,
-        typeEl: 'overview',
-        index: id,
-        scale: scale
-    });
-    createSlide('overview', evCodeSlide);
-
-    var evCodeSlide = ({
-        type: 'code',
-        rotateX: -45,
-        rotateY: 0,
-        rotateZ: 0,
-        x: Ox,
-        y: Oy,
-        z: Oz,
-        id: "slide-" + id++,
-        typeEl: 'overview',
-        index: id,
-        scale: scale
-    });
-    createSlide('overview', evCodeSlide);
-
 
 
 
@@ -202,72 +227,29 @@ function goJmpress() {
             scale: 1
         });
 
-        createSlide('slide', evCodeSlide);
-
-        var $newSlide = $('#slideArea>').children().last(); // contenu (enfant div step element)
-
-        var string = $(this).parent().parent().children('span').html();
-        var reg = new RegExp("[@]+", "g");
-
-
-        //surtitre tronqué par à partir de @
-        var tabTxt = string.split(reg);
-        var evCodeText = ({
-            type: 'code',
-            container: $newSlide,
-            x: '0',
-            y: '0',
-            z: '0',
-            content: $(this).parent().parent().attr('number') + " - " + tabTxt[0]
-        });
-        createText('title2', evCodeText);
-
-
-
-        //contenu (titre ou content)
-        string = $(this).children('span').html();
-        tabTxt = string.split(reg);
-
-        var evCodeText = ({
-            type: 'code',
-            container: $newSlide,
-            x: '0',
-            y: '999',
-            z: '0',
-            content: $(this).attr('number') //KIKI+ " - " + content
+//        createSlide('slide', evCodeSlide);
+        var slide = new Slide({
+            pos: {
+                x: $(this).attr('data-x'),
+                y: $(this).attr('data-y'),
+                z: $(this).attr('data-z')
+            }
         });
 
-        if ($(this).attr('type') === 'content') {
-            //var content = "<p>" + tabTxt.join('</p> <p>') + "</p>";
-            var content = tabTxt.join('');
-            evCodeText.y = 100;        //KIKI magouille pour décaler les textes de contenus
-
-
-            for (var val in tabTxt) {   //crée une nouvelle instance de bodyText pour la mise à la ligne
-                evCodeText.content = tabTxt[val];
-                createText('bodyText', evCodeText);
-
+        new Text(slide.matricule, {
+            properties: {
+                hierachy: 'H1Text',
+                content: $(this).children('span').html()
             }
+        });
 
-        } else {        //sinon c'est un titre
-            evCodeText.content += tabTxt.join('');
-            evCodeText.y = 0;
-            if ($(this).attr('type') === 'title1') {
-                createText('title1', evCodeText);
-            } else if ($(this).attr('type') === 'title2') {
-                createText('title2', evCodeText);
-            }
 
-        }
+
 
     });
 
 
-    goAutoAlign();  //-> le probleme sur lequel je buttais depuis une demie heure
-    //c'était que cet appel de fonction n'es pas bon, il manque  ()  !!
-
-
-}
+} //fin goJmpress
 
 
 function goAutoAlign() {

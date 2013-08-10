@@ -1689,7 +1689,7 @@
 					action = event.shiftKey ? action[1] : action[0];
 				}
 				jmpress.jmpress( action );
-				stopEvent(event);
+				// KIKI stopEvent(event);
 			} else if ( $.isFunction(action) ) {
 				action.call(jmpress, event);
 			} else if ( action ) {

@@ -74,7 +74,7 @@ $(document).ready(function() {
                 }
             });
             var matricule = slide.matricule;
-            new Text({
+            new Text(matricule,{
                 properties: {
                     hierarchy: 'H1Text'
                 },
@@ -82,8 +82,8 @@ $(document).ready(function() {
                     x: 40,
                     y: 10
                 }
-            }, matricule);
-            new Text({
+            });
+            new Text(matricule, {
                 properties: {
                     hierarchy: 'bodyText'
                 },
@@ -91,7 +91,7 @@ $(document).ready(function() {
                     y: 200,
                     x: 50
                 }
-            }, matricule);
+            });
         }
 
     });
@@ -248,11 +248,11 @@ $(document).ready(function() {
             var matriculeSlide = slide.matricule;
             for (var matEl in pressjson.slide[matS].element) {
                 var element = pressjson.slide[matS].element[matEl];
-                new Text({
+                new Text(matriculeSlide,{
                  //   'matricule': element.matricule,
                     'pos': element.pos,
                     'properties': {'content': element.properties.content}
-                }, matriculeSlide);
+                });
             }
         }
 
