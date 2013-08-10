@@ -458,19 +458,50 @@ function test3() {
 
 
 function dynamicTest() {
-    
-    
+    //au départ, on cache toutes les slides
+    $('.slide').each(function() {
+        $(this).addClass('hidden');
+    });
+
+
 
     $(document).on('keypress', function(event) {
+
         if (event.which == 32) { //je n'ai pu récupérer que l'espace
+            
             /*
              * each time space bar is pressed on cherche la slide qui a la classe 'active'
              */
-            var active = $('#slideArea').attr('class').split(' ')[0].replace('step-', '');
-            
-            
-            
+            var currentMatricule = $('#slideArea').attr('class').split(' ')[0].replace('step-', '');
+            var liCurrent = $('#tree #li_' + currentMatricule);
 
+            //on cache les filles et leurs filles (et ainsi de suite) de ses soeurs
+            liCurrent.siblings().each(function() {      //toutes les soeurs
+                var allChildren = getChildren($(this), []);  // on recupere un tableau des matricules de toutes les filles
+                for (var child in allChildren) {
+                    var matriculeChild = allChildren[child];
+                    $('#'+matriculeChild).addClass('hidden');
+                }
+            });
+
+
+
+
+            /*   affiche certaines slides */
+            //ses soeurs
+            liCurrent.siblings().each(function() {
+                var matricule = $(this).attr('matricule'); //on recuperer le matricule stocké dans la li
+                $('#' + matricule).removeClass('hidden');     //on agit sur la slide qui a ce matricule
+            });
+            
+            //ses filles directes
+            $(liCurrent.children('ol')[0]).children().each(function() {
+                var matricule = $(this).attr('matricule');
+                $('#' + matricule).removeClass('hidden');
+            });
+
+            //elle meme
+            $('#' + currentMatricule).removeClass('hidden');
         }
     });
 
