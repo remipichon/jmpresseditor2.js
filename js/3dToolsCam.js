@@ -24,10 +24,13 @@
  1: 
  2: 
  */
-function getTrans3D() {
+function getTrans3D($node) {
+    if( typeof $node === 'undefined' ){
+        $node = $("#slideArea>div");
+    }
 
     var prefix = (pfx('transform'));
-    var trans = $("#slideArea>div")[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
+    var trans = $node[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};
     for (var el in trans) {
         var ele = trans[el];
@@ -53,10 +56,13 @@ function getTrans3D() {
  * @param {type} dico
  * 
  */
-function setTrans3D(dico) {
+function setTrans3D(dico,$node) {
+    if( typeof $node === 'undefined' ){
+        $node = $("#slideArea>div");
+    }
     //var transform = "translate(" + dico.translate[0] + "%, " + dico.translate[1] + "%) scaleX(" + dico.scaleX + ") scaleY(" + dico.scaleY + ") scaleZ(" + dico.scaleZ + ") rotateX(" + dico.rotateX + "deg) rotateY(" + dico.rotateY + "deg) rotateZ(" + dico.rotateZ + "deg) translate3d(" + dico.translate3d[0] + "px," + dico.translate3d[1] + "px, " + dico.translate3d[2] + "px)";
     var transform = "translate(" + dico.translate[0] + "%, " + dico.translate[1] + "%) scaleX(" + dico.scaleX + ") scaleY(" + dico.scaleY + ") scaleZ(" + dico.scaleZ + ") translate3d(0px,0px,0px) scaleX(1) scaleY(1) scaleZ(1) rotateZ(" + dico.rotateZ + "deg) rotateY(" + dico.rotateY + "deg) rotateX(" + dico.rotateX + "deg) translate3d(" + dico.translate3d[0] + "px," + dico.translate3d[1] + "px, " + dico.translate3d[2] + "px)";
-    $("#slideArea>div").css({'transform': transform});
+    $node.css({'transform': transform});
 }
 
 

@@ -462,6 +462,29 @@ function dynamicTest() {
     $('.slide').each(function() {
         $(this).addClass('hidden');
     });
+    
+    //au depart tout le plan est en 'futur'
+    $('#tree li').each(function() {
+       $(this).addClass('li-slide'); 
+       $(this).addClass('future-slide'); 
+    });
+    
+    //au depart tous les titres sont au niveau de leur grande soeur
+    $('#tree li').each(function(){
+       if( $(this).attr('type') === 'title' ){
+           
+           var $slideRef = $('#'+$(this).attr('matricule'));
+           var dicoRef = getTrans3D($slideRef);
+           
+           $(this).siblings().each(function(){
+               var $slide = $('#'+$(this).attr('matricule'));
+               var dico = getTrans3D($slide);
+//               console.log($slideRef,dicoRef,$slide,dico);
+               dico.translate3d[2] = dicoRef.translate3d[2];
+               setTrans3D(dico,$slide);
+           });
+       } 
+    });
 
 
 
@@ -469,11 +492,15 @@ function dynamicTest() {
 
         if (event.which == 32) { //je n'ai pu récupérer que l'espace
             
-            /*
+           /*
              * each time space bar is pressed on cherche la slide qui a la classe 'active'
              */
             var currentMatricule = $('#slideArea').attr('class').split(' ')[0].replace('step-', '');
+            var currentSlide = $('#'+currentMatricule);
             var liCurrent = $('#tree #li_' + currentMatricule);
+            //petit effet sur le tree 
+            $('.present-slide').removeClass('present-slide').addClass('past-slide');
+            liCurrent.removeClass('future-slide').addClass('present-slide');
 
             //on cache les filles et leurs filles (et ainsi de suite) de ses soeurs
             liCurrent.siblings().each(function() {      //toutes les soeurs
@@ -502,6 +529,18 @@ function dynamicTest() {
 
             //elle meme
             $('#' + currentMatricule).removeClass('hidden');
+            
+            
+            /* mise à niveau des petites soeurs sur la petite soeur de la current*/
+            var littleHilly = $('#'+liCurrent.next().attr('matricule'));
+            var dicoRef = getTrans3D(littleHilly);
+            $('#tree #li_' + currentMatricule +' ~').each(function(){ //pour obtenir les next siblings de la current li
+               var $slide = $('#'+$(this).attr('matricule'));
+               var dico = getTrans3D($slide);
+               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
+               dico.translate3d[2] = littleHilly.attr('data-z');
+               setTrans3D(dico,$slide);
+           });
         }
     });
 

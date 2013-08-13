@@ -5,11 +5,22 @@
 
 
 #tree {
-    color: red;
-   
-    
-    
+    color: black
 }
+
+.present-slide{
+    color: red;
+}
+
+.past-slide{
+    color: gray;
+}
+
+.future-slide{
+    color: blue;
+}
+
+
 
 
 /********************************************************************************************/

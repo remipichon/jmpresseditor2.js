@@ -5,7 +5,7 @@
  */
 
 
-deltaZ = 1000;
+
 
 function goCK() {
 //    $('#slideArea').html('');
@@ -39,8 +39,11 @@ function max(array) {
 
 //function maxDepth
 
-sibPerLevel = new Array();
+
+
 function goDepth() {
+    
+    var sibPerLevel = new Array();
 
 
 
@@ -115,7 +118,7 @@ function maxDepth($node, max) {
     var $lis = $($node.children('ol')[0]).children();
     for (var i = 0, len = $lis.length; i < len; i++) {
         var $li = $($lis[i]);
-        console.log($li.html());
+//        console.log($li.html());
         max = maxDepth($li, max);
     }
 
@@ -126,7 +129,7 @@ function maxDepth($node, max) {
 
 
 function goPosition() {
-    var cranY = 500;
+    var cranY = 1000;
     var cranZ = -1000;
     var cranX = 1200;
     //////calcul des positions 
@@ -138,14 +141,14 @@ function goPosition() {
         if ($(this).attr('depth') === '1') {
             var x = -1500 + parseInt($(this).index()) * cranX;
             var y = 0;
-            if ($(this).index() == 0) { //initialisation de la positio de la toute première slide
+            if ($(this).index() === 0) { //initialisation de la positio de la toute première slide
                 var z = (parseInt(maxDepth($(this).prev(), 0))) * cranZ;
             } else {
                 var z = parseInt($(this).prev().attr('data-z')) + (parseInt(maxDepth($(this).prev(), 0))) * cranZ;
             }
 
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z).attr('data-rotate-x', '-45');
-            $(this).attr('type', 'title1');
+            $(this).attr('type', 'title');
             var indice = parseFloat($(this).index()) + 1;
             $(this).attr('number', indice);
         }
@@ -156,9 +159,10 @@ function goPosition() {
     //les autres niveaux
     $('#tree li').each(function() {
         if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
-            var delta = 1000;
+            
             var x = $(this).parent().parent().attr('data-x'); //va changer
-            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+//            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+            var y = parseInt($(this).parent().parent().attr('data-y')) +  cranY; //pour atteindre la li qui la stocke
             var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
             if ($(this).index() === 0) { //si première fille
                 var x = x;
@@ -166,7 +170,7 @@ function goPosition() {
                 var x = parseInt($($(this).prev()).attr('data-x')) + cranX; //position de sa grande soeur
             }
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
-            $(this).attr('type', 'title1');
+            $(this).attr('type', 'title');
             var indice = parseInt($(this).index()) + 1;
             $(this).attr('number', $(this).parent().parent().attr('number') + "." + indice);
 
@@ -175,7 +179,9 @@ function goPosition() {
 
 
             var x = parseInt($(this).parent().parent().attr('data-x')) + $(this).index() * cranX / 2;
-            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+//            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+//            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index()) * cranY; //pour atteindre la li qui la stocke
+            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index()+1) * cranY; //pour atteindre la li qui la stocke
             var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
             
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
@@ -197,7 +203,33 @@ function goJmpress() {
 
     //creation des slides jmpress
     $('#tree li').each(function() {
-
+        
+        //si besoin ajout de l'overview
+        //titre
+        if( $(this).attr('type') === 'title' ){
+            //s'il y au moins une petite soeur
+            //console.log($(this).index() , parseInt($(this).attr('siblings')) -1);
+            if($(this).index() < parseInt($(this).attr('siblings')) -1 ){
+                
+                var over = new Slide({
+                    type: 'overview',
+                    pos: {
+                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings.length-1]).attr('data-x') ))/2,
+                        y: $(this).attr('data-y'),
+                        z: $(this).attr('data-z')                     
+                    },
+                    scale: $(this).attr('siblings')
+                });
+                
+//                console.log(parseInt($(this).attr('data-x')), parseInt($($(this).siblings()[$(this).siblings.length-1]).attr('data-x') ));
+//                console.log('new overview ',over.pos.x,over.pos.y,over.pos.z);
+                
+            }
+        }
+       
+     
+        
+        //ajout de la slide
         var slide = new Slide({
             pos: {
                 x: $(this).attr('data-x'),
