@@ -507,7 +507,8 @@ function dynamicTest() {
                 var allChildren = getChildren($(this), []);  // on recupere un tableau des matricules de toutes les filles
                 for (var child in allChildren) {
                     var matriculeChild = allChildren[child];
-                    $('#'+matriculeChild).addClass('hidden');
+                    //$('#'+matriculeChild).addClass('hidden');
+                    $('#'+matriculeChild).fadeOut(1600);
                 }
             });
 
@@ -518,17 +519,20 @@ function dynamicTest() {
             //ses soeurs
             liCurrent.siblings().each(function() {
                 var matricule = $(this).attr('matricule'); //on recuperer le matricule stocké dans la li
-                $('#' + matricule).removeClass('hidden');     //on agit sur la slide qui a ce matricule
+//                $('#' + matricule).removeClass('hidden');     //on agit sur la slide qui a ce matricule
+                $('#' + matricule).fadeIn(1600);           //on agit sur la slide qui a ce matricule
             });
             
             //ses filles directes
             $(liCurrent.children('ol')[0]).children().each(function() {
                 var matricule = $(this).attr('matricule');
-                $('#' + matricule).removeClass('hidden');
+//                $('#' + matricule).removeClass('hidden');
+                $('#' + matricule).fadeIn(1600);
             });
 
             //elle meme
-            $('#' + currentMatricule).removeClass('hidden');
+//            $('#' + currentMatricule).removeClass('hidden');
+            $('#' + currentMatricule).fadeIn(1600);
             
             
             /* mise à niveau des petites soeurs sur la petite soeur de la current*/
@@ -537,7 +541,7 @@ function dynamicTest() {
             $('#tree #li_' + currentMatricule +' ~').each(function(){ //pour obtenir les next siblings de la current li
                var $slide = $('#'+$(this).attr('matricule'));
                var dico = getTrans3D($slide);
-               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
+//               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
                dico.translate3d[2] = littleHilly.attr('data-z');
                setTrans3D(dico,$slide);
            });
