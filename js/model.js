@@ -455,13 +455,60 @@ function test3() {
  * 
  * 
  */
+ 
+ /*
+ *  test from http://cameronspear.com/blog/animating-translate3d-with-jquery/
+ *  Great thanks to Cameronspear 2013 !
+ */
+ (function($) {
+    var delay = 0;
+    $.fn.translate3d = function(translations, speed, easing, complete) {
+        var opt = $.speed(speed, easing, complete);
+        opt.easing = opt.easing || 'ease';
+        translations = $.extend({x: 0, y: 0, z: 0}, translations);
+
+        return this.each(function() {
+            var $this = $(this);
+            /* tentative avec mes outils */
+            var dico = getTrans3D($this);
+            dico.translate3d[0] = translations.x;
+            dico.translate3d[1] = translations.y;
+            dico.translate3d[2] = translations.z;
+            
+
+            $this.css({ 
+                transitionDuration: opt.duration + 'ms',
+                transitionTimingFunction: opt.easing,
+                transform: "translate(" + dico.translate[0] + "%, " + dico.translate[1] + "%) scaleX(" + dico.scaleX + ") scaleY(" + dico.scaleY + ") scaleZ(" + dico.scaleZ + ") translate3d(0px,0px,0px) scaleX(1) scaleY(1) scaleZ(1) rotateZ(" + dico.rotateZ + "deg) rotateY(" + dico.rotateY + "deg) rotateX(" + dico.rotateX + "deg) translate3d(" + dico.translate3d[0] + "px," + dico.translate3d[1] + "px, " + dico.translate3d[2] + "px)"
+    
+//                transform: 'translate3d(' + translations.x + 'px, ' + translations.y + 'px, ' + translations.z + 'px)'
+            });
+
+            setTimeout(function() { 
+                $this.css({ 
+                    transitionDuration: '0s', 
+                    transitionTimingFunction: 'ease'
+                });
+
+                opt.complete();
+            }, opt.duration + (delay || 0));
+        });
+    };
+})(jQuery);
+ 
+ 
 
 
 function dynamicTest() {
     //au départ, on cache toutes les slides
-    $('.slide').each(function() {
-        $(this).addClass('hidden');
-    });
+   $('.slide').each(function() {
+       $(this).addClass('hidden');
+   });
+   
+   //mais on affiche les premiers titres
+   $('#tree').children('ol').children().each(function(){
+      $('#'+$(this).attr('matricule')).removeClass('hidden'); 
+   });
     
     //au depart tout le plan est en 'futur'
     $('#tree li').each(function() {
@@ -503,7 +550,11 @@ function dynamicTest() {
             liCurrent.removeClass('future-slide').addClass('present-slide');
 
             //on cache les filles et leurs filles (et ainsi de suite) de ses soeurs
-            liCurrent.siblings().each(function() {      //toutes les soeurs
+            //pour effectuer le fadeout plus tôt, sur l'arrivée à un overview s'il y en a un
+            if( currentSlide.hasClass('overview') ) var aliCurrent = $('#tree #li_'+currentSlide.next().attr('matricule')); //on recupère le matricule de la slide suivant le matricule et on recupere la li correspondante
+            else var aliCurrent = liCurrent;
+            
+            aliCurrent.siblings().each(function() {      //toutes les soeurs
                 var allChildren = getChildren($(this), []);  // on recupere un tableau des matricules de toutes les filles
                 for (var child in allChildren) {
                     var matriculeChild = allChildren[child];
@@ -542,8 +593,13 @@ function dynamicTest() {
                var $slide = $('#'+$(this).attr('matricule'));
                var dico = getTrans3D($slide);
 //               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
-               dico.translate3d[2] = littleHilly.attr('data-z');
-               setTrans3D(dico,$slide);
+//                dico.translate3d[2] = littleHilly.attr('data-z');
+                 $slide.translate3d({
+                     x:parseInt($slide.attr('data-x')),//-700,
+                     y:parseInt($slide.attr('data-y')),//-600 ,
+                     z:littleHilly.attr('data-z')
+                     },1000);
+//                setTrans3D(dico,$slide);
            });
         }
     });

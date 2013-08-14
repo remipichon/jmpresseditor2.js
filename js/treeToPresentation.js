@@ -131,7 +131,7 @@ function maxDepth($node, max) {
 function goPosition() {
     var cranY = 1000;
     var cranZ = -1000;
-    var cranX = 1200;
+    var cranX = 1800;
     //////calcul des positions 
     $('#tree').attr('number', '');
     $('#tree').prepend("<span style='display:none'>Jmpress Editor -</span>");
@@ -214,7 +214,7 @@ function goJmpress() {
                 var over = new Slide({
                     type: 'overview',
                     pos: {
-                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings.length-1]).attr('data-x') ))/2,
+                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings().length-1]).attr('data-x') ))/2,
                         y: $(this).attr('data-y'),
                         z: $(this).attr('data-z')                     
                     },

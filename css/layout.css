@@ -350,9 +350,9 @@ body
 .slide {
     display: block;
 
-    width: 900px;           /* taille réelle : 900 */
+    width: 1200px;           /* taille réelle : 900 */
     height: 700px;          /* taille réelle : 700 */
-    padding: 40px 60px;
+    /*padding: 40px 60px;*/
 
          background: rgb(215, 215, 215);
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));

@@ -20,6 +20,40 @@
     color: blue;
 }
 
+/* @-webkit-keyframes spinner {
+    from,15% { -webkit-transform: rotateY(0deg);    }
+    20%,35%  { -webkit-transform: rotateY(-72deg);  }
+    40%,55%  { -webkit-transform: rotateY(-144deg); }
+    60%,75%  { -webkit-transform: rotateY(-216deg); }
+    80%,95%  { -webkit-transform: rotateY(-288deg); }
+    to       { -webkit-transform: rotateY(-360deg); }
+ }  
+ 
+ 
+ @-webkit-keyframes move {
+     from   {      }
+     to     { -webkit-transform: transform3D(0px,0px,-1000px);    }
+     
+ }
+ 
+#slide1 {
+     -webkit-animation-name: move;
+     -webkit-animation-duration: 10s;
+     -webkit-animation-iteration-count: 1;
+ }
+   */
+  
+/*   .slide {
+    -webkit-animation-name: spinner;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 6s;
+    -webkit-transform-style: preserve-3d;
+  }
+  .slide:hover {
+    -webkit-animation-play-state: paused;
+  } */
+
 
 
 
