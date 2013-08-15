@@ -46,18 +46,20 @@ container = {metadata: {}, slide: {}};
  */
 Slide = Class.extend({
     init: function(params) {
-        //if matricule is set, check if unique
-        if( typeof params.matricule !== 'undefined'){
-            if( findObjectOfComposant(params.matricule) !== false ){ //le matricule existe déjà !
-                console.log('Error : construct Slide : matricule '+params.matricule+' already set in container');
-                delete this;
-                return; 
-                
+        if (typeof params !== 'undefined') {
+            //if matricule is set, check if unique
+            if (typeof params.matricule !== 'undefined') {
+                if (findObjectOfComposant(params.matricule) !== false) { //le matricule existe déjà !
+                    console.log('Error : construct Slide : matricule ' + params.matricule + ' already set in container');
+                    delete this;
+                    return;
+
+                }
             }
         }
-        
+
         //default value
-        var matricule = 'slide' + globalCpt++; 
+        var matricule = 'slide' + globalCpt++;
         this.matricule = matricule;
 
 
@@ -97,8 +99,8 @@ Slide = Class.extend({
                 }
             }
         }
-        
-        
+
+
 
 
 
@@ -220,8 +222,8 @@ Slide = Class.extend({
 
         //deplace le slide dans le container en s'appuyant sur le DOM
         var newContainer = {
-            metadata: container.metadata, 
-                    slide: {}
+            metadata: container.metadata,
+            slide: {}
         };
         $('#slideArea>').children().each(function() {
             if ($(this).attr('id') !== 'profondeur') {
@@ -250,13 +252,13 @@ Slide = Class.extend({
     destroy: function() {
         $('#' + this.matricule).remove();
         delete container.slide[this.matricule];
-        $('li').each( function() { 
-            if( $(this).attr('matricule') === this.matricule) {
+        $('li').each(function() {
+            if ($(this).attr('matricule') === this.matricule) {
 //                 $(this).remove();
                 truc = $(this);
             }
 //               
-                
+
         });
     }
 
@@ -316,14 +318,16 @@ function selectSlide(callback, param1, composant) {
  * 
  */
 Element = Class.extend({
-    init: function(slide, params,  matricule) {
-        //if matricule is set, check if unique
-        if( typeof params.matricule !== 'undefined'){
-            if( findObjectOfComposant(params.matricule) !== false ){ //le matricule existe déjà !
-                console.log('Error : construct Element : matricule '+params.matricule+' already set in container');
-                delete this;
-                return; 
-                
+    init: function(slide, params, matricule) {
+        if (typeof params !== 'undefined') {
+            //if matricule is set, check if unique
+            if (typeof params.matricule !== 'undefined') {
+                if (findObjectOfComposant(params.matricule) !== false) { //le matricule existe déjà !
+                    console.log('Error : construct Element : matricule ' + params.matricule + ' already set in container');
+                    delete this;
+                    return;
+
+                }
             }
         }
         //ce sont les filles qui se chargent de params !
@@ -455,13 +459,13 @@ Text = Element.extend({
         // Il écrit la totalité des objets de params dans les attributs de la mere
         // Il prend en compte les attributs qui ne sont pas dans la mère, il faut alors
         // définir des watches au besoin.
-        if( typeof params === 'undefined' ){
+        if (typeof params === 'undefined') {
             params = {};
         }
-        if( typeof slide === 'undefined' ){
+        if (typeof slide === 'undefined') {
             slide = 'null';
         }
-        
+
 
         var matricule = 'texteelement' + globalCpt++;
         this.matricule = matricule;
@@ -477,7 +481,7 @@ Text = Element.extend({
 
         //attribut propre aux textes
         this.properties = {
-            hierarchy: 'H1Text',//'bodyText',
+            hierarchy: 'H1Text', //'bodyText',
             content: 'Type text here'
         };
 
@@ -552,13 +556,13 @@ Text = Element.extend({
 //les images sont en pixel
 Image = Element.extend({
     init: function(slide, params) {
-        if( typeof params === 'undefined' ){
+        if (typeof params === 'undefined') {
             params = {};
         }
-         if( typeof slide === 'undefined' ){
+        if (typeof slide === 'undefined') {
             slide = 'null';
         }
-      
+
         var matricule = 'imageelement' + globalCpt++;
         this.matricule = matricule;
 
