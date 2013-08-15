@@ -6,7 +6,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <title>Editor</title>
-                <link rel="stylesheet" type="text/css" href="css/layout.css" >
+        <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="css/element.css" >
 
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
@@ -270,16 +270,16 @@
 
         </div>
 
-       
+
 
 
 
         <div id="slideArea" >
             <!--<div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>-->
-            <div id="profondeur" class="hidden step overview" data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
+            <div id="home" class="hidden step overview" data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
         </div>
-        
-         <div id="tree">
+
+        <div id="tree">
             <ol>
                 <li>1
                     <ol>
@@ -346,6 +346,7 @@
 
             $(document).ready(function() {
 
+
                 $('#slideArea').jmpress({
 //                        keyboard: {
 //                                keys: {
@@ -365,15 +366,19 @@
 //                        maxScale: 1
 //                    }
 //                });
+                $('#slideArea').jmpress('deinit', $('#home'));
+
 
 //                alert();
                 transform3D = new Transform3D();
                 goCK();
                 goDepth();
                 goPosition();
+                goPositionEnd();
                 goJmpress();
                 //test();
-                dynamicTest();
+                dynamic();
+                //endDynamic();
 
             });
         </script>

@@ -42,7 +42,7 @@ function max(array) {
 
 
 function goDepth() {
-    
+
     var sibPerLevel = new Array();
 
 
@@ -90,7 +90,7 @@ function getChildren($node, listChild) {
     //recursivité
     var $lis = $($node.children('ol')[0]).children();
     for (var i = 0, len = $lis.length; i < len; i++) {
-        var $li = $($lis[i]);   
+        var $li = $($lis[i]);
         listChild.push($li.attr('matricule'));
         listChild = getChildren($li, listChild);
     }
@@ -159,10 +159,10 @@ function goPosition() {
     //les autres niveaux
     $('#tree li').each(function() {
         if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
-            
+
             var x = $(this).parent().parent().attr('data-x'); //va changer
 //            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
-            var y = parseInt($(this).parent().parent().attr('data-y')) +  cranY; //pour atteindre la li qui la stocke
+            var y = parseInt($(this).parent().parent().attr('data-y')) + cranY; //pour atteindre la li qui la stocke
             var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
             if ($(this).index() === 0) { //si première fille
                 var x = x;
@@ -181,9 +181,9 @@ function goPosition() {
             var x = parseInt($(this).parent().parent().attr('data-x')) + $(this).index() * cranX / 2;
 //            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
 //            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index()) * cranY; //pour atteindre la li qui la stocke
-            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index()+1) * cranY; //pour atteindre la li qui la stocke
+            var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index() + 1) * cranY; //pour atteindre la li qui la stocke
             var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
-            
+
             $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
             $(this).attr('type', 'content');
             var indice = parseFloat($(this).index()) + 1;
@@ -203,32 +203,71 @@ function goJmpress() {
 
     //creation des slides jmpress
     $('#tree li').each(function() {
-        
+
+        if (typeof $(this).attr('uppery') !== 'undefined') {
+            var upperY = parseInt($(this).attr('uppery'));
+            var lowerY = parseInt($(this).attr('lowery'));
+            new Slide({
+                matricule: 'end',
+                pos: {
+                    x: 10000,
+                    y: (upperY + lowerY) / 2,
+                    z: 0
+                },
+                scale: 15,
+                type: 'overview'
+            }
+            );
+            var slide = new Slide({
+                matricule: 'questions',
+                pos: {
+                    x: 15000,
+                    y: (upperY + lowerY) / 2,
+                    z: 0
+                },
+                scale: 10
+
+            }
+            );
+            new Text(slide.matricule, {
+                properties: {
+                    content: 'Any questions ?',
+                    hierarchy: 'H1Text'
+                },
+                pos: {
+                    x: 0,
+                    y: 0
+                }
+
+            });
+            return;
+        }
+
         //si besoin ajout de l'overview
         //titre
-        if( $(this).attr('type') === 'title' ){
+        if ($(this).attr('type') === 'title') {
             //s'il y au moins une petite soeur
             //console.log($(this).index() , parseInt($(this).attr('siblings')) -1);
-            if($(this).index() < parseInt($(this).attr('siblings')) -1 ){
-                
+            if ($(this).index() < parseInt($(this).attr('siblings')) - 1) {
+
                 var over = new Slide({
                     type: 'overview',
                     pos: {
-                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings().length-1]).attr('data-x') ))/2,
+                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings().length - 1]).attr('data-x'))) / 2,
                         y: $(this).attr('data-y'),
-                        z: $(this).attr('data-z')                     
+                        z: $(this).attr('data-z')
                     },
                     scale: $(this).attr('siblings')
                 });
-                
+
 //                console.log(parseInt($(this).attr('data-x')), parseInt($($(this).siblings()[$(this).siblings.length-1]).attr('data-x') ));
 //                console.log('new overview ',over.pos.x,over.pos.y,over.pos.z);
-                
+
             }
         }
-       
-     
-        
+
+
+
         //ajout de la slide
         var slide = new Slide({
             pos: {

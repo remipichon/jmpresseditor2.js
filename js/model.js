@@ -455,12 +455,12 @@ function test3() {
  * 
  * 
  */
- 
- /*
+
+/*
  *  test from http://cameronspear.com/blog/animating-translate3d-with-jquery/
  *  Great thanks to Cameronspear 2013 !
  */
- (function($) {
+(function($) {
     var delay = 0;
     $.fn.translate3d = function(translations, speed, easing, complete) {
         var opt = $.speed(speed, easing, complete);
@@ -469,24 +469,24 @@ function test3() {
 
         return this.each(function() {
             var $this = $(this);
+
             /* tentative avec mes outils */
             var dico = getTrans3D($this);
             dico.translate3d[0] = translations.x;
             dico.translate3d[1] = translations.y;
             dico.translate3d[2] = translations.z;
-            
 
-            $this.css({ 
+
+            $this.css({
                 transitionDuration: opt.duration + 'ms',
                 transitionTimingFunction: opt.easing,
                 transform: "translate(" + dico.translate[0] + "%, " + dico.translate[1] + "%) scaleX(" + dico.scaleX + ") scaleY(" + dico.scaleY + ") scaleZ(" + dico.scaleZ + ") translate3d(0px,0px,0px) scaleX(1) scaleY(1) scaleZ(1) rotateZ(" + dico.rotateZ + "deg) rotateY(" + dico.rotateY + "deg) rotateX(" + dico.rotateX + "deg) translate3d(" + dico.translate3d[0] + "px," + dico.translate3d[1] + "px, " + dico.translate3d[2] + "px)"
-    
-//                transform: 'translate3d(' + translations.x + 'px, ' + translations.y + 'px, ' + translations.z + 'px)'
+
             });
 
-            setTimeout(function() { 
-                $this.css({ 
-                    transitionDuration: '0s', 
+            setTimeout(function() {
+                $this.css({
+                    transitionDuration: '0s',
                     transitionTimingFunction: 'ease'
                 });
 
@@ -495,71 +495,189 @@ function test3() {
         });
     };
 })(jQuery);
- 
- 
 
-
-function dynamicTest() {
+function initDynamic() {
     //au départ, on cache toutes les slides
-   $('.slide').each(function() {
-       $(this).addClass('hidden');
-   });
-   
-   //mais on affiche les premiers titres
-   $('#tree').children('ol').children().each(function(){
-      $('#'+$(this).attr('matricule')).removeClass('hidden'); 
-   });
-    
+    $('.slide').each(function() {
+        $(this).addClass('hidden');
+    });
+
+    //mais on affiche les premiers titres
+    $('#tree').children('ol').children().each(function() {
+        $('#' + $(this).attr('matricule')).removeClass('hidden');
+    });
+
     //au depart tout le plan est en 'futur'
     $('#tree li').each(function() {
-       $(this).addClass('li-slide'); 
-       $(this).addClass('future-slide'); 
+        $(this).addClass('li-slide');
+        $(this).addClass('future-slide');
     });
+
+    //au depart tous les plus grands titres sont au niveau de leur grande soeur
+    $('#tree li').each(function() {
+        if ($(this).attr('type') === 'title') {
+
+            var $slideRef = $('#' + $(this).attr('matricule'));
+            
+            var dicoRef = getTrans3D($slideRef);
+            
+
+            $(this).siblings().each(function() {
+                if( typeof $(this).attr('matricule') === 'undefined' ) return;
+                var $slide = $('#' + $(this).attr('matricule'));
+                var dico = getTrans3D($slide);
+                dico.translate3d[2] = dicoRef.translate3d[2];
+                setTrans3D(dico, $slide);
+            });
+        }
+    });
+}
+
+function endDynamic() {
+    $('#questions').removeClass('hidden');
+    $('#questions').fadeIn(1000);
+
+    /* parcours de la liste pour deplacer les slides jusqu'à la position de fin */
+    $('#tree li').each(function() {
+        if (typeof $(this).attr('data-end-x') !== 'undefined') { //si la slide doit être déplacée
+            
+
+            var $slide = $('#' + $(this).attr('matricule'));
+            $slide.removeClass('hidden');
+            $slide.fadeIn(10);
+            //var dico = getTrans3D($slide);
+//               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
+//                dico.translate3d[2] = littleHilly.attr('data-z');
+            $slide.translate3d({
+                x: parseInt($(this).attr('data-end-x')), //-700,
+                y: parseInt($(this).attr('data-end-y')), //-600 ,
+                z: parseInt($(this).attr('data-end-z'))
+            }, 5000);
+
+
+        } else {                                 //si la slide ne doit pas etre déplacée, on la cache
+            
+            $('#' + $(this).attr('matricule')).fadeOut(1000);
+            $('#' + $(this).attr('matricule')).addClass('hidden');
+        }
+    });
+
+}
+
+function goPositionEnd() {
+    var cranY = 1000;
+    var cranZ = -1000;
+    var cranX = 1800;
+    //////calcul des positions pour le deplacement final
+
+    //archivage de la coord Y de la plus haute et de la plus basse slide pour l'overview final
+    var upperY = -5000;
+    var lowerY;
+
+    //premiers niveaux
+    $('#tree li').each(function() {
+
+        if ($(this).attr('depth') === '1') {
+            var x = 0;
+            var z = 0;
+            if ($(this).index() === 0) { //initialisation de la positio de la toute première slide
+                var y = upperY;
+            } else {
+                var y = parseInt($(this).prev().attr('data-end-y')) + (parseInt(maxDepth($(this).prev(), 0))) * cranY * 1.2;
+            }
+//            console.log('y',y);
+            $(this).attr('data-end-x', x).attr('data-end-y', y).attr('data-end-z', z);
+            $(this).attr('type', 'title');
+            var indice = parseFloat($(this).index()) + 1;
+            $(this).attr('number', indice);
+            lowerY = y;
+
+        }
+
+
+    });
+
+    //les autres niveaux
+    $('#tree li').each(function() {
+        if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
+
+            var x = (parseInt($(this).attr('depth')) - 1) * cranX;//$(this).parent().parent().attr('data-end-x') ; //va changer
+//            var y = parseInt($(this).parent().parent().attr('data-end-y')) + parseInt($(this).attr('depth')) * cranY; //pour atteindre la li qui la stocke
+//            var y = parseInt($(this).parent().parent().attr('data-end-y')) +  cranY; //pour atteindre la li qui la stocke
+            var z = 0;//parseInt($(this).parent().parent().attr('data-end-z')) + parseInt($(this).index()) * cranZ;
+            if ($(this).index() === 0) { //si première fille
+                var y = parseInt($(this).parent().parent().attr('data-end-y')) + ($(this).index() + 1) * cranY * 0.5;
+            } else {
+                var y = parseInt($($(this).prev()).attr('data-end-y')) + (maxDepth($(this).prev(), 0) - $(this).attr('depth')) * cranY * 1.2; //position de sa grande soeur//depth-1 pour virer le content
+            }
+            $(this).attr('data-end-x', x).attr('data-end-y', y).attr('data-end-z', z);
+            $(this).attr('type', 'title');
+            var indice = parseInt($(this).index()) + 1;
+            $(this).attr('number', $(this).parent().parent().attr('number') + "." + indice);
+
+
+
+        } // sinon c'est du contenu, on ne s'en occupe pas
+
+    });
+    //console.log(upperY, lowerY);
     
-    //au depart tous les titres sont au niveau de leur grande soeur
-    $('#tree li').each(function(){
-       if( $(this).attr('type') === 'title' ){
-           
-           var $slideRef = $('#'+$(this).attr('matricule'));
-           var dicoRef = getTrans3D($slideRef);
-           
-           $(this).siblings().each(function(){
-               var $slide = $('#'+$(this).attr('matricule'));
-               var dico = getTrans3D($slide);
-//               console.log($slideRef,dicoRef,$slide,dico);
-               dico.translate3d[2] = dicoRef.translate3d[2];
-               setTrans3D(dico,$slide);
-           });
-       } 
-    });
+    //ajout de la slide de questions
+    var li = "<li uppery = '"+upperY+"' lowery = '"+lowerY+"' >Any questions ?</li>";
+    $('#tree').children('ol').append(li);
+
+    //lowerY a été instancié pour la dernière fois par l'element le plus 'bas' dans la lsite ul li
+   
 
 
+}
+
+
+function dynamic() {
+
+    initDynamic();
 
     $(document).on('keypress', function(event) {
 
         if (event.which == 32) { //je n'ai pu récupérer que l'espace
             
-           /*
+            /*
              * each time space bar is pressed on cherche la slide qui a la classe 'active'
              */
             var currentMatricule = $('#slideArea').attr('class').split(' ')[0].replace('step-', '');
-            var currentSlide = $('#'+currentMatricule);
+            var currentSlide = $('#' + currentMatricule);
             var liCurrent = $('#tree #li_' + currentMatricule);
+
+            /*
+             *  Réinit de la présentation lorsqu'on arrive à la premiere slide
+             */
+            if (currentMatricule === 'home') {
+                initDynamic();
+            }
+            /*
+             *  Mise en place finale lorsqu'on arrive à la fin
+             */
+            if (currentMatricule === 'end') {
+                endDynamic();
+            }
+
             //petit effet sur le tree 
             $('.present-slide').removeClass('present-slide').addClass('past-slide');
             liCurrent.removeClass('future-slide').addClass('present-slide');
 
             //on cache les filles et leurs filles (et ainsi de suite) de ses soeurs
             //pour effectuer le fadeout plus tôt, sur l'arrivée à un overview s'il y en a un
-            if( currentSlide.hasClass('overview') ) var aliCurrent = $('#tree #li_'+currentSlide.next().attr('matricule')); //on recupère le matricule de la slide suivant le matricule et on recupere la li correspondante
-            else var aliCurrent = liCurrent;
-            
+            if (currentSlide.hasClass('overview'))
+                var aliCurrent = $('#tree #li_' + currentSlide.next().attr('matricule')); //on recupère le matricule de la slide suivant le matricule et on recupere la li correspondante
+            else
+                var aliCurrent = liCurrent;
+
             aliCurrent.siblings().each(function() {      //toutes les soeurs
                 var allChildren = getChildren($(this), []);  // on recupere un tableau des matricules de toutes les filles
                 for (var child in allChildren) {
                     var matriculeChild = allChildren[child];
                     //$('#'+matriculeChild).addClass('hidden');
-                    $('#'+matriculeChild).fadeOut(1600);
+                    $('#' + matriculeChild).fadeOut(1600);
                 }
             });
 
@@ -573,7 +691,7 @@ function dynamicTest() {
 //                $('#' + matricule).removeClass('hidden');     //on agit sur la slide qui a ce matricule
                 $('#' + matricule).fadeIn(1600);           //on agit sur la slide qui a ce matricule
             });
-            
+
             //ses filles directes
             $(liCurrent.children('ol')[0]).children().each(function() {
                 var matricule = $(this).attr('matricule');
@@ -584,23 +702,23 @@ function dynamicTest() {
             //elle meme
 //            $('#' + currentMatricule).removeClass('hidden');
             $('#' + currentMatricule).fadeIn(1600);
-            
-            
+
+
             /* mise à niveau des petites soeurs sur la petite soeur de la current*/
-            var littleHilly = $('#'+liCurrent.next().attr('matricule'));
+            var littleHilly = $('#' + liCurrent.next().attr('matricule'));
             var dicoRef = getTrans3D(littleHilly);
-            $('#tree #li_' + currentMatricule +' ~').each(function(){ //pour obtenir les next siblings de la current li
-               var $slide = $('#'+$(this).attr('matricule'));
-               var dico = getTrans3D($slide);
+            $('#tree #li_' + currentMatricule + ' ~').each(function() { //pour obtenir les next siblings de la current li
+                var $slide = $('#' + $(this).attr('matricule'));
+                var dico = getTrans3D($slide);
 //               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
 //                dico.translate3d[2] = littleHilly.attr('data-z');
-                 $slide.translate3d({
-                     x:parseInt($slide.attr('data-x')),//-700,
-                     y:parseInt($slide.attr('data-y')),//-600 ,
-                     z:littleHilly.attr('data-z')
-                     },1000);
+                $slide.translate3d({
+                    x: parseInt($slide.attr('data-x')), //-700,
+                    y: parseInt($slide.attr('data-y')), //-600 ,
+                    z: littleHilly.attr('data-z')
+                }, 1000);
 //                setTrans3D(dico,$slide);
-           });
+            });
         }
     });
 

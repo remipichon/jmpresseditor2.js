@@ -46,8 +46,18 @@ container = {metadata: {}, slide: {}};
  */
 Slide = Class.extend({
     init: function(params) {
+        //if matricule is set, check if unique
+        if( typeof params.matricule !== 'undefined'){
+            if( findObjectOfComposant(params.matricule) !== false ){ //le matricule existe déjà !
+                console.log('Error : construct Slide : matricule '+params.matricule+' already set in container');
+                delete this;
+                return; 
+                
+            }
+        }
+        
         //default value
-        var matricule = 'slide' + globalCpt++;
+        var matricule = 'slide' + globalCpt++; 
         this.matricule = matricule;
 
 
@@ -87,6 +97,8 @@ Slide = Class.extend({
                 }
             }
         }
+        
+        
 
 
 
@@ -212,7 +224,7 @@ Slide = Class.extend({
                     slide: {}
         };
         $('#slideArea>').children().each(function() {
-            if ($(this).attr('id') != 'profondeur') {
+            if ($(this).attr('id') !== 'profondeur') {
                 newContainer.slide[$(this).attr('matricule')] = container.slide[$(this).attr('matricule')];
             }
         });
@@ -223,12 +235,12 @@ Slide = Class.extend({
     },
     show: function(i) {
         if (typeof i === 'undefined') {
-            //console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.properties.scale, '}, nb elements :', Object.size(this.element), '}');
+            console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.properties.scale, '}, nb elements :', Object.size(this.element), '}');
         }
         else if (i === 'element') {
             //console.log('liste des elements');
             for (var el in this.element) {
-                this.element[el].show();
+                console.log(this.element[el].show());
             }
 
         } else {
@@ -305,6 +317,15 @@ function selectSlide(callback, param1, composant) {
  */
 Element = Class.extend({
     init: function(slide, params,  matricule) {
+        //if matricule is set, check if unique
+        if( typeof params.matricule !== 'undefined'){
+            if( findObjectOfComposant(params.matricule) !== false ){ //le matricule existe déjà !
+                console.log('Error : construct Element : matricule '+params.matricule+' already set in container');
+                delete this;
+                return; 
+                
+            }
+        }
         //ce sont les filles qui se chargent de params !
 
         //default values
@@ -404,7 +425,7 @@ Element = Class.extend({
     },
     show: function(i) {
         if (typeof i === 'undefined') {
-            //console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '} }');
+            console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '} }');
         }
         else {
             return '{ matricule: ' + this.matricule + ', pos:{x: ' + this.pos.x + ', y: ' + this.pos.y + ' z: ' + this.pos.z + '}, rotate:{x:' + this.rotate.x + ',y:' + this.rotate.y + 'z:' + this.rotate.z + '} }';
