@@ -144,7 +144,7 @@
 
         <div id="slideArea" >
             <!--<div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>-->
-            <div id="home" class="hidden step overview" data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
+            <div id="home" class="hidden step overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
         </div>
 
         <div id="tree">
@@ -205,7 +205,27 @@
                         <li>content</li>
                     </ol>
                 </li>
-            </ol>
+<!--                <li>4
+                    <ol>
+                        <li>content</li>
+                    </ol>
+                </li>
+                <li>4
+                    <ol>
+                        <li>content</li>
+                    </ol>
+                </li>
+                <li>4
+                    <ol>
+                        <li>content</li>
+                    </ol>
+                </li>
+                <li>4
+                    <ol>
+                        <li>content</li>
+                    </ol>
+                </li>
+            </ol>-->
 
 
         </div>
@@ -236,17 +256,9 @@
 //                });
                 $('#slideArea').jmpress('deinit', $('#home'));
 
-
-//                alert();
                 transform3D = new Transform3D();
-                goCK();
-                goDepth();
-                goPosition();
-                goPositionEnd();
-                goJmpress();
-                //test();
-                dynamic();
-                //endDynamic();
+                initAutomatic();
+                
 
             });
         </script>
@@ -260,16 +272,6 @@
 
         </script>
 
-
-        <script id="templateStepElement" type="text/template">
-
-            <div id={{id}} class='step {{type}}'  data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}'> 
-            <div id={{id}}  class='element'> 
-            {{content}}
-            </div>
-            </div>    
-
-        </script>
 
         <!--ajouter position: relative; dans le style pour que les elements ne puissent pas se superposer (utile pour automatic editor)-->
 

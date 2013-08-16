@@ -9,7 +9,7 @@
 /*
  * Wrap les content dans une span pour facilement le traitement
  */ 
-function goCK() {
+function goCK(config) {
     $('#tree li').each(function() {
         //var span = "<span class='li' contenteditable='true'> texte </span>";
         var span = "<span class='li' contenteditable='true'> " + $(this).html().match(/.*/)[0] + " </span>";
@@ -43,7 +43,7 @@ function max(array) {
 /*
  * Parse la liste ol pour determiner la profondeur, le nombre d'enfant et le nombre de jumeaux (soeurs) de chaque li
  */
-function goDepth() {
+function goDepth(config) {
 
     var sibPerLevel = new Array();
     //stocke le nombre de siblings par niveau de profondeur (independament des parents)
@@ -96,6 +96,33 @@ function getChildren($node, listChild) {
     return listChild;
 }
 
+function getChildrenTitre($node){
+    var list = getChildren($node,[]);
+    for( var i in list){
+        
+        if( $('#li_'+list[i]).attr('type') === 'content' ){
+            list.splice(i,1);
+        }
+    }
+    return list;
+}
+
+/*
+ * 
+ * obtenir le dernier element (le plus 'bas vertivalement') d'une lise
+ */
+function getLastChild($node){
+    //condition de sortie
+    if( $node.attr('nbchild') == 0 ){
+        return $node.parent().parent(); //pour ne pas prendre en compte les slides de content
+    }    
+    
+    //recursivité
+    var $last = $($node.children()[$node.children().length-1]);
+    return getLastChild($last);
+    
+    
+}   
 
 
 /*
@@ -121,7 +148,6 @@ function maxDepth($node, max) {
         max = maxDepth($li, max);
     }
 
-
     return max;
 
 }
@@ -133,7 +159,7 @@ function maxDepth($node, max) {
  * Une fois la présentation prête, cette fonction s'assure que chaquement contenu texte ne dépasse pas de la slide
  * Si c'est le cas, procède à une série de redimensionnement pour tout faire rentrer dans chaque slide
  */
-function goAutoAlign() {
+function goAutoAlign(config) {
 
     //$('#slideArea .slide').each(function() {
     $('#slideArea .slide').each(function() {

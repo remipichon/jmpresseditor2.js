@@ -30,6 +30,10 @@
 
             /* tentative avec mes outils */
             var dico = getTrans3D($this);
+            if( typeof dico.translate3d === 'undefined') {
+                console.log($this,'n\'a pas de transform !');
+                return;
+            }
             dico.translate3d[0] = translations.x;
             dico.translate3d[1] = translations.y;
             dico.translate3d[2] = translations.z;

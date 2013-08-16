@@ -16,7 +16,7 @@
  * 
  * @type object composant
  */
-function findObjectOfComposant(matricule) {
+function findObjectOfComposant(matricule){
 
     if (typeof container.slide[matricule] === 'undefined') {   //si le matricule n'est pas celui d'une slide
         for (var slide in container.slide) {                //parcours des slides
