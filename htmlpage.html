@@ -38,6 +38,7 @@
         <script type="text/javascript" src="js/slideshowEditor.js"></script>
         <script type="text/javascript" src="js/translator.js"></script>
         <script type="text/javascript" src="js/automaticEditor.js"></script>
+        <script type="text/javascript" src="js/buildingTree.js"></script>
 
 
         <!--les boites a outils-->
@@ -146,8 +147,52 @@
             <!--<div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>-->
             <div id="home" class="hidden step overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
         </div>
+        
+        <div id='goSlideShow'> Go SlideShow </div>    
+       
+        <div id='goTreeMaker'> Go TreeMaker</div>    
 
-        <div id="tree">
+        <div id="treeMaker">
+            <ol>
+
+                <!-- ici se mettront les jumeaux -->
+
+                <li class='addSibling'>Add Sibling                    
+                </li>
+
+
+            </ol>
+
+
+
+        </div>
+
+
+
+
+        <!-- template Mustache -->
+        <script id="templateSibling" type="text/template">
+          <li>
+                   <span class="li" contenteditable="true">  Titre </span>
+                     
+                   <ol> 
+                        <li>
+                            <span class="li" contenteditable="true">  sous titre </span>
+                        </li>
+                   
+                      <!-- pour les éventuels jumeaux -->
+                      
+                       <li class='addSibling'>Add Sibling                    
+                       </li>
+                   </ol>
+          </li>
+            
+
+        </script>
+
+        
+
+        <div id="tree2">
             <ol>
                 <li> Intro
                     <ol>
@@ -306,8 +351,19 @@
         <script>
 
             $(document).ready(function() {
-
-
+                
+               handlerTreeMaker();
+                
+                $('#goSlideShow').on('click',function(){
+                    goSlideShow();
+                });
+                
+                $('#goTreeMaker').on('click',function(event){
+//                    event.stopPropagation();
+                    goTreeMaker();
+                });
+                
+                
                 $('#slideArea').jmpress({
 //                        keyboard: {
 //                                keys: {
@@ -330,7 +386,8 @@
                 $('#slideArea').jmpress('deinit', $('#home'));
 
                 transform3D = new Transform3D();
-                initAutomatic();
+                
+                
 
 
             });

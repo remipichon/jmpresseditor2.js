@@ -32,12 +32,12 @@ function initAutomatic() {
         endY0: -1500,
         endZ0: 0
     };
-    goCK(config);
+    //goCK(config);
     goDepth(config);
     goPosition(config);
     goPositionEnd(config);
     goJmpress(config);
-    dynamic(config);
+//    dynamic(config);
 }
 
 

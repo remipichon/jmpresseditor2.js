@@ -251,8 +251,14 @@ Slide = Class.extend({
         }
     },
     destroy: function() {
+
+ $('#slideArea').jmpress('deinit', $('#'+this.matricule));
+ 
         $('#' + this.matricule).remove();
+        
+       
         delete container.slide[this.matricule];
+        
         $('li').each(function() {
             if ($(this).attr('matricule') === this.matricule) {
 //                 $(this).remove();

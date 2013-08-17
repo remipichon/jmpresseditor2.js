@@ -87,8 +87,7 @@ function initDynamic() {
         else
             $(this).fadeOut(2000);
     });
-    //KIKI ****************  il faut arranger cela pour ne pas cacher les slides qu'on affiche juste après
-
+    
 
 //    //on deplace les slides à leur véritable positions (utile lorsqu'on loop)
     $('.slide').each(function() {
@@ -107,6 +106,8 @@ function initDynamic() {
         $(this).addClass('future-slide');
     });
 
+    
+    
     //au depart tous les plus grands titres sont au niveau de leur grande soeur
     $('#tree li').each(function() {
         if ($(this).attr('type') === 'title') {
