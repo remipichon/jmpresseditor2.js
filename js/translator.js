@@ -168,7 +168,7 @@ Slide = Class.extend({
         //ajout à la timeline
 
         var idSlide = this.matricule;
-        var $slideButton = $('<li matricule=' + idSlide + '><span>' + ((this.type === 'overview')? 'Overview' : idSlide )+ '</span>    <a class="cross" href="#">x</a></li>');
+        var $slideButton = $('<li matricule=' + idSlide + '><span>' + ((this.type === 'overview') ? 'Overview' : idSlide) + '</span>    <a class="cross" href="#">x</a></li>');
         $('#sortable').append($slideButton);
 
 
@@ -251,22 +251,12 @@ Slide = Class.extend({
         }
     },
     destroy: function() {
-
- $('#slideArea').jmpress('deinit', $('#'+this.matricule));
- 
+       //Jmpress l'oublie
+        $('#slideArea').jmpress('deinit', $('#' + this.matricule));
+        //disparition du dom
         $('#' + this.matricule).remove();
-        
-       
+        //nettoyage du container
         delete container.slide[this.matricule];
-        
-        $('li').each(function() {
-            if ($(this).attr('matricule') === this.matricule) {
-//                 $(this).remove();
-                truc = $(this);
-            }
-//               
-
-        });
     }
 
 
@@ -578,7 +568,7 @@ Image = Element.extend({
         if (typeof slide === 'undefined') {
             slide = 'null';
         }
-        
+
         //le constructeur mère a besoin du matricule pour renseigner le container.
         //ainsi, si params contient un matricule, il faut lui passer en priorité :
         if (typeof params !== 'undefined')

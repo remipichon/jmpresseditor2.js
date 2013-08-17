@@ -51,6 +51,9 @@ function goTreeMaker(){
     });
     
     $('#tree').attr('id','treeMaker');
+    $('#treeMaker .questions').each(function(){
+       $(this).remove(); 
+    });
     $('#treeMaker ol').each(function(){
        $(this).append("<li class='addSibling'>Add Sibling</li>"); 
     });

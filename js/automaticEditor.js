@@ -37,7 +37,8 @@ function initAutomatic() {
     goPosition(config);
     goPositionEnd(config);
     goJmpress(config);
-//    dynamic(config);
+    $('#slideArea').jmpress();
+    dynamic(config);
 }
 
 
@@ -170,7 +171,7 @@ function goPositionEnd(config) {
     });
 
     //ajout de la slide de questions
-    var li = "<li uppery = '" + upperY + "' lowery = '" + lowerY + "' >Any questions ?</li>";
+    var li = "<li class='questions' uppery = '" + upperY + "' lowery = '" + lowerY + "' >Any questions ?</li>";
     $('#tree').children('ol').append(li);
 
     //lowerY a été instancié pour la dernière fois par l'element le plus 'bas' dans la lsite ul li
