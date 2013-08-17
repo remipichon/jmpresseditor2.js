@@ -21,7 +21,7 @@ function findObjectOfComposant(matricule){
     if (typeof container.slide[matricule] === 'undefined') {   //si le matricule n'est pas celui d'une slide
         for (var slide in container.slide) {                //parcours des slides
             if (typeof container.slide[slide].element[matricule] === 'undefined') {
-                console.log('pas dans la slide ', slide);
+//                console.log('pas dans la slide ', slide);
             } else {
                 return container.slide[slide].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
             }

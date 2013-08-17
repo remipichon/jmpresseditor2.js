@@ -150,7 +150,8 @@ Slide = Class.extend({
 
 
         //ajout de la slide à l'espace de stockage
-        container.slide[this.matricule] = this;
+//        container.slide[this.matricule] = this;
+        container.slide[params.matricule] = this;
 
         //create node via mustach
 //        console.log("go jmpress");
@@ -166,8 +167,8 @@ Slide = Class.extend({
 
         //ajout à la timeline
 
-        var idSlide = matricule;
-        var $slideButton = $('<li matricule=' + idSlide + '><span>' + idSlide + '</span>    <a class="cross" href="#">x</a></li>');
+        var idSlide = this.matricule;
+        var $slideButton = $('<li matricule=' + idSlide + '><span>' + ((this.type === 'overview')? 'Overview' : idSlide )+ '</span>    <a class="cross" href="#">x</a></li>');
         $('#sortable').append($slideButton);
 
 

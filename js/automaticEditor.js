@@ -101,7 +101,8 @@ function goPosition(config) {
 
         $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
         var indice = parseFloat($(this).index()) + 1;
-        $(this).attr('number', $(this).parent().parent().attr('number') + "." + indice);
+        var parentNumber = $(this).parent().parent().attr('number');
+        $(this).attr('number',(parentNumber === '')? indice : parentNumber + "." + indice);
     });
 }
 
@@ -231,7 +232,7 @@ function goJmpress(config) {
             //s'il y au moins une petite soeur
             //console.log($(this).index() , parseInt($(this).attr('siblings')) -1);
             if ($(this).index() < parseInt($(this).attr('siblings')) - 1) {
-                console.log($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]),$(this).siblings());
+//                console.log($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]),$(this).siblings());
                 new Slide({
                     type: 'overview',
                     pos: {
@@ -245,9 +246,13 @@ function goJmpress(config) {
                 });
             }
         }
-
+        
         //ajout de la slideet de son texte
+        var number = $(this).attr('number');
+        number =  number.split('.').join('-');
+        console.log(number);
         var slide = new Slide({
+            matricule:  number,
             pos: {
                 x: $(this).attr('data-x'),
                 y: $(this).attr('data-y'),
