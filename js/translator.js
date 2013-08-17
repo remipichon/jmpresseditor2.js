@@ -466,8 +466,13 @@ Text = Element.extend({
             slide = 'null';
         }
 
-
-        var matricule = 'texteelement' + globalCpt++;
+        //le constructeur mère a besoin du matricule pour renseigner le container.
+        //ainsi, si params contient un matricule, il faut lui passer en priorité :
+        if (typeof params !== 'undefined')
+            if (typeof params.matricule !== 'undefined')
+                var matricule = params.matricule;
+            else
+                var matricule = 'texteelement' + globalCpt++;
         this.matricule = matricule;
 
 
@@ -513,8 +518,12 @@ Text = Element.extend({
 //            //console.log('hu', matricule);
             var $element = $('#' + matricule);
 
-            //redondant si le texte est édité via contenteditable
-            $element.html(newVal);
+            if (attr === 'content') {
+                //redondant si le texte est édité via contenteditable
+                $element.children().html(newVal);
+            } else if (attr === 'hierarchy') {
+                $element.children().removeClass().addClass(newVal);
+            }
         });
 
         //console.log('avant ajout dans le DOM');
@@ -562,6 +571,15 @@ Image = Element.extend({
         if (typeof slide === 'undefined') {
             slide = 'null';
         }
+        
+        //le constructeur mère a besoin du matricule pour renseigner le container.
+        //ainsi, si params contient un matricule, il faut lui passer en priorité :
+        if (typeof params !== 'undefined')
+            if (typeof params.matricule !== 'undefined')
+                var matricule = params.matricule;
+            else
+                var matricule = 'texteelement' + globalCpt++;
+        this.matricule = matricule;
 
         var matricule = 'imageelement' + globalCpt++;
         this.matricule = matricule;

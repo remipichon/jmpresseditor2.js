@@ -21,17 +21,17 @@ function initAutomatic() {
         endY0: -10000,
         endZ0: -10000
     };
-//    var config = {
-//        cranX: 1800,
-//        cranY: 1000,
-//        cranZ: -1000,
-//        liveX0: -1500,
-//        liveY0: 0,
-//        liveZ0: 0,
-//        endX0: 0,
-//        endY0: -1500,
-//        endZ0: 0
-//    };
+    var config = {
+        cranX: 1800,
+        cranY: 1000,
+        cranZ: -1000,
+        liveX0: -1500,
+        liveY0: 0,
+        liveZ0: 0,
+        endX0: 0,
+        endY0: -1500,
+        endZ0: 0
+    };
     goCK(config);
     goDepth(config);
     goPosition(config);
@@ -203,9 +203,8 @@ function goJmpress(config) {
             var slide = new Slide({
                 matricule: 'questions',
                 pos: {
-                    x: config.endX0 + 1400,  //1400
-//                    y: Math.abs(upperY - lowerY) / 2  + upperY ,   //300
-                    y: 300 ,   //300
+                    x: config.endX0 + 12500,
+                    y: Math.abs(upperY - lowerY) / 2  + upperY ,   
                     z: config.endZ0
                 },
                 scale: 10
@@ -213,6 +212,7 @@ function goJmpress(config) {
             }
             );
             new Text(slide.matricule, {
+                matricule: 'questionstexte',
                 properties: {
                     content: 'Any questions ?',
                     hierarchy: 'H1Text'
@@ -235,8 +235,8 @@ function goJmpress(config) {
                 new Slide({
                     type: 'overview',
                     pos: {
-//                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings().length - 1]).attr('data-x'))) / 2,
-                 x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]).attr('data-x'))) / 2,
+                                                                                                                //long bug à trouver ! Il faut -2 dans les siblings car le siblings ne compatabilise pas lui meme, logique !
+                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]).attr('data-x'))) / 2,
                  
                         y: $(this).attr('data-y'),
                         z: $(this).attr('data-z')

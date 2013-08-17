@@ -30,8 +30,8 @@
 
             /* tentative avec mes outils */
             var dico = getTrans3D($this);
-            if( typeof dico.translate3d === 'undefined') {
-                console.log($this,'n\'a pas de transform !');
+            if (typeof dico.translate3d === 'undefined') {
+                console.log($this, 'n\'a pas de transform !');
                 return;
             }
             dico.translate3d[0] = translations.x;
@@ -66,25 +66,34 @@
  */
 function initDynamic() {
     //on affiche le tree 
-    $('#tree').fadeIn(1000);    
-    
-    //au départ, on cache toutes les slides
-    $('.slide').each(function() {
-        $(this).fadeOut(1000);  
-    });
-                                            //KIKI ****************  il faut arranger cela pour ne pas cacher les slides qu'on affiche juste après
-    //mais on affiche les premiers titres
+    $('#tree').fadeIn(1000);
+
+    //au départ, on cache toutes les slides sauf les premiers titres
+
+    //les premiers titres
+    var firstTitle = [];
     $('#tree').children('ol').children().each(function() {
-        $('#' + $(this).attr('matricule')).fadeIn(1000);
+        firstTitle.push($(this).attr('matricule'));
     });
-    
-    //on deplace les slides à leur véritable positions (utile lorsqu'on loop)
-    $('.slide').each(function(){
-         $(this).translate3d({
-                x: parseInt($(this).attr('data-x')), 
-                y: parseInt($(this).attr('data-y')),
-                z: parseInt($(this).attr('data-z'))
-            }, 1000);
+
+    $('.slide').each(function() {
+        if (firstTitle.indexOf($(this).attr('matricule')) !== -1)
+            $(this).fadeIn(1000);
+        else
+            $(this).fadeOut(2000);
+    });
+    //KIKI ****************  il faut arranger cela pour ne pas cacher les slides qu'on affiche juste après
+
+
+//    //on deplace les slides à leur véritable positions (utile lorsqu'on loop)
+    $('.slide').each(function() {
+        if ($(this).attr('matricule') === 'questions')
+            return; //deplacement étrange de la slide de questions
+        $(this).translate3d({
+            x: parseInt($(this).attr('data-x')),
+            y: parseInt($(this).attr('data-y')),
+            z: parseInt($(this).attr('data-z'))
+        }, 1000);
     });
 
     //au depart tout le plan est en 'futur'
@@ -96,15 +105,17 @@ function initDynamic() {
     //au depart tous les plus grands titres sont au niveau de leur grande soeur
     $('#tree li').each(function() {
         if ($(this).attr('type') === 'title') {
-            if( $('#'+$(this).attr('matricule')).attr('matricule') === 'questions' || $('#'+$(this).attr('matricule')).attr('matricule') === 'end') return;  //on va chercher l'info dans les slides car la li n'a pas trace de ces slides là (qui ne font pas parties du plan)
+            if ($('#' + $(this).attr('matricule')).attr('matricule') === 'questions' || $('#' + $(this).attr('matricule')).attr('matricule') === 'end')
+                return;  //on va chercher l'info dans les slides car la li n'a pas trace de ces slides là (qui ne font pas parties du plan)
 
             var $slideRef = $('#' + $(this).attr('matricule'));
-            
+
             var dicoRef = getTrans3D($slideRef);
-            
+
 
             $(this).siblings().each(function() {
-                if( typeof $(this).attr('matricule') === 'undefined' ) return;
+                if (typeof $(this).attr('matricule') === 'undefined')
+                    return;
                 var $slide = $('#' + $(this).attr('matricule'));
                 var dico = getTrans3D($slide);
                 dico.translate3d[2] = dicoRef.translate3d[2];
@@ -120,7 +131,7 @@ function initDynamic() {
 function endDynamic() {
     //on cache le tree
     $('#tree').fadeOut(1000);
-    
+
     //on montre la dernière slide (qui ne fait pas parti de la présentation donc est exclu du circuit normal
     $('#questions').fadeIn(1000);
 
@@ -130,7 +141,7 @@ function endDynamic() {
 
             var $slide = $('#' + $(this).attr('matricule'));
             $slide.fadeIn(10);
-            
+
             $slide.translate3d({
                 x: parseInt($(this).attr('data-end-x')), //-700,
                 y: parseInt($(this).attr('data-end-y')), //-600 ,
@@ -139,7 +150,7 @@ function endDynamic() {
 
 
         } else {                                 //si la slide ne doit pas etre déplacée, on la cache            
-            $('#' + $(this).attr('matricule')).fadeOut(1000);            
+            $('#' + $(this).attr('matricule')).fadeOut(1000);
         }
     });
 
@@ -160,7 +171,7 @@ function dynamic() {
     $(document).on('keypress', function(event) {
 
         if (event.which == 32) { //je n'ai pu récupérer que l'espace
-            
+
             /*
              * each time space bar is pressed on cherche la slide qui a la classe 'active'
              */
@@ -179,6 +190,15 @@ function dynamic() {
              */
             if (currentMatricule === 'end') {
                 endDynamic();
+            }
+            /*
+             * remerciement final
+             */
+            if (currentMatricule === 'questions') {
+                var slide = container.slide[currentMatricule];
+                var texte = slide.element['questionstexte'];
+                texte.properties.content = "Thanks for watching";
+
             }
 
             //petit effet sur le tree 
