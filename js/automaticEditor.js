@@ -21,17 +21,17 @@ function initAutomatic() {
         endY0: -10000,
         endZ0: -10000
     };
-    var config = {
-        cranX: 1800,
-        cranY: 1000,
-        cranZ: -1000,
-        liveX0: -1500,
-        liveY0: 0,
-        liveZ0: 0,
-        endX0: 0,
-        endY0: -1500,
-        endZ0: 0
-    };
+//    var config = {
+//        cranX: 1800,
+//        cranY: 1000,
+//        cranZ: -1000,
+//        liveX0: -1500,
+//        liveY0: 0,
+//        liveZ0: 0,
+//        endX0: 0,
+//        endY0: -1500,
+//        endZ0: 0
+//    };
     goCK(config);
     goDepth(config);
     goPosition(config);
@@ -231,12 +231,13 @@ function goJmpress(config) {
             //s'il y au moins une petite soeur
             //console.log($(this).index() , parseInt($(this).attr('siblings')) -1);
             if ($(this).index() < parseInt($(this).attr('siblings')) - 1) {
-
+                console.log($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]),$(this).siblings());
                 new Slide({
                     type: 'overview',
                     pos: {
-                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings().length - 1]).attr('data-x'))) / 2,
-//                         x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[parseInt($(this).attr('siblings')) - 1]).attr('data-x'))) / 2,
+//                        x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[$(this).siblings().length - 1]).attr('data-x'))) / 2,
+                 x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]).attr('data-x'))) / 2,
+                 
                         y: $(this).attr('data-y'),
                         z: $(this).attr('data-z')
                     },
