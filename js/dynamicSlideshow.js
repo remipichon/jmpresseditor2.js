@@ -65,6 +65,11 @@
  * 
  */
 function initDynamic() {
+    //on masque les slides content du tree
+    $('#tree li').each(function(){
+       if( $(this).attr('type') === 'content') $(this).css('display','none'); 
+    });
+    
     //on affiche le tree 
     $('#tree').fadeIn(1000);
 

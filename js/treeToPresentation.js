@@ -12,10 +12,16 @@
 function goCK(config) {
     $('#tree li').each(function() {
         //var span = "<span class='li' contenteditable='true'> texte </span>";
-        var span = "<span class='li' contenteditable='true'> " + $(this).html().match(/.*/)[0] + " </span>";
+        var span = "<span style='display:'none' class='li' contenteditable='true'> " + $(this).html().match(/.*/)[0] + " </span>";
 //        var span = "<span class='li' contenteditable='true'> " + '$(this).html()' + " </span>";
         //$(this).html('');
+//        html = $(this).html();
+//        html = html.replace('',$(this).html().match(/.*/)[0]);
+////        $(this).html(html + span);
+        
+        
         $(this).prepend(span);
+        
 
     });
 
