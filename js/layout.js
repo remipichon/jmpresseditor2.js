@@ -242,14 +242,14 @@ $(document).ready(function() {
         for (var matS in pressjson.slide) {
             var slide = pressjson.slide[matS];
             var slide = new Slide({         
-                //'matricule': slide.matricule,
+                'matricule': slide.matricule,
                 'pos': slide.pos                //a voir si je mets une boucle pour renseigner tous les champs existant, l'existence de l'adaptateur serait ici
             });
             var matriculeSlide = slide.matricule;
             for (var matEl in pressjson.slide[matS].element) {
                 var element = pressjson.slide[matS].element[matEl];
                 new Text(matriculeSlide,{
-                 //   'matricule': element.matricule,
+                    'matricule': element.matricule,
                     'pos': element.pos,
                     'properties': {'content': element.properties.content}
                 });

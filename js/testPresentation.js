@@ -1,4 +1,11 @@
 
+/*
+ * n'a pas suivi les changements du container.slide objet à conteneur.slide array
+ * 
+ * 
+ */
+
+
 
 //function test(){
 function testcos() {

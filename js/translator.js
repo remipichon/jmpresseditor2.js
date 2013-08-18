@@ -26,7 +26,18 @@ Object.size = function(obj) {
 /*******         definition des clases         ********/
 
 globalCpt = 0;
-container = {metadata: {}, slide: {}};
+container = {metadata: {}, slide: [],
+    getSlide: function(matricule) {
+        for (var i in container.slide) {
+            if (container.slide[i].matricule === matricule)
+                return container.slide[i];
+        }
+        console.log('error : getSlide : matricule \'' + matricule + '\' doesn\'t exist as a slide');
+        return ;
+
+    }
+
+};
 
 /* classe slide
  * matricule
@@ -82,7 +93,7 @@ Slide = Class.extend({
         //seul les objet au sein de la slide peuvent avoir des watch.
         this.properties = {
             scale: 1,
-            hierarchy: 0
+            hierarchy: '0'
         };
 
         this.element = {};
@@ -150,8 +161,9 @@ Slide = Class.extend({
 
 
         //ajout de la slide à l'espace de stockage
-//        container.slide[this.matricule] = this;
-        container.slide[params.matricule] = this;
+//        container.slide[matricule] = this;
+        container.slide.push(this);
+//        container.slide[params.matricule] = this;
 
         //create node via mustach
 //        console.log("go jmpress");
@@ -179,7 +191,7 @@ Slide = Class.extend({
             stop: function(event, ui) {
                 var newIndex = ui.item.index();                                    //nouvelle place
                 var matriculeSorted = ui.item.attr('matricule');                    //pour la slide qui vient prendre la place de
-                var slide = container.slide[matriculeSorted];     //+ 2 car il y a pour le moment deux slides dans le DOM dès le départ
+                var slide = container.getSlide(matriculeSorted);     //+ 2 car il y a pour le moment deux slides dans le DOM dès le départ
                 var slideAfter = $($('#slideArea>').children()[newIndex + 0 + 1]).attr('matricule');  //cette slide
 
                 if (newIndex > ui.item.startPos) { //maintenant
@@ -251,12 +263,12 @@ Slide = Class.extend({
         }
     },
     destroy: function() {
-       //Jmpress l'oublie
+        //Jmpress l'oublie
         $('#slideArea').jmpress('deinit', $('#' + this.matricule));
         //disparition du dom
         $('#' + this.matricule).remove();
         //nettoyage du container
-        delete container.slide[this.matricule];
+        delete container.getSlide(this.matricule);
     }
 
 
@@ -412,14 +424,14 @@ Element = Class.extend({
 
 
         //gestion de l'erreur de matricule
-        if (container.slide[slide] === undefined) {
+        if (container.getSlide(slide) === undefined) {
             //console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
             return 0;
-        } else if (container.slide[slide].type !== 'slide') {
+        } else if (container.getSlide(slide).type !== 'slide') {
             //console.log('Error : Le composant cible doit être une slide ', slide);
             return 0;
         } else {
-            container.slide[slide].element[matricule] = this;
+            container.getSlide(slide).element[matricule] = this;
             return 1;
         }
 
@@ -434,7 +446,7 @@ Element = Class.extend({
     },
     destroy: function() {
         $('#' + this.matricule).remove();
-        delete container.slide[this.matricule];
+        delete container.getSlide(this.matricule);
     }
 
     /* Important
@@ -635,14 +647,14 @@ Image = Element.extend({
  */
 function getSlideMother(matricule) {
 
-    if (typeof container.slide[matricule] === 'undefined') {   //si le matricule n'est pas celui d'une slide
-        for (var slide in container.slide) {                //parcours des slides
-            if (typeof container.slide[slide].element[matricule] === 'undefined') {
+    if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
+        $.each(container.slide, function(rien, slide) {         //parcours des slides
+            if (typeof slide.element[matricule] === 'undefined') {
                 //console.log('pas dans la slide ', slide);
             } else {    //si le matricule est un element de la slide, on return le matricule de sa mere
-                return container.slide[slide].matricule;
+                return slide.matricule;
             }
-        }
+        });
     } else {                                            //si le matricule est celui d'une slide
         return matricule;
     }

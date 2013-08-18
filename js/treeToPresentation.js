@@ -109,7 +109,7 @@ function getChildrenTitre($node){
 
 /*
  * 
- * obtenir le dernier element (le plus 'bas vertivalement') d'une lise
+ * obtenir le dernier element (le plus 'bas vertivalement') d'un noeud d'une liste
  */
 function getLastChild($node){
     //condition de sortie

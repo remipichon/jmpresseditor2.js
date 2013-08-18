@@ -150,7 +150,21 @@
         
         <div id='goSlideShow'> Go SlideShow </div>    
        
-        <div id='goTreeMaker'> Go TreeMaker</div>    
+        <div id='goTreeMaker'> Go TreeMaker</div>  
+        
+        <div id='gotTree' > Go Tree</div>    
+        
+        <div id='treeTest'>
+            <ol>
+
+                <!-- ici se mettront les jumeaux -->
+
+                <li class='addSibling'>Add Sibling                    
+                </li>
+
+
+            </ol>
+        </div>
 
         <div id="treeMaker">
             <ol>
@@ -176,10 +190,10 @@
                    <span class="li" contenteditable="true">  Titre </span>
                      
                    <ol> 
-                        <li>
+                        <!-- <li>
                             <span class="li" contenteditable="true">  sous titre </span>
-                        </li>
-                   
+                        </li> -->
+                                           
                       <!-- pour les éventuels jumeaux -->
                       
                        <li class='addSibling'>Add Sibling                    
@@ -192,7 +206,8 @@
 
         
 
-        <div id="tree2">
+        <!--<div style='display:none;' id="tree2">-->
+        <div id="tree">
             <ol>
                 <li> Intro
                     <ol>
@@ -323,6 +338,7 @@
                         </li>
                     </ol>
                 </li>
+            </ol>
                 <!--                <li>4
                                     <ol>
                                         <li>content</li>
@@ -351,6 +367,11 @@
         <script>
 
             $(document).ready(function() {
+                $('#gotTree').on('click',function(event){
+                    console.log('hum?');
+//                    event.stopPropagation();
+                    goTreeFromContainer();
+                });
                 
                handlerTreeMaker();
                 
@@ -362,6 +383,8 @@
 //                    event.stopPropagation();
                     goTreeMaker();
                 });
+                
+                
                 
                 
                 $('#slideArea').jmpress({
@@ -397,7 +420,7 @@
 
         <script id="templateSlide" type="text/template">
 
-            <div id={{matricule}} matricule={{matricule}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{scale}}' > 
+            <div id={{matricule}} matricule={{matricule}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}' data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{properties.scale}}' > 
             </div>
 
         </script>

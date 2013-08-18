@@ -37,7 +37,6 @@ function initAutomatic() {
     goPosition(config);
     goPositionEnd(config);
     goJmpress(config);
-    $('#slideArea').jmpress();
     dynamic(config);
 }
 
@@ -51,7 +50,7 @@ function goPosition(config) {
     var cranX = config.cranX;
     var cranY = config.cranY;
     var cranZ = config.cranZ;
-    
+
     //////calcul des positions 
     $('#tree').attr('number', '');
     $('#tree').prepend("<span style='display:none'>Jmpress Editor -</span>");
@@ -103,7 +102,7 @@ function goPosition(config) {
         $(this).attr('data-x', x).attr('data-y', y).attr('data-z', z);
         var indice = parseFloat($(this).index()) + 1;
         var parentNumber = $(this).parent().parent().attr('number');
-        $(this).attr('number',(parentNumber === '')? indice : parentNumber + "." + indice);
+        $(this).attr('number', (parentNumber === '') ? indice : parentNumber + "." + indice);
     });
 }
 
@@ -132,7 +131,7 @@ function goPositionEnd(config) {
                 var y = upperY;
             } else {
                 var y = parseInt($(this).prev().attr('data-end-y')) + (parseInt(maxDepth($(this).prev(), 0))) * cranY * 1.2;
-                var y = parseInt(getLastChild($(this).prev()).attr('data-end-y'))     + cranY;
+                var y = parseInt(getLastChild($(this).prev()).attr('data-end-y')) + cranY;
             }
 
             $(this).attr('data-end-x', x).attr('data-end-y', y).attr('data-end-z', z);
@@ -146,18 +145,18 @@ function goPositionEnd(config) {
 
 //    });
 
-    //les autres niveaux
+        //les autres niveaux
 //    $('#tree li').each(function() {
         if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
 
-            var x = config.endX0+ (parseInt($(this).attr('depth')) - 1) * cranX;
+            var x = config.endX0 + (parseInt($(this).attr('depth')) - 1) * cranX;
             var z = config.endZ0;
 
             if ($(this).index() === 0) { //si première fille
                 var y = parseInt($(this).parent().parent().attr('data-end-y')) + ($(this).index() + 1) * cranY * 0.5;
             } else {
 //                var y = parseInt($($(this).prev()).attr('data-end-y')) + (maxDepth($(this).prev(), 0) - parseInt($(this).attr('depth'))) * cranY ;//* 1.2; //position de sa grande soeur//depth-1 pour virer le content
-                var y = parseInt(getLastChild($(this).prev()).attr('data-end-y'))     + cranY;
+                var y = parseInt(getLastChild($(this).prev()).attr('data-end-y')) + cranY;
             }
             $(this).attr('data-end-x', x).attr('data-end-y', y).attr('data-end-z', z);
             $(this).attr('type', 'title');
@@ -192,25 +191,29 @@ function goJmpress(config) {
             var upperY = parseInt($(this).attr('uppery'));
             var lowerY = parseInt($(this).attr('lowery'));
             new Slide({
+                properties: {
+                    hierarchy: ''+$(this).attr('number'),
+                    scale: Math.abs((upperY - lowerY)) * 4 / 3 / 1000
+                },
                 matricule: 'end',
                 pos: {
                     x: config.endX0 + 10000,
                     y: (upperY + lowerY) / 2,
                     z: config.endZ0
                 },
-                scale: Math.abs((upperY - lowerY)) * 4/3 / 1000,
                 type: 'overview'
             }
             );
             var slide = new Slide({
-                matricule: 'questions',
+                properties: {
+                    matricule: 'questions',
+                    scale: 10
+                },
                 pos: {
                     x: config.endX0 + 12500,
-                    y: Math.abs(upperY - lowerY) / 2  + upperY ,   
+                    y: Math.abs(upperY - lowerY) / 2 + upperY,
                     z: config.endZ0
                 },
-                scale: 10
-
             }
             );
             new Text(slide.matricule, {
@@ -237,28 +240,33 @@ function goJmpress(config) {
                 new Slide({
                     type: 'overview',
                     pos: {
-                                                                                                                //long bug à trouver ! Il faut -2 dans les siblings car le siblings ne compatabilise pas lui meme, logique !
+                        //long bug à trouver ! Il faut -2 dans les siblings car le siblings ne compatabilise pas lui meme, logique !
                         x: (parseInt($(this).attr('data-x')) + parseInt($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]).attr('data-x'))) / 2,
-                 
                         y: $(this).attr('data-y'),
                         z: $(this).attr('data-z')
                     },
-                    scale: $(this).attr('siblings')
+                    properties: {
+                        scale: $(this).attr('siblings')
+                    }
                 });
             }
         }
-        
+
         //ajout de la slideet de son texte
         var number = $(this).attr('number');
-        number =  number.split('.').join('-');
+        number = number.split('.').join('-');
         console.log(number);
         var slide = new Slide({
-            matricule:  number,
+            matricule: number,
             pos: {
                 x: $(this).attr('data-x'),
                 y: $(this).attr('data-y'),
                 z: $(this).attr('data-z')
-            }
+            },
+            properties: {
+                hierarchy: ''+$(this).attr('number'),
+                scale: 1
+            },
         });
 
         new Text(slide.matricule, {

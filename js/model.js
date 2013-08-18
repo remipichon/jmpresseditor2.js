@@ -17,21 +17,22 @@
  * @type object composant
  */
 function findObjectOfComposant(matricule){
-
-    if (typeof container.slide[matricule] === 'undefined') {   //si le matricule n'est pas celui d'une slide
-        for (var slide in container.slide) {                //parcours des slides
-            if (typeof container.slide[slide].element[matricule] === 'undefined') {
+    console.log('info : findObjectOfComposant effectue un test avec getSlide');
+    if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
+       for( var i in container.slide) {               //parcours des slides
+//           console.log('debug findobjofcptmr',slide,slide.element,matricule,typeof slide.element[matricule]);
+            if (typeof container.slide[i].element[matricule] === 'undefined') {
 //                console.log('pas dans la slide ', slide);
             } else {
-                return container.slide[slide].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
+                return container.slide[i].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
             }
-        }
+        };
     } else {                                            //si le matricule est celui d'une slide
-        return container.slide[matricule];
+        return container.getSlide(matricule);
     }
 
-    console.log('Error : matricule doesn\'t existe');
-    return false;
+    console.log('Error : findObjectOfComposant : matricule '+matricule+' doesn\'t existe');
+    return;
 }
 
 
@@ -41,7 +42,7 @@ function findObjectOfComposant(matricule){
  * 
  */
 function callModel(objectEvent) {
-    console.log(objectEvent);
+//    console.log(objectEvent);
 
     if (objectEvent.matricule === '' || objectEvent.matricule === 'document') {
         //creation de composant

@@ -89,7 +89,7 @@ $(document).ready(function() {
             $link.parent().remove();
             var $idSlide = $(this).attr('matricule');
 //      $('#' + $idSlide + '').remove();
-            container.slide[$idSlide].destroy();
+            container.getSlide($idSlide).destroy();
         });
     });
 });

@@ -201,7 +201,7 @@ function dynamic() {
              * remerciement final
              */
             if (currentMatricule === 'questions') {
-                var slide = container.slide[currentMatricule];
+                var slide = container.getSlide(currentMatricule);
                 var texte = slide.element['questionstexte'];
                 texte.properties.content = "Thanks for watching";
 
