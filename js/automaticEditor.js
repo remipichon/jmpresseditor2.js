@@ -32,7 +32,7 @@ function initAutomatic() {
         endY0: -1500,
         endZ0: 0
     };
-    //goCK(config);
+//    goCK(config);
     goDepth(config);
     goPosition(config);
     goPositionEnd(config);
@@ -213,7 +213,7 @@ function goJmpress(config) {
                     x: config.endX0 + 12500,
                     y: Math.abs(upperY - lowerY) / 2 + upperY,
                     z: config.endZ0
-                },
+                }
             }
             );
             new Text(slide.matricule, {
@@ -258,6 +258,7 @@ function goJmpress(config) {
         console.log(number);
         var slide = new Slide({
             matricule: number,
+            
             pos: {
                 x: $(this).attr('data-x'),
                 y: $(this).attr('data-y'),
@@ -266,7 +267,7 @@ function goJmpress(config) {
             properties: {
                 hierarchy: ''+$(this).attr('number'),
                 scale: 1
-            },
+            }
         });
 
         new Text(slide.matricule, {

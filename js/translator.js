@@ -60,7 +60,7 @@ Slide = Class.extend({
         if (typeof params !== 'undefined') {
             //if matricule is set, check if unique
             if (typeof params.matricule !== 'undefined') {
-                if (findObjectOfComposant(params.matricule) !== false) { //le matricule existe déjà !
+                if (typeof findObjectOfComposant(params.matricule) !== 'undefined') { //le matricule existe déjà !
                     console.log('Error : construct Slide : matricule ' + params.matricule + ' already set in container');
                     delete this;
                     return;
@@ -106,6 +106,7 @@ Slide = Class.extend({
                         this[param][paramNested] = params[param][paramNested];
                     }
                 } else {
+//                    console.log('info constructor slide param[param]',params[param]);
                     this[param] = params[param];
                 }
             }
@@ -162,6 +163,7 @@ Slide = Class.extend({
 
         //ajout de la slide à l'espace de stockage
 //        container.slide[matricule] = this;
+//        console.log('infos : constructor Slide : ajout de',this,params.slide);
         container.slide.push(this);
 //        container.slide[params.matricule] = this;
 
