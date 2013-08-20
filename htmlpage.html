@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="css/element.css" >
 
-        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" >
         <link rel="stylesheet" href="css/jquery-ui.css" />
 
         <script type='text/javascript' >
@@ -66,7 +65,8 @@
                         <li><a href="#" id="clear" title="change presentation theme"><p>clear all</p></a></li>
                         <li><a href="#" id="info" title="more info on this editor"><p>info</p></a></li>
                         <li><a href="helpModal" id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></a></li>
-                        <li><a  id="load" title="load presentation"><p>load</p></a></li>
+                        <li><a  id="loadSlide" title="load presentation"><p>load slide show</p></a></li>
+                        <li><a  id="loadTree" title="load tree"><p>load tree</p></a></li>
 
                     </ul>
                 </li>
@@ -149,30 +149,19 @@
             <div id="home" class="hidden step overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
         </div>
         
-        <div id='goSlideShow'> Go SlideShow </div>    
+        <div id='goSlideShow' > Go SlideShow </div>    
        
-        <div id='goTreeMaker'> Go TreeMaker</div>  
+        
         
         <div id='gotTree' > Go Tree from container</div>    
         
-        <div id='treeTest'>
-            <ol>
-
-                <!-- ici se mettront les jumeaux -->
-
-                <li class='addSibling'>Add Sibling                    
-                </li>
-
-
-            </ol>
-        </div>
 
         <div id="treeMaker">
             <ol>
-
+                  
                 <!-- ici se mettront les jumeaux -->
 
-                <li class='addSibling'>Add Sibling                    
+                <li class='addSibling'> [+]                   
                 </li>
 
 
@@ -188,16 +177,14 @@
         <!-- template Mustache -->
         <script id="templateSibling" type="text/template">
           <li>
-                   <span class="li" contenteditable="true">  Titre </span>
+                   <span class="li" contenteditable="true">  Type title here  </span>
+                   <span class='removeSibling'> [-] </span>
                      
                    <ol> 
-                        <!-- <li>
-                            <span class="li" contenteditable="true">  sous titre </span>
-                        </li> -->
-                                           
-                      <!-- pour les éventuels jumeaux -->
+                             
+                      <!--  -->
                       
-                       <li class='addSibling'>Add Sibling                    
+                       <li class='addSibling'> [+]                
                        </li>
                    </ol>
           </li>
@@ -208,7 +195,8 @@
         
 
         <div style='display:none;' id="tree2">
-       <!-- <div id="tree"> -->
+        <!--<div idà
+        ="tree">--> 
             <ol>
                 <li> Intro
                     <ol>

@@ -17,6 +17,12 @@ function handlerTreeMaker() {
 
     });
 
+    
+    $('#treeMaker').on('click','.removeSibling',function(){
+        console.log('remove',$(this));
+        $(this).parent().next('ol').remove();
+       $(this).parent().remove(); 
+    });
 }
 
 
@@ -33,11 +39,17 @@ function goSlideShow() {
     $('#treeMaker .addSibling').each(function() {
         $(this).remove();
     });
+    $('#treeMaker .removeSibling').each(function() {
+        $(this).remove();
+    });
     $('#treeMaker').attr('id', 'tree');
     initAutomatic();
 }
 
-
+/*
+ * obsolete
+ * 
+ */
 function goTreeMaker() {
     console.log('RETURN TREE MAKER  ');
 
@@ -70,7 +82,7 @@ function goTreeMaker() {
  */
 function goTreeFromContainer() {
     
-    
+    //desinit de la présentation
     $('#slideArea .step').each(function() {
         if ($(this).attr('id') === 'home')
             return; //cette foutue slide n'existe pas dans le container !
@@ -91,7 +103,7 @@ function goTreeFromContainer() {
     else
         var $tree = $('#tree');
     
-    console.log('goTreefromcontainer', $tree,container.slide);
+    console.log('goTreefromcontainer', $tree, container.slide);
     $tree.children('ol').html('');
     
     
@@ -104,14 +116,16 @@ function goTreeFromContainer() {
     var prevNiv;
     var niv;
 //    for (var matricule in container.slide) {
-var cpt = 0;
+    var cpt = 0;
     $.each(container.slide, function(matricule, slide) {
+        //alert();
         cpt++;
         var matricule = slide.matricule;
 //        var slide = container.slide[matricule];
         if (slide.type === 'overwiew')
             return;
         var hierarchy = slide.properties.hierarchy.split('.');
+        console.log('hierarchy',hierarchy);
         if (hierarchy[0] === 'undefined')
             return;
         if (hierarchy[0] === '0')
@@ -121,6 +135,7 @@ var cpt = 0;
         }
 
         var data = {
+            'indice': slide.properties.hierarchy
         };
 
         var template = $('#templateSibling').html();
@@ -143,7 +158,7 @@ var cpt = 0;
             for (var i = 1; i < diff; i++) {
                 $target = $target.parent().parent();
             }
-            console.log(niv, prevNiv, i, $target);
+//            console.log(niv, prevNiv, i, $target);
 
 
             //$target = $prevTarget.parent().parent();  //prevTarget -> parent li -> parent ol
@@ -156,19 +171,14 @@ var cpt = 0;
         console.log($target, hierarchy);
 
 //        alert();
-        var $button = $($target.children()[$target.children().length-1]);
+        var $button = $target.children('.addSibling');
         $target.append(html);
         $target.append($button);
 
 
         $prevTarget = $target;
-        
-        
-        
+           
         prevH = hierarchy;
-
-
-
 
     });
     

@@ -34,13 +34,26 @@ function initAutomatic() {
         endZ0: 0
     };
 //    goCK(config);
+     goNormalize();   
+//    console.log('de');
     goDepth(config);
+//    console.log('pos');
     goPosition(config);
+//    console.log('posEnd');
     goPositionEnd(config);
+//    console.log('jmpre');
     goJmpress(config);
+//    console.log('dyna');
     dynamic(config);
 }
 
+function goNormalize(){
+    $('#tree ol').each(function(){
+       if( $(this).children().length === 0 ){ //si l'ol a été ajouté pour 'rien'
+           $(this).remove();
+       } 
+    });
+}
 
 /*
  * Determination des positions des slides pendant la présentation, les coordonnées sont stockées dans la liste
@@ -124,17 +137,19 @@ function goPositionEnd(config) {
 
     //premiers niveaux
     $('#tree li').each(function() {
-
+        console.log('tree li',$(this));
+       
         if ($(this).attr('depth') === '1') {
             var x = config.endX0;
             var z = config.endZ0;
+            
             if ($(this).index() === 0) { //initialisation de la positio de la toute première slide
                 var y = upperY;
             } else {
                 var y = parseInt($(this).prev().attr('data-end-y')) + (parseInt(maxDepth($(this).prev(), 0))) * cranY * 1.2;
                 var y = parseInt(getLastChild($(this).prev()).attr('data-end-y')) + cranY;
             }
-
+            
             $(this).attr('data-end-x', x).attr('data-end-y', y).attr('data-end-z', z);
             $(this).attr('type', 'title');
             var indice = parseFloat($(this).index()) + 1;

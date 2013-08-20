@@ -429,10 +429,10 @@ Element = Class.extend({
 
         //gestion de l'erreur de matricule
         if (container.getSlide(slide) === undefined) {
-            //console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
+            console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
             return 0;
         } else if (container.getSlide(slide).type !== 'slide') {
-            //console.log('Error : Le composant cible doit être une slide ', slide);
+            console.log('Error : element constructor : insert elementin slide : Le composant cible doit être une slide ', slide);
             return 0;
         } else {
             container.getSlide(slide).element[matricule] = this;

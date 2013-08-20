@@ -20,6 +20,15 @@
     color: blue;
 }
 
+.addSibling{
+     list-style-type: none;
+     margin-left: 2px;
+}
+
+.removeSibling{
+    margin-left: 2px;
+}
+
 /* @-webkit-keyframes spinner {
     from,15% { -webkit-transform: rotateY(0deg);    }
     20%,35%  { -webkit-transform: rotateY(-72deg);  }

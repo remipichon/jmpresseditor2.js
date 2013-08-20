@@ -234,17 +234,20 @@ $(document).ready(function() {
      * charge la présentation en local storage 
      * ====================================================================================== */
 
-    $('#load').on('click', function(event) {
+    $('#loadSlide').on('click', function(event) {
         initContainer();
 
         pressjson = JSON.parse(localStorage.getItem('savedJson'));
-        console.log(pressjson);
+        
 
         for (var matS in pressjson.slide) {
             var slide = pressjson.slide[matS];
             var slide = new Slide({         
                 'matricule': slide.matricule,
-                'pos': slide.pos                //a voir si je mets une boucle pour renseigner tous les champs existant, l'existence de l'adaptateur serait ici
+                'pos': slide.pos ,               //a voir si je mets une boucle pour renseigner tous les champs existant, l'existence de l'adaptateur serait ici
+                'properties': {
+                    hierarchy: slide.properties.hierarchy
+                }
             });
             var matriculeSlide = slide.matricule;
             for (var matEl in pressjson.slide[matS].element) {
@@ -255,11 +258,12 @@ $(document).ready(function() {
                     'properties': {'content': element.properties.content}
                 });
             }
-        }
-        console.log(container);
-        goTreeFromContainer(); 
-
-
+        } 
+    });
+    
+    $('#loadTree').on('click',function(event){
+       container = JSON.parse(localStorage.getItem('saveJson'));
+       goTreeFromContainer();
     });
 
 
