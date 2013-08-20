@@ -10,6 +10,7 @@
  */
 
 function initAutomatic() {
+    initContainer();
     var config = {
         cranX: 1800,
         cranY: 1000,

@@ -152,7 +152,7 @@
        
         <div id='goTreeMaker'> Go TreeMaker</div>  
         
-        <div id='gotTree' > Go Tree</div>    
+        <div id='gotTree' > Go Tree from container</div>    
         
         <div id='treeTest'>
             <ol>
@@ -206,8 +206,8 @@
 
         
 
-        <!--<div style='display:none;' id="tree2">-->
-        <div id="tree">
+        <div style='display:none;' id="tree2">
+       <!-- <div id="tree"> -->
             <ol>
                 <li> Intro
                     <ol>
@@ -367,6 +367,8 @@
         <script>
 
             $(document).ready(function() {
+                initContainer();
+                
                 $('#gotTree').on('click',function(event){
                     console.log('hum?');
 //                    event.stopPropagation();

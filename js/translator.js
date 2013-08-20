@@ -26,18 +26,20 @@ Object.size = function(obj) {
 /*******         definition des clases         ********/
 
 globalCpt = 0;
-container = {metadata: {}, slide: [],
-    getSlide: function(matricule) {
-        for (var i in container.slide) {
-            if (container.slide[i].matricule === matricule)
-                return container.slide[i];
+function initContainer() {
+    container = {metadata: {}, slide: [],
+        getSlide: function(matricule) {
+            for (var i in container.slide) {
+                if (container.slide[i].matricule === matricule)
+                    return container.slide[i];
+            }
+            console.log('error : getSlide : matricule \'' + matricule + '\' doesn\'t exist as a slide');
+            return;
+
         }
-        console.log('error : getSlide : matricule \'' + matricule + '\' doesn\'t exist as a slide');
-        return ;
 
-    }
-
-};
+    };
+}
 
 /* classe slide
  * matricule

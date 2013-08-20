@@ -235,6 +235,7 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#load').on('click', function(event) {
+        initContainer();
 
         pressjson = JSON.parse(localStorage.getItem('savedJson'));
         console.log(pressjson);
@@ -255,6 +256,8 @@ $(document).ready(function() {
                 });
             }
         }
+        console.log(container);
+        goTreeFromContainer(); 
 
 
     });

@@ -65,10 +65,10 @@
  * 
  */
 function initDynamic() {
-    //on masque les slides content du tree
-    $('#tree li').each(function(){
-       if( $(this).attr('type') === 'content') $(this).css('display','none'); 
-    });
+    //on masque les li content du tree
+//    $('#tree li').each(function(){
+//       if( $(this).attr('type') === 'content') $(this).css('display','none'); 
+//    });
     
     //on affiche le tree 
     $('#tree').fadeIn(1000);
@@ -171,7 +171,6 @@ function endDynamic() {
  * 
  */
 function dynamic() {
-
     initDynamic();
 
     $(document).on('keypress', function(event) {

@@ -69,21 +69,53 @@ function goTreeMaker() {
  * (s'il existe, l'adaptateur devra s'arrange pour ce que ce soit le cas)
  */
 function goTreeFromContainer() {
-    console.log('goTree');
-    var $tree = $('#treeTest');
+    
+    
+    $('#slideArea .step').each(function() {
+        if ($(this).attr('id') === 'home')
+            return; //cette foutue slide n'existe pas dans le container !
+//        container.slide[$($('#slideArea .step')[5]).attr('matricule')].destroy()
+        console.log($(this).attr('matricule'));
+        if (!findObjectOfComposant($(this).attr('matricule')))
+            return;
+        container.getSlide($(this).attr('matricule')).destroy();
+    });
+
+    $('#tree').attr('id', 'treeMaker');
+    $('#treeMaker .questions').each(function() {
+        $(this).remove();
+    });
+    
+    if ($('#tree').length === 0)
+        var $tree = $('#treeMaker');
+    else
+        var $tree = $('#tree');
+    
+    console.log('goTreefromcontainer', $tree,container.slide);
+    $tree.children('ol').html('');
+    
+    
+    
+    
+
     var prevH = [0];
     var $target = $tree.children('ol');
     var $prevTarget = $tree.children('ol');
     var prevNiv;
     var niv;
 //    for (var matricule in container.slide) {
-    $.each(container.slide, function(matricule, slide){
+var cpt = 0;
+    $.each(container.slide, function(matricule, slide) {
+        cpt++;
         var matricule = slide.matricule;
 //        var slide = container.slide[matricule];
-        if( slide.type === 'overwiew') return;
+        if (slide.type === 'overwiew')
+            return;
         var hierarchy = slide.properties.hierarchy.split('.');
-        if(  hierarchy[0] === 'undefined' ) return;
-        if( hierarchy[0] === '0') return;
+        if (hierarchy[0] === 'undefined')
+            return;
+        if (hierarchy[0] === '0')
+            return;
         for (var i in hierarchy) {
             hierarchy[i] = parseInt(hierarchy[i]);
         }
@@ -105,32 +137,44 @@ function goTreeFromContainer() {
         prevNiv = prevH.length;
 
         if (niv < prevNiv) { //niveau plus haut
+
             var diff = prevNiv - niv; //difference de niveau qui indique combien de fois il faut remonter
             $target = $prevTarget.parent().parent();
-            for( var i = 1; i < diff;i++){
+            for (var i = 1; i < diff; i++) {
                 $target = $target.parent().parent();
             }
-            
-            
-            $target = $prevTarget.parent().parent();  //prevTarget -> parent li -> parent ol
+            console.log(niv, prevNiv, i, $target);
+
+
+            //$target = $prevTarget.parent().parent();  //prevTarget -> parent li -> parent ol
         } else if (niv === prevNiv) {   //mm niveau
             $target = $prevTarget;
         } else if (niv > prevNiv) { //niveau plus bas
-            $target = $($prevTarget.children('li')[$prevTarget.children('li').length-1]).children('ol');
+            $target = $($prevTarget.children('li')[$prevTarget.children('li').length - 1]).children('ol');
         }
 
-        console.log($target,hierarchy);
+        console.log($target, hierarchy);
 
 //        alert();
+        var $button = $($target.children()[$target.children().length-1]);
         $target.append(html);
+        $target.append($button);
 
 
         $prevTarget = $target;
+        
+        
+        
         prevH = hierarchy;
 
 
 
 
     });
+    
+    $('#treeMaker').children('ol').append("<li class='addSibling'>Add Sibling</li>");
+    
+    console.log('debug treefromcontainer : nb de passafge dans .each(slide',cpt);
+//    initContainer();
 
 }
