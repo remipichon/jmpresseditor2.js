@@ -175,9 +175,25 @@
 
 
         <!-- template Mustache -->
+        
+        <script id="templateContent" type="text/template">
+
+            <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
+
+        </script>
         <script id="templateSibling" type="text/template">
           <li>
-                   <span class="li" contenteditable="true">  Type title here  </span>
+                    {{#title}}
+                        <span class="li liTitle" contenteditable="true">{{content}}</span>
+                    {{/title}}
+                            
+                    
+                    {{#body}}
+                        <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
+                    {{/body}}  
+                            
+                    
+                   <span class='switchContent'> [switchBodyTitle] </span>
                    <span class='removeSibling'> [-] </span>
                      
                    <ol> 
@@ -431,6 +447,9 @@
             <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
 
         </script>
+        
+        
+        
 
 
     </body>

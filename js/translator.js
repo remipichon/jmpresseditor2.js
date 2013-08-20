@@ -565,7 +565,8 @@ Text = Element.extend({
             var str = '';
             str = this._super(24);
             str += ' properties: {content: ' + this.properties.content + ' ,hierarchy: ' + this.hierarchy + ' }';
-            //console.log(str);
+//            console.log(str);
+            return str;
         }
         else {
 

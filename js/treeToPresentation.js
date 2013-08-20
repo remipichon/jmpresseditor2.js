@@ -16,6 +16,9 @@ function goCK(config) {
 
         $(this).prepend(span);
         
+        if( $(this).attr('nbChild') === '0'  ) //pas de fils, donc c'est du content
+            $(this).attr('type','content');
+        
 
     });
 

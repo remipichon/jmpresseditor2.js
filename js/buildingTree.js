@@ -4,6 +4,8 @@ function handlerTreeMaker() {
     $('#treeMaker').on('click', '.addSibling', function() {
         console.log('add sib');
         var data = {
+            'content': 'Type title here',
+            'title': true
         };
 
         var template = $('#templateSibling').html();
@@ -23,6 +25,19 @@ function handlerTreeMaker() {
         $(this).parent().next('ol').remove();
        $(this).parent().remove(); 
     });
+    
+    $('#treeMaker').on('click','.switchContent',function(){
+        console.log('switch to content',$(this));
+        $(this).parent().children('liTitle').remove();
+        
+        var template = $('#templateContent').html();
+        data = {
+            
+        };
+        var html = Mustache.to_html(template,data); 
+        $(this).parent().prepend(html);
+        $(this).siblings('.liTitle').remove();
+    });
 }
 
 
@@ -40,6 +55,9 @@ function goSlideShow() {
         $(this).remove();
     });
     $('#treeMaker .removeSibling').each(function() {
+        $(this).remove();
+    });
+    $('#treeMaker .createContent').each(function() {
         $(this).remove();
     });
     $('#treeMaker').attr('id', 'tree');
@@ -133,10 +151,18 @@ function goTreeFromContainer() {
         for (var i in hierarchy) {
             hierarchy[i] = parseInt(hierarchy[i]);
         }
-
+        
         var data = {
-            'indice': slide.properties.hierarchy
+            'indice': slide.properties.hierarchy,
+            
         };
+        
+        for( var matEle in slide.element){           
+            data['content'] = slide.element[matEle].properties.content;
+        }
+        data[slide.style] = 'true';
+
+        
 
         var template = $('#templateSibling').html();
         var html = Mustache.to_html(template, data);

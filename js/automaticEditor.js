@@ -53,6 +53,18 @@ function goNormalize(){
            $(this).remove();
        } 
     });
+    
+    $('#tree textarea').each(function(){
+        var content = $(this).val();
+        content = '<span>'+content+'</span>';
+        $(this).parent().attr('type','body');
+        $(this).parent().append(content);       
+        $(this).remove();
+    });
+    
+    $('#tree li').each(function(){
+       if( typeof $(this).attr('type') === 'undefined') $(this).attr('type',''); 
+    });
 }
 
 /*
@@ -103,13 +115,14 @@ function goPosition(config) {
 
             $(this).attr('type', 'title');
 
-        } else if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') === '0') {       //si pas d'enfants, c'est du contenu, slides horizontales 
+//        } else if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') === '0') {       //si pas d'enfants, c'est du contenu, slides horizontales 
+        } else if ($(this).attr('depth') !== '1' && $(this).attr('type') ==='body' ){ //slide horizontales 
 
-            var x = parseInt($(this).parent().parent().attr('data-x')) + $(this).index() * cranX / 2;
+            var x = parseInt($(this).parent().parent().attr('data-x'));//+ $(this).index() * cranX / 2;
             var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index() + 1) * cranY; //pour atteindre la li qui la stocke
-            var z = parseInt($(this).parent().parent().attr('data-z')) + parseInt($(this).index()) * cranZ;
+            var z = parseInt($(this).parent().parent().attr('data-z'));//+ parseInt($(this).index()) * cranZ;
 
-            $(this).attr('type', 'content');
+            $(this).attr('type', 'body');
 
         }
 
@@ -274,6 +287,7 @@ function goJmpress(config) {
         console.log(number);
         var slide = new Slide({
             matricule: number,
+            style: $(this).attr('type'),
             
             pos: {
                 x: $(this).attr('data-x'),

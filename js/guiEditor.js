@@ -10,6 +10,7 @@
 
 
 $(document).keypress(function(event) {
+    return;
 //    console.log(event.which);
 
 
