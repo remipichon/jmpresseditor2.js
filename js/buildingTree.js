@@ -152,14 +152,19 @@ function goTreeFromContainer() {
         cpt++;
         var matricule = slide.matricule;
 //        var slide = container.slide[matricule];
-        if (slide.type === 'overwiew')
-            return;
+        if (slide.type === 'overwiew'){
+            
+       
+            console.log('debug : goTreeFromContainer : overview create return');
+            return;}
         var hierarchy = slide.properties.hierarchy.split('.');
         console.log('hierarchy', hierarchy);
-        if (hierarchy[0] === 'undefined')
-            return;
-        if (hierarchy[0] === '0')
-            return;
+        if (hierarchy[0] === 'undefined')  {          
+            console.log('debug : goTreeFromContainer  : undefined hierarchy eturn');
+            return;}
+        if (hierarchy[0] === '0'){            
+            console.log('debug : goTreeFromContainer : debug :hierarchy == 0 return');
+            return; }
         for (var i in hierarchy) {
             hierarchy[i] = parseInt(hierarchy[i]);
         }
@@ -202,10 +207,11 @@ function goTreeFromContainer() {
         } else if (niv === prevNiv) {   //mm niveau
             $target = $prevTarget;
         } else if (niv > prevNiv) { //niveau plus bas
-            $target = $($prevTarget.children('li')[$prevTarget.children('li').length - 1]).children('ol');
+            //pour ne pas prendre les boutons, impossible d'ajoute des titres à des buttons !
+            $target = $($prevTarget.children('li:not(.addSibling)')[$prevTarget.children('li:not(.addSibling)').length - 1]).children('ol');
         }
 
-        console.log($target, hierarchy);
+        console.log('tree building',$target, hierarchy);
 
 //        alert();
         var $button = $target.children('.addSibling');
