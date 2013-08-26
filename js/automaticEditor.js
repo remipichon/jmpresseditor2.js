@@ -34,7 +34,7 @@ function initAutomatic() {
         endZ0: 0
     };
 //    goCK(config);
-     goNormalize();   
+    goNormalize();
 //    console.log('de');
     goDepth(config);
 //    console.log('pos');
@@ -47,23 +47,24 @@ function initAutomatic() {
     dynamic(config);
 }
 
-function goNormalize(){
-    $('#tree ol').each(function(){
-       if( $(this).children().length === 0 ){ //si l'ol a été ajouté pour 'rien'
-           $(this).remove();
-       } 
+function goNormalize() {
+    $('#tree ol').each(function() {
+        if ($(this).children().length === 0) { //si l'ol a été ajouté pour 'rien'
+            $(this).remove();
+        }
     });
-    
-    $('#tree textarea').each(function(){
+
+    $('#tree textarea').each(function() {
         var content = $(this).val();
-        content = '<span>'+content+'</span>';
-        $(this).parent().attr('type','body');
-        $(this).parent().append(content);       
+        content = '<span class=\'textarea\'>' + content + '</span>';
+        $(this).parent().attr('type', 'body');
+        $(this).parent().append(content);
         $(this).remove();
     });
-    
-    $('#tree li').each(function(){
-       if( typeof $(this).attr('type') === 'undefined') $(this).attr('type',''); 
+
+    $('#tree li').each(function() {
+        if (typeof $(this).attr('type') === 'undefined')
+            $(this).attr('type', '');
     });
 }
 
@@ -116,7 +117,7 @@ function goPosition(config) {
             $(this).attr('type', 'title');
 
 //        } else if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') === '0') {       //si pas d'enfants, c'est du contenu, slides horizontales 
-        } else if ($(this).attr('depth') !== '1' && $(this).attr('type') ==='body' ){ //slide horizontales 
+        } else if ($(this).attr('depth') !== '1' && $(this).attr('type') === 'body') { //slide horizontales 
 
             var x = parseInt($(this).parent().parent().attr('data-x'));//+ $(this).index() * cranX / 2;
             var y = parseInt($(this).parent().parent().attr('data-y')) + parseInt($(this).index() + 1) * cranY; //pour atteindre la li qui la stocke
@@ -150,19 +151,19 @@ function goPositionEnd(config) {
 
     //premiers niveaux
     $('#tree li').each(function() {
-        console.log('tree li',$(this));
-       
+        console.log('tree li', $(this));
+
         if ($(this).attr('depth') === '1') {
             var x = config.endX0;
             var z = config.endZ0;
-            
+
             if ($(this).index() === 0) { //initialisation de la positio de la toute première slide
                 var y = upperY;
             } else {
                 var y = parseInt($(this).prev().attr('data-end-y')) + (parseInt(maxDepth($(this).prev(), 0))) * cranY * 1.2;
                 var y = parseInt(getLastChild($(this).prev()).attr('data-end-y')) + cranY;
             }
-            
+
             $(this).attr('data-end-x', x).attr('data-end-y', y).attr('data-end-z', z);
             $(this).attr('type', 'title');
             var indice = parseFloat($(this).index()) + 1;
@@ -212,6 +213,7 @@ function goPositionEnd(config) {
  * Ajoute également les slides qui ne font pas partie de la présentation, à savoir les overviews, les slides d'accueils et de concluion (any questions ?)
  */
 function goJmpress(config) {
+    
 
     //creation des slides jmpress
     $('#tree li').each(function() {
@@ -221,7 +223,7 @@ function goJmpress(config) {
             var lowerY = parseInt($(this).attr('lowery'));
             new Slide({
                 properties: {
-                    hierarchy: ''+$(this).attr('number'),
+                    hierarchy: '' + $(this).attr('number'),
                     scale: Math.abs((upperY - lowerY)) * 4 / 3 / 1000
                 },
                 matricule: 'end',
@@ -288,22 +290,27 @@ function goJmpress(config) {
         var slide = new Slide({
             matricule: number,
             style: $(this).attr('type'),
-            
             pos: {
                 x: $(this).attr('data-x'),
                 y: $(this).attr('data-y'),
                 z: $(this).attr('data-z')
             },
             properties: {
-                hierarchy: ''+$(this).attr('number'),
+                hierarchy: '' + $(this).attr('number'),
                 scale: 1
             }
         });
-
+        var content = '';
+        if ($(this).children('.textarea').length !== 0)
+            content = $(this).children('.textarea').html();
+        else if ($(this).children('.liTitle').length !== 0)
+            content = $(this).children('.liTitle').html();
+//        console.log('content                      ',continuentent);
+        
         new Text(slide.matricule, {
             properties: {
                 hierachy: 'H1Text',
-                content: $(this).children('span').html()
+                content: content
             }
         });
 

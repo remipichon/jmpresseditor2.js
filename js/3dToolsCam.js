@@ -25,10 +25,8 @@
  2: 
  */
 function getTrans3D($node) {
-    if( typeof $node === 'undefined' ){
-        $node = $("#slideArea>div");
-    }
-
+   
+    console.log('getTrans3D',$node);
     var prefix = (pfx('transform'));
     var trans = $node[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};

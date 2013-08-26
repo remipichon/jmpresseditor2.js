@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="css/jquery-ui.css" />
 
         <script type='text/javascript' >
-		//
+            //
             pressjson = {metadata: {}, slide: {}};
         </script>
 
@@ -143,22 +143,23 @@
 
 
 
-
         <div id="slideArea" >
-            <!--<div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>-->
-            <div id="home" class="hidden step overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>
+
         </div>
-        
+
+
+
         <div id='goSlideShow' > Go SlideShow </div>    
-       
-        
-        
+
+
+
         <div id='gotTree' > Go Tree from container</div>    
-        
+
 
         <div id="treeMaker">
             <ol>
-                  
+
                 <!-- ici se mettront les jumeaux -->
 
                 <li class='addSibling'> [+]                   
@@ -175,50 +176,50 @@
 
 
         <!-- template Mustache -->
-        
+
         <script id="templateContent" type="text/template">
 
             <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
 
         </script>
-        
+
         <script id="templateTitle" type="text/template">
 
-             <span class="li liTitle" contenteditable="true">{{content}}</span>
-     
+            <span class="li liTitle" contenteditable="true">{{content}}</span>
+
         </script>
         <script id="templateSibling" type="text/template">
-          <li>
-                    {{#title}}
-                        <span class="li liTitle" contenteditable="true">{{content}}</span>
-                    {{/title}}
-                            
-                    
-                    {{#body}}
-                        <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
-                    {{/body}}  
-                            
-                    
-                   <span class='switchContent'> [switchBodyTitle] </span>
-                   <span class='removeSibling'> [-] </span>
-                     
-                   <ol> 
-                             
-                      <!--  -->
-                      
-                       <li class='addSibling'> [+]                
-                       </li>
-                   </ol>
-          </li>
-            
+            <li>
+            {{#title}}
+            <span class="li liTitle" contenteditable="true">{{content}}</span>
+            {{/title}}
+
+
+            {{#body}}
+            <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
+            {{/body}}  
+
+
+            <span class='switchContent'> [switchBodyTitle] </span>
+            <span class='removeSibling'> [-] </span>
+
+            <ol> 
+
+            <!--  -->
+
+            <li class='addSibling'> [+]                
+            </li>
+            </ol>
+            </li>
+
 
         </script>
 
-        
+
 
         <div style='display:none;' id="tree2">
-        <!--<div idà
-        ="tree">--> 
+            <!--<div idà
+            ="tree">--> 
             <ol>
                 <li> Intro
                     <ol>
@@ -274,7 +275,7 @@
                                 </li>
                             </ol>
                         </li>
-                        
+
                     </ol>
                 </li>
                 <li> La solution
@@ -325,7 +326,7 @@
                         </li>
                     </ol>
                 </li>
-                 <li> Conclusion
+                <li> Conclusion
                     <ol>
                         <li> Gain de temps
                             <ol>
@@ -350,56 +351,37 @@
                     </ol>
                 </li>
             </ol>
-                <!--                <li>4
-                                    <ol>
-                                        <li>content</li>
-                                    </ol>
-                                </li>
-                                <li>4
-                                    <ol>
-                                        <li>content</li>
-                                    </ol>
-                                </li>
-                                <li>4
-                                    <ol>
-                                        <li>content</li>
-                                    </ol>
-                                </li>
-                                <li>4
-                                    <ol>
-                                        <li>content</li>
-                                    </ol>
-                                </li>
-                            </ol>-->
+            <!--                <li>4
+                                <ol>
+                                    <li>content</li>
+                                </ol>
+                            </li>
+                            <li>4
+                                <ol>
+                                    <li>content</li>
+                                </ol>
+                            </li>
+                            <li>4
+                                <ol>
+                                    <li>content</li>
+                                </ol>
+                            </li>
+                            <li>4
+                                <ol>
+                                    <li>content</li>
+                                </ol>
+                            </li>
+                        </ol>-->
 
 
         </div>
 
         <script>
-
-            $(document).ready(function() {
-                initContainer();
-                
-                $('#gotTree').on('click',function(event){
-                    console.log('hum?');
-//                    event.stopPropagation();
-                    goTreeFromContainer();
-                });
-                
-               handlerTreeMaker();
-                
-                $('#goSlideShow').on('click',function(){
-                    goSlideShow();
-                });
-                
-                $('#goTreeMaker').on('click',function(event){
-//                    event.stopPropagation();
-                    goTreeMaker();
-                });
-                
-                
-                
-                
+            function initJmpress() {
+                $('#slideArea').children().remove();
+                //il semblerait que Jmpress ait besoin d'au moins une slide dans slideArea pour pouvoir looper
+                $('#slideArea').append('<div id="home" class="hidden step overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>');
+                $('#slideArea').removeClass();
                 $('#slideArea').jmpress({
 //                        keyboard: {
 //                                keys: {
@@ -422,8 +404,37 @@
                 $('#slideArea').jmpress('deinit', $('#home'));
 
                 transform3D = new Transform3D();
-                
-                
+
+            }
+
+            $(document).ready(function() {
+                initContainer();
+
+                $('#gotTree').on('click', function(event) {
+                    console.log('hum?');
+//                    event.stopPropagation();
+                    goTreeFromContainer();
+                });
+
+                handlerTreeMaker();
+
+                $('#goSlideShow').on('click', function() {
+                    goSlideShow();
+                });
+
+                $('#goTreeMaker').on('click', function(event) {
+//                    event.stopPropagation();
+                    goTreeMaker();
+                });
+
+
+                initJmpress();
+
+
+
+
+
+
 
 
             });
@@ -453,9 +464,9 @@
             <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
 
         </script>
-        
-        
-        
+
+
+
 
 
     </body>

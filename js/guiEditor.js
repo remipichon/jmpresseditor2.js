@@ -126,7 +126,7 @@ $(document).keypress(function(event) {
 
 Transform3D = Class.extend({
     init: function() {
-        var transform = getTrans3D();
+        var transform = getTrans3D($('#slideArea'));
         this.pos = {
             x: 0, //transform.translate3d[0],
             y: 0, //transform.translate3d[1],
@@ -154,7 +154,7 @@ Transform3D = Class.extend({
 
 
             //magouille qui fera fonctionner
-            var dico = getTrans3D();
+            var dico = getTrans3D($('#slideArea'));
             var i;
             switch (attr) {
                 case 'x':
@@ -191,7 +191,7 @@ Transform3D = Class.extend({
 
 
             //magouille qui fera fonctionner
-            var dico = getTrans3D();
+            var dico = getTrans3D($('#slideArea'));
             var i;
             switch (attr) {
                 case 'x':

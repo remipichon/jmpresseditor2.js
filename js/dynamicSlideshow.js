@@ -203,7 +203,6 @@ function dynamic() {
                 var slide = container.getSlide(currentMatricule);
                 var texte = slide.element['questionstexte'];
                 texte.properties.content = "Thanks for watching";
-
             }
 
             //petit effet sur le tree 
@@ -221,7 +220,6 @@ function dynamic() {
                 var allChildren = getChildren($(this), []);  // on recupere un tableau des matricules de toutes les filles
                 for (var child in allChildren) {
                     var matriculeChild = allChildren[child];
-                    //$('#'+matriculeChild).addClass('hidden');
                     $('#' + matriculeChild).fadeOut(1600);
                 }
             });
@@ -233,27 +231,26 @@ function dynamic() {
             //ses soeurs
             liCurrent.siblings().each(function() {
                 var matricule = $(this).attr('matricule'); //on recuperer le matricule stocké dans la li
-//                $('#' + matricule).removeClass('hidden');     //on agit sur la slide qui a ce matricule
                 $('#' + matricule).fadeIn(1600);           //on agit sur la slide qui a ce matricule
             });
 
             //ses filles directes
             $(liCurrent.children('ol')[0]).children().each(function() {
                 var matricule = $(this).attr('matricule');
-//                $('#' + matricule).removeClass('hidden');
                 $('#' + matricule).fadeIn(1600);
             });
 
             //elle meme
-//            $('#' + currentMatricule).removeClass('hidden');
             $('#' + currentMatricule).fadeIn(1600);
 
 
             /* mise à niveau des petites soeurs sur la petite soeur de la current*/
             var littleHilly = $('#' + liCurrent.next().attr('matricule'));
+            console.log('dynamicSlideShow : call getTrans3D for dicoRef');
             var dicoRef = getTrans3D(littleHilly);
             $('#tree #li_' + currentMatricule + ' ~').each(function() { //pour obtenir les next siblings de la current li
                 var $slide = $('#' + $(this).attr('matricule'));
+                 console.log('dynamicSlideShow : call getTrans3D for dico');
                 var dico = getTrans3D($slide);
 //               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
 //                dico.translate3d[2] = littleHilly.attr('data-z');

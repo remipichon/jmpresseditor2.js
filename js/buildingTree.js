@@ -15,8 +15,6 @@ function handlerTreeMaker() {
         $(this).parent().append(html);
         $(this).parent().append($(this)); //deplacement du bouton
 
-
-
     });
 
 
@@ -32,14 +30,14 @@ function handlerTreeMaker() {
             $(this).parent().children('.liTitle').remove();
             var template = $('#templateContent').html();
             console.log('if');
-        } else if ( $(this).parent().children('textarea').length !== 0) {
+        } else if ($(this).parent().children('textarea').length !== 0) {
             $(this).parent().children('textarea').remove();
             var template = $('#templateTitle').html();
         }
-       
+
 
         data = {
-            content : 'Type text here'
+            content: 'Type text here'
         };
         var html = Mustache.to_html(template, data);
         $(this).parent().prepend(html);
@@ -64,6 +62,9 @@ function goSlideShow() {
         $(this).remove();
     });
     $('#treeMaker .createContent').each(function() {
+        $(this).remove();
+    });
+    $('#treeMaker .switchContent').each(function() {
         $(this).remove();
     });
     $('#treeMaker').attr('id', 'tree');
@@ -105,17 +106,22 @@ function goTreeMaker() {
  * (s'il existe, l'adaptateur devra s'arrange pour ce que ce soit le cas)
  */
 function goTreeFromContainer() {
-
+    $('#slideArea').jmpress('deinit');
     //desinit de la présentation
-    $('#slideArea .step').each(function() {
-        if ($(this).attr('id') === 'home')
-            return; //cette foutue slide n'existe pas dans le container !
-//        container.slide[$($('#slideArea .step')[5]).attr('matricule')].destroy()
-        console.log($(this).attr('matricule'));
-        if (!findObjectOfComposant($(this).attr('matricule')))
-            return;
-        container.getSlide($(this).attr('matricule')).destroy();
-    });
+//    $('#slideArea .step').each(function() {
+//        if ($(this).attr('id') === 'home')
+//            return; //cette foutue slide n'existe pas dans le container !
+////        container.slide[$($('#slideArea .step')[5]).attr('matricule')].destroy()
+////        console.log($(this).attr('matricule'));
+//        if (!findObjectOfComposant($(this).attr('matricule')))
+//            return;
+//        container.getSlide($(this).attr('matricule')).destroy();
+//    });
+
+    $('#slideArea').children().remove();
+   
+   initJmpress();
+
 
     $('#tree').attr('id', 'treeMaker');
     $('#treeMaker .questions').each(function() {

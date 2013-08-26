@@ -214,8 +214,8 @@ $(document).ready(function() {
 
 
         var savedJson = JSON.stringify(container, null, 2);
-//        console.log("saved json : ");
-//        console.log(savedjson);
+        console.log("saved json : ");
+        console.log(savedJson);
         localStorage.setItem('savedJson', savedJson);
 
         var savedPress = $("#slideArea>div").html();
@@ -262,7 +262,7 @@ $(document).ready(function() {
     });
     
     $('#loadTree').on('click',function(event){
-       container = JSON.parse(localStorage.getItem('saveJson'));
+       container = JSON.parse(localStorage.getItem('savedJson'));
        goTreeFromContainer();
     });
 
