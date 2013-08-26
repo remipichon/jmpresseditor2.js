@@ -74,7 +74,7 @@ $(document).ready(function() {
                 }
             });
             var matricule = slide.matricule;
-            new Text(matricule,{
+            new Text(matricule, {
                 properties: {
                     hierarchy: 'H1Text'
                 },
@@ -236,34 +236,38 @@ $(document).ready(function() {
 
     $('#loadSlide').on('click', function(event) {
         initContainer();
+        container = JSON.parse(localStorage.getItem('savedJson'));
+        goTreeFromContainer();
+        goSlideShow();
 
-        pressjson = JSON.parse(localStorage.getItem('savedJson'));
-        
+//        pressjson = JSON.parse(localStorage.getItem('savedJson'));
 
-        for (var matS in pressjson.slide) {
-            var slide = pressjson.slide[matS];
-            var slide = new Slide({         
-                'matricule': slide.matricule,
-                'pos': slide.pos ,               //a voir si je mets une boucle pour renseigner tous les champs existant, l'existence de l'adaptateur serait ici
-                'properties': {
-                    hierarchy: slide.properties.hierarchy
-                }
-            });
-            var matriculeSlide = slide.matricule;
-            for (var matEl in pressjson.slide[matS].element) {
-                var element = pressjson.slide[matS].element[matEl];
-                new Text(matriculeSlide,{
-                    'matricule': element.matricule,
-                    'pos': element.pos,
-                    'properties': {'content': element.properties.content}
-                });
-            }
-        } 
+//
+//        for (var matS in pressjson.slide) {
+//            var slide = pressjson.slide[matS];
+//            var slide = new Slide({         
+//                'matricule': slide.matricule,
+//                'pos': slide.pos ,               //a voir si je mets une boucle pour renseigner tous les champs existant, l'existence de l'adaptateur serait ici
+//                'properties': {
+//                    hierarchy: slide.properties.hierarchy
+//                }
+//            });
+//            var matriculeSlide = slide.matricule;
+//            for (var matEl in pressjson.slide[matriculeSlide].element) {
+//                var element = pressjson.slide[matriculeSlide].element[matEl];
+//                new Text(matriculeSlide,{
+//                    'matricule': element.matricule,
+//                    'pos': element.pos,
+//                    'properties': {'content': element.properties.content}
+//                });
+//            }
+//        } 
     });
-    
-    $('#loadTree').on('click',function(event){
-       container = JSON.parse(localStorage.getItem('savedJson'));
-       goTreeFromContainer();
+
+    $('#loadTree').on('click', function(event) {
+        initContainer();
+        container = JSON.parse(localStorage.getItem('savedJson'));
+        goTreeFromContainer();
     });
 
 
