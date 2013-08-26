@@ -5,7 +5,8 @@ function handlerTreeMaker() {
         console.log('add sib');
         var data = {
             'content': 'Type title here',
-            'title': true
+            'title': true,
+            matricule: 'textarea' + globalCpt++
         };
 
         var template = $('#templateSibling').html();
@@ -37,12 +38,29 @@ function handlerTreeMaker() {
 
 
         data = {
-            content: 'Type text here'
+            content: 'Type text here',
+            matricule: 'textarea' + globalCpt++
+
         };
         var html = Mustache.to_html(template, data);
         $(this).parent().prepend(html);
     });
+
+
+    $('#treeMaker').on('click', 'textarea', function() {
+        console.log('go ck');
+        CKEDITOR.replace($(this).attr('id'));
+        
+    });
+    
+    $('#treeMaker').on('mouseleave','.cke',function() {
+    console.log('leave cke');
+            CKEDITOR.instances[$(this).prev().attr('id')].destroy();
+        });
 }
+
+
+
 
 
 function goSlideShow() {
@@ -119,8 +137,8 @@ function goTreeFromContainer() {
 //    });
 
     $('#slideArea').children().remove();
-   
-   initJmpress();
+
+    initJmpress();
 
 
     $('#tree').attr('id', 'treeMaker');
@@ -152,19 +170,22 @@ function goTreeFromContainer() {
         cpt++;
         var matricule = slide.matricule;
 //        var slide = container.slide[matricule];
-        if (slide.type === 'overwiew'){
-            
-       
+        if (slide.type === 'overwiew') {
+
+
             console.log('debug : goTreeFromContainer : overview create return');
-            return;}
+            return;
+        }
         var hierarchy = slide.properties.hierarchy.split('.');
         console.log('hierarchy', hierarchy);
-        if (hierarchy[0] === 'undefined')  {          
+        if (hierarchy[0] === 'undefined') {
             console.log('debug : goTreeFromContainer  : undefined hierarchy eturn');
-            return;}
-        if (hierarchy[0] === '0'){            
+            return;
+        }
+        if (hierarchy[0] === '0') {
             console.log('debug : goTreeFromContainer : debug :hierarchy == 0 return');
-            return; }
+            return;
+        }
         for (var i in hierarchy) {
             hierarchy[i] = parseInt(hierarchy[i]);
         }
@@ -180,6 +201,7 @@ function goTreeFromContainer() {
 
 
 
+//        var template = $('#templateSibling').html();
         var template = $('#templateSibling').html();
         var html = Mustache.to_html(template, data);
 
@@ -211,7 +233,7 @@ function goTreeFromContainer() {
             $target = $($prevTarget.children('li:not(.addSibling)')[$prevTarget.children('li:not(.addSibling)').length - 1]).children('ol');
         }
 
-        console.log('tree building',$target, hierarchy);
+        console.log('tree building', $target, hierarchy);
 
 //        alert();
         var $button = $target.children('.addSibling');

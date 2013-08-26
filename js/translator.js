@@ -552,12 +552,15 @@ Text = Element.extend({
         //console.log('ajout de DOM');
         this.show();
         //ajout dans le DOM
-        var template = $('#templateElement').html();
+//        var template = $('#templateElement').html();
+        var template = $('#templateElementCK').html();
         var html = Mustache.to_html(template, this);
         //console.log('html', html);
         $('#' + slide).append(html);
         //console.log('adtexte', slide);
-        handlerComposant($('#' + this.matricule));
+        var newEl = $('#' + this.matricule);
+        newEl.children('span').html(this.properties.content);
+        handlerComposant(newEl);
 
     },
     show: function(i) {

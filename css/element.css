@@ -86,6 +86,9 @@
 
 }
 
+strong {
+    color: red;
+}
 .H1Text
 {
 
@@ -96,7 +99,7 @@
     display: block;
     /*font-size: 15em;*/
     font-size: 6em;
-    font-weight: bold;
+    /*font-weight: bold;*/
 
 }
 
