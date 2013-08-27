@@ -118,6 +118,28 @@ $(document).ready(function() {
     });
 
 
+    /* ======================================================================================
+     * TREE PANNEL - gestion de la présentation hierarchisée grace au tree
+     * ======================================================================================*/
+
+    $('#gotTree').on('click', function(event) {
+        event.preventDefault();        
+         $('#gotTree').fadeOut(1,function(){
+            $('#goSlideShow').fadeIn(1); 
+         });
+        goTreeFromContainer();
+    });
+
+    handlerTreeMaker();
+
+    $('#goSlideShow').on('click', function(event) {
+        event.preventDefault();
+         $('#goSlideShow').fadeOut(1,function(){
+            $('#gotTree').fadeIn(1); 
+         });
+        goSlideShow();
+    });
+
 
 
 
@@ -151,6 +173,8 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#arrow-nav').on('click', function() {
+//        if ( ! $('#arrow-nav-tree').hasClass('hidden-bar')) $('#arrow-nav').trigger('click');
+
         var $sidebar = $('#sidebar');
         $sidebar.toggleClass('hidden-bar');
         if ($sidebar.hasClass('hidden-bar')) {
@@ -160,6 +184,21 @@ $(document).ready(function() {
         else {
             $('#sidebar').animate({marginLeft: "0"}, 300);
             $('#arrow-nav').css('background-position', '0 0');
+        }
+    });
+
+    $('#arrow-nav-tree').on('click', function() {
+        if (!$('#sidebar').hasClass('hidden-bar'))
+            $('#arrow-nav').trigger('click');
+        var $sidebar = $('#sidebarTree');
+        $sidebar.toggleClass('hidden-bar');
+        if ($sidebar.hasClass('hidden-bar')) {
+            $sidebar.animate({marginLeft: "-400"}, 300);
+            $(this).css('background-position', '-50px 0');
+        }
+        else {
+            $sidebar.animate({marginLeft: "0"}, 300);
+            $(this).css('background-position', '0 0');
         }
     });
 

@@ -1,23 +1,25 @@
 /* CSS de test */
-.hidden {
-    display : none;
+
+#treeMaker {
+    color: white;
+    font-family: Arial;
 }
 
-
 #tree {
-    color: black
+    color: white;
+    font-family: Arial;
 }
 
 .present-slide{
-    color: red;
+    color: white ;
 }
 
 .past-slide{
-    color: gray;
+    color: #9F9FA0;
 }
 
 .future-slide{
-    color: blue;
+    color:  #ABAAFF;
 }
 
 .addSibling{
@@ -26,6 +28,7 @@
 }
 
 .removeSibling{
+    text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;
     margin-left: 2px;
 }
 

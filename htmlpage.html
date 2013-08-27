@@ -53,7 +53,7 @@
     </head>
 
     <body>
-        
+
         <!--<textarea id='debugCk'></textarea>-->
 
 
@@ -75,9 +75,9 @@
             </ul>
         </div>
         <!--tag <nav> ?-->
-        <div class='noJoystick' id="sidebar">
+        <div class='noJoystick sidebar' id="sidebar">
 
-            <div id="arrow-nav"></div>
+            <div class='arrow-nav' id="arrow-nav"></div>
             <ul>  
                 <li id="tools">
                     <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
@@ -136,6 +136,50 @@
         </div>
 
 
+        <div class='noJoystick sidebar' id="sidebarTree">
+
+            <div class='arrow-nav' id="arrow-nav-tree"></div>
+            
+            <ul>  
+                <li id="tools">
+                    <h1 id="header-drawing-tools">PRESENTATION TOOLS</h1>
+                    <ul>
+                        <li>
+                            <a href="#" target='goSlideShow' id='goSlideShow' title="goSlideShow"><p>goSlideShow</p></a>
+                            
+                        </li>
+                        <li>
+                            <a href="#" target="gotTree" id='gotTree'  title="gotTree"><p>gotTree</p></a>
+                            
+                        </li>
+                        
+                    </ul>
+                </li>
+               
+            </ul>
+            
+
+            <div id="treeMaker">
+                <ol>
+
+                    <!-- ici se mettront les jumeaux -->
+
+                    <li class='addSibling'> [+]                   
+                    </li>
+
+
+                </ol>
+
+
+
+            </div>
+
+
+
+
+        </div>
+
+
         <div id='joystick'> 
             <div id="zone-tolerance-x" class ="zone-tolerance-joystick"></div>
             <div id="zone-tolerance-y" class ="zone-tolerance-joystick"></div>
@@ -151,28 +195,6 @@
         </div>
 
 
-
-        <div id='goSlideShow' > Go SlideShow </div>    
-
-
-
-        <div id='gotTree' > Go Tree from container</div>    
-
-
-        <div id="treeMaker">
-            <ol>
-
-                <!-- ici se mettront les jumeaux -->
-
-                <li class='addSibling'> [+]                   
-                </li>
-
-
-            </ol>
-
-
-
-        </div>
 
 
 
@@ -198,7 +220,7 @@
 
 
             {{#body}}
-           <span class='textarea' rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</span>
+            <span class='textarea' rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</span>
             {{/body}}  
 
 
@@ -413,23 +435,7 @@
 //                CKEDITOR.replace('debugCk');
                 initContainer();
 
-                $('#gotTree').on('click', function(event) {
-                    console.log('hum?');
-//                    event.stopPropagation();
-                    goTreeFromContainer();
-                });
-
-                handlerTreeMaker();
-
-                $('#goSlideShow').on('click', function() {
-                    goSlideShow();
-                });
-
-                $('#goTreeMaker').on('click', function(event) {
-//                    event.stopPropagation();
-                    goTreeMaker();
-                });
-
+               
 
                 initJmpress();
 

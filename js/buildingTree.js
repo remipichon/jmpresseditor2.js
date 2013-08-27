@@ -1,5 +1,7 @@
 
 function handlerTreeMaker() {
+    
+    $('#gotTree').fadeOut(1);
 
     $('#treeMaker').on('click', '.addSibling', function() {
         console.log('add sib');
