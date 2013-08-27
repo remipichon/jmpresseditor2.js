@@ -214,6 +214,7 @@ function goPositionEnd(config) {
  * Ajoute également les slides qui ne font pas partie de la présentation, à savoir les overviews, les slides d'accueils et de concluion (any questions ?)
  */
 function goJmpress(config) {
+    initJmpress();
     
 
     //creation des slides jmpress

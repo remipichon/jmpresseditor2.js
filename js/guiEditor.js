@@ -10,7 +10,8 @@
 
 
 $(document).keypress(function(event) {
-    return;
+   
+
 //    console.log(event.which);
 
 
@@ -24,7 +25,12 @@ $(document).keypress(function(event) {
 
 
     switch (event.which) {
-        //creation composant
+        //deplacement dans la présentation
+        case 32:
+            $('#slideArea').jmpress('next');
+            break;
+
+            //creation composant
         case 106 :
             objEvt.action = 'createSlide';
             break;
@@ -45,6 +51,15 @@ $(document).keypress(function(event) {
             break;
     }
     
+    
+    
+    
+    return;
+    
+    
+    
+    
+
     if (composantCatchEvent) {
         console.log('document capte event mais ne fait rien');
         return;

@@ -1,6 +1,6 @@
 
 function handlerTreeMaker() {
-    
+
     $('#gotTree').fadeOut(1);
 
     $('#treeMaker').on('click', '.addSibling', function() {
@@ -30,8 +30,7 @@ function handlerTreeMaker() {
     $('#treeMaker').on('click', '.switchContent', function() {
         console.log('switch to content', $(this));
         data = {
-                        matricule: 'textarea' + globalCpt++
-
+            matricule: 'textarea' + globalCpt++
         };
         if ($(this).parent().children('.liTitle').length !== 0) {
             $(this).parent().children('.liTitle').remove();
@@ -45,7 +44,7 @@ function handlerTreeMaker() {
         }
 
 
-        
+
         var html = Mustache.to_html(template, data);
         $(this).parent().prepend(html);
     });
@@ -55,40 +54,40 @@ function handlerTreeMaker() {
 
     $('#treeMaker').on('mouseleave', '.cke', function() {
         //return;
-       
-        
+
+
         var txt = CKEDITOR.instances[$(this).prev().attr('id')].getData();
-         console.log('leave cke',txt);
-        $(this).parent().on('click',lauchCK);
-        var $parent =  $(this).parent();
+        console.log('leave cke', txt);
+        $(this).parent().on('click', lauchCK);
+        var $parent = $(this).parent();
 //        CKEDITOR.instances[$(this).prev().attr('id')].destroy();
-        
+
 //       $parent.html(txt);
 
 //        $(this).parent().children().remove();
         $(this).parent().html(txt);
-        
-        
-        
+
+
+
     });
 }
 
 
 function lauchCK() {
-        //empecher le double lauch
-        if( $(this).children('textarea').length !== 0 )
-            return;
-    
-    
-//        $(this).css('display','none');
-        var txt = $(this).html();
-        console.log('laych ck',txt);
-        $(this).html('');
-        $(this).append("<textarea style='display:none;'id='textarea" + globalCpt++ + "'>"+txt+"</textarea>");
-        console.log('go ck');
-        CKEDITOR.replace($($(this).children('textarea')).attr('id'));
+    //empecher le double lauch
+    if ($(this).children('textarea').length !== 0)
+        return;
+    console.log('DEBUG LAUCHE CK');
 
-    }
+//        $(this).css('display','none');
+    var txt = $(this).html();
+    console.log('laych ck', txt);
+    $(this).html('');
+    $(this).append("<textarea style='display:none;'id='textarea" + globalCpt++ + "'>" + txt + "</textarea>");
+    console.log('go ck');
+    CKEDITOR.replace($($(this).children('textarea')).attr('id'));
+
+}
 
 
 function goSlideShow() {
@@ -268,13 +267,13 @@ function goTreeFromContainer() {
         var $button = $target.children('.addSibling');
         $target.append(html);
         //ajout du texte ne se fait pas via mustache car il n'interprete pas le html (c'est l'un ou l'autre (ou exclusif))
-        $($target.children()[$target.children().length-1]).children('.liTitle').html(content);
-        $($target.children()[$target.children().length-1]).children('.textarea').html(content);
-        
+        $($target.children()[$target.children().length - 1]).children('.liTitle').html(content);
+        $($target.children()[$target.children().length - 1]).children('.textarea').html(content);
+
         //handler CK
-         $($target.children()[$target.children().length-1]).children('.textarea').on('click',lauchCK);
-        
-        
+        $($target.children()[$target.children().length - 1]).children('.textarea').on('click', lauchCK);
+
+
         $target.append($button);
 
 
@@ -285,6 +284,8 @@ function goTreeFromContainer() {
     });
 
     $('#treeMaker').children('ol').append("<li class='addSibling'>Add Sibling</li>");
+
+    $tree.fadeIn(200);
 
     console.log('debug treefromcontainer : nb de passafge dans .each(slide', cpt);
 //    initContainer();

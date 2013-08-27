@@ -299,15 +299,22 @@ $(document).ready(function() {
         modalSelectStorage(saveJson);
 
     });
+     $('#quickSave').on('click', function(event) {
+         console.log('quicksave on @' +$('#slideshowName').html()+'@')
+        saveJson($('#slideshowName').html());
+    });
 
     /* ======================================================================================
      * LOAD       -   load button
      * charge la présentation en local storage 
      * ====================================================================================== */
     function loadJsonForTree(localName) {
+        $('#slideshowName').html(localName);
         initContainer();
         container = JSON.parse(localStorage.getItem(localName));
         goTreeFromContainer();
+        $('#gotTree').fadeOut(1);
+        $('#goSlideShow').fadeIn(1);
     }
     
     function loadJsonForSlideShow(localName) {
