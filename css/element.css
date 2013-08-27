@@ -28,7 +28,7 @@
 }
 
 .removeSibling{
-    text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;
+    /*text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;*/
     margin-left: 2px;
 }
 
