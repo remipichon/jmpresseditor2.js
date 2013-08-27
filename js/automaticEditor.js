@@ -54,8 +54,9 @@ function goNormalize() {
         }
     });
 
-    $('#tree textarea').each(function() {
-        var content = $(this).val();
+    $('#tree .textarea').each(function() {
+//        var content = $(this).val();
+        var content = $(this).html();
         content = '<span class=\'textarea\'>' + content + '</span>';
         $(this).parent().attr('type', 'body');
         $(this).parent().append(content);

@@ -53,6 +53,8 @@
     </head>
 
     <body>
+        
+        <!--<textarea id='debugCk'></textarea>-->
 
 
 
@@ -179,7 +181,7 @@
 
         <script id="templateContent" type="text/template">
 
-            <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
+            <span class='textarea' rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</div>
 
         </script>
 
@@ -196,7 +198,7 @@
 
 
             {{#body}}
-            <textarea rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</textarea>
+           <span class='textarea' rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</span>
             {{/body}}  
 
 
@@ -408,6 +410,7 @@
             }
 
             $(document).ready(function() {
+//                CKEDITOR.replace('debugCk');
                 initContainer();
 
                 $('#gotTree').on('click', function(event) {

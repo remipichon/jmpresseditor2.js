@@ -27,40 +27,66 @@ function handlerTreeMaker() {
 
     $('#treeMaker').on('click', '.switchContent', function() {
         console.log('switch to content', $(this));
+        data = {
+                        matricule: 'textarea' + globalCpt++
+
+        };
         if ($(this).parent().children('.liTitle').length !== 0) {
             $(this).parent().children('.liTitle').remove();
             var template = $('#templateContent').html();
-            console.log('if');
-        } else if ($(this).parent().children('textarea').length !== 0) {
-            $(this).parent().children('textarea').remove();
+//            console.log('if');
+            data.content = 'Type content here';
+        } else if ($(this).parent().children('.textarea').length !== 0) {
+            $(this).parent().children('.textarea').remove();
             var template = $('#templateTitle').html();
+            data.content = 'Type title here';
         }
 
 
-        data = {
-            content: 'Type text here',
-            matricule: 'textarea' + globalCpt++
-
-        };
+        
         var html = Mustache.to_html(template, data);
         $(this).parent().prepend(html);
     });
 
 
-    $('#treeMaker').on('click', 'textarea', function() {
-        console.log('go ck');
-        CKEDITOR.replace($(this).attr('id'));
+    $('#treeMaker').one('click', '.textarea', lauchCK);
+
+    $('#treeMaker').on('mouseleave', '.cke', function() {
+        //return;
+       
+        
+        var txt = CKEDITOR.instances[$(this).prev().attr('id')].getData();
+         console.log('leave cke',txt);
+        $(this).parent().on('click',lauchCK);
+        var $parent =  $(this).parent();
+//        CKEDITOR.instances[$(this).prev().attr('id')].destroy();
+        
+//       $parent.html(txt);
+
+//        $(this).parent().children().remove();
+        $(this).parent().html(txt);
+        
+        
         
     });
-    
-    $('#treeMaker').on('mouseleave','.cke',function() {
-    console.log('leave cke');
-            CKEDITOR.instances[$(this).prev().attr('id')].destroy();
-        });
 }
 
 
+function lauchCK() {
+        //empecher le double lauch
+        if( $(this).children('textarea').length !== 0 )
+            return;
+    
+    
+//        $(this).css('display','none');
+        var txt = $(this).html();
+        console.log('laych ck',txt);
+        $(this).html('');
+        $(this).append("<textarea style='display:none;'id='textarea" + globalCpt++ + "'>"+txt+"</textarea>");
+        console.log('go ck');
+        CKEDITOR.replace($($(this).children('textarea')).attr('id'));
 
+    }
 
 
 function goSlideShow() {
@@ -193,9 +219,10 @@ function goTreeFromContainer() {
         var data = {
             'indice': slide.properties.hierarchy,
         };
-
+        var content = '';
         for (var matEle in slide.element) {
-            data['content'] = slide.element[matEle].properties.content;
+//            data['content'] = slide.element[matEle].properties.content;
+            var content = content + slide.element[matEle].properties.content;
         }
         data[slide.style] = 'true';
 
@@ -238,6 +265,14 @@ function goTreeFromContainer() {
 //        alert();
         var $button = $target.children('.addSibling');
         $target.append(html);
+        //ajout du texte ne se fait pas via mustache car il n'interprete pas le html (c'est l'un ou l'autre (ou exclusif))
+        $($target.children()[$target.children().length-1]).children('.liTitle').html(content);
+        $($target.children()[$target.children().length-1]).children('.textarea').html(content);
+        
+        //handler CK
+         $($target.children()[$target.children().length-1]).children('.textarea').on('click',lauchCK);
+        
+        
         $target.append($button);
 
 

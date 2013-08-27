@@ -3,32 +3,41 @@
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 
-CKEDITOR.stylesSet.add('styleJmpress',
-        [
-          // Inline styles
-          {name: 'Title 1', element: 'span', attributes: {'class': 'title1'}},
-          {name: 'Body', element: 'span', attributes: {'class': 'bodyText'}}
-        ]);
-
+/*
+ CKEDITOR.stylesSet.add('styleJmpress',
+ [
+ // Inline styles
+ {name: 'Title 1', element: 'span', attributes: {'class': 'title1'}},
+ {name: 'Body', element: 'span', attributes: {'class': 'bodyText'}}
+ ]);
+ */
 
 
 CKEDITOR.editorConfig = function(config) {
-  // Define changes to default configuration here.
-  // For the complete reference:
-  // http://docs.ckeditor.com/#!/api/CKEDITOR.config
+    // Define changes to default configuration here.
+    // For the complete reference:
+    // http://docs.ckeditor.com/#!/api/CKEDITOR.config
 
-  config.toolbar = 'ImpressToolbar';      // toolbar personnalisée
+    config.toolbar = 'ImpressToolbar';      // toolbar personnalisée
 
-  config.toolbar_ImpressToolbar =
-          [
-            {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline']},
-            {name: 'styles', items: ['Styles']}
-          ];
-          
-          CKEDITOR.config.stylesSet = 'styleJmpress';
+    config.toolbar_ImpressToolbar =
+            [
+                {name: 'document', items: ['Source', '-']},
+                {name: 'clipboard', items: ['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']},
+                {name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt']},
+                {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+//                {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']},
+                {name: 'links', items: ['Link', 'Unlink']},
+                {name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'SpecialChar']},
+                {name: 'colors', items: ['TextColor', 'BGColor']},
+                {name: 'tools', items: ['Maximize', 'ShowBlocks', '-', 'About']}
+                //{name: 'styles', items: ['Styles']}
+            ];
+
+    CKEDITOR.config.stylesSet = 'styleJmpress';
 
 
-  // The toolbar groups arrangement, optimized for two toolbar rows.
+    // The toolbar groups arrangement, optimized for two toolbar rows.
 //  config.toolbarGroups = [
 //		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 //		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
