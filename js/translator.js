@@ -74,6 +74,12 @@ Slide = Class.extend({
         //default value
         var matricule = 'slide' + globalCpt++;
         this.matricule = matricule;
+        //check if unique matrcule already exists
+        while (typeof findObjectOfComposant(this.matricule) !== 'undefined') { //le matricule existe déjà !
+            var matricule = 'slide' + globalCpt++;
+            this.matricule = matricule;
+        }
+
 
 
         this.type = 'slide';
@@ -484,8 +490,15 @@ Text = Element.extend({
         if (typeof params !== 'undefined')
             if (typeof params.matricule !== 'undefined')
                 var matricule = params.matricule;
-            else
+            else {
                 var matricule = 'texteelement' + globalCpt++;
+                //check if unique matrcule already exists
+                while (typeof findObjectOfComposant(this.matricule) !== 'undefined') { //le matricule existe déjà !
+                    var matricule = 'texteelement' + globalCpt++;
+                    this.matricule = matricule;
+                }
+            }
+
         this.matricule = matricule;
 
 
@@ -594,12 +607,16 @@ Image = Element.extend({
         if (typeof params !== 'undefined')
             if (typeof params.matricule !== 'undefined')
                 var matricule = params.matricule;
-            else
-                var matricule = 'texteelement' + globalCpt++;
-        this.matricule = matricule;
+            else {
+                var matricule = 'imageelement' + globalCpt++;
+                //check if unique matricule already exists
+                while (typeof findObjectOfComposant(this.matricule) !== 'undefined') { //le matricule existe déjà !
+                    var matricule = 'imageelement' + globalCpt++;
+                    this.matricule = matricule;
+                }
 
-        var matricule = 'imageelement' + globalCpt++;
-        this.matricule = matricule;
+            }
+        this.matricule = matricule;       
 
         this._super(slide, params, matricule);
 

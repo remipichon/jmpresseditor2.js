@@ -6,6 +6,21 @@
 
 
 $(document).ready(function() {
+    //calcul de la taille necessaire pour la div contenant un asceneurs
+
+    $(window).on('resize', function() {
+        //scroll pour la timeline 
+        var height = window.innerHeight - $('#sidebar #sortable').offset().top;
+        $('#sidebar #sortable').css('height', height);
+
+        //scrool pour le tree
+        var height = window.innerHeight - $('#treeMaker').offset().top;
+        $('#treeMaker').css('height', height);
+
+    });
+    
+    $(window).trigger('resize');
+
 
 
     /* ======================================================================================
@@ -192,12 +207,13 @@ $(document).ready(function() {
             $('#arrow-nav').trigger('click');
         var $sidebar = $('#sidebarTree');
         $sidebar.toggleClass('hidden-bar');
+        var width = $sidebar.css('width');
         if ($sidebar.hasClass('hidden-bar')) {
-            $sidebar.animate({marginLeft: "-400"}, 300);
+            $sidebar.animate({marginLeft: "-400"}, width);
             $(this).css('background-position', '-50px 0');
         }
         else {
-            $sidebar.animate({marginLeft: "0"}, 300);
+            $sidebar.animate({marginLeft: "0"}, width);
             $(this).css('background-position', '0 0');
         }
     });
@@ -283,14 +299,14 @@ $(document).ready(function() {
 
         for (var key in localStorage) {
             var item = {text: key,
-                click: function(event,ui) {   
+                click: function(event, ui) {
                     callback($(event.target).html());
                     $(this).dialog("close");
                 }
             };
             option.buttons.push(item);
         }
-        
+
         $('#dialog-select-storage').dialog(option);
 
     }
@@ -299,8 +315,8 @@ $(document).ready(function() {
         modalSelectStorage(saveJson);
 
     });
-     $('#quickSave').on('click', function(event) {
-         console.log('quicksave on @' +$('#slideshowName').html()+'@')
+    $('#quickSave').on('click', function(event) {
+        console.log('quicksave on @' + $('#slideshowName').html() + '@')
         saveJson($('#slideshowName').html());
     });
 
@@ -316,14 +332,14 @@ $(document).ready(function() {
         $('#gotTree').fadeOut(1);
         $('#goSlideShow').fadeIn(1);
     }
-    
+
     function loadJsonForSlideShow(localName) {
         container = JSON.parse(localStorage.getItem(localName));
         console.log('infos : loadSlide : pas de politique définie pour ce bouton, container contient la slideShow');
     }
 
     $('#loadSlide').on('click', function(event) {
-         modalSelectStorage(loadJsonForSlideShow);
+        modalSelectStorage(loadJsonForSlideShow);
     });
 
     $('#loadTree').on('click', function(event) {
@@ -340,21 +356,21 @@ $(document).ready(function() {
      * pour vider les présentations sauvergarder
      * ====================================================================================== */
 
-     function clearOne(localName){
-         localStorage.removeItem(localName);
-         
-     }
+    function clearOne(localName) {
+        localStorage.removeItem(localName);
+
+    }
 
     $('#clearAll').click(function() {
         window.localStorage.clear();
-        location.reload();         
+        location.reload();
     });
     $('#clearOne').click(function() {
         modalSelectStorage(clearOne);
-       
+
     });
     $('#clearDom').click(function() {
-        location.reload();       
+        location.reload();
     });
 
 

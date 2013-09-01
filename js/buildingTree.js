@@ -32,7 +32,9 @@ function handlerTreeMaker() {
         data = {
             matricule: 'textarea' + globalCpt++
         };
-        if ($(this).parent().children('.liTitle').length !== 0) {
+        var content = false;
+        ($(this).parent().children('.liTitle').length !== 0) ? content = true : null;
+        if (content) {
             $(this).parent().children('.liTitle').remove();
             var template = $('#templateContent').html();
 //            console.log('if');
@@ -47,12 +49,18 @@ function handlerTreeMaker() {
 
         var html = Mustache.to_html(template, data);
         $(this).parent().prepend(html);
+        if (content) {//si ajout de content il faut le handler CK
+            $(this).parent().children('.textarea').one('click', lauchCK);
+        }
+
     });
 
 
     $('#treeMaker').one('click', '.textarea', lauchCK);
 
+
     $('#treeMaker').on('mouseleave', '.cke', function() {
+//$('body').on('mouseleave', '.cke', function() {
         //return;
 
 
@@ -67,13 +75,13 @@ function handlerTreeMaker() {
 //        $(this).parent().children().remove();
         $(this).parent().html(txt);
 
-
-
     });
+
 }
 
 
 function lauchCK() {
+    console.log('lauchCK call');
     //empecher le double lauch
     if ($(this).children('textarea').length !== 0)
         return;

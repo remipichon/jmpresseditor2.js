@@ -142,7 +142,7 @@ body
      width:180px;
 }
 #sidebarTree{
-     width:380px;
+     min-width: 380px;
 }
 
 
@@ -165,8 +165,8 @@ body
     margin-left: 180px;
 }
 .sidebar #arrow-nav-tree{
-    top:40%;
-    margin-left: 380px;
+    top: 8%;
+     left: 380px; 
 }
 /*
 #sidebar #arrow-nav:hover
@@ -242,7 +242,7 @@ body
 
 .nav-button
 {
-    height:80px;
+/*     height:80px; */
 }
 
 .nav-button img
