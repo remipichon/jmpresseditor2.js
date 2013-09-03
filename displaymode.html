@@ -1,32 +1,85 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=1024"/>
+        <meta name="viewport" content="width=1024" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <title>Display mode</title>
-        
+
+        <title>Editor</title>
+        <link rel="stylesheet" type="text/css" href="css/layout.css" >
+        <link rel="stylesheet" type="text/css" href="css/element.css" >
+
         <link rel="stylesheet" href="css/jquery-ui.css" />
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" type="text/css" href="css/displaymode.css" >
-        
-        <script type="text/javascript" src="js/plugin/mustache.js"></script>
 
+        <script type='text/javascript' >
+            //
+            pressjson = {metadata: {}, slide: {}};
+        </script>
+
+        <script type="text/javascript" src="js/plugin/watch1.3.0.js"></script>
+        <script type="text/javascript" src="js/plugin/simpleJsInheritance.js"></script>
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
-        <script type="text/javascript" src="js/plugin/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/plugin/jquery-ui.js"></script>        
+        <script type="text/javascript" src="js/plugin/mustache.js"></script>
+        <script type="text/javascript" src="js/plugin/mousewheel.js"></script>
+        <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+        <script type="text/javascript" src="ckeditor/image/plugin.js"></script>
 
-        <!--Pour la fonction goAutoAlign-->
-        <script type="text/javascript" src="js/treeToPresentation.js"></script>  
+        <script type="text/javascript" src="js/plugin/jmpress.js"></script>
+
+
+        <!--les modules-->
+        <script type="text/javascript" src="js/testPresentation.js"></script>
+        <script type="text/javascript" src="js/dynamicSlideshow.js"></script>
+        <script type="text/javascript" src="js/time-line.js"></script>
+        <script type="text/javascript" src="js/layout.js"></script>
+        <script type="text/javascript" src="js/editorTools.js"></script>
+        <script type="text/javascript" src="js/guiEditor.js"></script>
+        <script type="text/javascript" src="js/model.js"></script> 
+        <script type="text/javascript" src="js/slideshowEditor.js"></script>
+        <script type="text/javascript" src="js/translator.js"></script>
+        <script type="text/javascript" src="js/automaticEditor.js"></script>
+        <script type="text/javascript" src="js/buildingTree.js"></script>
+
+
+        <!--les boites a outils-->
+        <script type="text/javascript" src="js/treeToPresentation.js"></script>
+        <script type="text/javascript" src="js/3dTools.js"></script>
+        <script type="text/javascript" src="js/3dToolsCam.js"></script>
+        <script type="text/javascript" src="js/transformTools.js"></script>
+
+
+
 
     </head>
+
+
     <body>
 
-        <!--Kiki : je me suis permis de modifier l'id parce que displaymode partage une fonction avec l'éditeur (la fonction autoAlign-->
-        <div id="slideArea">
+
+        <div id="slideArea" >
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>
+
+        </div>
+        <div id='sidebar'>
+            <ul id="sortable" style="overflow-y:scroll;">        
+            </ul>
         </div>
 
+
         <div id="progressbar"></div>
+
+        <div id="treeMaker" style="overflow-y:scroll; overflow-x:auto;">
+            <ol>
+                <li class='addSibling'> [+]  </li> 
+            </ol>
+
+        </div>
+
         <script>
+
+
 
 
             $(document).keydown(function() {
@@ -49,43 +102,97 @@
 
         </script>
 
-        <script id="templateJmpress" type="text/template">
-            {{#slide}}
-            <div id={{matricule}} class='step {{type}}' data-x = '{{pos.x}}' data-y = '{{pos.y}}' data-z = '{{pos.z}}'  data-rotate-x='{{rotate.x}}' data-rotate-y='{{rotate.y}}' data-rotate-z='{{rotate.z}}' data-scale = '{{properties.scale}}' > 
-            
-            {{#element}} 
-                
-               {{#texte}}
-                    <div id={{matricule}} class='element' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' ><span class={{properties.hierarchy}} >{{properties.content}}</span> </div>
-               {{/texte}}
-               
-               {{#image}}               
-                    <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
-               {{/image}}
-               
-            {{/element}} 
-            </div>   
-            {{/slide}}
+
+        <!-- template Mustache -->
+
+        <script id="templateContent" type="text/template">
+
+            <span class='textarea' rows='1' cols='30' id={{matricule}} matricule={{matricule}} style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</div>
+
         </script>
+
+        <script id="templateTitle" type="text/template">
+
+            <span class="li liTitle" contenteditable="true">{{content}}</span>
+
+        </script>
+        <script id="templateSibling" type="text/template">
+            <li>
+            {{#title}}
+            <span class="li liTitle" contenteditable="true">{{content}}</span>
+            {{/title}}
+
+
+            {{#body}}
+            <span class='textarea' rows='1' cols='30' id='{{matricule}}' matricule='{{matricule}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px'>{{content}}</span>
+            {{/body}}  
+
+
+            <span class='switchContent'> [switchBodyTitle] </span>
+            <span class='removeSibling'> [-] </span>
+
+            <ol> 
+
+            <!--  -->
+
+            <li class='addSibling'> [+]                
+            </li>
+            </ol>
+            </li>
+
+
+        </script>
+
+
 
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
 
         <script type="text/javascript">
-            /*var config = {
-             viewPort:{
-             width:1000,
-             height:true
-             }
-             };*/
-            var pressjsonX = JSON.parse(localStorage.getItem('outputjson'));
-            var templateX = $('#templateJmpress').html();
-            var htmlX = Mustache.to_html(templateX, pressjsonX);
-            //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
-            $('#slideArea').append(htmlX);
-            $('#slideArea').jmpress({
-                viewport: {
-                    height: 2000}});
+//            /*var config = {
+//             viewPort:{
+//             width:1000,
+//             height:true
+//             }
+//             };*/
+//            var pressjsonX = JSON.parse(localStorage.getItem('outputjson'));
+//            var templateX = $('#templateJmpress').html();
+//            var htmlX = Mustache.to_html(templateX, pressjsonX);
+//            //            alert(html);        //ne pas commenter car le jmpress ne fonctionne pas sans
+//            $('#slideArea').append(htmlX);
+//            $('#slideArea').jmpress({
+//                viewport: {
+//                    height: 2000}});
 
+            
+            $(document).ready(function() {
+                initContainer();
+                initJmpress();
+
+
+                //recuperer la présentation depuis le local storage
+                container = JSON.parse(localStorage.getItem('outputjson'));
+
+                //transformer en tree
+                goTreeFromContainer();
+
+                //transformer en présentation
+                goSlideShow();
+
+                //activer le mode dynamique
+                var config = {
+                    cranX: globalConfig.widthSlide * 1.5,
+                    cranY: globalConfig.heightSlide * 1.5,
+                    cranZ: -1000,
+                    liveX0: -1500,
+                    liveY0: 0,
+                    liveZ0: 0,
+                    endX0: 0,
+                    endY0: -1500,
+                    endZ0: 0
+                };
+                dynamic(config);
+
+            });
 //            goAutoAlign();
 
 

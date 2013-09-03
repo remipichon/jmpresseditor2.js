@@ -512,7 +512,7 @@ Text = Element.extend({
 
         //attribut propre aux textes
         this.properties = {
-            hierarchy: 'H1Text', //'bodyText',
+            hierarchy: 'bodyText',
             content: 'Type text here'
         };
 
@@ -527,7 +527,7 @@ Text = Element.extend({
             for (var param in params) {
                 if (typeof params[param] === 'object') {
                     //console.log(params[param]);
-                    truc = params[param];
+                    //truc = params[param];
                     for (var paramNested in params[param]) {
                         this[param][paramNested] = params[param][paramNested];
                     }
@@ -566,14 +566,45 @@ Text = Element.extend({
         this.show();
         //ajout dans le DOM
 //        var template = $('#templateElement').html();
+        
+        
+
+
         var template = $('#templateElementCK').html();
         var html = Mustache.to_html(template, this);
         //console.log('html', html);
         $('#' + slide).append(html);
+        
+        
+        
+        
         //console.log('adtexte', slide);
         var newEl = $('#' + this.matricule);
         newEl.children('span').html(this.properties.content);
         handlerComposant(newEl);
+        
+        /* si pos.y = 'center', il faut centrer le texte en Y, le HTMl ne permet pas de faire cela
+        Le mustache insere le html, ensuite je passe derrière pour centrer le texte en y en fn de sa taille */
+        if( this.pos.y === 'center'){
+            bidule = $('#'+this.matricule);
+            
+            var heightTxt = parseInt($('#'+this.matricule).css('height'));
+            var posTxt = globalConfig.heightSlide/2 - heightTxt/2;
+            $('#'+this.matricule).css('top',posTxt);
+            this.pos.y = posTxt;
+            console.log('infos : DOM de Text : pos.y = center',heightTxt,posTxt,this.matricule);
+        }
+        
+        /* si pos.y = noCollision, il faut s'arranger pour mettre le texte sous son précédent (utile lors de la création automatique)*/
+        if( this.pos.y === 'noCollision'){
+             console.log('infos : DOM de Text : pos.y = noCollision',this.matricule);
+            var posPrev = parseInt($('#'+this.matricule).prev().css('top'));
+            var heightPrev = parseInt($('#'+this.matricule).prev().css('height'));
+            var posTxt = posPrev+heightPrev+20;
+             $('#'+this.matricule).css('top',posTxt);
+            this.pos.y = posTxt;            
+        }
+        
 
     },
     show: function(i) {

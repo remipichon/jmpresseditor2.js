@@ -11,20 +11,20 @@
 
 function initAutomatic() {
     initContainer();
+//     var config = {
+//         cranX: 1800,
+//         cranY: 1000,
+//         cranZ: -1000,
+//         liveX0: 10000,
+//         liveY0: 10000,
+//         liveZ0: 10000,
+//         endX0: -10000,
+//         endY0: -10000,
+//         endZ0: -10000
+//     };
     var config = {
-        cranX: 1800,
-        cranY: 1000,
-        cranZ: -1000,
-        liveX0: 10000,
-        liveY0: 10000,
-        liveZ0: 10000,
-        endX0: -10000,
-        endY0: -10000,
-        endZ0: -10000
-    };
-    var config = {
-        cranX: 1800,
-        cranY: 1000,
+        cranX: globalConfig.widthSlide*1.5,
+        cranY: globalConfig.heightSlide*1.5,
         cranZ: -1000,
         liveX0: -1500,
         liveY0: 0,
@@ -105,7 +105,7 @@ function goPosition(config) {
 
     //les autres niveaux  (ne pas factoriser avec le traitement des premiers niveaux car les autres niveaux ont besoin des premiers niveaux pour s'appuyer
     $('#tree li').each(function() {
-        if ($(this).attr('depth') !== '1' && $(this).attr('nbChild') !== '0') {
+        if ($(this).attr('depth') !== '1' && $(this).attr('type') !== 'body'){//&& $(this).attr('nbChild') !== '0') {
 
             if ($(this).index() === 0) { //si première fille
                 var x = $(this).parent().parent().attr('data-x');
@@ -215,7 +215,7 @@ function goPositionEnd(config) {
  */
 function goJmpress(config) {
     initJmpress();
-    
+
 
     //creation des slides jmpress
     $('#tree li').each(function() {
@@ -286,8 +286,8 @@ function goJmpress(config) {
         }
 
         //ajout de la slideet de son texte
-        var number = $(this).attr('number');
-        number = number.split('.').join('-');
+        var numberArray = $(this).attr('number').split('.');
+        number = numberArray.join('-');
         console.log(number);
         var slide = new Slide({
             matricule: number,
@@ -302,19 +302,54 @@ function goJmpress(config) {
                 scale: 1
             }
         });
-        var content = '';
-        if ($(this).children('.textarea').length !== 0)
-            content = $(this).children('.textarea').html();
-        else if ($(this).children('.liTitle').length !== 0)
-            content = $(this).children('.liTitle').html();
-//        console.log('content                      ',continuentent);
-        
-        new Text(slide.matricule, {
-            properties: {
-                hierachy: 'H1Text',
-                content: content
-            }
-        });
+
+        if ($(this).children('.textarea').length !== 0) {
+            //rappel de la partie
+            
+            var upHierarchy = $(this).parent('ol').siblings('span');
+           // console.log('debug : goJmpress',upHierarchy);
+            new Text(slide.matricule,{
+                auto: true,  //il ne faut que le treeMakerFromContainer en tienne compte
+                properties: {
+                    content: upHierarchy.html(),
+                    hierarchy: 'H3Text'
+                },
+                pos: {
+                    x: 0,
+                    y: globalConfig.heightSlide*0.05
+                }
+            });
+            
+            
+            //contenu
+            new Text(slide.matricule, {
+                properties: {
+                    hierarchy: 'bodyText',
+                    content: $(this).children('.textarea').html()
+                },
+                pos: {
+                    x: 0,
+                    y: 'noCollision'//globalConfig.heightSlide/2
+                }
+            });
+            
+        } else if ($(this).children('.liTitle').length !== 0) {
+            
+            new Text(slide.matricule, {
+                properties: {
+                    hierarchy: 'H1Text',
+                    content: numberArray.join('.')+' | '+$(this).children('.liTitle').html()
+                },
+                pos: {
+                    x: 0,
+                    y: 'center'
+                }
+            });
+            
+
+        }
+
+       
 
         //ecriture du matricule de la slide dans la liste
         $(this).attr('matricule', slide.matricule);

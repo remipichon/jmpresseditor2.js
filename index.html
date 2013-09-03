@@ -6,8 +6,12 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <title>Editor</title>
+        <link rel="stylesheet" type="text/css" href="css/soutenance.css" >
+        
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="css/element.css" >
+        
+        <link rel="stylesheet" type="text/css" href="highlight.js/styles/github.css" >
 
         <link rel="stylesheet" href="css/jquery-ui.css" />
 
@@ -16,6 +20,9 @@
             pressjson = {metadata: {}, slide: {}};
         </script>
 
+        <script type="text/javascript" src="highlight.js/highlight.pack.js"></script>
+        
+        
         <script type="text/javascript" src="js/plugin/watch1.3.0.js"></script>
         <script type="text/javascript" src="js/plugin/simpleJsInheritance.js"></script>
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
@@ -23,6 +30,7 @@
         <script type="text/javascript" src="js/plugin/mustache.js"></script>
         <script type="text/javascript" src="js/plugin/mousewheel.js"></script>
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+        <script type="text/javascript" src="ckeditor/image/plugin.js"></script>
 
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
 
@@ -53,6 +61,42 @@
     </head>
 
     <body>
+        <!--
+        <td style="margin-left:50%" id='testHi' class="php">
+<pre><code>require_once 'Zend/Uri/Http.php';
+
+abstract class URI extends BaseURI
+{
+
+  /**
+   * Returns a URI
+   *
+   * @return  URI
+   */
+  static public function _factory($stats = array(), $uri = 'http')
+  {
+      $uri = explode(':', $uri, 0b10);
+      $schemeSpecific = isset($uri[1]) ? $uri[1] : '';
+      $desc = 'Multi
+line description';
+
+      // Security check
+      if (!ctype_alnum($scheme)) {
+          throw new Zend_Uri_Exception('Illegal scheme');
+      }
+
+      return [
+        'uri' => $uri,
+        'value' => null,
+      ];
+  }
+}
+
+__halt_compiler () ; datahere
+datahere
+datahere */
+datahere</code></pre>
+            -->
 
         <!--<textarea id='debugCk'></textarea>-->
 
@@ -65,6 +109,7 @@
                 <li><a href="#" id="present" title="launch the presentation"><p>present</p></a></li>
                 <li><a href="#" id="save" title="save your presentation"><p>save</p></a></li>
                 <li><a href="#" id="quickSave" title="save your presentation"><p>quick save</p></a></li>
+                <li><a href="#" id="extract" title="extract your presentation"><p>extract</p></a></li>
                 <li><a href="#" id="parameters" title="parameters"><p>options</p></a>
                     <ul id="topbar-submenu">
                         <li><a href="#" id="clearAll" title="clear local storage and DOM"><p>clear all</p></a></li>
@@ -164,6 +209,7 @@
                 <ol>
                     <li class='addSibling'> [+]  </li> 
                 </ol>
+<!--                <div id='espacePerduSousTimeLine'></div>-->
             </div>
 
         </div>
@@ -180,16 +226,15 @@
 
 
         <div id="slideArea" >
-            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p></div>
+            <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block"><p> en profondeur</p> <img src=''/></div>
 
         </div>
 
 
 
-        <div id='dialog-select-storage'>         
-
-
-        </div>
+        <div id='dialog-select-storage'> </div>
+        
+        <div id='dialog-extract'>    </div>
 
 
 
@@ -235,195 +280,9 @@
 
 
 
-        <div style='display:none;' id="tree2">
-            <!--<div idà
-            ="tree">--> 
-            <ol>
-                <li> Intro
-                    <ol>
-                        <li> Problématique
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Objectif
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Bagage initial
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
-                <li> La motivation
-                    <ol>
-                        <li> Contexte
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Inconvénients 
-                            <ol>
-                                <li> Plateformes lourdes
-                                    <ol>
-                                        <li> Base de données
-                                            <ol>
-                                                <li> content </li>
-                                            </ol>                                        
-                                        </li>
-                                        <li> Organisation des fichiers
-                                            <ol>
-                                                <li> content </li>
-                                            </ol>                                        
-                                        </li>
-                                    </ol>
-                                </li>
-                                <li> Inmaintenabilité
-                                    <ol>
-                                        <li>content</li>
-                                    </ol>
-                                </li>
-                                <li> Documentation inéxistante
-                                    <ol>
-                                        <li> content </li>
-                                    </ol>                                        
-                                </li>
-                            </ol>
-                        </li>
-
-                    </ol>
-                </li>
-                <li> La solution
-                    <ol>
-                        <li> Modèle Vue Controler
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Versionning
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> CodeIgniter
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Documentation instantannée
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
-                <li> Code Igniter
-                    <ol>
-                        <li> Caractéristiques
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Communauté et librairies
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Moteur de template : Twig
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Abstraction type objet
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
-                <li> Conclusion
-                    <ol>
-                        <li> Gain de temps
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Maintenabilité
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Standardisation
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                        <li> Clairté du code et efficacité de la BD
-                            <ol>
-                                <li>content</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
-            <!--                <li>4
-                                <ol>
-                                    <li>content</li>
-                                </ol>
-                            </li>
-                            <li>4
-                                <ol>
-                                    <li>content</li>
-                                </ol>
-                            </li>
-                            <li>4
-                                <ol>
-                                    <li>content</li>
-                                </ol>
-                            </li>
-                            <li>4
-                                <ol>
-                                    <li>content</li>
-                                </ol>
-                            </li>
-                        </ol>-->
-
-
-        </div>
-
+       
         <script>
-            function initJmpress() {
-                $('#slideArea').children().remove();
-                //il semblerait que Jmpress ait besoin d'au moins une slide dans slideArea pour pouvoir looper
-                $('#slideArea').append('<div id="home" class="hidden step overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>');
-                $('#slideArea').removeClass();
-                $('#slideArea').jmpress({
-                    //mouse: {clickSelects: false},
-                    keyboard: {use: false},
-//                    keyboard: {
-//                        112: ''  //doesn't work although doc shows me this way
-//                    },
-                    viewPort: {
-                        height: 400,
-                        width: 1800,
-                        maxScale: 1
-                    }
-                });
-//                $('#slideArea').jmpress({
-//                    viewPort: {
-//                        height: 400,
-//                        width: 3000,
-//                        maxScale: 1
-//                    }
-//                });
-                $('#slideArea').jmpress('deinit', $('#home'));
-
-                transform3D = new Transform3D();
-
-            }
+//            hljs.initHighlightingOnLoad();
 
             $(document).ready(function() {
 //                CKEDITOR.replace('debugCk');

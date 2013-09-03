@@ -140,9 +140,11 @@ body
 
 #sidebar{
      width:180px;
+     z-index: 10;
 }
 #sidebarTree{
      min-width: 380px;
+     
 }
 
 
@@ -369,9 +371,9 @@ body
 .slide {
     display: block;
 
-    width: 1200px;           /* taille réelle : 900 */
+    width: 900px;           /* taille réelle : 900 */
     height: 700px;          /* taille réelle : 700 */
-    /*padding: 40px 60px;*/
+    
 
          background: rgb(215, 215, 215);
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
@@ -411,51 +413,6 @@ body
 }
 
 
-/*////////////////Gestion des styles////////////*/
-/*Avec ckeditor, les css s'ajoute. Si on selectionne title1 et bodyText la police fait 6em*/
-.slide span {
-    /*border : dashed black 10px;*/
-    font-family: Arial;
-
-}
-
-.slide .element{
-     /*border : dashed black 10px;*/
-     margin: auto;
-     position: relative;
-     
-}
-
-.title1
-{
-    
-    text-align:center;
-    padding-top: 30px;
-    padding-bottom: 20px;
-    /*margin: auto;*/     
-    display: block;
-    font-size: 6em;
-    font-weight: bold;
-
-}
-
-.title2
-{
-    /*border : dashed black 10px;*/
-    padding-top: 20px;
-    padding-bottom: 60px;
-    text-align:center;
-    /*margin: auto;*/     
-    display: block;
-    font-size: 3.5em;
-    font-weight: bold;
-    border-bottom: 10px dotted white;
-}   
-
-.bodyText
-{
-    font-size:2em;
-}
 
 
 

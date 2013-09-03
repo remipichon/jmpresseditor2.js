@@ -1,3 +1,39 @@
+function initJmpress() {
+    $('#slideArea').children().remove();
+    //il semblerait que Jmpress ait besoin d'au moins une slide dans slideArea pour pouvoir looper
+    $('#slideArea').append('<div id="home" class="hidden step slide overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>');
+    $('#slideArea').removeClass();
+    $('#slideArea').jmpress({
+        //mouse: {clickSelects: false},
+        keyboard: {use: false},
+//                    keyboard: {
+//                        112: ''  //doesn't work although doc shows me this way
+//                    },
+        viewPort: {
+            height: 400,
+            width: 1800,
+            maxScale: 1
+        }
+    });
+//                $('#slideArea').jmpress({
+//                    viewPort: {
+//                        height: 400,
+//                        width: 3000,
+//                        maxScale: 1
+//                    }
+//                });
+    globalConfig = {
+        heightSlide: parseInt($('#home').css('height')),
+        widthSlide: parseInt($('#home').css('width'))
+    };
+
+    $('#slideArea').jmpress('deinit', $('#home'));
+    $('#home').removeClass('slide'); //sinon la slide prend de la place dans le DOM alors que Jmpress ne la connait pas              
+
+    transform3D = new Transform3D();
+
+}
+
 
 function handlerTreeMaker() {
 
@@ -22,12 +58,16 @@ function handlerTreeMaker() {
 
 
     $('#treeMaker').on('click', '.removeSibling', function() {
+        if (!confirm('Attention, tu vas supprimer' + $(this).parent().html()))
+            return;
         console.log('remove', $(this));
         $(this).parent().next('ol').remove();
         $(this).parent().remove();
     });
 
     $('#treeMaker').on('click', '.switchContent', function() {
+        if (!confirm('Attention, tu vas switcher de content !' + $(this).parent().html()))
+            return;
         console.log('switch to content', $(this));
         data = {
             matricule: 'textarea' + globalCpt++
@@ -74,6 +114,7 @@ function handlerTreeMaker() {
 
 //        $(this).parent().children().remove();
         $(this).parent().html(txt);
+        hljs.initHighlighting($(this).prev().attr('id'));
 
     });
 
@@ -230,8 +271,14 @@ function goTreeFromContainer() {
         };
         var content = '';
         for (var matEle in slide.element) {
+            if (typeof slide.element[matEle].auto !== 'undefined')
+                continue; //si texte auto, le treeMaker ne doit pas le récupérer car il sera réajouté après
 //            data['content'] = slide.element[matEle].properties.content;
-            var content = content + slide.element[matEle].properties.content;
+            if (slide.element[matEle].properties.hierarchy !== 'bodyText') {
+                var content = content + slide.element[matEle].properties.content.split('|')[1];
+            } else {
+                var content = content + slide.element[matEle].properties.content;
+            }
         }
         data[slide.style] = 'true';
 

@@ -171,9 +171,12 @@ function endDynamic() {
  * 
  */
 function dynamic() {
+ 
     initDynamic();
 
     $(document).on('keypress', function(event) {
+        
+        
 
         if (event.which == 32) { //je n'ai pu récupérer que l'espace
 

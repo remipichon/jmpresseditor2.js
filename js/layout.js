@@ -4,6 +4,18 @@
  *  a deplacer dans GUIEditor
  */
 
+// $(document).keypress( function(event) {
+//     console.log(event.which);
+//     if (event.which == 36) {
+//         console.log('escape')
+//         $('body').children().each(function() {
+//             if ($(this).attr('id') === 'slideArea')
+//                 return;
+//             $(this).fadeIn(1000);
+//         });
+
+//     }
+// });
 
 $(document).ready(function() {
     //calcul de la taille necessaire pour la div contenant un asceneurs
@@ -18,7 +30,7 @@ $(document).ready(function() {
         $('#treeMaker').css('height', height);
 
     });
-    
+
     $(window).trigger('resize');
 
 
@@ -195,14 +207,16 @@ $(document).ready(function() {
         if ($sidebar.hasClass('hidden-bar')) {
             $('#sidebar').animate({marginLeft: "-200"}, 300);
             $('#arrow-nav').css('background-position', '-50px 0');
+            $('#sidebarTree').fadeIn(1000);
         }
         else {
             $('#sidebar').animate({marginLeft: "0"}, 300);
             $('#arrow-nav').css('background-position', '0 0');
+            $('#sidebarTree').fadeOut(1000);
         }
     });
 
-    $('#arrow-nav-tree').on('click', function() {
+    $('#arrow-nav-tree').on('clickKIKI', function() {
         if (!$('#sidebar').hasClass('hidden-bar'))
             $('#arrow-nav').trigger('click');
         var $sidebar = $('#sidebarTree');
@@ -211,10 +225,12 @@ $(document).ready(function() {
         if ($sidebar.hasClass('hidden-bar')) {
             $sidebar.animate({marginLeft: "-400"}, width);
             $(this).css('background-position', '-50px 0');
+            //$sidebar.fadeOut(1000);
         }
         else {
             $sidebar.animate({marginLeft: "0"}, width);
             $(this).css('background-position', '0 0');
+            //$sidebar.fadeIn(1000);
         }
     });
 
@@ -226,34 +242,42 @@ $(document).ready(function() {
 
     $('#present').on('click', function(event) {
 
+        $('body').children().each(function() {
+            if ($(this).attr('id') === 'slideArea')
+                return;
+            $(this).fadeOut(1000);
+        })
 
-        var outputjson = {data: null, slide: new Array()};
-        // mise en forme correct du json de sortie : 
-        var arrayElement = [];
-        $.each(container.slide, function(key1, slide) {
-            var slide2 = container.slide[key1];
-            $.each(slide, function(key2, element) {
-                if (key2 === 'element') {
-                    var arrayElement = [];
-                    $.each(element, function(key3, elemind) {
-                        arrayElement.push(elemind);
-                        slide2.element = [];
-                        $.each(arrayElement, function(key, value) {
-                            slide2.element.push(value);
-                        });
-                    });
-                }
-            });
-            outputjson.slide.push(slide2);
-        });
-        //console.log("output json : ");
+
+
+//
+//        var outputjson = {data: null, slide: new Array()};
+//        // mise en forme correct du json de sortie : 
+//        var arrayElement = [];
+//        $.each(container.slide, function(key1, slide) {
+//            var slide2 = container.slide[key1];
+//            $.each(slide, function(key2, element) {
+//                if (key2 === 'element') {
+//                    var arrayElement = [];
+//                    $.each(element, function(key3, elemind) {
+//                        arrayElement.push(elemind);
+//                        slide2.element = [];
+//                        $.each(arrayElement, function(key, value) {
+//                            slide2.element.push(value);
+//                        });
+//                    });
+//                }
+//            });
+//            outputjson.slide.push(slide2);
+//        });
+//        //console.log("output json : ");
+//        //console.log(outputjson);
+//        outputjson.slide.sort(sort_by('index', true, parseInt));
+//        //console.log("output json sorted : ");
         //console.log(outputjson);
-        outputjson.slide.sort(sort_by('index', true, parseInt));
-        //console.log("output json sorted : ");
-        //console.log(outputjson);
-        var stringjson = JSON.stringify(outputjson, null, 2);
-        localStorage.setItem('outputjson', stringjson);
-        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
+//        var stringjson = JSON.stringify(container, null, 2);
+//        localStorage.setItem('outputjson', stringjson);
+//        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
         // location
 
 
@@ -316,8 +340,35 @@ $(document).ready(function() {
 
     });
     $('#quickSave').on('click', function(event) {
-        console.log('quicksave on @' + $('#slideshowName').html() + '@')
-        saveJson($('#slideshowName').html());
+        if ($('#treeMaker').length !== 0) {
+            goSlideShow();
+            saveJson($('#slideshowName').html());
+            goTreeFromContainer();
+        } else {
+            //console.log('quicksave on @' + $('#slideshowName').html() + '@')
+            saveJson($('#slideshowName').html());
+        }
+
+    });
+    
+    $('#extract').on('click',function(){
+        window.prompt ("Copy to clipboard: Ctrl+C, Enter", JSON.stringify(container));
+//        $('#dialog-extract').html("<p>"+JSON.stringify(container)+"</p>");
+//         var option = {
+//            closeOnEscape: true,
+//            title: 'copy paste somewhere',
+//            buttons: [
+//                {text: "Close",
+//                    click: function() {
+//                        
+//                        $(this).dialog("close");
+//                    }
+//                }
+//
+//            ]
+//        };
+//        
+//        $('#dialog-extract').dialog(option);
     });
 
     /* ======================================================================================
