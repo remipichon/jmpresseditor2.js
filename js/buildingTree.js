@@ -1,7 +1,8 @@
 function initJmpress() {
+
     $('#slideArea').children().remove();
     //il semblerait que Jmpress ait besoin d'au moins une slide dans slideArea pour pouvoir looper
-    $('#slideArea').append('<div id="home" class="hidden step slide overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"><p> </p></div>');
+    $('#slideArea').append('<div id="home" class="hidden step slide overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"></div>');
     $('#slideArea').removeClass();
     $('#slideArea').jmpress({
         //mouse: {clickSelects: false},
@@ -322,7 +323,11 @@ function goTreeFromContainer() {
         var $button = $target.children('.addSibling');
         $target.append(html);
         //ajout du texte ne se fait pas via mustache car il n'interprete pas le html (c'est l'un ou l'autre (ou exclusif))
-        $($target.children()[$target.children().length - 1]).children('.liTitle').html(content);
+
+        /**** traitement spécifique à iframe ****/
+        if (slide.type === 'iframe') content = 'iframe';
+
+                $($target.children()[$target.children().length - 1]).children('.liTitle').html(content);
         $($target.children()[$target.children().length - 1]).children('.textarea').html(content);
 
         //handler CK

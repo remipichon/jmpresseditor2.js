@@ -23,8 +23,8 @@ function initAutomatic() {
 //         endZ0: -10000
 //     };
     var config = {
-        cranX: globalConfig.widthSlide*1.5,
-        cranY: globalConfig.heightSlide*1.5,
+        cranX: globalConfig.widthSlide * 1.5,
+        cranY: globalConfig.heightSlide * 1.5,
         cranZ: -1000,
         liveX0: -1500,
         liveY0: 0,
@@ -105,7 +105,7 @@ function goPosition(config) {
 
     //les autres niveaux  (ne pas factoriser avec le traitement des premiers niveaux car les autres niveaux ont besoin des premiers niveaux pour s'appuyer
     $('#tree li').each(function() {
-        if ($(this).attr('depth') !== '1' && $(this).attr('type') !== 'body'){//&& $(this).attr('nbChild') !== '0') {
+        if ($(this).attr('depth') !== '1' && $(this).attr('type') !== 'body') {//&& $(this).attr('nbChild') !== '0') {
 
             if ($(this).index() === 0) { //si première fille
                 var x = $(this).parent().parent().attr('data-x');
@@ -225,7 +225,6 @@ function goJmpress(config) {
             var lowerY = parseInt($(this).attr('lowery'));
             new Slide({
                 properties: {
-                    
                     scale: Math.abs((upperY - lowerY)) * 4 / 3 / 1000
                 },
                 matricule: 'end',
@@ -304,24 +303,35 @@ function goJmpress(config) {
             }
         });
 
+        /****** traitement spécifique pour le site dans la slide ****/
+        if ($(this).children('.liTitle').html() === 'iframe') {
+            console.log('iframe !');
+            slide.type= 'iframe';
+            var iframeAdlivia = "<iframe class='iframeInSlide' src='http://127.0.0.1:81/etude/list'></iframe>";
+            $('#'+slide.matricule).html(iframeAdlivia);
+            return;
+        }
+
+
+
         if ($(this).children('.textarea').length !== 0) {
             //rappel de la partie
-            
+
             var upHierarchy = $(this).parent('ol').siblings('span');
-           // console.log('debug : goJmpress',upHierarchy);
-            new Text(slide.matricule,{
-                auto: true,  //il ne faut que le treeMakerFromContainer en tienne compte
+            // console.log('debug : goJmpress',upHierarchy);
+            new Text(slide.matricule, {
+                auto: true, //il ne faut que le treeMakerFromContainer en tienne compte
                 properties: {
                     content: upHierarchy.html(),
                     hierarchy: 'H3Text'
                 },
                 pos: {
                     x: 0,
-                    y: globalConfig.heightSlide*0.05
+                    y: globalConfig.heightSlide * 0.05
                 }
             });
-            
-            
+
+
             //contenu
             new Text(slide.matricule, {
                 properties: {
@@ -333,24 +343,24 @@ function goJmpress(config) {
                     y: 'noCollision'//globalConfig.heightSlide/2
                 }
             });
-            
+
         } else if ($(this).children('.liTitle').length !== 0) {
-            
+
             new Text(slide.matricule, {
                 properties: {
                     hierarchy: 'H1Text',
-                    content: numberArray.join('.')+' | '+$(this).children('.liTitle').html()
+                    content: numberArray.join('.') + ' | ' + $(this).children('.liTitle').html()
                 },
                 pos: {
                     x: 0,
                     y: 'center'
                 }
             });
-            
+
 
         }
 
-       
+
 
         //ecriture du matricule de la slide dans la liste
         $(this).attr('matricule', slide.matricule);
