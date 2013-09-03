@@ -139,7 +139,8 @@ function endDynamic() {
     $('#tree').fadeOut(1000);
 
     //on montre la dernière slide (qui ne fait pas parti de la présentation donc est exclu du circuit normal
-    $('#questions').fadeIn(1000);
+    $('#questions').fadeIn(6000);
+    //container.getSlide($('#questions').attr('matricule')).pos.x = container.getSlide($('#questions').attr('matricule')).pos.x + 1;
 
     /* parcours de la liste pour deplacer les slides jusqu'à la position de fin */
     $('#tree li').each(function() {
@@ -171,8 +172,7 @@ function endDynamic() {
  * 
  */
 function dynamic() {
- 
-    initDynamic();
+   initDynamic();
 
     $(document).on('keypress', function(event) {
         

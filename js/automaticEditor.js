@@ -225,7 +225,7 @@ function goJmpress(config) {
             var lowerY = parseInt($(this).attr('lowery'));
             new Slide({
                 properties: {
-                    hierarchy: '' + $(this).attr('number'),
+                    
                     scale: Math.abs((upperY - lowerY)) * 4 / 3 / 1000
                 },
                 matricule: 'end',
@@ -238,26 +238,27 @@ function goJmpress(config) {
             }
             );
             var slide = new Slide({
+                matricule: 'questions',
                 properties: {
-                    matricule: 'questions',
-                    scale: 10
+                    //hierarchy: '' + $(this).attr('number'),
+                    scale: 20
                 },
                 pos: {
-                    x: config.endX0 + 12500,
+                    x: config.endX0 + 15000,
                     y: Math.abs(upperY - lowerY) / 2 + upperY,
                     z: config.endZ0
                 }
             }
             );
-            new Text(slide.matricule, {
-                matricule: 'questionstexte',
+            new Text('questions', {
+                //matricule: 'questionstexte',
                 properties: {
-                    content: 'Any questions ?',
+                    content: '<em>Merci de votre attention</em> <br/> Avez vous des questions ?',
                     hierarchy: 'H1Text'
                 },
                 pos: {
                     x: 0,
-                    y: 0
+                    y: 'center'//globalConfig.heightSlide/2
                 }
 
             });
