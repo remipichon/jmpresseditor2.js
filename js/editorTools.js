@@ -60,13 +60,13 @@ ObjectEvent = Class.extend({
     },
     show: function(i) {
         if (typeof i === 'undefined') {
-            console.log('objectEvent');
+            //console.log('objectEvent');
         } else {
-            console.log('objectEvent');
+            //console.log('objectEvent');
         }
     },
     destroy: function() {
-        console.log('nothing to delete');
+        //console.log('nothing to delete');
     }
 
 
@@ -164,10 +164,10 @@ longHasMouseMove = false;
 $(document).on('mousedown', function(event) {
     return;
     if( $('#sidebar:hover').length !== 0 || $('.buttonclicked').length !== 0 ){//|| $('.noJoystick').length !== 0){ //on n'affiche pas le joystick sur la barre d'outils on lorsqu'on selectionne un point de chute pour la creation d'element (probleme sous chrome)
-//        console.log('hover de slide bar');
+//        //console.log('hover de slide bar');
         return;
     }
-    console.log('target mousedown', event.target);
+    //console.log('target mousedown', event.target);
     var $this = $(event.target);
 
     if ($('body')[0] === $this[0]) {
@@ -211,14 +211,14 @@ $(document).on('mousedown', function(event) {
      */
     if (event.which === 1) {        //longpress left        
         $this.data('checkdown', setTimeout(function() {
-            console.log('long left press sur', matricule);
+            //console.log('long left press sur', matricule);
             if (simpleHasMouseMove) {
-                console.log('long left : mouse move déja pris ');
+                //console.log('long left : mouse move déja pris ');
 
             } else {
                 $(document).on('mousemove.longLeft', function(event) {       //si on move penant un click long
                     longHasMouseMove = true;
-                    console.log('mousemove après long left sur', matricule);
+                    //console.log('mousemove après long left sur', matricule);
                 });
             }
         }, 500)).on('mousemove', function() {
@@ -228,14 +228,14 @@ $(document).on('mousedown', function(event) {
 
     if (event.which === 3) {        //longpress right      
         $this.data('checkdown', setTimeout(function() {
-            console.log('long right press sur', matricule);
+            //console.log('long right press sur', matricule);
             if (simpleHasMouseMove) {
-                console.log('long right : mouse move déja pris ');
+                //console.log('long right : mouse move déja pris ');
 
             } else {
                 $(document).on('mousemove.longRight', function(event) {       //si on move penant un click long
                     longHasMouseMove = true;
-                    console.log('mousemove après long right sur', matricule);
+                    //console.log('mousemove après long right sur', matricule);
                 });
             }
         }, 500)).on('mousemove', function() {
@@ -252,23 +252,23 @@ $(document).on('mousedown', function(event) {
     if (event.which === 1) {
         $(document).on('mousemove.simpleLeft', function(event) {       //si on move penant un click long
             if (longHasMouseMove) {
-                console.log('long click a pris le mousemove');
+                //console.log('long click a pris le mousemove');
                 $(this).off('.simpleLeft');
             } else {
                 simpleHasMouseMove = true;
-                console.log('mousemove left sur', matricule);
+                //console.log('mousemove left sur', matricule);
                 var eventXY = orthogonalProjection(event, $this.data('posInitMouse'),0.1);
                 objEvt.action = 'move';
                 
                 //maj position X
                 objEvt.event.direction = eventXY.directionX;
                 objEvt.event.cran = eventXY.cranX;                
-                console.log('avant appel call model', objEvt);
+                //console.log('avant appel call model', objEvt);
                 callModel(objEvt);
                 //maj position Y
                 objEvt.event.direction = eventXY.directionY;
                 objEvt.event.cran = eventXY.cranY;                
-                console.log('avant appel call model', objEvt);
+                //console.log('avant appel call model', objEvt);
                 callModel(objEvt);
 
             }
@@ -278,23 +278,23 @@ $(document).on('mousedown', function(event) {
     if (event.which === 3) {
         $(document).on('mousemove.simpleRight', function(event) {       //si on move penant un click long
             if (longHasMouseMove) {
-                console.log('long click a pris le mousemove');
+                //console.log('long click a pris le mousemove');
                 $(this).off('.simpleRight');
             } else {
                 simpleHasMouseMove = true;
-                console.log('mousemove right sur', matricule);
+                //console.log('mousemove right sur', matricule);
                 var eventXY = orthogonalProjection(event, $this.data('posInitMouse'),0.1);
                 objEvt.action = 'rotate';
                 
                 //maj position X
                 objEvt.event.direction = eventXY.directionX;
                 objEvt.event.cran = eventXY.cranX;                
-                console.log('avant appel call model', objEvt);
+                //console.log('avant appel call model', objEvt);
                 callModel(objEvt);
                 //maj position Y
                 objEvt.event.direction = eventXY.directionY;
                 objEvt.event.cran = eventXY.cranY;                
-                console.log('avant appel call model', objEvt);
+                //console.log('avant appel call model', objEvt);
                 callModel(objEvt);
             }
         });
@@ -313,7 +313,7 @@ $(document).on('mousedown', function(event) {
         $(this).off('.simpleClick');
         $(this).off('.simpleLeft');
         $(this).off('.simpleRight');
-        console.log('annulation des events mouse');
+        //console.log('annulation des events mouse');
         $('#joystick').css('display','none');
 
     });

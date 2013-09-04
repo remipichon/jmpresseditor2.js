@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <title>Editor</title>
+       
+
+        <link rel="stylesheet" type="text/css" href="../highlight.js/styles/github.css" > 
+        <!--<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/css/SyntaxHighlighter.css"></link>-->
+
+     
+        <script type="text/javascript" src="../highlight.js/highlight.pack.js"></script> 
+        
+
+
+
+
+
+    </head>
+
+    <body>
+
+     <pre id='testHI' class='php'><code>
+         function index() {
+        $idEtude = 26;
+          $idClient = $this->etude->getEtude2($idEtude)->user_id;
+        $synthese = $form = $this->medecin->hasStartedFillform($idEtude, $idClient);
+        $idSyntheseEtude = $form->id_formulaire_etude;
+        
+        
+        /* on renseigne les champs valeur de reponse_medicament avec la valeur moyenne de toutes les valeurs */
+        $allFormulaire = $this->formulaire->getAllFormulaireEtude($idEtude);
+        $formulaireModele = $this->formulaire->getFormulaireModelEtude($idEtude);
+
+        //pour chaque formulaire_model.ligne_formulaire
+        $allLigne = $this->formulaire->getLigneFormulaire($formulaireModele->id_model);
+        foreach ($allLigne as $ligne) {
+
+            //pour chaque medicament_ligne
+            $allMedicament = $this->formulaire->getMedicamentLigne($ligne->id_ligne);
+            foreach ($allMedicament as $medicamentLigne) {
+                $moyVal = array();
+                //pour chaque formulaire_etude (chaque medecin)
+                foreach ($allFormulaire as $formulaireEtude) {
+                    $idUSer = $this->medecin->getMedecinEtude($formulaireEtude->id_medecin_etude)->user_id;
+                    /* Attention, le formulaire de synthèse est stocké comme un formulaire, il ne faut pas prendre en comptes ses données */
+                    if (70 != $this->formulaire->quickQueryOne("select niveau from groups join users_groups on groups.id = users_groups.group_id where users_groups.user_id = {$idUSer} ")->niveau)
+                        continue;
+                    $reponse = $this->formulaire->getReponseMedicamentLigne($formulaireEtude->id_formulaire_etude, $medicamentLigne->id_medicament_ligne);
+                    $valeur = $reponse->valeur;
+                    array_push($moyVal, $valeur);
+                }
+                $moy = intval(array_sum($moyVal) / count($moyVal) );
+              
+                $idReponseMedicamentSynthese = $this->formulaire->quickQueryOne("
+                        select id_reponse_medicament from reponse_medicament 
+                                where id_medicament_ligne = {$medicamentLigne->id_medicament_ligne}
+                                and id_formulaire_etude = {$idSyntheseEtude}
+                                            ")->id_reponse_medicament;  
+                $this->formulaire->udpateReponseMedicamentLigne($idReponseMedicamentSynthese, $moy);
+            }
+        }
+        
+        $this->output->enable_profiler(TRUE);
+    }
+
+
+        </code></pre>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+            
+        </script>    
+
+    </body>
+</html>

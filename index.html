@@ -7,11 +7,12 @@
 
         <title>Editor</title>
         <link rel="stylesheet" type="text/css" href="css/soutenance.css" >
-        
+
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="css/element.css" >
-        
-        <link rel="stylesheet" type="text/css" href="highlight.js/styles/github.css" >
+
+        <link rel="stylesheet" type="text/css" href="highlight.js/styles/github.css" > 
+        <!--<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/css/SyntaxHighlighter.css"></link>-->
 
         <link rel="stylesheet" href="css/jquery-ui.css" />
 
@@ -20,9 +21,15 @@
             pressjson = {metadata: {}, slide: {}};
         </script>
 
-        <script type="text/javascript" src="highlight.js/highlight.pack.js"></script>
-        
-        
+        <script type="text/javascript" src="highlight.js/highlight.pack.js"></script> 
+        <!--<script language="javascript" src="SyntaxHighlighter/js/shCore.js"></script>-->
+        <!--<script language="javascript" src="SyntaxHighlighter/js/shBrushCSharp.js"></script>-->
+        <!--<script language="javascript" src="SyntaxHighlighter/js/shBrushXml.js"></script>-->
+
+
+
+
+
         <script type="text/javascript" src="js/plugin/watch1.3.0.js"></script>
         <script type="text/javascript" src="js/plugin/simpleJsInheritance.js"></script>
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
@@ -61,42 +68,28 @@
     </head>
 
     <body>
-        <!--
-        <td style="margin-left:50%" id='testHi' class="php">
-<pre><code>require_once 'Zend/Uri/Http.php';
 
-abstract class URI extends BaseURI
-{
+    <!--<td style="margin-left:50%" id='testHi' class="php">-->
+<!--       <pre id='testHI' class='php'><code>
+        $this->load->helper('url');
 
-  /**
-   * Returns a URI
-   *
-   * @return  URI
-   */
-  static public function _factory($stats = array(), $uri = 'http')
-  {
-      $uri = explode(':', $uri, 0b10);
-      $schemeSpecific = isset($uri[1]) ? $uri[1] : '';
-      $desc = 'Multi
-line description';
+        /* S'il existe un formulaire pour l'étude, on récupère son ID pour mettre à jours son contenu, sinon on le crée et on récupère ayssu son ID */
+        if ($this->formulaire->getFormulaireModelEtude($idEtude) == '') {
+            $idForm = $this->formulaire->insertFormulaire($idEtude);
+        } else {
+            $idForm = $this->formulaire->getFormulaireModelEtude($idEtude)->id_model;
+        }
 
-      // Security check
-      if (!ctype_alnum($scheme)) {
-          throw new Zend_Uri_Exception('Illegal scheme');
-      }
+        //quoi faire en fonction du bouton qui a envoyé ici
+        if (isset($_POST['quit'])) {
+            //on part sans rien faire, les autres cas sont traités une fois l'enregistrement effectué
+            redirect('/etude/list');
+        }
 
-      return [
-        'uri' => $uri,
-        'value' => null,
-      ];
-  }
-}
+        </code></pre>-->
 
-__halt_compiler () ; datahere
-datahere
-datahere */
-datahere</code></pre>
-            -->
+
+
 
         <!--<textarea id='debugCk'></textarea>-->
 
@@ -209,7 +202,7 @@ datahere</code></pre>
                 <ol>
                     <li class='addSibling'> [+]  </li> 
                 </ol>
-<!--                <div id='espacePerduSousTimeLine'></div>-->
+                <!--                <div id='espacePerduSousTimeLine'></div>-->
             </div>
 
         </div>
@@ -227,9 +220,9 @@ datahere</code></pre>
 
         <div id="slideArea" >
             <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block">
-<!--                <iframe class='iframeInSlide' src='http://127.0.0.1:81/etude/formulaire/28'> 
-                
-                </iframe>-->
+                <!--                <iframe class='iframeInSlide' src='http://127.0.0.1:81/etude/formulaire/28'> 
+                                
+                                </iframe>-->
                 <p> en profondeur</p> <img src=''/>
             </div>
 
@@ -238,7 +231,7 @@ datahere</code></pre>
 
 
         <div id='dialog-select-storage'> </div>
-        
+
         <div id='dialog-extract'>    </div>
 
 
@@ -285,7 +278,7 @@ datahere</code></pre>
 
 
 
-       
+
         <script>
 //            hljs.initHighlightingOnLoad();
 

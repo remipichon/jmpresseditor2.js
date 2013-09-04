@@ -52,7 +52,7 @@ function createText(hierarchy, event) {
 //            var x = x - container.attr('data-x');
 //            var y = y - container.attr('data-y'); 
 //            
-//            console.log(x+" "+container.attr('data-x'));
+//            //console.log(x+" "+container.attr('data-x'));
 
 
         //Claire Z
@@ -85,7 +85,7 @@ function createText(hierarchy, event) {
 
     jsonToHtmlinSlide(jsonComponent, container);
 
-    //console.log(pressjson);
+    ////console.log(pressjson);
     $('#text-tool').parent().removeClass("buttonclicked");  // mise en forme css
 }
 ;
@@ -107,27 +107,27 @@ jQuery.fn.manageCkeditor = function() {
         CKEDITOR.disableAutoInline = true;
         CKEDITOR.inline($this.attr('id'));
         $this.focus();
-        console.log("ck this : "+ $this);
-        console.log($this);
+        //console.log("ck this : "+ $this);
+        //console.log($this);
 
-        console.log($this.data('newCreated'));
+        //console.log($this.data('newCreated'));
 
         $this.on('click', function() {
             //($this.data('newCreated')) ? CKEDITOR.instances[$this.attr('id')].setData("<span class='"+$this.data('hierarchy')+"'>  Ici  </span>") : 0 ; 
-//            ($this.data('newCreated')) ? console.log('instance ck éditée pour la première fois (que faire ?)') : 0;
+//            ($this.data('newCreated')) ? //console.log('instance ck éditée pour la première fois (que faire ?)') : 0;
         });
 
 
 // on n'entre jamais dedans ???? Mise à jour des contenus gérée ds layout.js, avant sauvegarde et mode présentation
         CKEDITOR.instances[$this.attr('id')].on('change', function(e) {
-            console.log("le changement c'est maintenant :" + CKEDITOR.instances[$this.attr('id')].getData());
+            //console.log("le changement c'est maintenant :" + CKEDITOR.instances[$this.attr('id')].getData());
             /////METTRE A JOUR LE JSON//////
 //            var element = CKEDITOR.instances[$this.attr('id')];
-//            console.log()
+//            //console.log()
 //            var idElement = CKEDITOR.instances[$this.attr('id')].getData();
-//            console.log("idElement" + idElement);
+//            //console.log("idElement" + idElement);
 //            var idSlide = element.parent().attr('id');
-//            console.log("idSlide" + idSlide);
+//            //console.log("idSlide" + idSlide);
 //            pressjson.slide[idSlide].element[idElement].content = $this.text();
         });
 
@@ -137,12 +137,12 @@ jQuery.fn.manageCkeditor = function() {
                 $this.unbind('mousemove');
                 CKEDITOR.instances[$this.attr('id')].destroy(false); //possible de passer un 'false' a destroy pour ne pas update le dom
                 $this.attr('contenteditable', 'false');
-                console.log('destroy');
+                //console.log('destroy');
             }
             event.stopPropagation();
             $this.removeClass('move');
             $this.parent().removeClass('move');
-            console.log('active');
+            //console.log('active');
         });
     });
 };
@@ -152,7 +152,7 @@ jQuery.fn.manageCkeditor = function() {
 
 
 function createSlide(typeCreation, event) {
-    //console.log('typeCreation '+typeCreation);
+    ////console.log('typeCreation '+typeCreation);
     if (event.type === 'code') {
         var dico = {
             rotateX: event.rotateX,
@@ -184,7 +184,7 @@ function createSlide(typeCreation, event) {
         var y = posVirtuel[0] - off[0];
         var z = 1000; //dico.translate3d[2];
         var idSlide = "slide-" + i++;
-        //console.log(x + " " + y);
+        ////console.log(x + " " + y);
         var index = i - 2;
     }
 
@@ -267,15 +267,15 @@ function jsonToHtmlinSlide(data, container) {
     var htmlBIS = Mustache.to_html(template, data);
     var html = htmlBIS.replace('&lt;p&gt;', '<p>');
     html = html.replace('&lt;&#x2F;p&gt;', '</p>');
-    //console.log( "avt " + htmlBIS);
-    //console.log( "après " + html);
+    ////console.log( "avt " + htmlBIS);
+    ////console.log( "après " + html);
     container.append(htmlBIS);
 
     //gestion de ckeditor
     if (data.type === 'text') {
         var $newTxt = container.children().last();
         $newTxt.manageCkeditor();
-        //console.log(data.newCreated);
+        ////console.log(data.newCreated);
         (data.newCreated === 'true') ? $newTxt.data('newCreated', 'true') : $newTxt.data('newCreated', 'false');  //pour savoir si on vide le champ texte 
         $newTxt.data('hierarchy', data.hierarchy);
     }

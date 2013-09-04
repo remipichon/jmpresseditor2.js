@@ -17,12 +17,12 @@
  * @type object composant
  */
 function findObjectOfComposant(matricule){
-    console.log('info : findObjectOfComposant effectue un test avec getSlide');
+    //console.log('info : findObjectOfComposant effectue un test avec getSlide');
     if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
        for( var i in container.slide) {               //parcours des slides
-//           console.log('debug findobjofcptmr',slide,slide.element,matricule,typeof slide.element[matricule]);
+//           //console.log('debug findobjofcptmr',slide,slide.element,matricule,typeof slide.element[matricule]);
             if (typeof container.slide[i].element[matricule] === 'undefined') {
-//                console.log('pas dans la slide ', slide);
+//                //console.log('pas dans la slide ', slide);
             } else {
                 return container.slide[i].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
             }
@@ -31,7 +31,7 @@ function findObjectOfComposant(matricule){
         return container.getSlide(matricule);
     }
 
-    console.log('Error : findObjectOfComposant : matricule '+matricule+' doesn\'t existe');
+    //console.log('Error : findObjectOfComposant : matricule '+matricule+' doesn\'t existe');
     return;
 }
 
@@ -42,16 +42,16 @@ function findObjectOfComposant(matricule){
  * 
  */
 function callModel(objectEvent) {
-//    console.log(objectEvent);
+//    //console.log(objectEvent);
 
     if (objectEvent.matricule === '' || objectEvent.matricule === 'document') {
         //creation de composant
-        console.log('warning : bad function call (callModel instead of callModelGui), redirectinnf proceded');
+        //console.log('warning : bad function call (callModel instead of callModelGui), redirectinnf proceded');
         callModelGUI(objectEvent);
     } else {
         //modification de composant
         var composant = findObjectOfComposant(objectEvent.matricule);
-//        console.log('avant', composant.show());
+//        //console.log('avant', composant.show());
         if (objectEvent.action === 'move') {
             var attr;
             var val = objectEvent.event.cran;
@@ -83,7 +83,7 @@ function callModel(objectEvent) {
             }
 
             composant.pos[attr] += val;
-//            console.log('après', composant.show());
+//            //console.log('après', composant.show());
 
 
         } else if (objectEvent.action === 'rotate') {
@@ -117,7 +117,7 @@ function callModel(objectEvent) {
             }
 
             composant.rotate[attr] += val;
-//            console.log('après', composant.show());
+//            //console.log('après', composant.show());
 
 
         }
@@ -140,19 +140,19 @@ function callModel(objectEvent) {
 function createComposant($target, objectEvent) {
     if (objectEvent.action === 'createH1Text') {
         new Text($target, {properties: {hierarchy: 'H1Text'}});
-//        console.log('new text H1');
+//        //console.log('new text H1');
     } else if (objectEvent.action === 'createH2Text') {
         new Text($target, {properties: {hierarchy: 'H2Text'}});
-//        console.log('new text');
+//        //console.log('new text');
     } else if (objectEvent.action === 'createH3Text') {
         new Text($target, {properties: {hierarchy: 'H2Text'}});
-//        console.log('new text');
+//        //console.log('new text');
     } else if (objectEvent.action === 'createBodyText') {
         new Text($target, {});
-//        console.log('new text');
+//        //console.log('new text');
     } else if (objectEvent.action === 'createImage') {
         new Image($target, {source: objectEvent.source});
-//        console.log('new ');
+//        //console.log('new ');
     }
 }
 
@@ -186,28 +186,28 @@ function callModelGUI(objectEvent) {
             }
         }
         var $target = selectSlide(createComposant, objectEvent);
-        console.log('after selectc', $target);
+        //console.log('after selectc', $target);
         return;
     }
 
 
-//    console.log(objectEvent);
+//    //console.log(objectEvent);
     if (objectEvent.action === 'createSlide') {
         new Slide();
-        console.log('new slide');
+        //console.log('new slide');
     }
 //    else if (objectEvent.action === 'createH1Text') {                 //voir fonction createComposant
 //        new Text({properties: {hierarchy: 'H1Text'}}, $target);
-//        console.log('new text H1');
+//        //console.log('new text H1');
 //    } else if (objectEvent.action === 'createH2Text') {
 //        new Text({properties: {hierarchy: 'H2Text'}}, $target);
-//        console.log('new text');
+//        //console.log('new text');
 //    } else if (objectEvent.action === 'createH3Text') {
 //        new Text({properties: {hierarchy: 'H2Text'}}, $target);
-//        console.log('new text');
+//        //console.log('new text');
 //    } else if (objectEvent.action === 'createBodyText') {
 //        new Text({}, $target);
-//        console.log('new text');
+//        //console.log('new text');
 //    } 
     else if (objectEvent.action === 'move' || objectEvent.action === 'navigable') {
         var attr;
@@ -242,7 +242,7 @@ function callModelGUI(objectEvent) {
 
         transform3D.pos[attr] = val;
 
-        console.log('navigable');
+        //console.log('navigable');
 
     } else if (objectEvent.action === 'rotate') {
         var attr;
@@ -276,7 +276,7 @@ function callModelGUI(objectEvent) {
 
         transform3D.rotate[attr] = val;
 
-        console.log('rotate');
+        //console.log('rotate');
     }
 
 }

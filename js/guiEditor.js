@@ -12,7 +12,7 @@
 $(document).keypress(function(event) {
    
 
-//    console.log(event.which);
+//    //console.log(event.which);
 
 
     var objEvt = new ObjectEvent({
@@ -61,7 +61,7 @@ $(document).keypress(function(event) {
     
 
     if (composantCatchEvent) {
-        console.log('document capte event mais ne fait rien');
+        //console.log('document capte event mais ne fait rien');
         return;
     }
 
@@ -163,7 +163,7 @@ Transform3D = Class.extend({
 
 //            var transform = 'translate(-50%, -50%),  scaleX(1), scaleY(1),  scaleZ(1),  rotateZ(0deg),  rotateY(0deg),  rotateX(0deg), \n\
 //                 translate3d(' + this.x + 'px, ' + this.y + 'px, ' + this.z + 'px)';
-//            console.log('transform :', transform);
+//            //console.log('transform :', transform);
 //            $("#slideArea>div").css({'transform': transform});
 //            $("#slideArea").css({'transform': transform});
 
@@ -186,7 +186,7 @@ Transform3D = Class.extend({
             dico.translate3d[i] += newVal;
 
             setTrans3D(dico);
-            console.log(dico);
+            //console.log(dico);
 
         });
 
@@ -200,7 +200,7 @@ Transform3D = Class.extend({
 
 //            var transform = 'translate(-50%, -50%),  scaleX(1), scaleY(1),  scaleZ(1),  rotateZ(0deg),  rotateY(0deg),  rotateX(0deg), \n\
 //                 translate3d(' + this.x + 'px, ' + this.y + 'px, ' + this.z + 'px)';
-//            console.log('transform :', transform);
+//            //console.log('transform :', transform);
 //            $("#slideArea>div").css({'transform': transform});
 //            $("#slideArea").css({'transform': transform});
 
@@ -223,7 +223,7 @@ Transform3D = Class.extend({
             dico['rotate' + i] += newVal;
 
             setTrans3D(dico);
-            console.log(dico);
+            //console.log(dico);
 
         });
 

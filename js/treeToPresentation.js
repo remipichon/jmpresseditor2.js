@@ -137,7 +137,7 @@ function maxDepth($node, max) {
 
     //condition de sortie
     if ($node.attr('nbchild') == 0) {
-//        console.log($node.attr('depth'));
+//        //console.log($node.attr('depth'));
         if ($node.attr('depth') > max)
             return $node.attr('depth');
         return max;
@@ -147,7 +147,7 @@ function maxDepth($node, max) {
     var $lis = $($node.children('ol')[0]).children();
     for (var i = 0, len = $lis.length; i < len; i++) {
         var $li = $($lis[i]);
-//        console.log($li.html());
+//        //console.log($li.html());
         max = maxDepth($li, max);
     }
 
@@ -187,7 +187,7 @@ function goAutoAlign(config) {
                 totHeight += parseInt($(this).height());
 
             });
-            //console.log(totHeight);
+            ////console.log(totHeight);
 
             if (totHeight > sizeMax) {     //si encore depassement de la slide
                 $($(this).children()[0]).children().css('padding-bottom', 10).css('font-size', '2em');     //reduction de l'espace titreslide/contenu
@@ -206,7 +206,7 @@ function goAutoAlign(config) {
         //positionnement à proprement dit
         $($(this).children('.element')).each(function() {
 
-            //console.log("totpourtous " + totHeight);
+            ////console.log("totpourtous " + totHeight);
 
 
             if (totHeight > 0) {        //permet d'exclure les slides de content
@@ -214,7 +214,7 @@ function goAutoAlign(config) {
                 var midAllText = sizeMax / 2 - totHeight / 2;
                 var top = midAllText + height / 2;
                 var top = (sizeMax - totHeight) / 2;
-                //console.log(totHeight + " " + height + " " + midAllText + " " + top);
+                ////console.log(totHeight + " " + height + " " + midAllText + " " + top);
 
                 $(this).css('top', top);
 

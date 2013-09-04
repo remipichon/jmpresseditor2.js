@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <title>Editor</title>
+       
+
+        <link rel="stylesheet" type="text/css" href="../highlight.js/styles/arta.css" > 
+        <!--<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/css/SyntaxHighlighter.css"></link>-->
+
+     
+        <script type="text/javascript" src="../highlight.js/highlight.pack.js"></script> 
+        
+
+
+
+
+
+    </head>
+
+    <body style="font-size:1em">
+        
+        <h2> Controleur </h2>
+     <pre  class='php'><code>
+   function formulaireModele($idEtude) {
+
+
+        /*         * *   un formulaire existe il déja pour cette etude ? ** */
+        $form = $this->formulaire->getFormulaireModelEtude($idEtude);
+        if ($form != NULL) $idForm = $form->id_model;
+        else $idForm = 0;
+
+
+
+        /*         * ***recupération des informations sur l'étude**** */
+        $etude = $this->etude->getEtude2($idEtude);
+
+        if ($idForm == 0) {
+            /*             * *********creatin d'un formulaire avec une question et une ligne de médicament ***************** */
+            /*             * ********************************* ATTENTION        medicament.id est en fait id_medicament_ligne */           
+        } else {
+            /*             * *********init du formulaire déjà commencé d'être completé***************** */
+
+
+            $lignesMedoc = array();
+
+            foreach ($this->formulaire->getLigneFormulaire($idForm) as $ligne) {
+                $medicament = array();
+                foreach ($this->formulaire->getMedicamentLigne($ligne->id_ligne) as $medic) {
+                    $medoc = $this->medicament->getMedicament($medic->id_medicament);
+                    $nomMedoc = $medoc->nom_medicament;
+
+                    array_push($medicament, array(
+                        'id' => $medic->id_medicament_ligne,
+                        'libelle' => $nomMedoc
+                    ));
+                }
+
+                array_push($lignesMedoc, array(
+                    'id_ligne' => $ligne->id_ligne,
+                    'libelle' => $ligne->libelle,
+                    'medicament' => $medicament
+                ));
+            }
+
+
+            $questions = array();
+            foreach ($this->formulaire->getQuestionFormulaire($idForm) as $quest) {
+                array_push($questions, array(
+                    'id_question' => $quest->id_question,
+                    'libelle' => $quest->libelle
+                ));
+            }
+        }
+
+
+
+
+        /*         * *****form & submit****** */
+        /* 4 propositions sont offertes à l'user remplissant le formulaire, donc 4 submit avec des 'name' differents */
+        $this->load->helper('form');
+        $formdata = array();
+        $Form = form_open('/formulaire/valideFormulaire/' . $idEtude, 'class="new_formulaire_form"'); // voir config/routes.php => user ajax
+        $formdata['form_open'] = $Form;
+        //bouton sauvergarder et quitter
+        $attr = array(
+            'name' => 'save_stay',
+            'class' => 'btn-glow primary');
+        $formdata['submitSave'] = form_submit($attr, "Enregistrer le formulaire");
+        //bouton sauvergarder et envoyer (mail)
+        $attr = array(
+            'name' => 'save_mail',
+            'class' => 'btn-glow primary');
+        $formdata['submitMail'] = form_submit($attr, "Enregistrer le formulaire et envoyer mail");
+        //bouton sauvergarder et visualiser
+        $attr = array(
+            'name' => 'save_view',
+            'class' => 'btn-glow primary');
+        $formdata['submitView'] = form_submit($attr, "Enregistrer le formulaire et visualiser");
+        //bouton quitter
+        $attr = array(
+            'name' => 'quit',
+            'class' => 'btn-glow primary');
+        $formdata['submitQuit'] = form_submit($attr, "Quitter");
+
+
+        $endForm = form_close(''); // il est important que cette fonction contienne une chaine de caractère (même vide), sinon s'affiche pas
+        $formdata['form_close'] = $endForm;
+
+        $list = $this->medicament->getMedicament('*');
+        $listMedic = '';
+
+        foreach ($list->result() as $item) {
+            $listMedic .= "{$item->nom_medicament}_";
+//            $listMedic .= "{$item->id_medicament}_{$item->nom_medicament}_";
+        }
+        $listMedic = substr($listMedic, 0, strlen($listMedic) - 1);
+
+
+        $this->data['page'] = 'formulaire/modele';
+        $this->data['nom_etude'] = $etude->nom_etude;
+        $this->data['form'] = $formdata;
+        $this->data['ligne_formulaire'] = $lignesMedoc;
+        $this->data['question_formulaire'] = $questions;
+        $this->data['liste_medicament'] = $listMedic;
+
+//           $this->output->enable_profiler(TRUE);
+
+        $this->twig->display($this->config->item('bundle') . '/formulaire/editFormulaire.html.twig', $this->data);  //dataView pour passer aux vues la liste des droits entre autre
+    }
+
+
+        </code></pre>
+        
+         <h2> Modèle </h2>
+     <pre  class='php'><code>
+  function getFormulaireModelEtude($idEtude) {
+        $this->db->select('*')->from('formulaire_modele')->where('id_etude', $idEtude);
+        $query = $this->db->get();
+        $result = $query->first_row(); 
+
+        if (isset($result->id_model))   return $result;
+        else     return NULL;
+    }
+
+ function getLigneFormulaire($idForm) {
+        $this->db->select('*')->from('ligne_formulaire')->where('id_model', $idForm);
+        $query = $this->db->get();
+        $result = $query->first_row(); 
+
+        if (isset($result->id_model))   return $result;
+        else     return NULL;
+    }
+        
+
+function getMedicamentLigne($idLigne) {
+        $this->db->select('*')->from('medicament_ligne')->where('id_ligne', $idLigne);
+        $ $query = $this->db->get();
+        $result = $query->first_row(); 
+
+        if (isset($result->id_model))   return $result;
+        else     return NULL;
+    }
+
+ function getMedicament($id) {
+        $this->db->select('*')->from('medicament')->where('id_medicament', $id);
+         $query = $this->db->get();
+        $result = $query->first_row(); 
+
+        if (isset($result->id_model))   return $result;
+        else     return NULL;
+    }
+        </code></pre>
+         
+         
+         <h2> Vue </h2>
+     <pre  ><code class='html'>
+&lt; &gt;
+     &lt;div class="container" id="formulaireModele"&gt;
+             {{ form.form_open | raw }}
+              
+                &lt;h4&gt; Lignes de médicaments &lt;/h4&gt;
+                    {% for ligne in ligne_formulaire%}
+                         &lt;div id="ligne_{{ligne.id_ligne}}" class="ligne"&gt; 
+                                &lt;input name=ligne_{{ligne.id_ligne}} value='{{ligne.libelle}}'&gt;&lt;/input&gt; &lt;div class='delete icon-trash'&gt;&lt;/div&gt;
+                                &lt;ul&gt;
+                                    {% for medicament in ligne.medicament %}
+                                        &lt;li class='visible'&gt; 
+                                            
+                                            &lt;input  ligne="{{ligne.id_ligne}}" name="medicament_{{medicament.id}}_{{ligne.id_ligne}}" class="medicament" value="{{medicament.libelle}}"&gt;&lt;/input&gt;                                            &lt;div class='icon-trash delete'&gt;&lt;/div&gt; 
+                                            &lt;div class='fail' style='display:none'&gt;Ce nom de médicament n'éxiste pas !&lt;/div&gt;  &lt;!-- pour gerer l'erreur de medicament en dynamique --&gt;
+                                            &lt;div class='editAgain' style='display:none'&gt;Double cliquer pour éditer de nouveau&lt;/div&gt;  &lt;!-- pour gerer l'erreur de medicament en dynamique --&gt;
+                                            &lt;div class='help displayed'&gt;Saissisez le nom d'un médicament et aidez vous de la liste&lt;/div&gt;
+                                        &lt;/li&gt; 
+                                    {% endfor %}
+                                &lt;/ul&gt;
+                         &lt;div ligne="{{ligne.id_ligne}}" class="addMedicament btn-glow primary"&gt; Ajouter un médicament &lt;/div&gt;
+                         &lt;/div&gt;
+                     {% endfor %} 
+                    
+                    &lt;div id="addLigne" class="btn-glow primary"&gt; Ajouter une ligne &lt;/div&gt;
+                    
+               
+              
+               &lt;h4&gt; Questions sur l'ensemble du questionnaire &lt;/h4&gt;
+               
+                     
+                    {% for question in question_formulaire %} 
+                        &lt;div class='row fluid wrapLib'&gt;
+                            &lt;textarea  class="libelleQuestion span11" maxlength='10000' spellcheck='true' name="question_{{question.id_question}}" rows="3" &gt;{{question.libelle}}&lt;/textarea&gt;
+                            &lt;div class='delete icon-trash'&gt;&lt;/div&gt;
+                         &lt;/div&gt;
+                    {% endfor %}
+                            
+                     &lt;div id="addQuestion" class="btn-glow primary"&gt; Ajouter une question &lt;/div&gt;
+
+          
+             liste des boutons proposés à l'utilisateur 
+            
+              &lt;div id='submit' class="row-fluid"&gt;
+                    {% set nbButton = 0 %}
+                    {% if form.submitSave is not null %} 
+                    {%     set  nbButton = nbButton + 1 %}
+                    {% endif %}
+                    {% if form.submitView is not null %} 
+                    {%    set   nbButton = nbButton + 1 %}
+                    {% endif %}
+                    {% if form.submitQuit is not null %} 
+                    {%    set   nbButton = nbButton + 1 %}
+                    {% endif %}
+                    {% if session.droit_niveau != 80 and  form.submitMail is not null %}
+                     {%   set    nbButton = nbButton + 1 %}
+                    {% endif %}  
+                      
+                   
+                      {% if form.submitSave is not null %} 
+                    &lt;div class='span{{12//nbButton}}'&gt;
+                       &lt;div class='saveForm row'&gt; {{ form.submitSave | raw }}&lt;/div&gt;
+                      &lt;/div&gt;  
+                    {% endif %}
+                    {% if form.submitView is not null %} 
+                    &lt;div  class='span{{12//nbButton}}'&gt;
+                      &lt;div class='saveForm row'&gt;{{ form.submitView | raw}}&lt;/div&gt;
+                      &lt;/div&gt;  
+                    {% endif %}
+                   
+                    {% if session.droit_niveau != 80 and  form.submitMail is not null %}
+                    &lt;div class='span{{12//nbButton}}'&gt;
+                         &lt;div class='saveForm row'&gt;  {{ form.submitMail | raw}}&lt;/div&gt;
+                      &lt;/div&gt;  
+                    {% endif %}  
+                       {% if form.submitQuit is not null %} 
+                   &lt;div class='span{{12//nbButton}}'&gt;
+                       {{ form.submitQuit | raw}}
+                      &lt;/div&gt;  
+                    {% endif %}
+                   
+                     
+                  
+                    
+                   
+            &lt;/div&gt;
+                    
+            {{ form.form_close | raw}}
+            
+              
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+   
+
+
+
+
+
+        </code></pre>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+            
+        </script>    
+
+    </body>
+</html>

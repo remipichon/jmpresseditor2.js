@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <title>Editor</title>
+       
+
+        <link rel="stylesheet" type="text/css" href="../highlight.js/styles/arta.css" > 
+        <!--<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/css/SyntaxHighlighter.css"></link>-->
+
+     
+        <script type="text/javascript" src="../highlight.js/highlight.pack.js"></script> 
+        
+
+
+
+
+
+    </head>
+
+    <body>
+        
+        <h2> Controleur </h2>
+     <pre  class='php'><code>
+  function editSynthese($idEtude, $idFormulaireMedecin = Null) {
+
+
+
+        if ($this->session->userdata('droit_niveau') >= 90 || $this->session->userdata('droit_niveau') == 80 || $this->session->userdata('droit_niveau') == 60) {  //client, admin, operateur
+            //recuperation du client de l'étude
+            $idClient = $this->etude->getEtude2($idEtude)->user_id;
+
+            //si pas déja fait, affectation du client à l'étude
+            $clientEtude = $this->medecin->isInvited($idEtude, $idClient);
+            if (!$clientEtude)
+                $idClientEtude = $this->medecin->affecterMedecinEtude($idEtude, $idClient);
+            else
+                $idClientEtude = $clientEtude->id_medecin_etude;
+
+
+            //vérification si la synthèse à déja commencer
+            $synthese = $form = $this->medecin->hasStartedFillform($idEtude, $idClient);
+
+            if ($synthese != NULL) {
+                $idSyntheseEtude = $form->id_formulaire_etude;                  //pour le "enregistrer et revenir"
+            } else {
+                //creation du formulaire de synthèse
+                $idSyntheseEtude = $this->createFormulaireEtude($idEtude, $idClientEtude);
+
+
+                /* on renseigne les champs valeur de reponse_medicament avec la valeur moyenne de toutes les valeurs */
+                $allFormulaire = $this->formulaire->getAllFormulaireEtude($idEtude);
+                $formulaireModele = $this->formulaire->getFormulaireModelEtude($idEtude);
+
+                //pour chaque formulaire_model.ligne_formulaire
+                $allLigne = $this->formulaire->getLigneFormulaire($formulaireModele->id_model);
+                foreach ($allLigne as $ligne) {
+
+                    //pour chaque medicament_ligne
+                    $allMedicament = $this->formulaire->getMedicamentLigne($ligne->id_ligne);
+                    foreach ($allMedicament as $medicamentLigne) {
+                        $moyVal = array();
+                        //pour chaque formulaire_etude (chaque medecin)
+                        foreach ($allFormulaire as $formulaireEtude) {
+                            $reponse = $this->formulaire->getReponseMedicamentLigne($formulaireEtude->id_formulaire_etude, $medicamentLigne->id_medicament_ligne);
+                            $valeur = $reponse->valeur;
+                            $moyVal . push($valeur);
+                        }
+                        $moy = (int) array_sum($moyVal) / count($moyVal);
+                        $this->formulaire->udpateReponseMedicamentLigne($medicamentLigne->id_medicament_ligne, $moy);
+                    }
+                }
+            }
+
+            //demande de rendu du formulaire de synthèse
+            $dataSynthese = $this->showFormulaireEtude($idSyntheseEtude, true);
+            $this->data['synthese']['ligne_formulaire'] = $dataSynthese['ligne_formulaire'];
+            $this->data['synthese']['question_formulaire'] = $dataSynthese['question_formulaire'];
+
+            if ($idFormulaireMedecin !== Null) {
+                $dataFormulaire = $this->showFormulaireEtude($idFormulaireMedecin, true); 
+                $this->data['formulaireMed']['ligne_formulaire'] = $dataFormulaire['ligne_formulaire'];
+                $this->data['formulaireMed']['question_formulaire'] = $dataFormulaire['question_formulaire'];
+            }
+
+            //commun
+            $this->data['form'] = $dataSynthese['form'];
+            $this->data['page'] = 'synthese';
+            $this->data['id_etude'] = $idEtude;
+            $this->data['nom_etude'] = $this->etude->getEtude2($idEtude)->nom_etude;
+
+            /* renseigne data['points'] et data['stats']  données pour les deux tableaux de stats par lignes */
+            $this->calculSynthese($idEtude);
+
+            $this->twig->display($this->config->item('bundle') . '/synthese/listFormulaireEditionSynthese.html.twig', $this->data);  //dataView pour passer aux vues la liste des droits entre autre
+        }
+    }
+
+
+ function calculSynthese($idEtude) {
+        if ($this->session->userdata('droit_niveau') >= 90 || $this->session->userdata('droit_niveau') == 80 || $this->session->userdata('droit_niveau') == 60) {
+            $allFormulaire = $this->formulaire->getAllFormulaireEtude($idEtude);
+            $formulaireModele = $this->formulaire->getFormulaireModelEtude($idEtude);
+
+            /*             * ***    tableau récapitulatif des notes des médicaments **** */
+            $allNote = array();
+
+            //pour chaque formulaire_model.ligne_formulaire
+            $allLigne = $this->formulaire->getLigneFormulaire($formulaireModele->id_model);
+            foreach ($allLigne as $ligne) {
+                $note = array();
+
+                //pour chaque medicament_ligne
+                $allMedicament = $this->formulaire->getMedicamentLigne($ligne->id_ligne);
+                foreach ($allMedicament as $medicamentLigne) {
+
+                    //pour chaque formulaire_etude (chaque medecin)
+                    foreach ($allFormulaire as $formulaireEtude) {
+                        $reponse = $this->formulaire->getReponseMedicamentLigne($formulaireEtude->id_formulaire_etude, $medicamentLigne->id_medicament_ligne);
+                        $valeur = $reponse->valeur;
+
+                        //récupération des données (id) intéréssantes
+                        $idUSer = $this->medecin->getMedecinEtude($formulaireEtude->id_medecin_etude)->user_id;
+                        /* Attention, le formulaire de synthèse est stocké comme un formulaire, il ne faut pas prendre en comptes ses données */
+                        if (70 != $this->formulaire->quickQueryOne("select niveau from groups join users_groups on groups.id = users_groups.group_id where users_groups.user_id = {$idUSer} ")->niveau)
+                            continue;
+                        $idMedicament = $medicamentLigne->id_medicament;
+
+                        //ecriture dans le tableau
+                        $note[$idUSer][$idMedicament] = $valeur;
+//                      $note[$formulaireEtude->id_medecin_etude][$medicamentLigne->id_medicament_ligne] = $valeur;
+                    }
+                }
+                $allNote[$ligne->id_ligne] = $note;
+            }
+
+
+
+            /*             * ***    tableau des positons (1er, 2nb, 3ème...) des médicaments **** */
+            $allPositions = array();
+            $allNote2 = $allNote;
+
+            //pour chaque ligne dans $allNote
+            foreach ($allNote2 as $idLigne => $ligne) {
+                $positions = array(); //tableau non associatif contenant première position = indice 0...., sert de compteur mutlitple
+                //calcul nombre de médicament
+                foreach ($ligne as $medecin => $medicament) {
+                    $nbMedicament = count($medicament);
+                }
+
+                //autant de fois qu'il y a de médicament               
+                for ($i = 1; $i <= $nbMedicament; $i++) {
+                    $pos = array();   //premiere position, seconde posuition....
+                    //pour chaque medecin
+                    foreach ($ligne as $medecin => $medicament) {
+//                        echo '';
+                        $medicament = $allNote2[$idLigne][$medecin];
+                        $max = max($medicament);
+
+
+                        $key = array_search($max, $medicament);
+
+                        if (!isset($pos[$key]))
+                            $pos[$key] = 0;
+                        $pos[$key]++;
+
+                        $allNote2[$idLigne][$medecin][$key] = 0;
+                        //$valueMax = 0
+                    }
+
+                    /* lorsqu'il y a peu de panéliste par rapport au nombre de médicament, il est possible qu'un médicament
+                      ne soit jamais à une des positions (1er,2nd..) possible (arrive sytematique s'il y a moins de paneliste que de médicament, ca c'est logique)
+                      Il faut donc vérifier si tous les médicaments ont une valeur de position */
+                    if (count($pos) !== $nbMedicament) {
+                        foreach ($medicament as $id => $valeur) {
+                            if (!isset($pos[$id]))
+                                $pos[$id] = 0;
+                        }
+                    }
+
+                    ksort($pos);
+                    $positions[$i] = $pos;
+                }
+                $allPositions[$idLigne] = $positions;
+            }
+ 
+
+
+            /*             * ***    tableau de proportions des positions des médicaments **** */
+            //nombre de panneliste
+            foreach ($allNote as $ligne) {
+                $nbPannel = count($ligne);
+                break; //pas besoin de parcourir toute les lignes pour savoir combiend e panneliste il y a
+            }
+
+            foreach ($allPositions as $idLigne => $ligne) {
+                foreach ($ligne as $place => $listMed) {
+                    foreach ($listMed as $med => $nbFois) {
+                        $allPositions[$idLigne][$place][$med] = $allPositions[$idLigne][$place][$med] / $nbPannel * 100;
+                    }
+                }
+            }
+
+            /* tableau des médicaments : pour facilter le twig */
+            $medicament = array();
+            foreach ($allNote as $idLigne => $ligne) {
+                $medicament[$idLigne] = array();
+                foreach ($ligne as $medecin => $listmedicament) {
+                    foreach ($listmedicament as $idMedicament => $val)
+                        $medicament[$idLigne][$idMedicament] = $this->medicament->getMedicament($idMedicament)->nom_medicament;
+                }
+            }
+
+            $this->data['points'] = $allNote;
+            $this->data['stats'] = $allPositions;
+            $this->data['medicament'] = $medicament;
+        }//fin if
+    }
+
+          
+        </code></pre>
+        
+         <h2> Modèle </h2>
+     <pre  class='php'><code>
+        "Aucun nouveau modèle n'a été écrit"
+        </code></pre>
+         
+         
+         <h2> Vue </h2>
+     <pre  ><code class='html'>
+&lt; &gt;
+ 
+{% block content %}
+
+&lt;div class="table-wrapper products-table section"&gt;
+    &lt;div class="row-fluid head"&gt;
+        &lt;div class="span12"&gt;
+            &lt;h3&gt;Rédaction de la synthèse pour &lt;strong&gt;{{nom_etude}}&lt;/strong&gt;&lt;/h3&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;fieldset class='row-fluid'&gt;
+        &lt;legend class='offset 4 span8'&gt;&lt;h3&gt; Liste des formulaires &lt;/h3&gt; &lt;/legend&gt;
+              {% include app_bundle ~ '/formulaire/datatablelisteformulaire.html.twig' %}
+    &lt;/fieldset&gt;
+        
+
+    &lt;fieldset class='row-fluid'&gt;
+        &lt;legend class='offset 4 span8'&gt;&lt;h3&gt; Synthèse &lt;/h3&gt; &lt;/legend&gt;
+              {% include app_bundle ~ '/synthese/formulairesynthese.html.twig' %}
+    &lt;/fieldset&gt;
+
+
+{% endblock %}
+
+    {{ form.form_open | raw}}
+
+       &lt;!-- si l'user n'a accès qu'au bouton 'quitter', on désactive les sliders (via JS) ainsi que les textaerea (en twig)  --&gt; 
+     {% if form.submitSave is null and form.submitFinish is null  %}
+           {% set disabled = 'disabled' %}
+     {% endif %}
+
+
+      &lt;h3&gt; Lignes de médicaments &lt;/h3&gt;
+           {% for ligneSynthese in synthese.ligne_formulaire%}
+            {% set ligne = formulaireMed.ligne_formulaire[loop.index0] %} 
+
+
+
+               &lt;div class='libLigne span12' &gt;&lt;h4&gt;{{ligneSynthese.libelle}} {{ligneSynthese.id_ligne}}&lt;/h4&gt;&lt;/div&gt; 
+
+                &lt;div class='pointContainer row'&gt;                           
+                   {% include app_bundle ~ '/synthese/datatableSynthesePoint.html.twig'  %}                            
+               &lt;/div&gt;
+
+               &lt;div class='pointContainer row'&gt;                           
+                   {% include app_bundle ~ '/synthese/datatableSyntheseStat.html.twig'  %}                            
+               &lt;/div&gt;    
+
+
+               &lt;div class='sliderContainer row'&gt; 
+                   &lt;ul&gt;
+                               {% for medicament in ligne.medicament %}
+                               {% set medicamentSynthese = ligneSynthese[loop.index0] %}   
+                           &lt;li&gt; &lt;div class='libMedi row'&gt;&lt;span  class="offset1 span10 medicamentLibelle"&gt;{{medicament.libelle}}&lt;/span&gt;&lt;/div&gt;
+                               &lt;input refModel='{{medicament.refModel}}' type="hidden" ligne="{{ligne.id_ligne}}" name="medicament_{{medicament.id_reponse_medicament}}" class="medicament" value="{{medicament.valeur}}"&gt;&lt;/input&gt;    &lt;!-- deviendra un slide --&gt;   
+                               &lt;div class="{{disabled}} slider"&gt;&lt;/div&gt;
+                           &lt;/li&gt; 
+                               {% endfor %}
+                       &lt;/ul&gt;
+                   &lt;/div&gt;
+
+                   &lt;div class="row questionBasHaut"&gt;                                
+                           &lt;div class='span6'&gt;&lt;div class="questionBas"&gt;&lt;h4&gt; Pourquoi en moyenne &lt;strong class='worstMed'&gt;...&lt;/strong&gt; a été le moins bien évalué ? &lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+                           &lt;div class='span6'&gt;&lt;div class="questionHaut"&gt; &lt;h4&gt;Pourquoi en moyenne &lt;strong class='bestMed'&gt;...&lt;/strong&gt;a été le mieux évalué ? &lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+
+                           &lt;div class='span6'&gt;&lt;div class='span10 repMedQtForm'&gt; &lt;div class='icon-stethoscope icon-2x'&gt;&lt;/div&gt; {{ligne.reponse_bas}}&lt;/div&gt;&lt;/div&gt;
+                           &lt;div class='span6'&gt;&lt;div class='span10 repMedQtForm'&gt; &lt;div class='icon-stethoscope icon-2x'&gt;&lt;/div&gt; {{ligne.reponse_haut}}&lt;/div&gt;&lt;/div&gt;
+
+                           &lt;div class='span6'&gt; &lt;textarea {{disabled}} class="reponseQuestionBas span10" maxlength='10000' spellcheck='true' name="questionligne_{{ligneSynthese.id_reponse_ligne}}_bas" rows="3" &gt;{{ligneSynthese.reponse_bas}}&lt;/textarea&gt;&lt;/div&gt;
+                           &lt;div class='span6'&gt;&lt;textarea {{disabled}} class="reponseQuestionHaut span10" maxlength='10000' spellcheck='true' name="questionligne_{{ligneSynthese.id_reponse_ligne}}_haut" rows="3" &gt;{{ligneSynthese.reponse_haut}}&lt;/textarea&gt;&lt;/div&gt;
+
+                   &lt;/div&gt;
+
+
+               &lt;/div&gt;
+            {% endfor %}                 
+
+
+
+          &lt;h3&gt; Questions sur l'ensemble du questionnaire &lt;/h3&gt;               
+
+           {% for question in synthese.question_formulaire %}    
+           {% set i = loop.index0 %} 
+                   &lt;div class='questioFormulaire row'&gt;
+                       &lt;div class='row'&gt;&lt;div  class="libelleQuestion" &gt;&lt;h4&gt;{{question.libelle}}&lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+                       &lt;div class='row repMedQtForm'&gt; &lt;div class='icon-stethoscope icon-2x'&gt;&lt;/div&gt; {{formulaireMed.question_formulaire[i].reponse}}&lt;/div&gt;
+                       &lt;div class='row'&gt;&lt;textarea {{disabled}} class="reponseQuestion span12" maxlength='10000' spellcheck='true' name="question_{{question.id_reponse_question}}" rows="3" &gt;{{question.reponse}}&lt;/textarea&gt;&lt;/div&gt;                          
+                   &lt;/div&gt;    
+           {% endfor %}
+
+
+
+
+           &lt;div id='submit' class="row-fluid"&gt;
+           {% set nbButton = 0 %}
+           {% if form.submitSave is not null %} 
+           {%     set  nbButton = nbButton + 1 %}
+           {% endif %}
+           {% if form.submitFinish is not null %} 
+           {%    set   nbButton = nbButton + 1 %}
+           {% endif %}
+           {% if form.submitQuit is not null %} 
+           {%    set   nbButton = nbButton + 1 %}
+           {% endif %}
+
+
+
+           {% if form.submitSave is not null %} 
+                   &lt;div class='span{{12//nbButton}}'&gt;
+              {{ form.submitSave | raw }}
+                       &lt;/div&gt;  
+           {% endif %}
+           {% if form.submitFinish is not null %} 
+                       &lt;div class='span{{12//nbButton}}'&gt;
+             {{ form.submitFinish | raw}}
+                           &lt;/div&gt;  
+           {% endif %}
+
+           {% if form.submitQuit is not null %} 
+                           &lt;div class='span{{12//nbButton}}'&gt;
+              {{ form.submitQuit | raw}}
+                               &lt;/div&gt;  
+           {% endif %}
+
+                           &lt;/div&gt;
+
+   {{ form.form_close | raw}}
+
+                               
+
+
+
+        </code></pre>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+            
+        </script>    
+
+    </body>
+</html>

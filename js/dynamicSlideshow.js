@@ -31,7 +31,7 @@
             /* tentative avec mes outils */
             var dico = getTrans3D($this);
             if (typeof dico.translate3d === 'undefined') {
-                console.log($this, 'n\'a pas de transform !');
+                //console.log($this, 'n\'a pas de transform !');
                 return;
             }
             dico.translate3d[0] = translations.x;
@@ -115,7 +115,7 @@ function initDynamic() {
                 return;  //on va chercher l'info dans les slides car la li n'a pas trace de ces slides là (qui ne font pas parties du plan)
 
             var $slideRef = $('#' + $(this).attr('matricule'));
-
+            if( typeof $slideRef === 'undefined') return;
             var dicoRef = getTrans3D($slideRef);
 
 
@@ -173,6 +173,7 @@ function endDynamic() {
  */
 function dynamic() {
    initDynamic();
+    console.log('retour init dynamic');
 
     $(document).on('keypress', function(event) {
         
@@ -249,13 +250,13 @@ function dynamic() {
 
             /* mise à niveau des petites soeurs sur la petite soeur de la current*/
             var littleHilly = $('#' + liCurrent.next().attr('matricule'));
-            console.log('dynamicSlideShow : call getTrans3D for dicoRef');
+            //console.log('dynamicSlideShow : call getTrans3D for dicoRef');
             var dicoRef = getTrans3D(littleHilly);
             $('#tree #li_' + currentMatricule + ' ~').each(function() { //pour obtenir les next siblings de la current li
                 var $slide = $('#' + $(this).attr('matricule'));
-                 console.log('dynamicSlideShow : call getTrans3D for dico');
+                 //console.log('dynamicSlideShow : call getTrans3D for dico');
                 var dico = getTrans3D($slide);
-//               console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
+//               //console.log(littleHilly,dicoRef.translate3d,$slide,dico.translate3d);
 //                dico.translate3d[2] = littleHilly.attr('data-z');
                 $slide.translate3d({
                     x: parseInt($slide.attr('data-x')), //-700,

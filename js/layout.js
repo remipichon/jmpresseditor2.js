@@ -5,9 +5,9 @@
  */
 
 // $(document).keypress( function(event) {
-//     console.log(event.which);
+//     //console.log(event.which);
 //     if (event.which == 36) {
-//         console.log('escape')
+//         //console.log('escape')
 //         $('body').children().each(function() {
 //             if ($(this).attr('id') === 'slideArea')
 //                 return;
@@ -140,7 +140,7 @@ $(document).ready(function() {
     $(document).on('click', '.creationGeek', function(event) {
         event.stopPropagation();
         $('.creationGeek').removeClass('creationGeek');
-        console.log('creation geek html enclenchee');
+        //console.log('creation geek html enclenchee');
 //        createHtml();
     });
 
@@ -270,11 +270,11 @@ $(document).ready(function() {
 //            });
 //            outputjson.slide.push(slide2);
 //        });
-//        //console.log("output json : ");
-//        //console.log(outputjson);
+//        ////console.log("output json : ");
+//        ////console.log(outputjson);
 //        outputjson.slide.sort(sort_by('index', true, parseInt));
-//        //console.log("output json sorted : ");
-        //console.log(outputjson);
+//        ////console.log("output json sorted : ");
+        ////console.log(outputjson);
 //        var stringjson = JSON.stringify(container, null, 2);
 //        localStorage.setItem('outputjson', stringjson);
 //        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
@@ -291,8 +291,8 @@ $(document).ready(function() {
         var savedJson = JSON.stringify(container, null, 2);
         localStorage.setItem(localName, savedJson);
 
-        console.log("saved json : ");
-        console.log(savedJson);
+        //console.log("saved json : ");
+        //console.log(savedJson);
 
     }
 
@@ -345,7 +345,7 @@ $(document).ready(function() {
             saveJson($('#slideshowName').html());
             goTreeFromContainer();
         } else {
-            //console.log('quicksave on @' + $('#slideshowName').html() + '@')
+            ////console.log('quicksave on @' + $('#slideshowName').html() + '@')
             saveJson($('#slideshowName').html());
         }
 
@@ -386,7 +386,7 @@ $(document).ready(function() {
 
     function loadJsonForSlideShow(localName) {
         container = JSON.parse(localStorage.getItem(localName));
-        console.log('infos : loadSlide : pas de politique définie pour ce bouton, container contient la slideShow');
+        //console.log('infos : loadSlide : pas de politique définie pour ce bouton, container contient la slideShow');
     }
 
     $('#loadSlide').on('click', function(event) {

@@ -3,11 +3,12 @@ $('#slideArea').on('mouseenter', 'img',resizeImage );
 $('img').on('mouseenter',resizeImage);
 
 function resizeImage(){
+    return;
    
-    console.log('image hover');
+    //console.log('image hover');
     //fire keyboard event
     $(document).on('keypress', function(event) {
-        console.log('mouseenter image',event.which);
+        //console.log('mouseenter image',event.which);
         var objEvt = new ObjectEvent({
                 
                 event: {
@@ -45,11 +46,11 @@ function resizeImage(){
 
         if (objEvt.action == 'height') {
             if (objEvt.event.direction == 'h-') {
-                console.log('h-',parseInt($(this).attr('height')));
+                //console.log('h-',parseInt($(this).attr('height')));
                 var val = parseInt($(this).attr('height')) - 50;
                 $(this).attr('height', val);
                 $(this).css('height',val)
-                console.log('h-',parseInt($(this).attr('height')),val);
+                //console.log('h-',parseInt($(this).attr('height')),val);
             }
             if (objEvt.event.direction = 'h+') {
                 $(this).attr('height', parseInt($(this).attr('height')) + 50);
@@ -99,14 +100,14 @@ function handlerComposant($composant) {
         composantCatchEvent = true;
         event.stopPropagation();
         var $target = $(this);
-        console.log('hover', $target.attr('matricule'));
+        //console.log('hover', $target.attr('matricule'));
 
 
         //fire contenteditable
         if ($target.hasClass('texte')) {  //si c'est du texte on place un trigger pour rendre le contenu editable via un click
 
 //            $target.on('click', function(){
-//               console.log('click texte');
+//               //console.log('click texte');
 //               $target.attr('contenteditable','true');
 //               
 //            });
@@ -118,7 +119,7 @@ function handlerComposant($composant) {
         //fire keyboard event
         $(document).on('keypress.keySlide', function(event) {
 
-            console.log('key ', $(this).attr('id'));
+            //console.log('key ', $(this).attr('id'));
             var matricule = $target.attr('matricule');
             var obj = findObjectOfComposant(matricule);
 
@@ -202,7 +203,7 @@ function handlerComposant($composant) {
 
 
             callModel(objEvt);
-            console.log('key slide ', objEvt);
+            //console.log('key slide ', objEvt);
         });
 
 
@@ -212,7 +213,7 @@ function handlerComposant($composant) {
         var $target = $(this);
         var matricule = $target.attr('matricule');
         $(document).off('.keySlide');
-        console.log('fin hover', $target.attr('matricule'));
+        //console.log('fin hover', $target.attr('matricule'));
         composantCatchEvent = false;
 
 
@@ -221,11 +222,11 @@ function handlerComposant($composant) {
 //            $target.attr('contenteditable', 'false');
             var $textarea = $(this).children().children('textarea');
             var txt = CKEDITOR.instances[$textarea.attr('id')].getData();
-            console.log('leave cke', txt);
+            //console.log('leave cke', txt);
             $(this).children().one('click', lauchCK);
             $(this).children().html(txt);
 
-            console.log('maj texte dans container', $slideMother, matricule);
+            //console.log('maj texte dans container', $slideMother, matricule);
             var $slideMother = getSlideMother(matricule);
             //mise à jour de l'objet dans le conteneur
             container.slide[$slideMother].element[matricule].properties.content = txt;

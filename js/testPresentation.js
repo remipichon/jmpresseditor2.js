@@ -32,7 +32,7 @@ function testcos() {
         while (Math.sqrt(Math.pow((X - prevX), 2) + Math.pow((Y - prevY), 2)) < 1000) {
             X = X + 100;
             Y = 3000 * Math.cos(X / 1000);
-            console.log(X, Y, Math.sqrt(Math.pow((X - prevX), 2) + Math.pow((Y - prevY), 2)));
+            //console.log(X, Y, Math.sqrt(Math.pow((X - prevX), 2) + Math.pow((Y - prevY), 2)));
             //alert( X+' '+ Y+' '+Math.sqrt(  Math.pow((X-prevX),2) + Math.pow((Y-prevY),2) ) );
 
         }
@@ -122,7 +122,7 @@ function testCircle() {
             smaller = false;
 //            r = limite + 10;
         }
-        console.log('RAYON             ', r);
+        //console.log('RAYON             ', r);
 
         alpha += 20; //en degré
         i++;
@@ -434,7 +434,7 @@ function test2() {
 //    container.slide['slide0'].show();
 ////    //watch des modifications
 ////    watch(container.slide['slide0'].pos, 'x', function(attr, action, newVal, oldVal) {
-////        console.log('màj', this.matricule, ' propriété ', attr, ' avec ', newVal);
+////        //console.log('màj', this.matricule, ' propriété ', attr, ' avec ', newVal);
 ////    });
 //     
 //    

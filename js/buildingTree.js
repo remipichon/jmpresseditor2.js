@@ -12,7 +12,7 @@ function initJmpress() {
 //                    },
         viewPort: {
             height: 400,
-            width: 1800,
+            width: 1200,
             maxScale: 1
         }
     });
@@ -41,7 +41,7 @@ function handlerTreeMaker() {
     $('#gotTree').fadeOut(1);
 
     $('#treeMaker').on('click', '.addSibling', function() {
-        console.log('add sib');
+        //console.log('add sib');
         var data = {
             'content': 'Type title here',
             'title': true,
@@ -61,7 +61,7 @@ function handlerTreeMaker() {
     $('#treeMaker').on('click', '.removeSibling', function() {
         if (!confirm('Attention, tu vas supprimer' + $(this).parent().html()))
             return;
-        console.log('remove', $(this));
+        //console.log('remove', $(this));
         $(this).parent().next('ol').remove();
         $(this).parent().remove();
     });
@@ -69,7 +69,7 @@ function handlerTreeMaker() {
     $('#treeMaker').on('click', '.switchContent', function() {
         if (!confirm('Attention, tu vas switcher de content !' + $(this).parent().html()))
             return;
-        console.log('switch to content', $(this));
+        //console.log('switch to content', $(this));
         data = {
             matricule: 'textarea' + globalCpt++
         };
@@ -78,7 +78,7 @@ function handlerTreeMaker() {
         if (content) {
             $(this).parent().children('.liTitle').remove();
             var template = $('#templateContent').html();
-//            console.log('if');
+//            //console.log('if');
             data.content = 'Type content here';
         } else if ($(this).parent().children('.textarea').length !== 0) {
             $(this).parent().children('.textarea').remove();
@@ -106,7 +106,7 @@ function handlerTreeMaker() {
 
 
         var txt = CKEDITOR.instances[$(this).prev().attr('id')].getData();
-        console.log('leave cke', txt);
+        //console.log('leave cke', txt);
         $(this).parent().on('click', lauchCK);
         var $parent = $(this).parent();
 //        CKEDITOR.instances[$(this).prev().attr('id')].destroy();
@@ -123,18 +123,18 @@ function handlerTreeMaker() {
 
 
 function lauchCK() {
-    console.log('lauchCK call');
+    //console.log('lauchCK call');
     //empecher le double lauch
     if ($(this).children('textarea').length !== 0)
         return;
-    console.log('DEBUG LAUCHE CK');
+    //console.log('DEBUG LAUCHE CK');
 
 //        $(this).css('display','none');
     var txt = $(this).html();
-    console.log('laych ck', txt);
+    //console.log('laych ck', txt);
     $(this).html('');
     $(this).append("<textarea style='display:none;'id='textarea" + globalCpt++ + "'>" + txt + "</textarea>");
-    console.log('go ck');
+    //console.log('go ck');
     CKEDITOR.replace($($(this).children('textarea')).attr('id'));
 
 }
@@ -142,7 +142,7 @@ function lauchCK() {
 
 function goSlideShow() {
 
-    console.log('GO SLIDESHOW');
+    //console.log('GO SLIDESHOW');
 
 //    $('#slideArea .step').each(function(){
 //        if( $(this).attr('id') === 'home' ) return; //cette foutue slide n'existe pas dans le container !
@@ -171,14 +171,14 @@ function goSlideShow() {
  * 
  */
 function goTreeMaker() {
-    console.log('RETURN TREE MAKER  ');
+    //console.log('RETURN TREE MAKER  ');
 
 
     $('#slideArea .step').each(function() {
         if ($(this).attr('id') === 'home')
             return; //cette foutue slide n'existe pas dans le container !
 //        container.slide[$($('#slideArea .step')[5]).attr('matricule')].destroy()
-        console.log($(this).attr('matricule'));
+        //console.log($(this).attr('matricule'));
         if (!findObjectOfComposant($(this).attr('matricule')))
             return;
         container.getSlide($(this).attr('matricule')).destroy();
@@ -207,7 +207,7 @@ function goTreeFromContainer() {
 //        if ($(this).attr('id') === 'home')
 //            return; //cette foutue slide n'existe pas dans le container !
 ////        container.slide[$($('#slideArea .step')[5]).attr('matricule')].destroy()
-////        console.log($(this).attr('matricule'));
+////        //console.log($(this).attr('matricule'));
 //        if (!findObjectOfComposant($(this).attr('matricule')))
 //            return;
 //        container.getSlide($(this).attr('matricule')).destroy();
@@ -228,7 +228,7 @@ function goTreeFromContainer() {
     else
         var $tree = $('#tree');
 
-    console.log('goTreefromcontainer', $tree, container.slide);
+    //console.log('goTreefromcontainer', $tree, container.slide);
     $tree.children('ol').html('');
 
 
@@ -250,17 +250,17 @@ function goTreeFromContainer() {
         if (slide.type === 'overwiew') {
 
 
-            console.log('debug : goTreeFromContainer : overview create return');
+            //console.log('debug : goTreeFromContainer : overview create return');
             return;
         }
         var hierarchy = slide.properties.hierarchy.split('.');
-        console.log('hierarchy', hierarchy);
+        //console.log('hierarchy', hierarchy);
         if (hierarchy[0] === 'undefined') {
-            console.log('debug : goTreeFromContainer  : undefined hierarchy eturn');
+            //console.log('debug : goTreeFromContainer  : undefined hierarchy eturn');
             return;
         }
         if (hierarchy[0] === '0') {
-            console.log('debug : goTreeFromContainer : debug :hierarchy == 0 return');
+            //console.log('debug : goTreeFromContainer : debug :hierarchy == 0 return');
             return;
         }
         for (var i in hierarchy) {
@@ -306,7 +306,7 @@ function goTreeFromContainer() {
             for (var i = 1; i < diff; i++) {
                 $target = $target.parent().parent();
             }
-//            console.log(niv, prevNiv, i, $target);
+//            //console.log(niv, prevNiv, i, $target);
 
 
             //$target = $prevTarget.parent().parent();  //prevTarget -> parent li -> parent ol
@@ -317,15 +317,17 @@ function goTreeFromContainer() {
             $target = $($prevTarget.children('li:not(.addSibling)')[$prevTarget.children('li:not(.addSibling)').length - 1]).children('ol');
         }
 
-        console.log('tree building', $target, hierarchy);
+        //console.log('tree building', $target, hierarchy);
 
 //        alert();
         var $button = $target.children('.addSibling');
         $target.append(html);
         //ajout du texte ne se fait pas via mustache car il n'interprete pas le html (c'est l'un ou l'autre (ou exclusif))
 
-        /**** traitement spécifique à iframe ****/
+        /******************************** traitement spécifique à iframe ****/
         if (slide.type === 'iframe') content = 'iframe';
+        /******************************** traitement spécifique à iframe CODE****/
+        if (slide.type.search('iframecode') !== -1) content = slide.type;
 
                 $($target.children()[$target.children().length - 1]).children('.liTitle').html(content);
         $($target.children()[$target.children().length - 1]).children('.textarea').html(content);
@@ -347,7 +349,7 @@ function goTreeFromContainer() {
 
     $tree.fadeIn(200);
 
-    console.log('debug treefromcontainer : nb de passafge dans .each(slide', cpt);
+    //console.log('debug treefromcontainer : nb de passafge dans .each(slide', cpt);
 //    initContainer();
 
 }

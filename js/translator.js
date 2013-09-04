@@ -33,7 +33,7 @@ function initContainer() {
                 if (container.slide[i].matricule === matricule)
                     return container.slide[i];
             }
-            console.log('error : getSlide : matricule \'' + matricule + '\' doesn\'t exist as a slide');
+            //console.log('error : getSlide : matricule \'' + matricule + '\' doesn\'t exist as a slide');
             return;
 
         }
@@ -63,7 +63,7 @@ Slide = Class.extend({
             //if matricule is set, check if unique
             if (typeof params.matricule !== 'undefined') {
                 if (typeof findObjectOfComposant(params.matricule) !== 'undefined') { //le matricule existe déjà !
-                    console.log('Error : construct Slide : matricule ' + params.matricule + ' already set in container');
+                    //console.log('Error : construct Slide : matricule ' + params.matricule + ' already set in container');
                     delete this;
                     return;
 
@@ -114,7 +114,7 @@ Slide = Class.extend({
                         this[param][paramNested] = params[param][paramNested];
                     }
                 } else {
-//                    console.log('info constructor slide param[param]',params[param]);
+//                    //console.log('info constructor slide param[param]',params[param]);
                     this[param] = params[param];
                 }
             }
@@ -171,12 +171,12 @@ Slide = Class.extend({
 
         //ajout de la slide à l'espace de stockage
 //        container.slide[matricule] = this;
-//        console.log('infos : constructor Slide : ajout de',this,params.slide);
+//        //console.log('infos : constructor Slide : ajout de',this,params.slide);
         container.slide.push(this);
 //        container.slide[params.matricule] = this;
 
         //create node via mustach
-//        console.log("go jmpress");
+//        //console.log("go jmpress");
         var template = $('#templateSlide').html();
         var html = Mustache.to_html(template, this);
         $('#slideArea >').append(html);
@@ -185,7 +185,7 @@ Slide = Class.extend({
 
         handlerComposant($newSlide);
 
-        //console.log('Nouvelle slide: ', this.show(24));
+        ////console.log('Nouvelle slide: ', this.show(24));
 
         //ajout à la timeline
 
@@ -223,7 +223,7 @@ Slide = Class.extend({
 //                    var idSlide = $(this).attr('id');
 //                    //pressjson.slide[idSlide].index = index;     // MaJ de l'index des slide
 //                });
-                //console.log(newIndex, slide.matricule, slideAfter);
+                ////console.log(newIndex, slide.matricule, slideAfter);
 
             },
             axis: "y"
@@ -231,7 +231,7 @@ Slide = Class.extend({
                 .disableSelection();
 
         $("#sortable").on("sortupdate", function(event, ui) {
-            ////console.log(event, ui);
+            //////console.log(event, ui);
         });
     },
     reOrder: function(slideAfter, isBefore) {
@@ -260,12 +260,12 @@ Slide = Class.extend({
     },
     show: function(i) {
         if (typeof i === 'undefined') {
-            console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.properties.scale, '}, nb elements :', Object.size(this.element), '}');
+            //console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '}, scale:{scale:', this.properties.scale, '}, nb elements :', Object.size(this.element), '}');
         }
         else if (i === 'element') {
-            //console.log('liste des elements');
+            ////console.log('liste des elements');
             for (var el in this.element) {
-                console.log(this.element[el].show());
+                //console.log(this.element[el].show());
             }
 
         } else {
@@ -295,14 +295,14 @@ function selectSlide(callback, param1, composant) {
     $('.slide').one('click', function(event) {
         $('.buttonclicked').removeClass("buttonclicked");       //pour redonner le droit au joystick d'apparaitre
         var slide = $(this).attr('matricule');
-        //console.log('select ', slide);
+        ////console.log('select ', slide);
         alert('slide selectionnée' + slide);
         if (typeof callback !== 'undefined') {
             callback(slide, param1, composant);
-            //console.log('in select', slide);
+            ////console.log('in select', slide);
             return slide;
         } else {
-            //console.log('in select', slide);
+            ////console.log('in select', slide);
             return slide;
         }
     });
@@ -342,7 +342,7 @@ Element = Class.extend({
             //if matricule is set, check if unique
             if (typeof params.matricule !== 'undefined') {
                 if (findObjectOfComposant(params.matricule) !== false) { //le matricule existe déjà !
-                    console.log('Error : construct Element : matricule ' + params.matricule + ' already set in container');
+                    //console.log('Error : construct Element : matricule ' + params.matricule + ' already set in container');
                     delete this;
                     return;
 
@@ -371,7 +371,7 @@ Element = Class.extend({
 //        if (typeof params !== 'undefined') {
 //            for (var param in params) {
 //                if (typeof params[param] === 'object') {
-//                    //console.log(params[param]);
+//                    ////console.log(params[param]);
 //                    truc = params[param];
 //                    for (var paramNested in params[param]) {
 //                        this[param][paramNested] = params[param][paramNested];
@@ -386,7 +386,7 @@ Element = Class.extend({
         //definition des watch qui permettent d'agir sur le DOM lorsqu'on agit sur les objets des slides
         watch(this.pos, function(attr, action, newVal, oldVal) {
             //mise à jour du DOM
-            //console.log('hu', matricule);
+            ////console.log('hu', matricule);
             var $element = $('#' + matricule);
 
             var attribut;
@@ -419,10 +419,10 @@ Element = Class.extend({
 //        //s'il y a une erreur de slide destination (inexistante ou bien la cible est un composant
 //        //on demande à l'user de sélectionner une slide
 //        if (container.slide[slide] === undefined) {
-//            //console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
+//            ////console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
 //            selectSlide(matricule, this, addComposantToSlide);
 //        } else if (container.slide[slide].type !== 'slide') {
-//            //console.log('Error : Le composant cible doit être une slide ', slide);
+//            ////console.log('Error : Le composant cible doit être une slide ', slide);
 //            selectSlide(matricule, this, addComposantToSlide);
 //        } else {
 //            //ajout à la slide 
@@ -435,10 +435,10 @@ Element = Class.extend({
 
         //gestion de l'erreur de matricule
         if (container.getSlide(slide) === undefined) {
-            console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
+            //console.log('Error : Le matricule de la slide cible n\'existe pas ', slide);
             return 0;
         } else if (container.getSlide(slide).type !== 'slide') {
-            console.log('Error : element constructor : insert elementin slide : Le composant cible doit être une slide ', slide);
+            //console.log('Error : element constructor : insert elementin slide : Le composant cible doit être une slide ', slide);
             return 0;
         } else {
             container.getSlide(slide).element[matricule] = this;
@@ -448,7 +448,7 @@ Element = Class.extend({
     },
     show: function(i) {
         if (typeof i === 'undefined') {
-            console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '} }');
+            //console.log('{ matricule:', this.matricule, ', pos:{x:', this.pos.x, ', y:', this.pos.y, 'z:', this.pos.z, '}, rotate:{x:', this.rotate.x, ',y:', this.rotate.y, 'z:', this.rotate.z, '} }');
         }
         else {
             return '{ matricule: ' + this.matricule + ', pos:{x: ' + this.pos.x + ', y: ' + this.pos.y + ' z: ' + this.pos.z + '}, rotate:{x:' + this.rotate.x + ',y:' + this.rotate.y + 'z:' + this.rotate.z + '} }';
@@ -517,7 +517,7 @@ Text = Element.extend({
         };
 
 
-//        //console.log('params', params);
+//        ////console.log('params', params);
 
 //        truc = params;
 
@@ -526,7 +526,7 @@ Text = Element.extend({
         if (typeof params !== 'undefined') {
             for (var param in params) {
                 if (typeof params[param] === 'object') {
-                    //console.log(params[param]);
+                    ////console.log(params[param]);
                     //truc = params[param];
                     for (var paramNested in params[param]) {
                         this[param][paramNested] = params[param][paramNested];
@@ -541,7 +541,7 @@ Text = Element.extend({
         //definition des watch qui permettent d'agir sur le DOM lorsqu'on agit sur les objets des slides
         watch(this.properties, function(attr, action, newVal, oldVal) {
             //mise à jour du DOM
-//            //console.log('hu', matricule);
+//            ////console.log('hu', matricule);
             var $element = $('#' + matricule);
 
             if (attr === 'content') {
@@ -552,7 +552,7 @@ Text = Element.extend({
             }
         });
 
-        //console.log('avant ajout dans le DOM');
+        ////console.log('avant ajout dans le DOM');
 
 
         //ajout dans le DOM
@@ -562,7 +562,7 @@ Text = Element.extend({
     //ajout dans le DOM
     //cette fonction est appelé deux fois huhu
     DOM: function(slide) {
-        //console.log('ajout de DOM');
+        ////console.log('ajout de DOM');
         this.show();
         //ajout dans le DOM
 //        var template = $('#templateElement').html();
@@ -572,13 +572,13 @@ Text = Element.extend({
 
         var template = $('#templateElementCK').html();
         var html = Mustache.to_html(template, this);
-        //console.log('html', html);
+        ////console.log('html', html);
         $('#' + slide).append(html);
         
         
         
         
-        //console.log('adtexte', slide);
+        ////console.log('adtexte', slide);
         var newEl = $('#' + this.matricule);
         newEl.children('span').html(this.properties.content);
         handlerComposant(newEl);
@@ -592,12 +592,12 @@ Text = Element.extend({
             var posTxt = globalConfig.heightSlide/2 - heightTxt/2;
             $('#'+this.matricule).css('top',posTxt);
             this.pos.y = posTxt;
-            console.log('infos : DOM de Text : pos.y = center',heightTxt,posTxt,this.matricule);
+            //console.log('infos : DOM de Text : pos.y = center',heightTxt,posTxt,this.matricule);
         }
         
         /* si pos.y = noCollision, il faut s'arranger pour mettre le texte sous son précédent (utile lors de la création automatique)*/
         if( this.pos.y === 'noCollision'){
-             console.log('infos : DOM de Text : pos.y = noCollision',this.matricule);
+             //console.log('infos : DOM de Text : pos.y = noCollision',this.matricule);
             var posPrev = parseInt($('#'+this.matricule).prev().css('top'));
             var heightPrev = parseInt($('#'+this.matricule).prev().css('height'));
             var posTxt = posPrev+heightPrev+20;
@@ -612,7 +612,7 @@ Text = Element.extend({
             var str = '';
             str = this._super(24);
             str += ' properties: {content: ' + this.properties.content + ' ,hierarchy: ' + this.hierarchy + ' }';
-//            console.log(str);
+//            //console.log(str);
             return str;
         }
         else {
@@ -670,7 +670,7 @@ Image = Element.extend({
         if (typeof params !== 'undefined') {
             for (var param in params) {
                 if (typeof params[param] === 'object') {
-                    //console.log(params[param]);
+                    ////console.log(params[param]);
                     truc = params[param];
                     for (var paramNested in params[param]) {
                         this[param][paramNested] = params[param][paramNested];
@@ -690,7 +690,7 @@ Image = Element.extend({
 //        html = Mustache.to_html(template,this);
         $('#' + slide).append(html);
         handlerComposant($('#' + this.matricule));
-        //console.log('adimg', slide);
+        ////console.log('adimg', slide);
 
     }
 });
@@ -706,7 +706,7 @@ function getSlideMother(matricule) {
     if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
         $.each(container.slide, function(rien, slide) {         //parcours des slides
             if (typeof slide.element[matricule] === 'undefined') {
-                //console.log('pas dans la slide ', slide);
+                ////console.log('pas dans la slide ', slide);
             } else {    //si le matricule est un element de la slide, on return le matricule de sa mere
                 return slide.matricule;
             }

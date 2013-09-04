@@ -26,8 +26,9 @@
  */
 function getTrans3D($node) {
    
-    //console.log('getTrans3D',$node);
+    ////console.log('getTrans3D',$node);
     var prefix = (pfx('transform'));
+    if( typeof $node[0] === 'undefined') return;
     var trans = $node[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};
     for (var el in trans) {

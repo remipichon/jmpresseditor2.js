@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <title>Editor</title>
+       
+
+        <!--<link rel="stylesheet" type="text/css" href="../highlight.js/styles/github.css" >--> 
+        <link rel="stylesheet" type="text/css" href="../highlight.js/styles/arta.css" > 
+        <!--<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/css/SyntaxHighlighter.css"></link>-->
+
+     
+        <script type="text/javascript" src="../highlight.js/highlight.pack.js"></script> 
+        
+
+
+
+
+
+    </head>
+
+    <body>
+        
+        <h2> Controleur </h2>
+     <pre  class='php'><code>
+  function showFormulaireEtude($idFormulaireEtude, $render = false) {
+
+        /* recuperation du formulaire etude */
+        $formEtude = $this->formulaire->getFormulaireEtude($idFormulaireEtude);
+
+
+        /*         * ***recupération des informations sur l'étude**** */
+
+        $formModel = $this->formulaire->getFormulaireModel($formEtude->id_model);
+        $idModel = $formModel->id_model;
+        $etude = $this->etude->getEtude2($formModel->id_etude);
+
+
+        /*         * *********init du formulaire déjà commencé d'être complété***************** */
+
+
+        $lignesMedoc = array();
+        //pour chaque ligne du modèle
+        foreach ($this->formulaire->getLigneFormulaire($idModel) as $ligne) {
+            //pour chaque medicament de la ligne
+            $medicament = array();
+            foreach ($this->formulaire->getMedicamentLigne($ligne->id_ligne) as $medic) {
+                $medoc = $this->medicament->getMedicament($medic->id_medicament);
+                $nomMedoc = $medoc->nom_medicament;
+
+                //recuperons les reponses des medicaments
+                $medicRep = $this->formulaire->getReponseMedicamentLigne($idFormulaireEtude, $medic->id_medicament_ligne);
+
+                array_push($medicament, array(
+                    'id_reponse_medicament' => $medicRep->id_reponse_medicament,
+                    'valeur' => $medicRep->valeur,
+                    'libelle' => $nomMedoc,
+                    'refModel' => $medic->id_medicament_ligne
+                ));
+            }
+
+            //recuperons les reponses aux question worst/better
+            $ligneRep = $this->formulaire->getReponseLigne($idFormulaireEtude, $ligne->id_ligne);
+
+            array_push($lignesMedoc, array(
+                'id_ligne' => $ligne->id_ligne,
+                'id_reponse_ligne' => $ligneRep->id_reponse_ligne,
+                'reponse_bas' => $ligneRep->reponse_bas,
+                'reponse_haut' => $ligneRep->reponse_haut,
+                'libelle' => $ligne->libelle,
+                'medicament' => $medicament
+            ));
+        }
+
+
+        $questions = array();
+        //pour chaque question du modèle
+        foreach ($this->formulaire->getQuestionFormulaire($idModel) as $quest) {
+            //recuperons la réponse
+            $questRep = $this->formulaire->getReponseQuestionFormulaire($idFormulaireEtude, $quest->id_question);
+            array_push($questions, array(
+                'id_reponse_question' => $questRep->id_reponse_question,
+                'libelle' => $quest->libelle,
+                'reponse' => $questRep->reponse
+            ));
+        }
+
+
+
+
+
+        /*         * *****form & submit****** */
+        $this->load->helper('form');
+        $formdata = array();
+        $Form = form_open('formulaire/validationFormulaireEtude/' . $idFormulaireEtude); // voir config/routes.php => user ajax
+        $formdata['form_open'] = $Form;
+
+        $etat = $this->formulaire->getEtatFormEtude($idFormulaireEtude)->etat;
+
+        /*
+         * Les medecins peuvent remmplir le formulaire de l'étude si l'étude est en cours
+         * Les operateurs et admis peuvent remplir le formulaire de synthese si l'étude est cloturee
+         */
+        /* jusqu'à 3 propositions sont offertes à l'user remplissant le formulaire, donc 3 submit avec des 'name' differents */
+
+        if ($this->session->userdata('droit_niveau') == 70 && $etat == 0) {  //medecin
+            //bouton sauvergarder et soumettre
+            $attr = array(
+                'name' => 'save_finish',
+                'class' => 'btn-glow primary');
+            $formdata['submitFinish'] = form_submit($attr, "Enregistrer vos réponses et les soumettre");
+        } else
+        if ($etat == 0 && $this->session->userdata('droit_niveau') >= 80 && $etude->etat == 3) { //operateur et admin
+            //bouton sauvergarder et revenir plus tard
+            /*             * *************************             desactiver ceci pour réactiver la fonctionnalité "enregistrer et revenir plus tard"
+              voir listeFormulaireEtude pour plus de détails */
+            $attr = array(
+                'name' => 'save_stay',
+                'id' => 'saveStay',
+                'class' => 'btn-glow primary');
+            $formdata['submitSave'] = form_submit($attr, "Enregistrer la synthèse");
+
+            //bouton sauvergarder et visualiser
+            $attr = array(
+                'name' => 'save_finish',
+                'class' => 'btn-glow primary');
+            $formdata['submitFinish'] = form_submit($attr, "Enregistrer la synthèse et terminer l'étude");
+        }
+
+        //bouton quitter
+        $attr = array(
+            'name' => 'quit',
+            'class' => 'btn-glow primary');
+        $formdata['submitQuit'] = form_submit($attr, "Quitter");
+
+
+        $endForm = form_close(''); // il est important que cette fonction contienne une chaine de caractère (même vide), sinon s'affiche pas
+        $formdata['form_close'] = $endForm;
+
+
+
+
+        /*
+         * utile pour la synthese uniquement, on retour le render du twig sans faire l'affichage
+         */
+        if ($render)
+            return array('form' => $formdata,
+                'ligne_formulaire' => $lignesMedoc,
+                'question_formulaire' => $questions
+            );
+//            return $this->twig->render($this->config->item('bundle') . '/formulaire/fillFormulaire.html.twig', $this->data);  //dataView pour passer aux vues la liste des droits entre autre
+
+
+
+        $this->data['page'] = 'formulaire/modele';
+        $this->data['nom_etude'] = $etude->nom_etude;
+        $this->data['form'] = $formdata;
+        $this->data['ligne_formulaire'] = $lignesMedoc;
+        $this->data['question_formulaire'] = $questions;
+
+
+        $this->twig->display($this->config->item('bundle') . '/formulaire/fillFormulaire.html.twig', $this->data);  //dataView pour passer aux vues la liste des droits entre autre
+    }
+
+          
+        
+        </code></pre>
+        
+         <h2> Modèle </h2>
+     <pre  class='php'><code>
+ function getReponseMedicamentLigne($idFormulaireEtude, $idMedicamentLigne) {
+        $this->db->select('*')->from('reponse_medicament')->where('id_formulaire_etude', $idFormulaireEtude)->where('id_medicament_ligne', $idMedicamentLigne);
+        $query = $this->db->get();
+
+        return $query->first_row();  //normalement il n'y a qu'une seule ligne car le couple de clef etrangère est unique (KIKI ajouter une contrainte de check dans la base)
+    }
+
+ function getReponseLigne($idFormulaireEtude, $idLigne) {
+        $this->db->select('*')->from('reponse_ligne')->where('id_formulaire_etude', $idFormulaireEtude)->where('id_ligne', $idLigne);
+        $query = $this->db->get();
+
+        
+
+ 
+        </code></pre>
+         
+         
+         <h2> Vue </h2>
+     <pre  ><code class='html'>
+&lt; &gt
+
+&lt;div class="container" id="formulaireEtude"&gt;
+         {{ form.form_open | raw}}
+                
+              &lt;!-- si l'user n'a accès qu'au bouton 'quitter', on désactive les sliders (via JS) ainsi que les textaerea (en twig)  --&gt; 
+              {% if form.submitSave is null and form.submitFinish is null  %}
+                    {% set disabled = 'disabled' %}
+              {% endif %}
+               
+              
+           &lt;h3&gt; Lignes de médicaments &lt;/h3&gt;
+                    {% for ligne in ligne_formulaire%}
+                         &lt;div class="ligne"&gt; 
+                                
+                                &lt;h4&gt;{{ligne.libelle}}&lt;/h4&gt;                                
+                                 
+                               
+                                &lt;ul&gt;
+                                    {% for medicament in ligne.medicament %}
+                                        &lt;li&gt; 
+                                            &lt;div class='libMedi row'&gt;&lt;span  class="offset1 span10 medicamentLibelle"&gt;{{medicament.libelle}}&lt;/span&gt;&lt;/div&gt;
+                                            &lt;input refModel='{{medicament.refModel}}' type="hidden" ligne="{{ligne.id_ligne}}" name="medicament_{{medicament.id_reponse_medicament}}" class="medicament" value="{{medicament.valeur}}"&gt;&lt;/input&gt;    &lt;!-- deviendra un slide --&gt;   
+                                            &lt;div class="{{disabled}} slider"&gt;&lt;/div&gt
+                                       &lt;/li&gt; 
+                                    {% endfor %}
+                                &lt;/ul&gt;
+                               
+                             
+                                &lt;div class="row questionBasHaut"&gt;
+                                    &lt;div class='row questionWB span12'&gt;
+                                       &lt;div class='span6'&gt;&lt;div class="questionBas"&gt;&lt;h4&gt; Pourquoi &lt;strong class='worstMed'&gt;...&lt;/strong&gt; est le moins bien évalué ? &lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+                                       &lt;div class='span6'&gt;&lt;div class="questionHaut"&gt; &lt;h4&gt;Pourquoi &lt;strong class='bestMed'&gt;...&lt;/strong&gt; est le mieux évalué ? &lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+                                    &lt;/div&gt;
+                                      
+                                    &lt;div class='row span12'&gt;   
+                                      &lt;div class='span6'&gt; &lt;textarea {{disabled}} class="reponseQuestionBas span10" maxlength='10000' spellcheck='true' name="questionligne_{{ligne.id_reponse_ligne}}_bas" rows="3" &gt;{{ligne.reponse_bas}}&lt;/textarea&gt;&lt;/div&gt;
+                                       &lt;div class='span6'&gt;&lt;textarea {{disabled}} class="reponseQuestionHaut span10" maxlength='10000' spellcheck='true' name="questionligne_{{ligne.id_reponse_ligne}}_haut" rows="3" &gt;{{ligne.reponse_haut}}&lt;/textarea&gt;&lt;/div&gt;
+                                    &lt;/div&gt;
+                                &lt;/div&gt;
+                                 
+         
+                         &lt;/div&gt;
+                   {% endfor %}
+
+
+           &lt;h3&gt; Questions sur l'ensemble du questionnaire &lt;/h3&gt;      
+                     
+                    {% for question in question_formulaire %}                 
+                    &lt;div class='questioFormulaire row'&gt;
+                        &lt;div class='row'&gt;&lt;div  class="libelleQuestion" &gt;&lt;h4&gt;{{question.libelle}}&lt;/h4&gt;&lt;/div&gt;&lt;/div&gt; 
+                        &lt;div class='row'&gt;&lt;textarea {{disabled}} class="reponseQuestion span12" maxlength='10000' spellcheck='true' name="question_{{question.id_reponse_question}}" rows="3" &gt;{{question.reponse}}&lt;/textarea&gt;&lt;/div&gt;                          
+                    &lt;/div&gt;    
+                    {% endfor %}
+                    
+
+            
+              
+            &lt;div id='submit' class="row-fluid"&gt;
+                    {% set nbButton = 0 %}
+                    {% if form.submitSave is not null %} 
+                    {%     set  nbButton = nbButton + 1 %}
+                    {% endif %}
+                    {% if form.submitFinish is not null %} 
+                    {%    set   nbButton = nbButton + 1 %}
+                    {% endif %}
+                    {% if form.submitQuit is not null %} 
+                    {%    set   nbButton = nbButton + 1 %}
+                    {% endif %}
+                   
+                      
+                   
+                    {% if form.submitSave is not null %} 
+                    &lt;div class='span{{12//nbButton}}'&gt;
+                       {{ form.submitSave | raw }}
+                      &lt;/div&gt;  
+                    {% endif %}
+                    {% if form.submitFinish is not null %} 
+                    &lt;div class='span{{12//nbButton}}'&gt;
+                      {{ form.submitFinish | raw}}
+                      &lt;/div&gt;  
+                    {% endif %}
+                   
+                    {% if form.submitQuit is not null %} 
+                   &lt;div class='span{{12//nbButton}}'&gt;
+                       {{ form.submitQuit | raw}}
+                      &lt;/div&gt;  
+                    {% endif %}
+                       
+            &lt;/div&gt;
+                    
+            {{ form.form_close | raw}}
+             
+        &lt;/div&gt;
+ 
+
+
+        </code></pre>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+            
+        </script>    
+
+    </body>
+</html>

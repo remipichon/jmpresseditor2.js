@@ -35,15 +35,15 @@ function initAutomatic() {
     };
 //    goCK(config);
     goNormalize();
-//    console.log('de');
+//    //console.log('de');
     goDepth(config);
-//    console.log('pos');
+//    //console.log('pos');
     goPosition(config);
-//    console.log('posEnd');
+//    //console.log('posEnd');
     goPositionEnd(config);
-//    console.log('jmpre');
+//    //console.log('jmpre');
     goJmpress(config);
-//    console.log('dyna');
+//    //console.log('dyna');
     dynamic(config);
 }
 
@@ -152,7 +152,7 @@ function goPositionEnd(config) {
 
     //premiers niveaux
     $('#tree li').each(function() {
-        console.log('tree li', $(this));
+        //console.log('tree li', $(this));
 
         if ($(this).attr('depth') === '1') {
             var x = config.endX0;
@@ -240,7 +240,7 @@ function goJmpress(config) {
                 matricule: 'questions',
                 properties: {
                     //hierarchy: '' + $(this).attr('number'),
-                    scale: 20
+                    scale: 10
                 },
                 pos: {
                     x: config.endX0 + 15000,
@@ -267,9 +267,9 @@ function goJmpress(config) {
         //si besoin ajout de l'overview
         if ($(this).attr('type') === 'title') {
             //s'il y au moins une petite soeur
-            //console.log($(this).index() , parseInt($(this).attr('siblings')) -1);
+            ////console.log($(this).index() , parseInt($(this).attr('siblings')) -1);
             if ($(this).index() < parseInt($(this).attr('siblings')) - 1) {
-//                console.log($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]),$(this).siblings());
+//                //console.log($($(this).siblings()[parseInt($(this).attr('siblings')) - 2]),$(this).siblings());
                 new Slide({
                     type: 'overview',
                     pos: {
@@ -288,7 +288,7 @@ function goJmpress(config) {
         //ajout de la slideet de son texte
         var numberArray = $(this).attr('number').split('.');
         number = numberArray.join('-');
-        console.log(number);
+        //console.log(number);
         var slide = new Slide({
             matricule: number,
             style: $(this).attr('type'),
@@ -305,20 +305,40 @@ function goJmpress(config) {
 
         /****** traitement spécifique pour le site dans la slide ****/
         if ($(this).children('.liTitle').html() === 'iframe') {
-            console.log('iframe !');
-            slide.type= 'iframe';
+            //console.log('iframe !');
+            slide.type = 'iframe';
             var iframeAdlivia = "<iframe class='iframeInSlide' src='http://127.0.0.1:81/etude/list'></iframe>";
-            $('#'+slide.matricule).html(iframeAdlivia);
+            $('#' + slide.matricule).html(iframeAdlivia);
+
             return;
         }
 
+
+
+        /*** traitement spécifique pour l'inctrustation de code via iframe***/
+        if (typeof $(this).children('.liTitle').html() !== 'undefined') {
+            if ($(this).children('.liTitle').html().search('iframe') !== -1) {
+                console.log('code iframe !');
+
+                var request = $(this).children('.liTitle').html();
+                slide.type = request;
+                request = request.replace('iframecode', '');
+
+                var iframeCode = "<iframe class='iframeCode' src='code/" + request + ".html'></iframe>";
+                $('#' + slide.matricule).html(iframeCode);
+                //ecriture du matricule de la slide dans la liste
+
+                return;
+
+            }
+        }
 
 
         if ($(this).children('.textarea').length !== 0) {
             //rappel de la partie
 
             var upHierarchy = $(this).parent('ol').siblings('span');
-            // console.log('debug : goJmpress',upHierarchy);
+            // //console.log('debug : goJmpress',upHierarchy);
             new Text(slide.matricule, {
                 auto: true, //il ne faut que le treeMakerFromContainer en tienne compte
                 properties: {
@@ -332,17 +352,55 @@ function goJmpress(config) {
             });
 
 
+
+
+
+
+            /*** gestion spéciale pour le contenu en code à mettre sous hilight (wrapper dans un pre code avec un id puis init via hilight.js **/
+            /*
+             if ($(this).children('.textarea').html().search('<?php') !== -1) {
+             //remplacement des balises php par PHP
+             var test = $('.textarea').html().replace('&lt;?php', 'PHP');
+             test = test.replace('?&gt', 'PHPF');
+             
+             //suppression des sauts de lignes
+             test = test.replace(/(\r\n|\n|\r)/gm, "");
+             
+             //recupération du contenu entre PHP et PHPF
+             test = test.match(/PHP(.*?)PHP/i);
+             
+             //recupération que ce qui nous interesse
+             var code = '';
+             
+             test = test[0].match(/<p>(.*?)<\/p>/g);
+             
+             $(test).each(function(indice, txt) {
+             ////console.log(indice,txt,test[indice]);
+             code += test[indice].match(/<p>(.*?)<\/p>/i)[1] + '\n';
+             });
+             
+             code = "<pre id='HAHA' class='php'><code class='php'>"+code+"</code></pre>";
+             
+             
+             truc = code;
+             //                $(this).children('.textarea').append(code);
+             } else {
+             truc = $(this).children('.textarea').html();
+             }*/
+
+            var truc = $(this).children('.textarea').html();
             //contenu
             new Text(slide.matricule, {
                 properties: {
                     hierarchy: 'bodyText',
-                    content: $(this).children('.textarea').html()
+                    content: truc
                 },
                 pos: {
                     x: 0,
                     y: 'noCollision'//globalConfig.heightSlide/2
                 }
             });
+
 
         } else if ($(this).children('.liTitle').length !== 0) {
 

@@ -185,12 +185,12 @@
          */
         function doStepInit(element, idx) {
             var data = dataset(element);
-//            console.log("do step init data : "+  data);
+//            //console.log("do step init data : "+  data);
 //            console.dir(data);
             var step = {
                 oldStyle: $(element).attr("style") || ""
             };
-//            console.log("do step init step : "+  step);
+//            //console.log("do step init step : "+  step);
 //            console.dir(step);
 
             var callbackData = {
@@ -202,7 +202,7 @@
             callCallback.call(this, 'initStep', $(element), callbackData);
 
             $(element).data('stepData', step);
-//            console.log("do step init stepData fin: " + $(element).data('stepData'));
+//            //console.log("do step init stepData fin: " + $(element).data('stepData'));
 //            console.dir($(element).data('stepData'));
 
             if (!$(element).attr('id')) {
@@ -218,7 +218,7 @@
          */
         function doStepDeinit(element) {
             var stepData = $(element).data('stepData');
-//            console.log(" doStepDeinit stepData : " + stepData);
+//            //console.log(" doStepDeinit stepData : " + stepData);
 //            console.dir(stepData);
 
             $(element).attr("style", stepData.oldStyle);
@@ -236,7 +236,7 @@
             callCallback.call(this, 'unapplyStep', $(element), {
                 stepData: element.data("stepData")
             });
-//            console.log("doStepReapply");
+//            //console.log("doStepReapply");
 
             callCallback.call(this, 'applyStep', $(element), {
                 stepData: element.data("stepData")
@@ -247,7 +247,7 @@
          *
          */
         function deinit() {
-//            console.log("function deinit()");
+//            //console.log("function deinit()");
             if (active) {
                 callCallback.call(this, 'setInactive', active, {
                     stepData: $(active).data('stepData')
@@ -325,7 +325,7 @@
          * @return Object element selected
          */
         function select(el, type) {
-//            console.log("function select(el, type)");
+//            //console.log("function select(el, type)");
             var substep;
             if ($.isPlainObject(el)) {
                 substep = el.substep;
@@ -408,7 +408,7 @@
                         , area: area
                         , beforeActive: activeDelegated
             }, callbackData));
-//            console.log("target - canvas : " + canvas.toString());
+//            //console.log("target - canvas : " + canvas.toString());
 //            console.dir(canvas);
 
             active = el;
@@ -507,7 +507,7 @@
         function canvasMod(props) {
             css(canvas, props || {});
             return $(canvas);
-//            console.log("canvasMod");
+//            //console.log("canvasMod");
 //            console.dir(canvas);
         }
         /**
@@ -632,7 +632,7 @@
         $(container).addClass(settings.containerClass);
         $(area).addClass(settings.areaClass);
         $(canvas).addClass(settings.canvasClass);
-//        console.log("settings.canvasClass : ->" + settings.canvasClass);
+//        //console.log("settings.canvasClass : ->" + settings.canvasClass);
 //        console.dir(settings.canvasClass);
 
 
@@ -997,10 +997,10 @@
 
     $.jmpress("defaults").reasonableAnimation = {};
     $.jmpress("initStep", function(step, eventData) {
-//        console.log("$.jmpress(initStep, function(step, eventData)");
+//        //console.log("$.jmpress(initStep, function(step, eventData)");
         var data = eventData.data;
         var stepData = eventData.stepData;
-//        console.log("$.jmpress(initstep) step data 1" + stepData);
+//        //console.log("$.jmpress(initstep) step data 1" + stepData);
         var pf = parseFloat;
         $.extend(stepData, {
             x: pf(data.x) || 0
@@ -1058,7 +1058,7 @@
                 sd.scaleZ || sd.scale]
         ];
         engine.transform(step, transform);
-//        console.log("Apply step : engine.transform(step, transform)" + transform);
+//        //console.log("Apply step : engine.transform(step, transform)" + transform);
     });
     $.jmpress("setActive", function(element, eventData) {
         var target = eventData.target;
@@ -1083,7 +1083,7 @@
             -(step.y || (-step.r * Math.cos(step.phi * Math.PI / 180))),
             -step.z]);
         target.perspectiveScale *= (step.scaleX || step.scale);
-//          console.log("dans jmpress.js scale " + step.scaleX);
+//          //console.log("dans jmpress.js scale " + step.scaleX);
 
         $.each(eventData.parents, function(idx, element) {
             var step = $(element).data("stepData");
@@ -1100,7 +1100,7 @@
                 -(step.y || (-step.r * Math.cos(step.phi * Math.PI / 180))),
                 -step.z]);
             target.perspectiveScale *= (step.scaleX || step.scale);
-//            console.log("dans jmpress.js scale " + step.scaleX);
+//            //console.log("dans jmpress.js scale " + step.scaleX);
         });
 
         $.each(tf, function(idx, item) {
@@ -1139,7 +1139,7 @@
                 settings = eventData.settings,
                 zoomin = target.perspectiveScale * 1.3 < eventData.current.perspectiveScale,
                 zoomout = target.perspectiveScale > eventData.current.perspectiveScale * 1.3;
-//        console.log("apply target - stepData :" + step);
+//        //console.log("apply target - stepData :" + step);
 //        console.dir(step);
 
         // extract first scale from transform
@@ -1190,7 +1190,7 @@
             perspective: Math.round(target.perspectiveScale * 1000) + "px"
 
         };
-//        console.log("props.perspective :" +  props.perspective);
+//        //console.log("props.perspective :" +  props.perspective);
         props = $.extend({}, animation, props);
         if (!zoomin) {
             props.transitionDelay = '0s';
@@ -1201,9 +1201,9 @@
         }
         $.jmpress("css", eventData.area, props);
         engine.transform(eventData.area, extracted);
-//        console.log(" engine.transform(eventData.area, extracted): " + engine.transform(eventData.area, extracted));
-//        console.log(" eventData.area,): " + eventData.area);
-//        console.log(" extracted): " + extracted);
+//        //console.log(" engine.transform(eventData.area, extracted): " + engine.transform(eventData.area, extracted));
+//        //console.log(" eventData.area,): " + eventData.area);
+//        //console.log(" extracted): " + extracted);
 
 
         props = $.extend({}, animation);
@@ -1216,15 +1216,15 @@
         }
 
         eventData.current.perspectiveScale = target.perspectiveScale;
-//        console.log("target.perspectiveScale: " + target.perspectiveScale);
+//        //console.log("target.perspectiveScale: " + target.perspectiveScale);
 //        console.dir(target.perspectiveScale);
-//        console.log("props: " + props);
+//        //console.log("props: " + props);
 //        console.dir(props);
         $.jmpress("css", eventData.canvas, props);
         engine.transform(eventData.canvas, target.transform);
-//        console.log("target.transform 2: " + target.transform);
+//        //console.log("target.transform 2: " + target.transform);
 //        console.dir(target.transform);
-//        console.log("eventData.canvas 2: " + eventData.canvas);
+//        //console.log("eventData.canvas 2: " + eventData.canvas);
 ////        console.dir(eventData.canvas);
     });
 
@@ -1901,7 +1901,7 @@
         current.userTranslateY =
                 maxAbs(current.userTranslateY + y / current.zoomOriginWindowScale,
                 halfHeight * current.userZoom * current.userZoom / zoomableSteps);
-//        console.log("current.userTranslateX" + current.userTranslateX);
+//        //console.log("current.userTranslateX" + current.userTranslateX);
         $(this).jmpress("reselect", "zoom");
     });
     $.jmpress('afterDeinit', function(nil, eventData) {
