@@ -303,35 +303,8 @@ function goJmpress(config) {
             }
         });
 
-        /****** traitement spécifique pour le site dans la slide ****/
-        if ($(this).children('.liTitle').html() === 'iframe') {
-            //console.log('iframe !');
-            slide.type = 'iframe';
-            var iframeAdlivia = "<iframe class='iframeInSlide' src='http://127.0.0.1:81/etude/list'></iframe>";
-            $('#' + slide.matricule).html(iframeAdlivia);
+        
 
-            return;
-        }
-
-
-
-        /*** traitement spécifique pour l'inctrustation de code via iframe***/
-        if (typeof $(this).children('.liTitle').html() !== 'undefined') {
-            if ($(this).children('.liTitle').html().search('iframe') !== -1) {
-                console.log('code iframe !');
-
-                var request = $(this).children('.liTitle').html();
-                slide.type = request;
-                request = request.replace('iframecode', '');
-
-                var iframeCode = "<iframe class='iframeCode' src='code/" + request + ".html'></iframe>";
-                $('#' + slide.matricule).html(iframeCode);
-                //ecriture du matricule de la slide dans la liste
-
-                return;
-
-            }
-        }
 
 
         if ($(this).children('.textarea').length !== 0) {
@@ -388,12 +361,12 @@ function goJmpress(config) {
              truc = $(this).children('.textarea').html();
              }*/
 
-            var truc = $(this).children('.textarea').html();
+            
             //contenu
             new Text(slide.matricule, {
                 properties: {
                     hierarchy: 'bodyText',
-                    content: truc
+                    content: $(this).children('.textarea').html()
                 },
                 pos: {
                     x: 0,

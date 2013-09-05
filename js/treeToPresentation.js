@@ -1,7 +1,7 @@
 /* 
- *  Outils communs pour le parse d'une liste à puce destiné à préparer le positionnement des slides et la gestion de la présentation en dynamique
+ *  Outils communs pour le parse d'une liste à puce destiné à préparer le positionnement des slides 
+ *  et la gestion de la présentation en dynamique
  *
- *                  ATTENTION   pour le moment c'est guetto de stocker la lise à puce dans le layout.html, mais ca changera bientot !
  */
 
 

@@ -6,14 +6,11 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <title>Editor</title>
-        <link rel="stylesheet" type="text/css" href="css/soutenance.css" >
-
+        
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="css/element.css" >
 
         <link rel="stylesheet" type="text/css" href="highlight.js/styles/github.css" > 
-        <!--<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/css/SyntaxHighlighter.css"></link>-->
-
         <link rel="stylesheet" href="css/jquery-ui.css" />
 
         <script type='text/javascript' >
@@ -22,14 +19,6 @@
         </script>
 
         <script type="text/javascript" src="highlight.js/highlight.pack.js"></script> 
-        <!--<script language="javascript" src="SyntaxHighlighter/js/shCore.js"></script>-->
-        <!--<script language="javascript" src="SyntaxHighlighter/js/shBrushCSharp.js"></script>-->
-        <!--<script language="javascript" src="SyntaxHighlighter/js/shBrushXml.js"></script>-->
-
-
-
-
-
         <script type="text/javascript" src="js/plugin/watch1.3.0.js"></script>
         <script type="text/javascript" src="js/plugin/simpleJsInheritance.js"></script>
         <script type="text/javascript" src="js/plugin/jquery.js"></script>
@@ -38,28 +27,24 @@
         <script type="text/javascript" src="js/plugin/mousewheel.js"></script>
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
         <script type="text/javascript" src="ckeditor/image/plugin.js"></script>
-
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
 
 
         <!--les modules-->
         <script type="text/javascript" src="js/testPresentation.js"></script>
-        <script type="text/javascript" src="js/dynamicSlideshow.js"></script>
-        <script type="text/javascript" src="js/time-line.js"></script>
+        <script type="text/javascript" src="js/dynamicTreeSlideshow.js"></script>
         <script type="text/javascript" src="js/layout.js"></script>
         <script type="text/javascript" src="js/editorTools.js"></script>
         <script type="text/javascript" src="js/guiEditor.js"></script>
         <script type="text/javascript" src="js/model.js"></script> 
         <script type="text/javascript" src="js/slideshowEditor.js"></script>
         <script type="text/javascript" src="js/translator.js"></script>
-        <script type="text/javascript" src="js/automaticEditor.js"></script>
+        <script type="text/javascript" src="js/initTreeSlideshow.js"></script>
         <script type="text/javascript" src="js/buildingTree.js"></script>
 
 
         <!--les boites a outils-->
         <script type="text/javascript" src="js/treeToPresentation.js"></script>
-        <script type="text/javascript" src="js/3dTools.js"></script>
-        <script type="text/javascript" src="js/3dToolsCam.js"></script>
         <script type="text/javascript" src="js/transformTools.js"></script>
 
 
@@ -68,33 +53,6 @@
     </head>
 
     <body>
-
-    <!--<td style="margin-left:50%" id='testHi' class="php">-->
-<!--       <pre id='testHI' class='php'><code>
-        $this->load->helper('url');
-
-        /* S'il existe un formulaire pour l'étude, on récupère son ID pour mettre à jours son contenu, sinon on le crée et on récupère ayssu son ID */
-        if ($this->formulaire->getFormulaireModelEtude($idEtude) == '') {
-            $idForm = $this->formulaire->insertFormulaire($idEtude);
-        } else {
-            $idForm = $this->formulaire->getFormulaireModelEtude($idEtude)->id_model;
-        }
-
-        //quoi faire en fonction du bouton qui a envoyé ici
-        if (isset($_POST['quit'])) {
-            //on part sans rien faire, les autres cas sont traités une fois l'enregistrement effectué
-            redirect('/etude/list');
-        }
-
-        </code></pre>-->
-
-
-
-
-        <!--<textarea id='debugCk'></textarea>-->
-
-
-
 
         <div  id="topbar">
             <ul class='noJoystick' >
@@ -220,10 +178,7 @@
 
         <div id="slideArea" >
             <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block">
-                <!--                <iframe class='iframeInSlide' src='http://127.0.0.1:81/etude/formulaire/28'> 
-                                
-                                </iframe>-->
-                <p> en profondeur</p> <img src=''/>
+                 <img src=''/>
             </div>
 
         </div>

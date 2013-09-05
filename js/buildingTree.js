@@ -166,33 +166,7 @@ function goSlideShow() {
     initAutomatic();
 }
 
-/*
- * obsolete
- * 
- */
-function goTreeMaker() {
-    //console.log('RETURN TREE MAKER  ');
 
-
-    $('#slideArea .step').each(function() {
-        if ($(this).attr('id') === 'home')
-            return; //cette foutue slide n'existe pas dans le container !
-//        container.slide[$($('#slideArea .step')[5]).attr('matricule')].destroy()
-        //console.log($(this).attr('matricule'));
-        if (!findObjectOfComposant($(this).attr('matricule')))
-            return;
-        container.getSlide($(this).attr('matricule')).destroy();
-    });
-
-    $('#tree').attr('id', 'treeMaker');
-    $('#treeMaker .questions').each(function() {
-        $(this).remove();
-    });
-    $('#treeMaker ol').each(function() {
-        $(this).append("<li class='addSibling'>Add Sibling</li>");
-    });
-
-}
 
 
 /*
