@@ -38,7 +38,7 @@ function initJmpress() {
 
 function handlerTreeMaker() {
 
-    $('#gotTree').fadeOut(1);
+    $('#goTree').fadeOut(1);
 
     $('#treeMaker').on('click', '.addSibling', function() {
         //console.log('add sib');
@@ -141,6 +141,9 @@ function lauchCK() {
 
 
 function goSlideShow() {
+    $('#goSlideShow').fadeOut(1, function() {
+            $('#goTree').fadeIn(1);
+        });
 
     //console.log('GO SLIDESHOW');
 
@@ -175,6 +178,10 @@ function goSlideShow() {
  * (s'il existe, l'adaptateur devra s'arrange pour ce que ce soit le cas)
  */
 function goTreeFromContainer() {
+    $('#goTree').fadeOut(1, function() {
+            $('#goSlideShow').fadeIn(1);
+        });
+        
     $('#slideArea').jmpress('deinit');
     //desinit de la présentation
 //    $('#slideArea .step').each(function() {

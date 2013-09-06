@@ -4,33 +4,13 @@
  *  a deplacer dans GUIEditor
  */
 
-// $(document).keypress( function(event) {
-//     //console.log(event.which);
-//     if (event.which == 36) {
-//         //console.log('escape')
-//         $('body').children().each(function() {
-//             if ($(this).attr('id') === 'slideArea')
-//                 return;
-//             $(this).fadeIn(1000);
-//         });
 
-//     }
-// });
+
 
 $(document).ready(function() {
     //calcul de la taille necessaire pour la div contenant un asceneurs
 
-    $(window).on('resize', function() {
-        //scroll pour la timeline 
-        var height = window.innerHeight - $('#sidebar #sortable').offset().top;
-        $('#sidebar #sortable').css('height', height);
-
-        //scrool pour le tree
-        var height = window.innerHeight - $('#treeMaker').offset().top;
-        $('#treeMaker').css('height', height);
-
-    });
-
+    $(window).on('resize', resizeScrool);
     $(window).trigger('resize');
 
 
@@ -76,7 +56,6 @@ $(document).ready(function() {
         $('li').removeClass("buttonclicked");
         $('#slide-tool').parent().addClass("buttonclicked");    // css
         event.preventDefault();
-        event.stopPropagation();
         $('body').css('cursor', 'crosshair');
 
         $('body').removeClass().addClass('creationSlide');
@@ -130,18 +109,7 @@ $(document).ready(function() {
      * ======================================================================================*/
 
     $('#geek-tool').on('click', function(event) {
-        $('li').removeClass("buttonclicked");
-        $('#geek-tool').parent().addClass("buttonclicked");
-        event.preventDefault();
-        $('#layout').removeClass().addClass('creationGeek');
-
-    });
-
-    $(document).on('click', '.creationGeek', function(event) {
-        event.stopPropagation();
-        $('.creationGeek').removeClass('creationGeek');
-        //console.log('creation geek html enclenchee');
-//        createHtml();
+        alert('coming soon');
     });
 
 
@@ -149,23 +117,12 @@ $(document).ready(function() {
      * TREE PANNEL - gestion de la présentation hierarchisée grace au tree
      * ======================================================================================*/
 
-    $('#gotTree').on('click', function(event) {
-        event.preventDefault();
-        $('#gotTree').fadeOut(1, function() {
-            $('#goSlideShow').fadeIn(1);
-        });
-        goTreeFromContainer();
-    });
+    $('#goTree').on('click', goTreeFromContainer);
 
     handlerTreeMaker();
 
-    $('#goSlideShow').on('click', function(event) {
-        event.preventDefault();
-        $('#goSlideShow').fadeOut(1, function() {
-            $('#gotTree').fadeIn(1);
-        });
-        goSlideShow();
-    });
+    $('#goSlideShow').on('click', goSlideShow);
+
 
 
 
@@ -240,100 +197,12 @@ $(document).ready(function() {
      * utilise les données du json (reformatées) stockées en local storage + export mustache
      * ====================================================================================== */
 
-    $('#present').on('click', function(event) {
-
-        $('body').children().each(function() {
-            if ($(this).attr('id') === 'slideArea')
-                return;
-            $(this).fadeOut(1000);
-        })
-
-
-
-//
-//        var outputjson = {data: null, slide: new Array()};
-//        // mise en forme correct du json de sortie : 
-//        var arrayElement = [];
-//        $.each(container.slide, function(key1, slide) {
-//            var slide2 = container.slide[key1];
-//            $.each(slide, function(key2, element) {
-//                if (key2 === 'element') {
-//                    var arrayElement = [];
-//                    $.each(element, function(key3, elemind) {
-//                        arrayElement.push(elemind);
-//                        slide2.element = [];
-//                        $.each(arrayElement, function(key, value) {
-//                            slide2.element.push(value);
-//                        });
-//                    });
-//                }
-//            });
-//            outputjson.slide.push(slide2);
-//        });
-//        ////console.log("output json : ");
-//        ////console.log(outputjson);
-//        outputjson.slide.sort(sort_by('index', true, parseInt));
-//        ////console.log("output json sorted : ");
-        ////console.log(outputjson);
-//        var stringjson = JSON.stringify(container, null, 2);
-//        localStorage.setItem('outputjson', stringjson);
-//        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
-        // location
-
-
-    });
+    $('#present').on('click', launchPresentMode);
 
     /* ======================================================================================
      * SAVE       -   save button
      * enregistre la présentation en local storage (tjs présente si F5)
      * ====================================================================================== */
-    function saveJson(localName) {
-        var savedJson = JSON.stringify(container, null, 2);
-        localStorage.setItem(localName, savedJson);
-
-        //console.log("saved json : ");
-        //console.log(savedJson);
-
-    }
-
-    /* function de l'init de la modal de slection d'un element du local storage
-     * commun à load/save/clear
-     */
-    function modalSelectStorage(callback) {
-        /* KIKI ce n'est pas algorythmiquement au top mais ca ira pour le moment 27 08 2013*/
-        var option = {
-            closeOnEscape: true,
-            title: 'select a slideshow',
-            buttons: [
-                {text: "New slideshow",
-                    click: function() {
-                        var name = prompt('Type a name that does\'t already exists (no check, be careful)');
-                        callback(name);
-                        $(this).dialog("close");
-                    }
-                }
-//                ,{text: "All existing slideshow",
-//                    click: function() {
-//                        callback('all');
-//                        $(this).dialog("close");
-//                    }
-//                }
-            ]
-        };
-
-        for (var key in localStorage) {
-            var item = {text: key,
-                click: function(event, ui) {
-                    callback($(event.target).html());
-                    $(this).dialog("close");
-                }
-            };
-            option.buttons.push(item);
-        }
-
-        $('#dialog-select-storage').dialog(option);
-
-    }
 
     $('#save').on('click', function(event) {
         modalSelectStorage(saveJson);
@@ -350,45 +219,13 @@ $(document).ready(function() {
         }
 
     });
-    
-    $('#extract').on('click',function(){
-        window.prompt ("Copy to clipboard: Ctrl+C, Enter", JSON.stringify(container));
-//        $('#dialog-extract').html("<p>"+JSON.stringify(container)+"</p>");
-//         var option = {
-//            closeOnEscape: true,
-//            title: 'copy paste somewhere',
-//            buttons: [
-//                {text: "Close",
-//                    click: function() {
-//                        
-//                        $(this).dialog("close");
-//                    }
-//                }
-//
-//            ]
-//        };
-//        
-//        $('#dialog-extract').dialog(option);
-    });
+
+
 
     /* ======================================================================================
      * LOAD       -   load button
      * charge la présentation en local storage 
      * ====================================================================================== */
-    function loadJsonForTree(localName) {
-        $('#slideshowName').html(localName);
-        initContainer();
-        container = JSON.parse(localStorage.getItem(localName));
-        goTreeFromContainer();
-        $('#gotTree').fadeOut(1);
-        $('#goSlideShow').fadeIn(1);
-    }
-
-    function loadJsonForSlideShow(localName) {
-        container = JSON.parse(localStorage.getItem(localName));
-        //console.log('infos : loadSlide : pas de politique définie pour ce bouton, container contient la slideShow');
-    }
-
     $('#loadSlide').on('click', function(event) {
         modalSelectStorage(loadJsonForSlideShow);
     });
@@ -406,19 +243,12 @@ $(document).ready(function() {
      * CLEAR
      * pour vider les présentations sauvergarder
      * ====================================================================================== */
-
-    function clearOne(localName) {
-        localStorage.removeItem(localName);
-
-    }
-
     $('#clearAll').click(function() {
         window.localStorage.clear();
         location.reload();
     });
     $('#clearOne').click(function() {
         modalSelectStorage(clearOne);
-
     });
     $('#clearDom').click(function() {
         location.reload();
@@ -426,16 +256,94 @@ $(document).ready(function() {
 
 
 });
+/************* definition des fonctions nécéssaires à la gestion de l'interface ****/
 
-var sort_by = function(field, reverse, primer) {
 
-    var key = function(x) {
-        return primer ? primer(x[field]) : x[field];
+function resizeScrool() {
+    //scroll pour la timeline 
+    var height = window.innerHeight - $('#sidebar #sortable').offset().top;
+    $('#sidebar #sortable').css('height', height);
+
+    //scrool pour le tree
+    var height = window.innerHeight - $('#treeMaker').offset().top;
+    $('#treeMaker').css('height', height);
+}
+
+
+
+function launchPresentMode() {
+
+    $('body').children().each(function() {
+        if ($(this).attr('id') === 'slideArea')
+            return;
+        $(this).fadeOut(1000);
+    });
+//        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
+
+
+
+}
+
+
+
+
+
+
+function saveJson(localName) {
+    var savedJson = JSON.stringify(container, null, 2);
+    localStorage.setItem(localName, savedJson);
+}
+
+/* function de l'init de la modal de slection d'un element du local storage
+ * commun à load/save/clear
+ */
+function modalSelectStorage(callback) {
+    /* KIKI ce n'est pas algorythmiquement au top mais ca ira pour le moment 27 08 2013*/
+    var option = {
+        closeOnEscape: true,
+        title: 'select a slideshow',
+        buttons: [
+            {text: "New slideshow",
+                click: function() {
+                    var name = prompt('Type a name that does\'t already exists (no check, be careful)');
+                    callback(name);
+                    $(this).dialog("close");
+                }
+            }
+        ]
     };
 
-    return function(a, b) {
-        var A = key(a), B = key(b);
-        return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1, 1][+!!reverse];
-    };
-};
+    for (var key in localStorage) {
+        var item = {text: key,
+            click: function(event, ui) {
+                callback($(event.target).html());
+                $(this).dialog("close");
+            }
+        };
+        option.buttons.push(item);
+    }
+
+    $('#dialog-select-storage').dialog(option);
+
+}
+
+
+function loadJsonForTree(localName) {
+    $('#slideshowName').html(localName);
+    initContainer();
+    container = JSON.parse(localStorage.getItem(localName));
+    goTreeFromContainer();
+    $('#goTree').fadeOut(1);
+    $('#goSlideShow').fadeIn(1);
+}
+
+function loadJsonForSlideShow(localName) {
+    container = JSON.parse(localStorage.getItem(localName));
+}
+
+function clearOne(localName) {
+    localStorage.removeItem(localName);
+}
+
+
 

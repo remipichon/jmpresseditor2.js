@@ -51,26 +51,12 @@ body
  * TOP BAR
  * ====================================================================================== */
 
-/*#topbar
-{
-    background: #666;
-    height: 30px;
-    width:300px;
-    position:absolute;
-    right:0;
-    z-index: 1200;
-}*/
-#topbar a p
+#topbar  p
 {
     text-align: center;
     padding: 4%;
     margin: auto;
     color:#FFF;
-}
-
-#topbar a
-{
-    text-decoration: none;
 }
 
 /*Menu*/
@@ -113,7 +99,7 @@ body
 
 #topbar-submenu
 {
-    z-index: 1000;
+    z-index: 10;
     display:none;
 }
 
@@ -176,7 +162,7 @@ body
     background-position: -50px 0;
 }*/
 
-.sidebar h1, a, h3
+.sidebar 
 {
     text-align: center;
     color:#FFF;
@@ -200,9 +186,8 @@ body
     border-bottom: 1px solid #444; 
 }
 
-.sidebar li a
+.sidebar li 
 {
-    text-decoration: none;
     line-height: 2em;
 
 }
@@ -269,161 +254,8 @@ body
 }
 
 
-/* ======================================================================================
- * LAYOUT
- * ====================================================================================== */
-
-/*#layout
-{
-    background: #DDD;
-    left: 0px;
-    top: 0px;
-    right:0;
-    bottom:0;
-    height:100%;
-    position:fixed !important;
-    position:absolute;
-    z-index: 1;
-}*/
-
-#slideArea
-{
-    z-index: 10;
-}
 
 
-/* ======================================================================================
- * MODAL
- * ====================================================================================== */
-
-#helpModal h2,h3,p
-{
-    font-family: Arial;
-}
-
-#helpModal .modal-body h2
-{
-    font-size: 1.6em;
-    margin-top: 5px;
-    padding-top: 5px;
-    color :#333;
-    line-height: 30px;
-}
-
-#helpModal .modal-body h3
-{
-    font-family: Arial;
-    font-size: 1.2em;
-    color:#777;
-    margin-top: 3px;
-    padding-bottom: 0px;
-    margin-bottom:0px;
-    line-height: 30px;
-
-}
-
-#helpModal ul 
-{
-    list-style: none;
-}
-
-#helpModal ul li ul
-{
-    padding-left: 5px;
-}
-
-#helpModal ul li ul li li
-{
-    padding-left: 5px;
-    list-style-type: circle;
-}
-
-
-
-
-
-/* ======================================================================================
- * TEMPLATE JMPRESS LIGHT
- * css très léger des éléments de slideArea (éléments, slides)
- * Pour debug
- * ====================================================================================== */
-
-.step {
-    /*border: 1px dashed #ccc;*/
-    /*    width: 100px;
-        background-color: rgba(50,50,50,.5);*/
-    /*  position:relative;  
-        padding: 40px;
-        margin: 20px auto;
-        
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing:    border-box;
-        -ms-box-sizing:     border-box;
-        -o-box-sizing:      border-box;
-        box-sizing:         border-box;
-    
-        font-family: 'PT Serif', georgia, serif;
-        font-size: 48px;
-        line-height: 1.5;*/
-}
-
-
-.slide {
-    display: block;
-
-    width: 900px;           /* taille réelle : 900 */
-    height: 700px;          /* taille réelle : 700 */
-    
-
-         background: rgb(215, 215, 215);
-    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
-    background: -webkit-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190));
-    background: -moz-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190));
-    background: -ms-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190,0.8));
-    background: -o-radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190));
-    background: radial-gradient(rgb(240, 240, 240), rgba(190, 190, 190,0.8));
-    
-    border: 1px solid rgba(0, 0, 0, .3);
-    border-radius: 10px;
-    /*    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
-    
-        color: rgb(102, 102, 102);
-        text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
-    
-        font-family: 'Open Sans', Arial, sans-serif;
-        font-size: 70px;
-        line-height: 36px;
-        letter-spacing: -1px;*/
-
-}
-
-.hovered{
-    background-color: rgba(200,200,200,.9);
-}
-
-
-
-.slide:hover{
-    background-color: rgba(150,150,150,.5);
-}
-
-.slide .longclick
-{
-    background-color: rgba(200,200,200,.5);
-}
-
-
-
-
-
-
-
-/*Fin de gestion des styles*/
-
-.element:hover
-{
-    background-color: rgba(250,250,250,.5);
-}
 
 
 

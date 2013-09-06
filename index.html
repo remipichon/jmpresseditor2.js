@@ -6,7 +6,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <title>Editor</title>
-        
+
+        <link rel="stylesheet" type="text/css" href="css/slideshow.css" >
         <link rel="stylesheet" type="text/css" href="css/layout.css" >
         <link rel="stylesheet" type="text/css" href="css/element.css" >
 
@@ -54,79 +55,70 @@
 
     <body>
 
-        <div  id="topbar">
-            <ul class='noJoystick' >
-                <li><a><p>goSlideShow bf save</p></a></li>
-                <li><a href="#" id="present" title="launch the presentation"><p>present</p></a></li>
-                <li><a href="#" id="save" title="save your presentation"><p>save</p></a></li>
-                <li><a href="#" id="quickSave" title="save your presentation"><p>quick save</p></a></li>
-                <li><a href="#" id="extract" title="extract your presentation"><p>extract</p></a></li>
-                <li><a href="#" id="parameters" title="parameters"><p>options</p></a>
-                    <ul id="topbar-submenu">
-                        <li><a href="#" id="clearAll" title="clear local storage and DOM"><p>clear all</p></a></li>
-                        <li><a href="#" id="clearOne" title="clear one slideshow"><p>clear one</p></a></li>
-                        <li><a href="#" id="clearDom" title="clear one slideshow"><p>clear all but local storage</p></a></li>
-                        <!--<li><a href="#" id="info" title="more info on this editor"><p>info</p></a></li>-->
-                        <!--<li><a href="" id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></a></li>-->
-                        <li><a  id="loadSlide" title="load presentation"><p>load slide show</p></a></li>
-                        <li><a  id="loadTree" title="load tree"><p>load tree</p></a></li>
 
+        <div  id="topbar">
+            <ul class='noJoystick' >               
+                <li id="present" title="launch the presentation"><p>present</p></li>
+                <li id="save" title="save your presentation"><p>save</p></li>
+                <li id="quickSave" title="save your presentation"><p>quick save</p></li>
+                <li id="extract" title="extract your presentation"><p>extract</p></li>
+                <li id="parameters" title="parameters"><p>options</p>
+                    <ul id="topbar-submenu">
+                        <li id="clearAll" title="clear local storage and DOM"><p>clear all</p></li>
+                        <li id="clearOne" title="clear one slideshow"><p>clear one</p></li>
+                        <li id="clearDom" title="clear one slideshow"><p>clear all but local storage</p></li>
+                        <!--<li id="info" title="more info on this editor"><p>info</p></li>-->
+                        <!--<li>id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></li>-->
+                        <li  id="loadSlide" title="load presentation"><p>load slide show</p></li>
+                        <li  id="loadTree" title="load tree"><p>load tree</p></li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <!--tag <nav> ?-->
-        <div class='noJoystick sidebar' id="sidebar">
 
+
+        <div class='noJoystick sidebar' id="sidebar">
             <div class='arrow-nav' id="arrow-nav"></div>
             <ul>  
                 <li id="tools">
                     <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
                     <ul>
-                        <li>
-                            <a href="#" target='createSlide' class="slide-tool-button" id='slide-tool' title="create a slide"><p>slide</p></a>
+                        <li class="slide-tool-button" id='slide-tool' title="create a slide"><p>slide</p>
                             <ul class="submenu">
-                                <li>
-                                    <a href="#" target='createSlideText' class="slide-tool-button" title="slide text"><p>With text</p></a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" id="text-tool" target="createBodyText" class="text-tool-button" title="create text"><p>text</p></a>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="#" target="createH1Text" class="text-tool-button" id="text-tool-title" title="title type"><p>title 1</p></a>
-                                </li>
-                                <li>
-                                    <a href="#" target="createH2Text" class="text-tool-button" id="text-tool-title" title="title type"><p>title 2</p></a>
-                                </li>
-                                <li>
-                                    <a href="#" target="createH3Text" class="text-tool-button" id="text-tool-title" title="title type"><p>title 3</p></a>
-                                </li>
-                                <li>
-                                    <a href="#" target="createBodyText" class="text-tool-button" id="text-tool-body" title="body type"><p>body</p></a>
+                                <li class="slide-tool-button" title="slide text">
+                                    <p>With text</p>
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" id="geek-tool"  ><p>geek mode</p></a>
+                        <li id="text-tool" class="text-tool-button" title="create text"><p>text</p>
+                            <ul class="submenu">
+                                <li class="text-tool-button" id="text-tool-title" title="title type">
+                                    <p>title 1</p>
+                                </li>
+                                <li class="text-tool-button" id="text-tool-title" title="title type">
+                                    <p>title 2</p>
+                                </li>
+                                <li class="text-tool-button" id="text-tool-title" title="title type">
+                                    <p>title 3</p>
+                                </li>
+                                <li class="text-tool-button" id="text-tool-body" title="body type">
+                                    <p>body</p>
+                                </li>
+                            </ul>
                         </li>
-
+                        <li id="geek-tool">
+                            <p>geek mode</p>
+                        </li>
                     </ul>
                 </li>
                 <li id="time-line" >
                     <h1 id="header-time-line">TIME LINE</h1>                    
                     <ul class="nav-button">
-                        <li id="previous">
-                            <a href="#" id="previous-a" title="previous slide">
-                                <img src="images/arrowsTLleftP.png" alt="previous slide">
-                            </a>
+                        <li id="previous" title="previous slide">
+                            <img src="images/arrowsTLleftP.png" alt="previous slide">
                         </li>
-                        <li id="next">
-                            <a href="#" id="next-a" title="next slide">
-                                <img src="images/arrowsTLrightP.png" alt="next slide">
-                            </a>
+                        <li id="next" title="next slide">
+                            <img src="images/arrowsTLrightP.png" alt="next slide">
                         </li>
                     </ul>
                     <ul id="sortable" style="overflow-y:scroll;">
@@ -138,19 +130,17 @@
 
 
         <div class='noJoystick sidebar' id="sidebarTree">
-
             <div class='arrow-nav' id="arrow-nav-tree"></div>
-
             <ul>  
                 <li id="toolsTree">
                     <h1 id="header-drawing-tools">AUTOMATIC SLIDESHOW TOOLS</h1>
-                    <h3 id='slideshowName'> New slide show</h3>
+                    <h3 id='slideshowName'> New slide show </h3>
                     <ul>
-                        <li>
-                            <a href="#" target='goSlideShow' id='goSlideShow' title="goSlideShow"><p>goSlideShow</p></a>
+                        <li id='goSlideShow' title="goSlideShow">
+                            <p>launch slideshow</p>
                         </li>
-                        <li>
-                            <a href="#" target="gotTree" id='gotTree'  title="gotTree"><p>gotTree</p></a>
+                        <li id='goTree'  title="goTree">
+                            <p>edit tree</p>
                         </li>
                     </ul>
                 </li>
@@ -160,7 +150,6 @@
                 <ol>
                     <li class='addSibling'> [+]  </li> 
                 </ol>
-                <!--                <div id='espacePerduSousTimeLine'></div>-->
             </div>
 
         </div>
@@ -169,16 +158,12 @@
         <div id='joystick'> 
             <div id="zone-tolerance-x" class ="zone-tolerance-joystick"></div>
             <div id="zone-tolerance-y" class ="zone-tolerance-joystick"></div>
-
         </div>
-
-
-
 
 
         <div id="slideArea" >
             <div id="profondeur" class="step slide profondeur" data-scale ="1" data-z ="-3000" style="display:block">
-                 <img src=''/>
+                <img src=''/>
             </div>
 
         </div>
@@ -235,10 +220,10 @@
 
 
         <script>
-//            hljs.initHighlightingOnLoad();
+            //            hljs.initHighlightingOnLoad();
 
             $(document).ready(function() {
-//                CKEDITOR.replace('debugCk');
+                //                CKEDITOR.replace('debugCk');
                 initContainer();
 
 
@@ -275,7 +260,7 @@
 
         <script id="templateImage" type="text/template">
 
-            <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
+                        <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
 
         </script>
 
