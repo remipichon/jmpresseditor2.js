@@ -8,10 +8,10 @@
 
 
 $(document).ready(function() {
+    
     //calcul de la taille necessaire pour la div contenant un asceneurs
-
     $(window).on('resize', resizeScrool);
-    $(window).trigger('resize');
+    $(window).trigger('resize');  //pour lancer le resize au chargement de la page
 
 
 
@@ -19,29 +19,14 @@ $(document).ready(function() {
      * TRIGGERS CREATE TEXT
      * ======================================================================================*/
     $('.text-tool-button').on('click', function(event) {
-        $('li').removeClass("buttonclicked");
-        $('#text-tool').parent().addClass("buttonclicked");     // mise en forme css
-        event.preventDefault();
         event.stopPropagation();
-        $('body').css('cursor', 'crosshair');
-
-        $('body').removeClass().addClass('selectSlide');
-        $('body').data('action', $(this).attr('target'));
-    });
-
-
-    //listener pour créer un élement directement sur une slide lorsque le body est en selectSlide
-    $(document).on('click', '.selectSlide', function(event) {
-        $('body').removeClass();
         $('li').removeClass("buttonclicked");
-        $('body').css('cursor', 'default');
-
-        var objEvt = new ObjectEvent({
-            matricule: $(event.target).attr('matricule'), //le body stocke l'action du bouton qui l'avait mit en selectSlide
-            action: $('body').data('action'),
-            event: {}
-        });
-        callModelGUI(objEvt);
+        $('#text-tool').addClass("buttonclicked");     // mise en forme css
+        $('body').css('cursor', 'crosshair');
+        var action = $(this).attr('id').replace('-tool', '');
+        if( action.search('default') !== -1) action = 'BodyText';    //texte par défaut
+        $('body').data('action', action);
+        $('.slide').one('click', createTextOnSlide);
     });
 
 
@@ -50,59 +35,17 @@ $(document).ready(function() {
     /* ======================================================================================
      * CREATION DES SLIDES
      * ======================================================================================*/
-
-// Trigger sur bouton "creation slide"
     $('.slide-tool-button').on('click', function(event) {
+        event.stopPropagation();//KIKI
         $('li').removeClass("buttonclicked");
-        $('#slide-tool').parent().addClass("buttonclicked");    // css
-        event.preventDefault();
-        $('body').css('cursor', 'crosshair');
-
-        $('body').removeClass().addClass('creationSlide');
-        $('body').data('action', $(this).attr('target'));
-    });
-
-
-    $(document).on('click', '.creationSlide', function(event) {
-        $('li').removeClass("buttonclicked");
-        event.stopPropagation();
-        $('body').removeClass();
-        $('body').css('cursor', 'default');
-
-        var action = $('body').data('action');
-        if (action === 'createSlide') {
-            new Slide({});
-        } else if (action === 'createSlideText') {
-
-            var slide = new Slide({
-                pos: {
-                    x: 1000
-                }
-            });
-            var matricule = slide.matricule;
-            new Text(matricule, {
-                properties: {
-                    hierarchy: 'H1Text'
-                },
-                pos: {
-                    x: 40,
-                    y: 10
-                }
-            });
-            new Text(matricule, {
-                properties: {
-                    hierarchy: 'bodyText'
-                },
-                pos: {
-                    y: 200,
-                    x: 50
-                }
-            });
+        $('#slide-tool').addClass("buttonclicked");     // mise en forme css
+        $('body').css('cursor', 'crosshair');       
+        if ($(this).attr('id').search('text') !== -1) {
+            $('body').one('click', createSlideText);
+        } else {
+            $('body').one('click', createSlide);
         }
-
     });
-
-
 
     /* ======================================================================================
      * GEEK MODE - création d'element libre en html
@@ -157,38 +100,11 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#arrow-nav').on('click', function() {
-//        if ( ! $('#arrow-nav-tree').hasClass('hidden-bar')) $('#arrow-nav').trigger('click');
-
-        var $sidebar = $('#sidebar');
-        $sidebar.toggleClass('hidden-bar');
-        if ($sidebar.hasClass('hidden-bar')) {
-            $('#sidebar').animate({marginLeft: "-200"}, 300);
-            $('#arrow-nav').css('background-position', '-50px 0');
-            $('#sidebarTree').fadeIn(1000);
-        }
-        else {
-            $('#sidebar').animate({marginLeft: "0"}, 300);
-            $('#arrow-nav').css('background-position', '0 0');
-            $('#sidebarTree').fadeOut(1000);
-        }
+        extendSideBar($('#sidebar'));
     });
 
-    $('#arrow-nav-tree').on('clickKIKI', function() {
-        if (!$('#sidebar').hasClass('hidden-bar'))
-            $('#arrow-nav').trigger('click');
-        var $sidebar = $('#sidebarTree');
-        $sidebar.toggleClass('hidden-bar');
-        var width = $sidebar.css('width');
-        if ($sidebar.hasClass('hidden-bar')) {
-            $sidebar.animate({marginLeft: "-400"}, width);
-            $(this).css('background-position', '-50px 0');
-            //$sidebar.fadeOut(1000);
-        }
-        else {
-            $sidebar.animate({marginLeft: "0"}, width);
-            $(this).css('background-position', '0 0');
-            //$sidebar.fadeIn(1000);
-        }
+    $('#arrow-nav-tree').on('click', function() {
+        extendSideBar($('#sidebarTree'));
     });
 
     /* ======================================================================================
@@ -204,21 +120,10 @@ $(document).ready(function() {
      * enregistre la présentation en local storage (tjs présente si F5)
      * ====================================================================================== */
 
-    $('#save').on('click', function(event) {
+    $('#save').on('click', function() {
         modalSelectStorage(saveJson);
-
     });
-    $('#quickSave').on('click', function(event) {
-        if ($('#treeMaker').length !== 0) {
-            goSlideShow();
-            saveJson($('#slideshowName').html());
-            goTreeFromContainer();
-        } else {
-            ////console.log('quicksave on @' + $('#slideshowName').html() + '@')
-            saveJson($('#slideshowName').html());
-        }
-
-    });
+    $('#quickSave').on('click', quickSave);
 
 
 
@@ -232,10 +137,7 @@ $(document).ready(function() {
 
     $('#loadTree').on('click', function(event) {
         modalSelectStorage(loadJsonForTree);
-
     });
-
-
 
 
 
@@ -257,7 +159,82 @@ $(document).ready(function() {
 
 });
 /************* definition des fonctions nécéssaires à la gestion de l'interface ****/
+function createSlide() {
+    $('li').removeClass("buttonclicked");
+    $('body').css('cursor', 'default');
+    new Slide({});
+}
 
+function createSlideText() {
+    $('li').removeClass("buttonclicked");
+    $('body').css('cursor', 'default');
+
+    var slide = new Slide({
+        pos: {
+            x: 1000
+        }
+    });
+    
+    var matricule = slide.matricule;
+    new Text(matricule, {
+        properties: {
+            hierarchy: 'H1Text'
+        },
+        pos: {
+            x: 40,
+            y: 10
+        }
+    });
+    new Text(matricule, {
+        properties: {
+            hierarchy: 'bodyText'
+        },
+        pos: {
+            y: 200,
+            x: 50
+        }
+    });
+}
+
+
+function createTextOnSlide() {
+    $('li').removeClass("buttonclicked");
+    $('body').css('cursor', 'default');
+  
+    var objEvt = new ObjectEvent({
+        matricule: $(this).attr('matricule'), //le body stocke l'action du bouton qui l'avait mit en selectSlide
+        action: 'create'+$('body').data('action'),
+        event: {}
+    });
+    callModelGUI(objEvt);
+}
+
+
+function extendSideBar($sidebar) {
+//        if ( ! $('#arrow-nav-tree').hasClass('hidden-bar')) $('#arrow-nav').trigger('click');
+
+
+    $sidebar.toggleClass('hidden-bar');
+    if ($sidebar.hasClass('hidden-bar')) {
+        $sidebar.animate({marginLeft: "-200"}, 300);
+        $('#' + $sidebar.attr('id') + ' .arrow-nav').css('background-position', '-50px 0');
+    }
+    else {
+        $sidebar.animate({marginLeft: "0"}, 300);
+        $('#' + $sidebar.attr('id') + ' .arrow-nav').css('background-position', '0 0');
+    }
+}
+
+function quickSave() {
+    if ($('#treeMaker').length !== 0) {
+        goSlideShow();
+        saveJson($('#slideshowName').html());
+        goTreeFromContainer();
+    } else {
+        saveJson($('#slideshowName').html());
+    }
+
+}
 
 function resizeScrool() {
     //scroll pour la timeline 

@@ -27,7 +27,6 @@
         <script type="text/javascript" src="js/plugin/mustache.js"></script>
         <script type="text/javascript" src="js/plugin/mousewheel.js"></script>
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
-        <script type="text/javascript" src="ckeditor/image/plugin.js"></script>
         <script type="text/javascript" src="js/plugin/jmpress.js"></script>
 
 
@@ -83,25 +82,26 @@
                 <li id="tools">
                     <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
                     <ul>
+                        <li class="tree-tool-button" id='tree-tool' title="edit tree"><p>tree</p>
                         <li class="slide-tool-button" id='slide-tool' title="create a slide"><p>slide</p>
                             <ul class="submenu">
-                                <li class="slide-tool-button" title="slide text">
+                                <li class="slide-tool-button" id='slide-text-tool' title="slide text">
                                     <p>With text</p>
                                 </li>
                             </ul>
                         </li>
-                        <li id="text-tool" class="text-tool-button" title="create text"><p>text</p>
+                        <li id="defaultText-tool" class="text-tool-button" title="create text"><p>text</p>
                             <ul class="submenu">
-                                <li class="text-tool-button" id="text-tool-title" title="title type">
+                                <li class="text-tool-button" id="H1Text-tool" title="title type">
                                     <p>title 1</p>
                                 </li>
-                                <li class="text-tool-button" id="text-tool-title" title="title type">
+                                <li class="text-tool-button" id="H2Text-tool" title="title type">
                                     <p>title 2</p>
                                 </li>
-                                <li class="text-tool-button" id="text-tool-title" title="title type">
+                                <li class="text-tool-button" id="H3Text-tool" title="title type">
                                     <p>title 3</p>
                                 </li>
-                                <li class="text-tool-button" id="text-tool-body" title="body type">
+                                <li class="text-tool-button" id="BodyText-tool" title="body type">
                                     <p>body</p>
                                 </li>
                             </ul>
@@ -134,7 +134,7 @@
             <ul>  
                 <li id="toolsTree">
                     <h1 id="header-drawing-tools">AUTOMATIC SLIDESHOW TOOLS</h1>
-                    <h3 id='slideshowName'> New slide show </h3>
+                    <h3 id='slideshowName' title="Current slideshow's name"> New slide show </h3>
                     <ul>
                         <li id='goSlideShow' title="goSlideShow">
                             <p>launch slideshow</p>

@@ -164,7 +164,7 @@ function createComposant($target, objectEvent) {
  * 
  */
 function callModelGUI(objectEvent) {
-
+    
     //en attente de trouver une meilleure méthode pour récupérer la slide destination d'un element
     if (objectEvent.action === 'createImage' || objectEvent.action === 'createH3Text' || objectEvent.action === 'createH2Text' || objectEvent.action === 'createH1Text' || objectEvent.action === 'createBodyText') {
         if (objectEvent.action === 'createImage') {  //infos suplémentaires propre aux images
