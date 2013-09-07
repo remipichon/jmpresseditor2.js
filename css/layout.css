@@ -128,10 +128,7 @@ body
      width:180px;
      z-index: 10;
 }
-#sidebarTree{
-     min-width: 380px;
-     
-}
+
 
 
 .sidebar .arrow-nav
@@ -258,6 +255,63 @@ body
 
 
 
+
+
+/* ======================================================================================
+ * TREE
+ * ====================================================================================== */
+
+#sidebarTree{
+     width: 100%;
+     
+}
+
+/* #sidebarTree{
+    display: inline;
+} */
+
+#treeMaker {
+    display: block;
+    clear: left;
+    color: white;
+    font-family: Arial;
+    text-align:left;
+}
+
+#tree {
+    color: white;
+    font-family: Arial;
+}
+
+#tree-action-button li{
+    display: inline;
+    float: left;
+    width:50%;    
+}
+
+
+
+.present-slide{
+    color: white ;
+}
+
+.past-slide{
+    color: #9F9FA0;
+}
+
+.future-slide{
+    color:  #ABAAFF;
+}
+
+.addSibling{
+     list-style-type: none;
+     margin-left: 2px;
+}
+
+.removeSibling{
+    /*text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;*/
+    margin-left: 2px;
+}
 
 
 /* ======================================================================================

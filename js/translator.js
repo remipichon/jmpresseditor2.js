@@ -41,6 +41,45 @@ function initContainer() {
     };
 }
 
+function initJmpress() {
+
+    $('#slideArea').children().remove();
+    //il semblerait que Jmpress ait besoin d'au moins une slide dans slideArea pour pouvoir looper
+    $('#slideArea').append('<div id="home" class="hidden step slide overview " data-scale ="5" data-x="1000" data-z ="1000" style="display:block"></div>');
+    $('#slideArea').removeClass();
+    $('#slideArea').jmpress({
+        //mouse: {clickSelects: false},
+        keyboard: {use: false},
+//                    keyboard: {
+//                        112: ''  //doesn't work although doc shows me this way
+//                    },
+        viewPort: {
+            height: 400,
+            width: 1200,
+            maxScale: 1
+        }
+    });
+//                $('#slideArea').jmpress({
+//                    viewPort: {
+//                        height: 400,
+//                        width: 3000,
+//                        maxScale: 1
+//                    }
+//                });
+    globalConfig = {
+        heightSlide: parseInt($('#home').css('height')),
+        widthSlide: parseInt($('#home').css('width'))
+    };
+
+    $('#slideArea').jmpress('deinit', $('#home'));
+    $('#home').removeClass('slide'); //sinon la slide prend de la place dans le DOM alors que Jmpress ne la connait pas              
+
+    transform3D = new Transform3D();
+
+}
+
+
+
 /* classe slide
  * matricule
  * type

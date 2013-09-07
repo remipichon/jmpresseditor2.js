@@ -1,49 +1,5 @@
 /* CSS de test */
-.iframeInSlide{
-    height: 100%;
-    width: 100%;
-}
 
-.iframeCode{
-    height: 100%;
-    width: 100%;
-}
-
-#espacePerduSousTimeLine{
-    height: 300px;
-}
-
-#treeMaker {
-    color: white;
-    font-family: Arial;
-}
-
-#tree {
-    color: white;
-    font-family: Arial;
-}
-
-.present-slide{
-    color: white ;
-}
-
-.past-slide{
-    color: #9F9FA0;
-}
-
-.future-slide{
-    color:  #ABAAFF;
-}
-
-.addSibling{
-     list-style-type: none;
-     margin-left: 2px;
-}
-
-.removeSibling{
-    /*text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;*/
-    margin-left: 2px;
-}
 
 /* @-webkit-keyframes spinner {
     from,15% { -webkit-transform: rotateY(0deg);    }

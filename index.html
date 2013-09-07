@@ -130,28 +130,26 @@
 
 
         <div class='noJoystick sidebar' id="sidebarTree">
-            <div class='arrow-nav' id="arrow-nav-tree"></div>
             <ul>  
                 <li id="toolsTree">
                     <h1 id="header-drawing-tools">AUTOMATIC SLIDESHOW TOOLS</h1>
                     <h3 id='slideshowName' title="Current slideshow's name"> New slide show </h3>
-                    <ul>
-                        <li id='goSlideShow' title="goSlideShow">
+                    <ul id='tree-action-button'>
+                        <li id='goSlideShow' title="generate SlideShow from tree">
                             <p>launch slideshow</p>
                         </li>
-                        <li id='goTree'  title="goTree">
-                            <p>edit tree</p>
+                        <li id='quitTree'  title="Quit tree edit">
+                            <p>quit(coming soon)</p>
                         </li>
                     </ul>
                 </li>
+
+                <li id="treeMaker" style="overflow-y:scroll; overflow-x:auto;">
+                    <ol>
+                        <li class='addSibling'> [+]  </li> 
+                    </ol>
+                </li>
             </ul>
-
-            <div id="treeMaker" style="overflow-y:scroll; overflow-x:auto;">
-                <ol>
-                    <li class='addSibling'> [+]  </li> 
-                </ol>
-            </div>
-
         </div>
 
 
@@ -260,7 +258,7 @@
 
         <script id="templateImage" type="text/template">
 
-                        <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
+            <img id={{matricule}} matricule={{matricule}} src='{{source}}' style='position: relative; left: {{pos.x}}px; top: {{pos.y}}px' /> 
 
         </script>
 
