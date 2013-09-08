@@ -27,7 +27,9 @@ Object.size = function(obj) {
 
 globalCpt = 0;
 function initContainer() {
-    container = {metadata: {}, slide: [],
+    container = {metadata: {
+            type: 'free' //free, tree
+    }, slide: [],
         getSlide: function(matricule) {
             for (var i in container.slide) {
                 if (container.slide[i].matricule === matricule)

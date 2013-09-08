@@ -118,7 +118,7 @@ function handlerLayout() {
 
     $('#arrow-nav').on('click', function() {
         extendSideBar($('#sidebar'));
-        extendSideBar($('#sidebarTree'),'hide');
+        extendSideBar($('#sidebarTree'), 'hide');
     });
 
     $('#arrow-nav-tree').on('click', function() {
@@ -147,7 +147,7 @@ function handlerLayout() {
      * ====================================================================================== */
 
     $('#save').on('click', function() {
-        modalSelectStorage(saveJson, 'dialog-select-storage');
+        modalSelectStorage(saveJson);
     });
     $('#quickSave').on('click', quickSave);
 
@@ -157,16 +157,12 @@ function handlerLayout() {
      * LOAD       -   load button
      * charge la présentation en local storage 
      * ====================================================================================== */
-    $('#loadSlide').on('click', function(event) {
-        modalSelectStorage(loadJsonForSlideShow, 'dialog-select-storage');
-        extendSideBar($('#sidebarTree'), 'hide');
-        extendSideBar($('#sidebar'), 'show');
+    $('#loadSlideShow').on('click', function(event) {
+        modalSelectStorage(loadSlideShowByTypes);
     });
-
+    //possibilité de faire un seul handler je pense KIKI
     $('#loadTree').on('click', function(event) {
-        modalSelectStorage(loadJsonForTree, 'dialog-select-storage');
-        extendSideBar($('#sidebarTree'), 'show');
-        extendSideBar($('#sidebar'), 'hide');
+        modalSelectStorage(loadSlideShowByTypes);
     });
 
 
@@ -180,7 +176,7 @@ function handlerLayout() {
         location.reload();
     });
     $('#clearOne').click(function() {
-        modalSelectStorage(clearOne, 'dialog-select-storage');
+        modalSelectStorage(clearOne);
     });
     $('#clearDom').click(function() {
         location.reload();
@@ -244,7 +240,7 @@ function extendSideBar($sidebar, option) {
     if (typeof option === 'undefined')
         option = '';
 
-    if (parseInt($sidebar.css('margin-left')) >= 0 || option === 'hide')  {
+    if (parseInt($sidebar.css('margin-left')) >= 0 || option === 'hide') {
         //hide
         var width = parseInt($sidebar.css('width'));
         $sidebar.animate({marginLeft: -width}, 500);
@@ -257,11 +253,16 @@ function extendSideBar($sidebar, option) {
     }
 }
 
-function quickSave(localName) {
+function quickSave(localName) { //il n'y a qu'elle même qui s'appelle en passant un parametre
     if (typeof localName !== 'string') {
-        localName = $('#slideshowName').html();
+
+        if (container.metadata.type === 'free')
+            localName = $('#slideshowNameFree').html();
+        else if (container.metadata.type === 'tree')
+            localName = $('#slideshowNameTree').html();
+
         if (localName === 'New slide show' || localName === '') {
-            modalSelectStorage(quickSave, 'dialog-select-storage');
+            modalSelectStorage(quickSave);
             return;
         }
     }
@@ -538,36 +539,47 @@ function launchPresentMode() {
 
 
 
-function goSlideShowFromContainer(){
+function goSlideShowFromContainer() {
     var toCopy = container;
     initContainer();
-   $(toCopy).each(function(indice,slide){
-       var matricule = slide.matricule;
-       //possible que le procotype mit par watch.js pose pb
-       var element = slide.element;
-       delete slide.element;
-       new Slide(slide);
-       $(element).each(function(matricule,element){
-          new Text(matricule,element); 
-       });
-       
-       
-       
-   });
-   
-}   
+    $(toCopy).each(function(indice, slide) {
+        var matricule = slide.matricule;
+        //possible que le procotype mit par watch.js pose pb
+        var element = slide.element;
+        delete slide.element;
+        new Slide(slide);
+        $(element).each(function(matricule, element) {
+            new Text(matricule, element);
+        });
+
+
+
+    });
+
+}
 
 
 function saveJson(localName) {
 
     var savedJson;
-    if ($('#treeMaker').length !== 0) {
-        goSlideShow();
-        savedJson = JSON.stringify(container, null, 2);
-        goTreeFromContainer();
-    } else {
+
+    if (container.metadata.type === 'free') {
         savedJson = JSON.stringify(container, null, 2);
     }
+    else if (container.metadata.type === 'tree') {
+        if ($('#treeMaker').length !== 0) {
+            goSlideShow();
+            savedJson = JSON.stringify(container, null, 2);
+            goTreeFromContainer();
+        } else {
+            savedJson = JSON.stringify(container, null, 2);
+        }
+    } else {
+        alert('Le type de la présentation n\'est pas connu : ' + container.metadata.type);
+        return;
+    }
+
+
 
     localStorage.setItem(localName, savedJson);
 }
@@ -575,9 +587,9 @@ function saveJson(localName) {
 /* function de l'init de la modal de slection d'un element du local storage
  * commun à load/save/clear
  */
-function modalSelectStorage(callback, modal) {
+function modalSelectStorage(callback) {
 
-    var $modal = $('#' + modal);
+    var $modal = $('#dialog-select-storage');
     $modal.animate({marginTop: 0}, 500);
     //handler pour fermer la modale
     /* lorsque modalSelectStorage est call, body capte en même temps le click.
@@ -615,17 +627,34 @@ function hideModalSelectStorage($modal) {
     $modal.animate({marginTop: -height}, 500);
 }
 
-function loadJsonForTree(localName) {
-    $('#slideshowName').html(localName);
+function loadSlideShowByTypes(localName) {
     initContainer();
     container = JSON.parse(localStorage.getItem(localName));
+
+    if (container.metadata.type === 'free') {
+        //slideShow free
+        loadJsonForSlideShow(localName);
+        extendSideBar($('#sidebarTree'), 'hide');
+        extendSideBar($('#sidebar'), 'show');
+
+    } else if (container.metadata.type === 'tree') {
+        //slideShow tree
+        loadJsonForTree(localName);
+        extendSideBar($('#sidebarTree'), 'show');
+        extendSideBar($('#sidebar'), 'hide');
+    } else {
+        alert('La présentation chargée depuis le local storage ne correspond à aucuns types connus (free ou tree) :' + container.metadata.type);
+    }
+
+}
+
+function loadJsonForTree(localName) {
+    $('#slideshowNameTree').html(localName);
     goTreeFromContainer();
-    $('#goTree').fadeOut(1);
-    $('#goSlideShow').fadeIn(1);
 }
 
 function loadJsonForSlideShow(localName) {
-    container = JSON.parse(localStorage.getItem(localName));
+    $('#slideshowNameFree').html(localName);
     goSlideShowFromContainer();
 }
 

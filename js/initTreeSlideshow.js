@@ -11,6 +11,7 @@
 
 function initAutomatic() {
     initContainer();
+    container.metadata.type = 'tree';
 //     var config = {
 //         cranX: 1800,
 //         cranY: 1000,
