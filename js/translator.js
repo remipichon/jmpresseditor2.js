@@ -153,6 +153,7 @@ Slide = Class.extend({
                 if (typeof params[param] === 'object') {
                     for (var paramNested in params[param]) {
                         this[param][paramNested] = params[param][paramNested];
+                        
                     }
                 } else {
                     this[param] = params[param];

@@ -540,17 +540,26 @@ function launchPresentMode() {
 
 
 function goSlideShowFromContainer() {
-    var toCopy = container;
+    var toCopy = container.slide;
     initContainer();
     $(toCopy).each(function(indice, slide) {
-        var matricule = slide.matricule;
+        var matriculeSlide = slide.matricule;
         //possible que le procotype mit par watch.js pose pb
         var element = slide.element;
         delete slide.element;
         new Slide(slide);
-        $(element).each(function(matricule, element) {
-            new Text(matricule, element);
-        });
+        console.log(element);
+        
+        truc = element;
+//        $(element).each(function(matricule, el) {
+        for( var matricule in element){
+//            console.log(matricule);
+//            console.log(matriculeSlide);
+//            console.log(el);
+            var el = element[matricule];
+            new Text(matriculeSlide, el);
+//        });
+        }
 
 
 
@@ -595,11 +604,11 @@ function modalSelectStorage(callback) {
     /* lorsque modalSelectStorage est call, body capte en même temps le click.
      je mets donc un one pour attacher le one qui fermera la modal par un click au dehors
      habile :)    */
-    $('body').children(':not(#dialog-select-storage)').one('click', function() {
-        $('body').children(':not(#dialog-select-storage)').one('click', function() {
-            hideModalSelectStorage($modal);
-        });
-    });
+//    $('body').children(':not(#dialog-select-storage)').one('click', function() {
+//        $('body').children(':not(#dialog-select-storage)').one('click', function() {
+//            hideModalSelectStorage($modal);
+//        });
+//    });
 
     //handler pour la saisie d'un nom
     $('#' + $modal.attr('id') + ' #new-local').one('click', function(event) {
