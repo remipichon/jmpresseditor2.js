@@ -357,3 +357,24 @@ body
 }
 
 
+/* ======================================================================================
+ * PANNEL SELECT LOCAL STORAGE
+ * css s'appliquant à displaymode.html (à mettre ds fichier à part ?)
+ * ====================================================================================== */
+
+
+#dialog-select-storage{
+    width: 30%;
+    min-height: 30%;
+    top:0;
+    left: 35%;
+     text-align: center;
+    padding: 0% 4% 0% 4%;
+    margin: auto;
+    color:#FFF;
+     z-index: 0;
+    background: #666; 
+    opacity:0.9;
+    filter:alpha(opacity=90); 
+    
+}

@@ -7,7 +7,7 @@
 
 
 
-$(document).ready(function() {
+function handlerLayout() {
 
     //calcul de la taille necessaire pour la div contenant un asceneurs
     $(window).on('resize', resizeScrool);
@@ -61,14 +61,14 @@ $(document).ready(function() {
      * TREE PANNEL - gestion de la présentation hierarchisée grace au tree
      * ======================================================================================*/
 
-    $('#tree-tool').on('click',  goTreeFromContainer);
-   
-    $('#goSlideShow').on('click', function(){
+    $('#tree-tool').on('click', goTreeFromContainer);
+
+    $('#goSlideShow').on('click', function() {
         extendSideBar($('#sidebarTree'));
         goSlideShow();
-    });   
-    
-    
+    });
+
+
     $('#treeMaker').on('click', '.addSibling', addSibling);
 
     $('#treeMaker').on('click', '.removeSibling', removeSibling);
@@ -113,19 +113,22 @@ $(document).ready(function() {
      * ====================================================================================== */
     //pour cacher l'un ou l'autre par défaut
 //    extendSideBar($('#sidebar'));
-    extendSideBar($('#sidebarTree'));
+    extendSideBar($('#sidebarTree'), 'hide');
+    hideModalSelectStorage($('#dialog-select-storage'));
 
     $('#arrow-nav').on('click', function() {
         extendSideBar($('#sidebar'));
-        if (!$('#sidebarTree').hasClass('hidden-bar')) extendSideBar($('#sidebarTree'));
-        
+        if (!$('#sidebarTree').hasClass('hidden-bar'))
+            extendSideBar($('#sidebarTree'));
+
 
     });
 
     $('#tree-tool').on('click', function() {
-        if (!$('#sidebar').hasClass('hidden-bar')) extendSideBar($('#sidebar'));
+        // if (!$('#sidebar').hasClass('hidden-bar'))
+        extendSideBar($('#sidebar'), 'hide');
         extendSideBar($('#sidebarTree'));
-        
+
     });
 
     /* ======================================================================================
@@ -142,7 +145,7 @@ $(document).ready(function() {
      * ====================================================================================== */
 
     $('#save').on('click', function() {
-        modalSelectStorage(saveJson);
+        modalSelectStorage(saveJson, 'dialog-select-storage');
     });
     $('#quickSave').on('click', quickSave);
 
@@ -153,11 +156,15 @@ $(document).ready(function() {
      * charge la présentation en local storage 
      * ====================================================================================== */
     $('#loadSlide').on('click', function(event) {
-        modalSelectStorage(loadJsonForSlideShow);
+        modalSelectStorage(loadJsonForSlideShow, 'dialog-select-storage');
+        extendSideBar($('#sidebarTree'), 'hide');
+        extendSideBar($('#sidebar'), 'show');
     });
 
     $('#loadTree').on('click', function(event) {
-        modalSelectStorage(loadJsonForTree);
+        modalSelectStorage(loadJsonForTree, 'dialog-select-storage');
+        extendSideBar($('#sidebarTree'), 'show');
+        extendSideBar($('#sidebar'), 'hide');
     });
 
 
@@ -171,14 +178,14 @@ $(document).ready(function() {
         location.reload();
     });
     $('#clearOne').click(function() {
-        modalSelectStorage(clearOne);
+        modalSelectStorage(clearOne, 'dialog-select-storage');
     });
     $('#clearDom').click(function() {
         location.reload();
     });
 
 
-});
+}
 /************* definition des fonctions nécéssaires à la gestion de l'interface ****/
 function createSlide() {
     $('li').removeClass("buttonclicked");
@@ -231,31 +238,37 @@ function createTextOnSlide() {
 }
 
 
-function extendSideBar($sidebar) {
+function extendSideBar($sidebar, option) {
 //        if ( ! $('#arrow-nav-tree').hasClass('hidden-bar')) $('#arrow-nav').trigger('click');
-
+    if (typeof option === 'undefined')
+        option = '';
 
     $sidebar.toggleClass('hidden-bar');
-    if ($sidebar.hasClass('hidden-bar')) {
+    if ($sidebar.hasClass('hidden-bar') && option !== 'show') {
         var width = parseInt($sidebar.css('width'));
         $sidebar.animate({marginLeft: -width}, 500);
         $('#' + $sidebar.attr('id') + ' .arrow-nav').css('background-position', '-50px 0');
     }
-    else {
+    else if (option !== 'hide') {
         $sidebar.animate({marginLeft: "0"}, 500);
         $('#' + $sidebar.attr('id') + ' .arrow-nav').css('background-position', '0 0');
     }
 }
 
-function quickSave() {
-    if ($('#treeMaker').length !== 0) {
-        goSlideShow();
-        saveJson($('#slideshowName').html());
-        goTreeFromContainer();
-    } else {
-        saveJson($('#slideshowName').html());
+function quickSave(localName) {
+    if (typeof localName !== 'string') {
+        localName = $('#slideshowName').html();
+        if (localName === 'New slide show' || localName === '') {
+            modalSelectStorage(quickSave, 'dialog-select-storage');
+            return;
+        }
     }
 
+    saveJson(localName);
+}
+
+function _return(param) {
+    return param;
 }
 
 function resizeScrool() {
@@ -270,81 +283,81 @@ function resizeScrool() {
 
 
 function addSibling() {
-        //console.log('add sib');
-        var data = {
-            'content': 'Type title here',
-            'title': true,
-            matricule: 'textarea' + globalCpt++
-        };
+    //console.log('add sib');
+    var data = {
+        'content': 'Type title here',
+        'title': true,
+        matricule: 'textarea' + globalCpt++
+    };
 
-        var template = $('#templateSibling').html();
-        var html = Mustache.to_html(template, data);
+    var template = $('#templateSibling').html();
+    var html = Mustache.to_html(template, data);
 
 
-        $(this).parent().append(html);
-        $(this).parent().append($(this)); //deplacement du bouton
+    $(this).parent().append(html);
+    $(this).parent().append($(this)); //deplacement du bouton
 
-    }
-    
-    
-    function removeSibling() {
-        if (!confirm('Attention, tu vas supprimer : ' + $(this).parent().children('.li,.textarea').html()))
-            return;
-        //console.log('remove', $(this));
-        $(this).parent().next('ol').remove();
-        $(this).parent().remove();
-    }
-    
-    
-    function switchContent() {
-        if (!confirm('Attention, tu vas switcher de content : ' + $(this).parent().children('.li,.textarea').html()))
-            return;
-        //console.log('switch to content', $(this));
-        data = {
-            matricule: 'textarea' + globalCpt++
-        };
-        var content = false;
-        ($(this).parent().children('.liTitle').length !== 0) ? content = true : null;
-        if (content) {
-            $(this).parent().children('.liTitle').remove();
-            var template = $('#templateContent').html();
+}
+
+
+function removeSibling() {
+    if (!confirm('Attention, tu vas supprimer : ' + $(this).parent().children('.li,.textarea').html()))
+        return;
+    //console.log('remove', $(this));
+    $(this).parent().next('ol').remove();
+    $(this).parent().remove();
+}
+
+
+function switchContent() {
+    if (!confirm('Attention, tu vas switcher de content : ' + $(this).parent().children('.li,.textarea').html()))
+        return;
+    //console.log('switch to content', $(this));
+    data = {
+        matricule: 'textarea' + globalCpt++
+    };
+    var content = false;
+    ($(this).parent().children('.liTitle').length !== 0) ? content = true : null;
+    if (content) {
+        $(this).parent().children('.liTitle').remove();
+        var template = $('#templateContent').html();
 //            //console.log('if');
-            data.content = 'Type content here';
-        } else if ($(this).parent().children('.textarea').length !== 0) {
-            $(this).parent().children('.textarea').remove();
-            var template = $('#templateTitle').html();
-            data.content = 'Type title here';
-        }
-
-
-
-        var html = Mustache.to_html(template, data);
-        $(this).parent().prepend(html);
-        if (content) {//si ajout de content il faut le handler CK
-            $(this).parent().children('.textarea').one('click', lauchCK);
-        }
-
+        data.content = 'Type content here';
+    } else if ($(this).parent().children('.textarea').length !== 0) {
+        $(this).parent().children('.textarea').remove();
+        var template = $('#templateTitle').html();
+        data.content = 'Type title here';
     }
-    
-    
-    
-    function removeCK() {
-        var txt = CKEDITOR.instances[$(this).prev().attr('id')].getData();
-        //console.log('leave cke', txt);
-        $(this).parent().on('click', lauchCK);
-        var $parent = $(this).parent();
+
+
+
+    var html = Mustache.to_html(template, data);
+    $(this).parent().prepend(html);
+    if (content) {//si ajout de content il faut le handler CK
+        $(this).parent().children('.textarea').one('click', lauchCK);
+    }
+
+}
+
+
+
+function removeCK() {
+    var txt = CKEDITOR.instances[$(this).prev().attr('id')].getData();
+    //console.log('leave cke', txt);
+    $(this).parent().on('click', lauchCK);
+    var $parent = $(this).parent();
 //        CKEDITOR.instances[$(this).prev().attr('id')].destroy();
 
 //       $parent.html(txt);
 
 //        $(this).parent().children().remove();
-        $(this).parent().html(txt);
+    $(this).parent().html(txt);
 //        hljs.initHighlighting($(this).prev().attr('id'));
 
-    }
-    
-    
-    
+}
+
+
+
 
 function lauchCK() {
     //empecher le double lauch
@@ -385,7 +398,7 @@ function goSlideShow() {
  * (s'il existe, l'adaptateur devra s'arrange pour ce que ce soit le cas)
  */
 function goTreeFromContainer() {
-    
+
     $('#slideArea').jmpress('deinit');
     $('#slideArea').children().remove();
 
@@ -526,44 +539,62 @@ function launchPresentMode() {
 
 
 
-function saveJson(localName) {
-    var savedJson = JSON.stringify(container, null, 2);
+function saveJson(localName) {  
+
+    var savedJson;
+    if ($('#treeMaker').length !== 0) {
+        goSlideShow();
+        savedJson = JSON.stringify(container, null, 2);
+        goTreeFromContainer();
+    } else {
+        savedJson = JSON.stringify(container, null, 2);
+    }
+
     localStorage.setItem(localName, savedJson);
 }
 
 /* function de l'init de la modal de slection d'un element du local storage
  * commun à load/save/clear
  */
-function modalSelectStorage(callback) {
-    /* KIKI ce n'est pas algorythmiquement au top mais ca ira pour le moment 27 08 2013*/
-    var option = {
-        closeOnEscape: true,
-        title: 'select a slideshow',
-        buttons: [
-            {text: "New slideshow",
-                click: function() {
-                    var name = prompt('Type a name that does\'t already exists (no check, be careful)');
-                    callback(name);
-                    $(this).dialog("close");
-                }
-            }
-        ]
-    };
+function modalSelectStorage(callback, modal) {
+
+    var $modal = $('#' + modal);
+    $modal.animate({marginTop: 0}, 500);
+    //handler pour fermer la modale
+    /* lorsque modalSelectStorage est call, body capte en même temps le click.
+     je mets donc un one pour attacher le one qui fermera la modal par un click au dehors
+     habile :)    */
+    $('body').children(':not(#dialog-select-storage)').one('click', function() {
+        $('body').children(':not(#dialog-select-storage)').one('click', function() {
+            hideModalSelectStorage($modal);
+        });
+    });
+
+    //handler pour la saisie d'un nom
+    $('#' + $modal.attr('id') + ' #new-local').one('click', function(event) {
+        var localName = prompt('Type a new name to save a new Slideshow');
+        console.log(localName);
+        callback(localName);
+        hideModalSelectStorage($modal);
+    });
 
     for (var key in localStorage) {
-        var item = {text: key,
-            click: function(event, ui) {
-                callback($(event.target).html());
-                $(this).dialog("close");
-            }
-        };
-        option.buttons.push(item);
+        var item = "<li>" + key + "</li> ";
+        $modal.children('ul').append(item);
+        $modal.last().one('click', function(event) {
+            callback($(event.target).html());
+            hideModalSelectStorage($modal);
+
+        });
     }
-
-    $('#dialog-select-storage').dialog(option);
-
 }
 
+function hideModalSelectStorage($modal) {
+    $modal.children('ul').children('li:not(#new-local)').remove();
+
+    var height = parseInt($modal.css('height'));
+    $modal.animate({marginTop: -height}, 500);
+}
 
 function loadJsonForTree(localName) {
     $('#slideshowName').html(localName);

@@ -40,7 +40,6 @@
         <script type="text/javascript" src="js/slideshowEditor.js"></script>
         <script type="text/javascript" src="js/translator.js"></script>
         <script type="text/javascript" src="js/initTreeSlideshow.js"></script>
-        <script type="text/javascript" src="js/buildingTree.js"></script>
 
 
         <!--les boites a outils-->
@@ -60,12 +59,13 @@
                 <li id="present" title="launch the presentation"><p>present</p></li>
                 <li id="save" title="save your presentation"><p>save</p></li>
                 <li id="quickSave" title="save your presentation"><p>quick save</p></li>
-                <li id="extract" title="extract your presentation"><p>extract</p></li>
+                
                 <li id="parameters" title="parameters"><p>options</p>
                     <ul id="topbar-submenu">
                         <li id="clearAll" title="clear local storage and DOM"><p>clear all</p></li>
-                        <li id="clearOne" title="clear one slideshow"><p>clear one</p></li>
-                        <li id="clearDom" title="clear one slideshow"><p>clear all but local storage</p></li>
+                        <li id="clearOne" title="clear one slideshow"><p>delete one</p></li>
+                        <li id="clearDom" title="clear  slideshow"><p>clear all but local storage</p></li>
+                        <li id="extract" title="extract your presentation"><p>extract</p></li>
                         <!--<li id="info" title="more info on this editor"><p>info</p></li>-->
                         <!--<li>id="help" data-toggle="modal" data-target="#helpModal" title="how to use this editor"><p>help</p></li>-->
                         <li  id="loadSlide" title="load presentation"><p>load slide show</p></li>
@@ -133,7 +133,7 @@
             <ul>  
                 <li id="toolsTree">
                     <h1 id="header-drawing-tools">AUTOMATIC SLIDESHOW TOOLS</h1>
-                    <h3 id='slideshowName' title="Current slideshow's name"> New slide show </h3>
+                    <h3 id='slideshowName' title="Current slideshow's name">New slide show</h3> <!--si ce texte change, il faut changer dans quickSave() (layout.js au 8092013-->
                     <ul id='tree-action-button'>
                         <li id='goSlideShow' title="generate SlideShow from tree">
                             <p>launch slideshow</p>
@@ -144,7 +144,7 @@
                     </ul>
                 </li>
 
-                <li id="treeMaker" style="overflow-y:scroll; overflow-x:auto;">
+                <li id="treeMaker" style="overflow-y:auto; overflow-x:auto;">
                     <ol>
                         <li class='addSibling'> [+]  </li> 
                     </ol>
@@ -168,7 +168,21 @@
 
 
 
-        <div id='dialog-select-storage'> </div>
+        <div id='dialog-select-storage'> 
+            <h3> Select a slideshow from local storage </h3>
+            
+            <ul>
+                <li id="new-local">
+                   <span id='new-button'> create new </span>
+                </li>
+                <li>
+                    
+                </li>
+            
+            </ul>
+        
+        
+        </div>
 
         <div id='dialog-extract'>    </div>
 
@@ -224,9 +238,10 @@
                 //                CKEDITOR.replace('debugCk');
                 initContainer();
 
-
-
                 initJmpress();
+                
+                handlerLayout();
+                
 
             });
         </script>
