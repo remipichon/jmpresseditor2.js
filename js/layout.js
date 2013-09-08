@@ -118,15 +118,17 @@ function handlerLayout() {
 
     $('#arrow-nav').on('click', function() {
         extendSideBar($('#sidebar'));
-        if (!$('#sidebarTree').hasClass('hidden-bar'))
-            extendSideBar($('#sidebarTree'));
+        extendSideBar($('#sidebarTree'),'hide');
+    });
 
-
+    $('#arrow-nav-tree').on('click', function() {
+        extendSideBar($('#sidebar'), 'hide');
+        extendSideBar($('#sidebarTree'));
     });
 
     $('#tree-tool').on('click', function() {
         // if (!$('#sidebar').hasClass('hidden-bar'))
-        extendSideBar($('#sidebar'), 'hide');
+        extendSideBar($('#sidebar'));
         extendSideBar($('#sidebarTree'));
 
     });
@@ -239,17 +241,17 @@ function createTextOnSlide() {
 
 
 function extendSideBar($sidebar, option) {
-//        if ( ! $('#arrow-nav-tree').hasClass('hidden-bar')) $('#arrow-nav').trigger('click');
     if (typeof option === 'undefined')
         option = '';
 
-    $sidebar.toggleClass('hidden-bar');
-    if ($sidebar.hasClass('hidden-bar') && option !== 'show') {
+    if (parseInt($sidebar.css('margin-left')) >= 0 || option === 'hide')  {
+        //hide
         var width = parseInt($sidebar.css('width'));
         $sidebar.animate({marginLeft: -width}, 500);
         $('#' + $sidebar.attr('id') + ' .arrow-nav').css('background-position', '-50px 0');
     }
     else if (option !== 'hide') {
+        //show
         $sidebar.animate({marginLeft: "0"}, 500);
         $('#' + $sidebar.attr('id') + ' .arrow-nav').css('background-position', '0 0');
     }
@@ -536,10 +538,27 @@ function launchPresentMode() {
 
 
 
+function goSlideShowFromContainer(){
+    var toCopy = container;
+    initContainer();
+   $(toCopy).each(function(indice,slide){
+       var matricule = slide.matricule;
+       //possible que le procotype mit par watch.js pose pb
+       var element = slide.element;
+       delete slide.element;
+       new Slide(slide);
+       $(element).each(function(matricule,element){
+          new Text(matricule,element); 
+       });
+       
+       
+       
+   });
+   
+}   
 
 
-
-function saveJson(localName) {  
+function saveJson(localName) {
 
     var savedJson;
     if ($('#treeMaker').length !== 0) {
@@ -607,6 +626,7 @@ function loadJsonForTree(localName) {
 
 function loadJsonForSlideShow(localName) {
     container = JSON.parse(localStorage.getItem(localName));
+    goSlideShowFromContainer();
 }
 
 function clearOne(localName) {

@@ -59,7 +59,7 @@
                 <li id="present" title="launch the presentation"><p>present</p></li>
                 <li id="save" title="save your presentation"><p>save</p></li>
                 <li id="quickSave" title="save your presentation"><p>quick save</p></li>
-                
+
                 <li id="parameters" title="parameters"><p>options</p>
                     <ul id="topbar-submenu">
                         <li id="clearAll" title="clear local storage and DOM"><p>clear all</p></li>
@@ -81,6 +81,7 @@
             <ul>  
                 <li id="tools">
                     <h1 id="header-drawing-tools">DRAWING TOOLS</h1>
+                    <h3 id='slideshowName' title="Current slideshow's name">New slide show</h3> <!--si ce texte change, il faut changer dans quickSave() (layout.js au 8092013-->                    
                     <ul>
                         <li class="tree-tool-button" id='tree-tool' title="edit tree"><p>tree</p>
                         <li class="slide-tool-button" id='slide-tool' title="create a slide"><p>slide</p>
@@ -130,6 +131,7 @@
 
 
         <div class='noJoystick sidebar' id="sidebarTree">
+            <div class='arrow-nav' id="arrow-nav-tree"></div>
             <ul>  
                 <li id="toolsTree">
                     <h1 id="header-drawing-tools">AUTOMATIC SLIDESHOW TOOLS</h1>
@@ -170,18 +172,18 @@
 
         <div id='dialog-select-storage'> 
             <h3> Select a slideshow from local storage </h3>
-            
+
             <ul>
                 <li id="new-local">
-                   <span id='new-button'> create new </span>
+                    <span id='new-button'> create new </span>
                 </li>
                 <li>
-                    
+
                 </li>
-            
+
             </ul>
-        
-        
+
+
         </div>
 
         <div id='dialog-extract'>    </div>
@@ -239,9 +241,9 @@
                 initContainer();
 
                 initJmpress();
-                
+
                 handlerLayout();
-                
+
 
             });
         </script>

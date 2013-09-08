@@ -143,21 +143,20 @@ body
     
     background:url("../images/arrowsWGp.PNG") 0 0 no-repeat;
     /*background-size: 90%;*/
+     opacity: 0.5;
 }
 
 .sidebar #arrow-nav{
-    top:60%;
+    top:50%;
     margin-left: 180px;
 }
-.sidebar #arrow-nav-tree{
-    top: 8%;
-     left: 380px; 
-}
-/*
-#sidebar #arrow-nav:hover
+
+
+.sidebar .arrow-nav:hover
 {
-    background-position: -50px 0;
-}*/
+   opacity: 1;
+/*     background-position: -50px 0; */
+}
 
 .sidebar 
 {
@@ -311,6 +310,12 @@ body
 .removeSibling{
     /*text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;*/
     margin-left: 2px;
+}
+
+.sidebar #arrow-nav-tree{
+    top: 50%;
+    left: calc(100% - 50px);
+    
 }
 
 
