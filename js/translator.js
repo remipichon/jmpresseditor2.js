@@ -109,7 +109,7 @@ Slide = Class.extend({
                     return;
 
                 }
-            }
+            }   
         }
 
         //default value
@@ -374,7 +374,7 @@ Element = Class.extend({
         if (typeof params !== 'undefined') {
             //if matricule is set, check if unique
             if (typeof params.matricule !== 'undefined') {
-                if (findObjectOfComposant(params.matricule) !== false) { //le matricule existe déjà !
+                if (typeof findObjectOfComposant(params.matricule) !== 'undefined') { //le matricule existe déjà !
                     console.log('Error : construct Element : matricule ' + params.matricule + ' already set in container');
                     delete this;
                     return;

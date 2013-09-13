@@ -146,8 +146,9 @@ function handlerLayout() {
      * enregistre la présentation en local storage (tjs présente si F5)
      * ====================================================================================== */
 
-    $('#save').on('click', function() {
-        modalSelectStorage(saveJson);
+    $('#save').on('click', function(event) {
+        event.stopPropagation();
+        modalSelectStorage(saveJson,'save');
     });
     $('#quickSave').on('click', quickSave);
 
@@ -158,27 +159,24 @@ function handlerLayout() {
      * charge la présentation en local storage 
      * ====================================================================================== */
     $('#loadSlideShow').on('click', function(event) {
-        modalSelectStorage(loadSlideShowByTypes);
+        event.stopPropagation();
+        modalSelectStorage(loadSlideShowByTypes,'load');
     });
-    //possibilité de faire un seul handler je pense KIKI
-    $('#loadTree').on('click', function(event) {
-        modalSelectStorage(loadSlideShowByTypes);
-    });
-
-
+  
 
     /* ======================================================================================
      * CLEAR
      * pour vider les présentations sauvergarder
      * ====================================================================================== */
-    $('#clearAll').click(function() {
+    $('#clearAll').on('click',function() {
         window.localStorage.clear();
         location.reload();
     });
-    $('#clearOne').click(function() {
-        modalSelectStorage(clearOne);
+    $('#clearOne').on('click',function(event) {
+        event.stopPropagation();
+        modalSelectStorage(clearOne,'Clear');
     });
-    $('#clearDom').click(function() {
+    $('#clearDom').on('click',function() {
         location.reload();
     });
 
@@ -262,7 +260,7 @@ function quickSave(localName) { //il n'y a qu'elle même qui s'appelle en passan
             localName = $('#slideshowNameTree').html();
 
         if (localName === 'New slide show' || localName === '') {
-            modalSelectStorage(quickSave);
+            modalSelectStorage(quickSave,'Save');
             return;
         }
     }
@@ -596,18 +594,23 @@ function saveJson(localName) {
 /* function de l'init de la modal de slection d'un element du local storage
  * commun à load/save/clear
  */
-function modalSelectStorage(callback) {
-
+function modalSelectStorage(callback,title) {
     var $modal = $('#dialog-select-storage');
+    $modal.children('h3').html('Select a slideshow from local storage to '+title);
+    $modal.children('ul').children('li:not(#new-local)').remove();
+    $modal.children('ul').children('#new-local').off();
+
+    
     $modal.animate({marginTop: 0}, 500);
+     
     //handler pour fermer la modale
     /* lorsque modalSelectStorage est call, body capte en même temps le click.
      je mets donc un one pour attacher le one qui fermera la modal par un click au dehors
      habile :)    */
 //    $('body').children(':not(#dialog-select-storage)').one('click', function() {
-//        $('body').children(':not(#dialog-select-storage)').one('click', function() {
-//            hideModalSelectStorage($modal);
-//        });
+        $(document).children(':not(#dialog-select-storage)').one('click', function() {
+            hideModalSelectStorage($modal);
+        });
 //    });
 
     //handler pour la saisie d'un nom
@@ -615,7 +618,7 @@ function modalSelectStorage(callback) {
         var localName = prompt('Type a new name to save a new Slideshow');
         console.log(localName);
         callback(localName);
-        hideModalSelectStorage($modal);
+        hideModalSelectStorage($modal,title);
     });
 
     for (var key in localStorage) {
@@ -623,15 +626,14 @@ function modalSelectStorage(callback) {
         $modal.children('ul').append(item);
         $modal.last().one('click', function(event) {
             callback($(event.target).html());
-            hideModalSelectStorage($modal);
+            hideModalSelectStorage($modal,title);
 
         });
     }
 }
 
 function hideModalSelectStorage($modal) {
-    $modal.children('ul').children('li:not(#new-local)').remove();
-
+//    $modal.children('ul').children('li:not(#new-local)').remove();
     var height = parseInt($modal.css('height'));
     $modal.animate({marginTop: -height}, 500);
 }

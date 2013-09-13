@@ -176,7 +176,7 @@ function callModelGUI(objectEvent) {
         if (objectEvent.matricule !== '') {
             //si ce matricule existe
             var slide = findObjectOfComposant(objectEvent.matricule);
-            if (slide != false) { // pas de !== ivi  
+            if (typeof slide !== 'undefined') { // pas de !== ivi  
                 //si le composant est une slide
                 if (slide.type === 'slide') {
                     //alors on peut ajouter directement l'element
