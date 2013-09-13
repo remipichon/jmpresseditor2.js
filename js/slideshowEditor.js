@@ -150,10 +150,11 @@ function handlerComposant($composant) {
             $(this).children().one('click', lauchCK);
             $(this).children().html(txt);
 
-            //console.log('maj texte dans container', $slideMother, matricule);
-            var $slideMother = getSlideMother(matricule);
+            
+            var slideMother = getSlideMother(matricule);
+            console.log('maj texte dans container', slideMother, matricule,txt);
             //mise à jour de l'objet dans le conteneur
-            container.slide[$slideMother].element[matricule].properties.content = txt;
+            container.getSlide(slideMother).element[matricule].properties.content = txt;
 
 
 

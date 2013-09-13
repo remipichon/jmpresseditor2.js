@@ -669,13 +669,15 @@ Image = Element.extend({
 function getSlideMother(matricule) {
 
     if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
-        $.each(container.slide, function(rien, slide) {         //parcours des slides
+        //$.each(container.slide, function(rien, slide) {         //parcours des slides
+        for( var mat in container.slide){
+            var slide = container.slide[mat];
             if (typeof slide.element[matricule] === 'undefined') {
                 ////console.log('pas dans la slide ', slide);
             } else {    //si le matricule est un element de la slide, on return le matricule de sa mere
                 return slide.matricule;
             }
-        });
+        }//});
     } else {                                            //si le matricule est celui d'une slide
         return matricule;
     }
