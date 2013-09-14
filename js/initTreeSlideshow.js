@@ -12,6 +12,7 @@
 function initAutomatic() {
     initContainer();
     container.metadata.type = 'tree';
+    container.metadata.name = $('#slideshowNameTree').html();
 //     var config = {
 //         cranX: 1800,
 //         cranY: 1000,
@@ -46,6 +47,7 @@ function initAutomatic() {
     goJmpress(config);
 //    //console.log('dyna');
     dynamic(config);
+    alertify.success('slideShow '+container.metadata.name+' created </br> use SPACE to navigate </br> click \'tree\' to edit again ');
 }
 
 function goNormalize() {
@@ -225,6 +227,7 @@ function goJmpress(config) {
             var upperY = parseInt($(this).attr('uppery'));
             var lowerY = parseInt($(this).attr('lowery'));
             new Slide({
+                auto: true,
                 properties: {
                     scale: Math.abs((upperY - lowerY)) * 4 / 3 / 1000
                 },
@@ -238,6 +241,7 @@ function goJmpress(config) {
             }
             );
             var slide = new Slide({
+                auto: true,
                 matricule: 'questions',
                 properties: {
                     //hierarchy: '' + $(this).attr('number'),

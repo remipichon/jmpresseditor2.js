@@ -28,7 +28,8 @@ Object.size = function(obj) {
 globalCpt = 0;
 function initContainer() {
     container = {metadata: {
-            type: 'free' //free, tree
+            type: 'free', //free, tree
+            name: 'Unnamed'
     }, slide: [],
         getSlide: function(matricule) {
             for (var i in container.slide) {

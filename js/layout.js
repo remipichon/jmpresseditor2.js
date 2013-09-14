@@ -19,6 +19,7 @@ function handlerLayout() {
      * TRIGGERS CREATE TEXT
      * ======================================================================================*/
     $('.text-tool-button').on('click', function(event) {
+        alertify.success('click on a slide to add text');
         event.stopPropagation();
         $('li').removeClass("buttonclicked");
         $('#text-tool').addClass("buttonclicked");     // mise en forme css
@@ -37,6 +38,7 @@ function handlerLayout() {
      * CREATION DES SLIDES
      * ======================================================================================*/
     $('.slide-tool-button').on('click', function(event) {
+        alertify.success('click anywhere to add text');
         event.stopPropagation();//KIKI
         $('li').removeClass("buttonclicked");
         $('#slide-tool').addClass("buttonclicked");     // mise en forme css
@@ -53,7 +55,7 @@ function handlerLayout() {
      * ======================================================================================*/
 
     $('#geek-tool').on('click', function(event) {
-        alert('coming soon');
+        alertify.error('coming soon');
     });
 
 
@@ -148,7 +150,7 @@ function handlerLayout() {
 
     $('#save').on('click', function(event) {
         event.stopPropagation();
-        modalSelectStorage(saveJson,'save');
+        modalSelectStorage(saveJson, 'save');
     });
     $('#quickSave').on('click', quickSave);
 
@@ -160,23 +162,32 @@ function handlerLayout() {
      * ====================================================================================== */
     $('#loadSlideShow').on('click', function(event) {
         event.stopPropagation();
-        modalSelectStorage(loadSlideShowByTypes,'load');
+        modalSelectStorage(loadSlideShowByTypes, 'load');
     });
-  
+
 
     /* ======================================================================================
      * CLEAR
      * pour vider les présentations sauvergarder
      * ====================================================================================== */
-    $('#clearAll').on('click',function() {
-        window.localStorage.clear();
-        location.reload();
+    $('#clearAll').on('click', function() {
+        // confirm dialog
+        alertify.confirm("This will delete <strong>all</strong> slideShow saved in local storage and refresh the editor. \n\
+</br></br> Are you sure you want to do it ?\n\
+</br></br></br>", function(e) {
+            if (e) {
+                // user clicked "ok"
+                window.localStorage.clear();
+                location.reload();
+            }
+        });
+
     });
-    $('#clearOne').on('click',function(event) {
+    $('#clearOne').on('click', function(event) {
         event.stopPropagation();
-        modalSelectStorage(clearOne,'Clear');
+        modalSelectStorage(clearOne, 'Clear');
     });
-    $('#clearDom').on('click',function() {
+    $('#clearDom').on('click', function() {
         location.reload();
     });
 
@@ -237,8 +248,8 @@ function createTextOnSlide() {
 function extendSideBar($sidebar, option) {
     if (typeof option === 'undefined')
         option = '';
-
-    if (parseInt($sidebar.css('margin-left')) >= 0 || option === 'hide') {
+    // marginLeft = 0 => sidebar visible, si cachée, maginleft  < 0
+    if (parseInt($sidebar.css('margin-left')) === 0 && option !== 'show' || option === 'hide') {
         //hide
         var width = parseInt($sidebar.css('width'));
         $sidebar.animate({marginLeft: -width}, 500);
@@ -260,7 +271,7 @@ function quickSave(localName) { //il n'y a qu'elle même qui s'appelle en passan
             localName = $('#slideshowNameTree').html();
 
         if (localName === 'New slide show' || localName === '') {
-            modalSelectStorage(quickSave,'Save');
+            modalSelectStorage(quickSave, 'Save');
             return;
         }
     }
@@ -516,7 +527,9 @@ function goTreeFromContainer() {
 
     $('#treeMaker').children('ol').append("<li class='addSibling'>Add Sibling</li>");
 
-    $tree.fadeIn(200);
+    //$tree.fadeIn(200);
+
+    alertify.success('edit ' + container.metadata.name + ' in tree mode');
 
 
 }
@@ -529,6 +542,7 @@ function launchPresentMode() {
             return;
         $(this).fadeOut(1000);
     });
+    alertify.success('present mode launch, ESC to edit again');
 //        window.open("displaymode.html", "display", "toolbar=no, directories=no, menubar=no, resizable=yes, scrollbars=no, width=1200, height=900, top=10, left=20");
 
 
@@ -541,35 +555,34 @@ function goSlideShowFromContainer() {
     var toCopy = container.slide;
     initContainer();
     $(toCopy).each(function(indice, slide) {
+        if (!slide.auto && container.metadata.type === 'tree') {//si la slide a été créée par l'user
+            console.log('infos : goSlideShowFromContainer : une slide non auto n\'a pas été prise en compte');
+            return;
+        }
         var matriculeSlide = slide.matricule;
         //possible que le procotype mit par watch.js pose pb
         var element = slide.element;
         delete slide.element;
         new Slide(slide);
-        console.log(element);
-        
-        truc = element;
-//        $(element).each(function(matricule, el) {
-        for( var matricule in element){
-//            console.log(matricule);
-//            console.log(matriculeSlide);
-//            console.log(el);
+        for (var matricule in element) {
             var el = element[matricule];
             new Text(matriculeSlide, el);
-//        });
         }
 
 
 
     });
 
+    alertify.success('edit ' + container.metadata.name + ' in free mode');
+
 }
 
 
 function saveJson(localName) {
+    
 
     var savedJson;
-
+    container.metadata.name = localName;
     if (container.metadata.type === 'free') {
         savedJson = JSON.stringify(container, null, 2);
     }
@@ -585,32 +598,36 @@ function saveJson(localName) {
         alert('Le type de la présentation n\'est pas connu : ' + container.metadata.type);
         return;
     }
-
-
-
+    
+  
     localStorage.setItem(localName, savedJson);
+    alertify.success(localName + ' saved ');
+    
+    console.log('smth saved',localStorage);
+
 }
 
 /* function de l'init de la modal de slection d'un element du local storage
  * commun à load/save/clear
  */
-function modalSelectStorage(callback,title) {
+function modalSelectStorage(callback, title) {
     var $modal = $('#dialog-select-storage');
-    $modal.children('h3').html('Select a slideshow from local storage to '+title);
+    $modal.children('h3').html('Select a slideshow from local storage to ' + title);
+//       $modal.children('ul').children('li:not(#new-local)').off();
     $modal.children('ul').children('li:not(#new-local)').remove();
     $modal.children('ul').children('#new-local').off();
 
-    
+
     $modal.animate({marginTop: 0}, 500);
-     
+
     //handler pour fermer la modale
     /* lorsque modalSelectStorage est call, body capte en même temps le click.
      je mets donc un one pour attacher le one qui fermera la modal par un click au dehors
      habile :)    */
 //    $('body').children(':not(#dialog-select-storage)').one('click', function() {
-        $(document).children(':not(#dialog-select-storage)').one('click', function() {
-            hideModalSelectStorage($modal);
-        });
+    $(document).children(':not(#dialog-select-storage)').one('click', function() {
+        hideModalSelectStorage($modal);
+    });
 //    });
 
     //handler pour la saisie d'un nom
@@ -618,17 +635,22 @@ function modalSelectStorage(callback,title) {
         var localName = prompt('Type a new name to save a new Slideshow');
         console.log(localName);
         callback(localName);
-        hideModalSelectStorage($modal,title);
+        hideModalSelectStorage($modal, title);
     });
 
     for (var key in localStorage) {
         var item = "<li>" + key + "</li> ";
         $modal.children('ul').append(item);
-        $modal.last().one('click', function(event) {
-            callback($(event.target).html());
-            hideModalSelectStorage($modal,title);
+//         $modal.last().one('click', function(event) {
+//             //$('#' + $modal.attr('id') + ' #new-local').off(); //supprimer le handler sur le createNew
+//             $modal.children('ul').children('li').each(function(){
+//                 $(this).off();
+//             });
+            
+//             callback($(event.target).html());
+//             hideModalSelectStorage($modal, title);
 
-        });
+//         });
     }
 }
 
@@ -655,6 +677,8 @@ function loadSlideShowByTypes(localName) {
         extendSideBar($('#sidebar'), 'hide');
     } else {
         alert('La présentation chargée depuis le local storage ne correspond à aucuns types connus (free ou tree) :' + container.metadata.type);
+        alertify.error(localName + ' saved ');
+        ('La présentation chargée depuis le local storage ne correspond à aucuns types connus (free ou tree) :' + container.metadata.type);
     }
 
 }
@@ -671,6 +695,7 @@ function loadJsonForSlideShow(localName) {
 
 function clearOne(localName) {
     localStorage.removeItem(localName);
+    alertify.success('' + localName + ' deleted');
 }
 
 

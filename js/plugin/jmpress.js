@@ -1564,7 +1564,7 @@
 		return "" + Math.round(Math.random() * 100000, 0);
 	}
 	function stopEvent(event) {
-		event.preventDefault();
+		//event.preventDefault();
 		event.stopPropagation();
 	}
 
@@ -1689,7 +1689,7 @@
 					action = event.shiftKey ? action[1] : action[0];
 				}
 				jmpress.jmpress( action );
-				// KIKI stopEvent(event);
+				stopEvent(event);
 			} else if ( $.isFunction(action) ) {
 				action.call(jmpress, event);
 			} else if ( action ) {
