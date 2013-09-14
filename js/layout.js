@@ -150,9 +150,13 @@ function handlerLayout() {
 
     $('#save').on('click', function(event) {
         event.stopPropagation();
-        modalSelectStorage(saveJson, 'save');
+        saveAs();
     });
-    $('#quickSave').on('click', quickSave);
+    $('#quickSave').on('click', saveJson);
+
+    $('#slideshowNameFree').on('click', function(event) {
+        renameSlideshow(); //ne pas utiliser le callback !
+    });
 
 
 
@@ -262,21 +266,56 @@ function extendSideBar($sidebar, option) {
     }
 }
 
-function quickSave(localName) { //il n'y a qu'elle même qui s'appelle en passant un parametre
-    if (typeof localName !== 'string') {
+//function quickSave() { //il n'y a qu'elle même qui s'appelle en passant un parametre
+//
+//    var localName = container.metadata.name;
+//    saveJson(localName);
+//}
 
-        if (container.metadata.type === 'free')
-            localName = $('#slideshowNameFree').html();
-        else if (container.metadata.type === 'tree')
-            localName = $('#slideshowNameTree').html();
 
-        if (localName === 'New slide show' || localName === '') {
-            modalSelectStorage(quickSave, 'Save');
-            return;
+function renameSlideshow(rep) {
+    var title;
+    var repName;
+    if (typeof rep !== 'undefined') { //if not call by an handler
+        if (typeof rep !== 'string') { //if call with a callback
+            title = "Save slideShow as ...<br/><br/>";
+            repName = container.metadata.name;
+        } else {
+            title = "A slideshow named " + rep + " alreday exists. \n\
+<br/> Please type a new name";
+            repName = rep;
         }
+    } else {
+        title = "Rename slideshow <br/><br/>";
+        repName = container.metadata.name;
     }
 
-    saveJson(localName);
+
+    alertify.prompt(title, function(e, str) {
+        // str is the input text      
+
+        if (e) {
+
+            //verification de nom
+            for (var key in localStorage) {
+                if (key === str) {
+                    console.log('name alerady set in local');
+                    $('#alertify-cancel').trigger('click'); //pour fermer l'alertify
+                    setTimeout(function() {
+                        // rest of code here
+                        renameSlideshow(saveJson);
+                    }, 1000);
+
+                    return;
+                }
+            }
+            alertify.success('SlideShow ' + container.metadata.name + ' rename as ' + str);
+            container.metadata.name = str;
+            if (typeof rep !== 'string') { //if call with a callback
+                rep();
+            }
+        }
+    }, repName);
 }
 
 function _return(param) {
@@ -577,16 +616,38 @@ function goSlideShowFromContainer() {
 
 }
 
+/*
+ * save as... avec controle de already set in localstorage
+ */
 
-function saveJson(localName) {
-    
+function saveAs() {
+//    var name = container.metadata.name;
+//    if (name === 'Unnamed')
+//        ;
+    renameSlideshow(saveJson);
+//    for (var key in localStorage) {
+//        if (key === name) {
+//            renameSlideshow();
+//            return;
+//        }
+//    }
+    //saveJson(name);
 
+}
+
+function saveJson() {
     var savedJson;
-    container.metadata.name = localName;
+    var localName = container.metadata.name;
+
+    if (localName === 'Unnamed') {
+        renameSlideshow(saveJson);
+        return;
+    }
+
     if (container.metadata.type === 'free') {
         savedJson = JSON.stringify(container, null, 2);
     }
-    else if (container.metadata.type === 'tree') {
+    else if (container.metadata.type === 'tree') { //si mode tree en cours d'édition
         if ($('#treeMaker').length !== 0) {
             goSlideShow();
             savedJson = JSON.stringify(container, null, 2);
@@ -598,12 +659,12 @@ function saveJson(localName) {
         alert('Le type de la présentation n\'est pas connu : ' + container.metadata.type);
         return;
     }
-    
-  
+
+
     localStorage.setItem(localName, savedJson);
     alertify.success(localName + ' saved ');
-    
-    console.log('smth saved',localStorage);
+
+    console.log('smth saved', localStorage);
 
 }
 
@@ -646,7 +707,7 @@ function modalSelectStorage(callback, title) {
 //             $modal.children('ul').children('li').each(function(){
 //                 $(this).off();
 //             });
-            
+
 //             callback($(event.target).html());
 //             hideModalSelectStorage($modal, title);
 

@@ -30,7 +30,7 @@ function initContainer() {
     container = {metadata: {
             type: 'free', //free, tree
             name: 'Unnamed'
-    }, slide: [],
+        }, slide: [],
         getSlide: function(matricule) {
             for (var i in container.slide) {
                 if (container.slide[i].matricule === matricule)
@@ -40,8 +40,12 @@ function initContainer() {
             return;
 
         }
-
     };
+
+    watch(container.metadata, 'name', function(attr, action, newVal, oldVal) {
+        //mise à jour du DOM
+        $('#slideshowNameFree').html(newVal);
+    });
 }
 
 function initJmpress() {
@@ -110,7 +114,7 @@ Slide = Class.extend({
                     return;
 
                 }
-            }   
+            }
         }
 
         //default value
@@ -154,7 +158,7 @@ Slide = Class.extend({
                 if (typeof params[param] === 'object') {
                     for (var paramNested in params[param]) {
                         this[param][paramNested] = params[param][paramNested];
-                        
+
                     }
                 } else {
                     this[param] = params[param];
@@ -400,7 +404,7 @@ Element = Class.extend({
 
         this.properties = {
         };
-        
+
 
         //definition des watch qui permettent d'agir sur le DOM lorsqu'on agit sur les objets des slides
         watch(this.pos, function(attr, action, newVal, oldVal) {
@@ -425,7 +429,7 @@ Element = Class.extend({
             return;
         });
 
-       
+
 
         //gestion de l'erreur de matricule
         if (container.getSlide(slide) === undefined) {
@@ -552,32 +556,32 @@ Text = Element.extend({
         var html = Mustache.to_html(template, this);
         ////console.log('html', html);
         $('#' + slide).append(html);
-        
-        
+
+
         var newEl = $('#' + this.matricule);
         newEl.children('span').html(this.properties.content);
         handlerComposant(newEl);
-        
+
         /* si pos.y = 'center', il faut centrer le texte en Y, le HTMl ne permet pas de faire cela
-        Le mustache insere le html, ensuite je passe derrière pour centrer le texte en y en fn de sa taille */
-        if( this.pos.y === 'center'){
-            bidule = $('#'+this.matricule);
-            
-            var heightTxt = parseInt($('#'+this.matricule).css('height'));
-            var posTxt = globalConfig.heightSlide/2 - heightTxt/2;
-            $('#'+this.matricule).css('top',posTxt);
+         Le mustache insere le html, ensuite je passe derrière pour centrer le texte en y en fn de sa taille */
+        if (this.pos.y === 'center') {
+            bidule = $('#' + this.matricule);
+
+            var heightTxt = parseInt($('#' + this.matricule).css('height'));
+            var posTxt = globalConfig.heightSlide / 2 - heightTxt / 2;
+            $('#' + this.matricule).css('top', posTxt);
             this.pos.y = posTxt;
         }
-        
+
         /* si pos.y = noCollision, il faut s'arranger pour mettre le texte sous son précédent (utile lors de la création automatique)*/
-        if( this.pos.y === 'noCollision'){
-            var posPrev = parseInt($('#'+this.matricule).prev().css('top'));
-            var heightPrev = parseInt($('#'+this.matricule).prev().css('height'));
-            var posTxt = posPrev+heightPrev+20;
-             $('#'+this.matricule).css('top',posTxt);
-            this.pos.y = posTxt;            
+        if (this.pos.y === 'noCollision') {
+            var posPrev = parseInt($('#' + this.matricule).prev().css('top'));
+            var heightPrev = parseInt($('#' + this.matricule).prev().css('height'));
+            var posTxt = posPrev + heightPrev + 20;
+            $('#' + this.matricule).css('top', posTxt);
+            this.pos.y = posTxt;
         }
-        
+
 
     },
     show: function(i) {
@@ -619,7 +623,7 @@ Image = Element.extend({
                 }
 
             }
-        this.matricule = matricule;       
+        this.matricule = matricule;
 
         this._super(slide, params, matricule);
 
@@ -671,7 +675,7 @@ function getSlideMother(matricule) {
 
     if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
         //$.each(container.slide, function(rien, slide) {         //parcours des slides
-        for( var mat in container.slide){
+        for (var mat in container.slide) {
             var slide = container.slide[mat];
             if (typeof slide.element[matricule] === 'undefined') {
                 ////console.log('pas dans la slide ', slide);
