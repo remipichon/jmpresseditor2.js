@@ -7,13 +7,17 @@
  *  
  */
 
-
-
-$(document).keypress(function(event) {
-   
-
-//    //console.log(event.which);
-
+ $(document).on('keypress',function(event){
+    //si la souris est sur le body, et que le body, call keyboarGUI
+    if( $('.slide:hover').length === 0 &&
+            $('.sidebar:hover').length === 0 &&
+            $('#topbar:hover').length === 0 && 
+            $('.buttonclicked').length === 0 ){
+        keyboardGUI(event);
+    }
+ });
+    
+function keyboardGUI(event) {
 
     var objEvt = new ObjectEvent({
         matricule: '',
@@ -25,11 +29,6 @@ $(document).keypress(function(event) {
 
 
     switch (event.which) {
-        //deplacement dans la présentation
-        case 32:
-            $('#slideArea').jmpress('next');
-            break;
-
             //creation composant
         case 106 :
             objEvt.action = 'createSlide';
@@ -52,19 +51,7 @@ $(document).keypress(function(event) {
     }
     
     
-    
-    
-    return;
-    
-    
-    
-    
-
-    if (composantCatchEvent) {
-        //console.log('document capte event mais ne fait rien');
-        return;
-    }
-
+  
     switch (event.which) {
         //gestion navigation
         //deplacement      
@@ -135,97 +122,6 @@ $(document).keypress(function(event) {
 
     callModelGUI(objEvt);
 
-});
+}
 
 
-
-Transform3D = Class.extend({
-    init: function() {
-        var transform = getTrans3D($('#slideArea'));
-        this.pos = {
-            x: 0, //transform.translate3d[0],
-            y: 0, //transform.translate3d[1],
-            z: 0//transform.translate3d[2]
-        };
-
-        this.rotate = {
-            x: 0, //transform.translate3d[0],
-            y: 0, //transform.translate3d[1],
-            z: 0//transform.translate3d[2]
-        };
-
-        watch(this.pos, function(attr, action, newVal, oldVal) {
-
-            WatchJS.noMore = true; //prevent invoking watcher in this scope
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
-
-//            var transform = 'translate(-50%, -50%),  scaleX(1), scaleY(1),  scaleZ(1),  rotateZ(0deg),  rotateY(0deg),  rotateX(0deg), \n\
-//                 translate3d(' + this.x + 'px, ' + this.y + 'px, ' + this.z + 'px)';
-//            //console.log('transform :', transform);
-//            $("#slideArea>div").css({'transform': transform});
-//            $("#slideArea").css({'transform': transform});
-
-
-            //magouille qui fera fonctionner
-            var dico = getTrans3D($('#slideArea'));
-            var i;
-            switch (attr) {
-                case 'x':
-                    i = 0;
-                    break;
-                case 'y':
-                    i = 1;
-                    break;
-                case 'z':
-                    i = 2;
-                    break;
-
-            }
-            dico.translate3d[i] += newVal;
-
-            setTrans3D(dico);
-            //console.log(dico);
-
-        });
-
-
-        watch(this.rotate, function(attr, action, newVal, oldVal) {
-
-            WatchJS.noMore = true; //prevent invoking watcher in this scope
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
-
-//            var transform = 'translate(-50%, -50%),  scaleX(1), scaleY(1),  scaleZ(1),  rotateZ(0deg),  rotateY(0deg),  rotateX(0deg), \n\
-//                 translate3d(' + this.x + 'px, ' + this.y + 'px, ' + this.z + 'px)';
-//            //console.log('transform :', transform);
-//            $("#slideArea>div").css({'transform': transform});
-//            $("#slideArea").css({'transform': transform});
-
-
-            //magouille qui fera fonctionner
-            var dico = getTrans3D($('#slideArea'));
-            var i;
-            switch (attr) {
-                case 'x':
-                    i = 'X';
-                    break;
-                case 'y':
-                    i = 'Y';
-                    break;
-                case 'z':
-                    i = 'Z';
-                    break;
-
-            }
-            dico['rotate' + i] += newVal;
-
-            setTrans3D(dico);
-            //console.log(dico);
-
-        });
-
-    }
-});

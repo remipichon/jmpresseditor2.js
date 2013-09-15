@@ -38,7 +38,7 @@ function handlerLayout() {
      * CREATION DES SLIDES
      * ======================================================================================*/
     $('.slide-tool-button').on('click', function(event) {
-        alertify.success('click anywhere to add text');
+        alertify.success('click anywhere to add slide');
         event.stopPropagation();//KIKI
         $('li').removeClass("buttonclicked");
         $('#slide-tool').addClass("buttonclicked");     // mise en forme css

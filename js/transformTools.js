@@ -69,10 +69,11 @@
  2: 
  */
 function getTrans3D($node) {
-   
+
     ////console.log('getTrans3D',$node);
     var prefix = (pfx('transform'));
-    if( typeof $node[0] === 'undefined') return;
+    if (typeof $node[0] === 'undefined')
+        return;
     var trans = $node[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};
     for (var el in trans) {
@@ -99,8 +100,8 @@ function getTrans3D($node) {
  * @param {type} dico
  * 
  */
-function setTrans3D(dico,$node) {
-    if( typeof $node === 'undefined' ){
+function setTrans3D(dico, $node) {
+    if (typeof $node === 'undefined') {
         $node = $("#slideArea>div");
     }
     //var transform = "translate(" + dico.translate[0] + "%, " + dico.translate[1] + "%) scaleX(" + dico.scaleX + ") scaleY(" + dico.scaleY + ") scaleZ(" + dico.scaleZ + ") rotateX(" + dico.rotateX + "deg) rotateY(" + dico.rotateY + "deg) rotateZ(" + dico.rotateZ + "deg) translate3d(" + dico.translate3d[0] + "px," + dico.translate3d[1] + "px, " + dico.translate3d[2] + "px)";
@@ -142,3 +143,96 @@ pfx = (function() {
     };
 }());
 
+
+
+
+Transform3D = Class.extend({
+    init: function() {
+        var transform = getTrans3D($('#slideArea >'));
+        this.pos = {
+            x: 0, //transform.translate3d[0],
+            y: 0, //transform.translate3d[1],
+            z: 0//transform.translate3d[2]
+        };
+
+        this.rotate = {
+            x: 0, //transform.translate3d[0],
+            y: 0, //transform.translate3d[1],
+            z: 0//transform.translate3d[2]
+        };
+
+        watch(this.pos, function(attr, action, newVal, oldVal) {
+
+            WatchJS.noMore = true; //prevent invoking watcher in this scope
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+
+//            var transform = 'translate(-50%, -50%),  scaleX(1), scaleY(1),  scaleZ(1),  rotateZ(0deg),  rotateY(0deg),  rotateX(0deg), \n\
+//                 translate3d(' + this.x + 'px, ' + this.y + 'px, ' + this.z + 'px)';
+//            //console.log('transform :', transform);
+//            $("#slideArea>div").css({'transform': transform});
+//            $("#slideArea").css({'transform': transform});
+
+
+            //magouille qui fera fonctionner
+            var dico = getTrans3D($('#slideArea >'));
+            var i;
+            switch (attr) {
+                case 'x':
+                    i = 0;
+                    break;
+                case 'y':
+                    i = 1;
+                    break;
+                case 'z':
+                    i = 2;
+                    break;
+
+            }
+            dico.translate3d[i] += newVal;
+
+            setTrans3D(dico);
+            //console.log(dico);
+
+        });
+
+
+        watch(this.rotate, function(attr, action, newVal, oldVal) {
+
+            WatchJS.noMore = true; //prevent invoking watcher in this scope
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+
+//            var transform = 'translate(-50%, -50%),  scaleX(1), scaleY(1),  scaleZ(1),  rotateZ(0deg),  rotateY(0deg),  rotateX(0deg), \n\
+//                 translate3d(' + this.x + 'px, ' + this.y + 'px, ' + this.z + 'px)';
+//            //console.log('transform :', transform);
+//            $("#slideArea>div").css({'transform': transform});
+//            $("#slideArea").css({'transform': transform});
+
+
+            //magouille qui fera fonctionner
+            var dico = getTrans3D($('#slideArea >'));
+            var i;
+            switch (attr) {
+                case 'x':
+                    i = 'X';
+                    break;
+                case 'y':
+                    i = 'Y';
+                    break;
+                case 'z':
+                    i = 'Z';
+                    break;
+
+            }
+            dico['rotate' + i] += newVal;
+
+            setTrans3D(dico);
+            //console.log(dico);
+
+        });
+
+    }
+});

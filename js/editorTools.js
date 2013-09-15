@@ -161,13 +161,20 @@ longHasMouseMove = false;
  * Un mousedown n'importe 
  * 
  */
-$(document).on('mousedown', function(event) {
-    return;
-    if( $('#sidebar:hover').length !== 0 || $('.buttonclicked').length !== 0 ){//|| $('.noJoystick').length !== 0){ //on n'affiche pas le joystick sur la barre d'outils on lorsqu'on selectionne un point de chute pour la creation d'element (probleme sous chrome)
-//        //console.log('hover de slide bar');
-        return;
-    }
-    //console.log('target mousedown', event.target);
+$(document).on('mousedown', function (event){
+    
+    if( 
+            $('.sidebar:hover').length === 0 &&
+            $('#topbar:hover').length === 0 && 
+            $('.buttonclicked').length === 0 ){
+        joystickHandler(event);
+    }   
+    
+});
+
+
+function joystickHandler(event) {
+   
     var $this = $(event.target);
 
     if ($('body')[0] === $this[0]) {
@@ -190,11 +197,12 @@ $(document).on('mousedown', function(event) {
         });
         $this.data('scale', composant.scale);
     }
+    
     $this.data('posInitMouse', {
         pageX: event.pageX,
         pageY: event.pageY
     });
-//    //objectEvent destiner à une fonction qui redirige vers la bonne fonction de Model
+    
     var objEvt = new ObjectEvent({
         matricule: matricule,
         action: 'joystick',
@@ -303,7 +311,7 @@ $(document).on('mousedown', function(event) {
 
 
 //annulation des listeners sur mouseup
-    $(document).on('mouseup', function(event) {
+    $(document).one('mouseup', function(event) {
 //        $('.buttonclicked"').removeClass("buttonclicked");
         simpleHasMouseMove = false;
         longHasMouseMove = false;
@@ -318,7 +326,7 @@ $(document).on('mousedown', function(event) {
 
     });
 
-});
+}
 
 
 
