@@ -56,7 +56,7 @@ function initJmpress() {
     $('#slideArea').removeClass();
     $('#slideArea').jmpress({
         //mouse: {clickSelects: false},
-        keyboard: {use: false},
+//        keyboard: {use: false},
 //                    keyboard: {
 //                        112: ''  //doesn't work although doc shows me this way
 //                    },
