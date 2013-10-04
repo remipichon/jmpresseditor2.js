@@ -324,28 +324,6 @@ Slide = Class.extend({
 
 });
 
-/* selection d'une slide par click, 
- *  
- * @returns {string}
- */
-function selectSlide(callback, param1, composant) {
-    $('#sidebar').parent().addClass("buttonclicked");   //pour empecher le joystick d'apparaitre
-    alert('Il faut selectionner une slide');
-    $('.slide').one('click', function(event) {
-        $('.buttonclicked').removeClass("buttonclicked");       //pour redonner le droit au joystick d'apparaitre
-        var slide = $(this).attr('matricule');
-        alert('slide selectionnée' + slide);
-        if (typeof callback !== 'undefined') {
-            callback(slide, param1, composant);
-            ////console.log('in select', slide);
-            return slide;
-        } else {
-            ////console.log('in select', slide);
-            return slide;
-        }
-    });
-}
-
 
 
 /*  Ebauche de tentative de gestion par la Class Element d'un mauvais matricule
@@ -690,3 +668,29 @@ function getSlideMother(matricule) {
     return 'Error : matricule doesn\'t existe';
 
 }
+
+
+
+
+/* trouve l'object en fonction du matricule (que ce soit une slide ou un composant)
+ * 
+ * @type object composant
+ */
+function findObjectOfComposant(matricule){
+    //console.log('info : findObjectOfComposant effectue un test avec getSlide');
+    if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
+       for( var i in container.slide) {               //parcours des slides
+//           //console.log('debug findobjofcptmr',slide,slide.element,matricule,typeof slide.element[matricule]);
+            if (typeof container.slide[i].element[matricule] === 'undefined') {
+//                //console.log('pas dans la slide ', slide);
+            } else {
+                return container.slide[i].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
+            }
+        };
+    } else {                                            //si le matricule est celui d'une slide
+        return container.getSlide(matricule);
+    }
+
+    //console.log('Error : findObjectOfComposant : matricule '+matricule+' doesn\'t existe');
+    return;
+}   

@@ -12,30 +12,6 @@
  */
 
 
-/* trouve l'object en fonction du matricule (que ce soit une slide ou un composant)
- * 
- * @type object composant
- */
-function findObjectOfComposant(matricule){
-    //console.log('info : findObjectOfComposant effectue un test avec getSlide');
-    if (typeof container.getSlide(matricule) === 'undefined') {   //si le matricule n'est pas celui d'une slide
-       for( var i in container.slide) {               //parcours des slides
-//           //console.log('debug findobjofcptmr',slide,slide.element,matricule,typeof slide.element[matricule]);
-            if (typeof container.slide[i].element[matricule] === 'undefined') {
-//                //console.log('pas dans la slide ', slide);
-            } else {
-                return container.slide[i].element[matricule];  //si le matricule est un element de la slide, on return l'object complet
-            }
-        };
-    } else {                                            //si le matricule est celui d'une slide
-        return container.getSlide(matricule);
-    }
-
-    //console.log('Error : findObjectOfComposant : matricule '+matricule+' doesn\'t existe');
-    return;
-}
-
-
 /* Controler de slideshowEditor
  * permet de diriger les interactions avec les composants
  * deplacement, rotation, édition (texte, image)
@@ -282,3 +258,91 @@ function callModelGUI(objectEvent) {
 }
 
 
+
+/* selection d'une slide par click, 
+ *  
+ * @returns {string}
+ */
+function selectSlide(callback, param1, composant) {
+    $('#sidebar').parent().addClass("buttonclicked");   //pour empecher le joystick d'apparaitre
+    alert('Il faut selectionner une slide');
+    $('.slide').one('click', function(event) {
+        $('.buttonclicked').removeClass("buttonclicked");       //pour redonner le droit au joystick d'apparaitre
+        var slide = $(this).attr('matricule');
+        alert('slide selectionnée' + slide);
+        if (typeof callback !== 'undefined') {
+            callback(slide, param1, composant);
+            ////console.log('in select', slide);
+            return slide;
+        } else {
+            ////console.log('in select', slide);
+            return slide;
+        }
+    });
+}
+
+
+
+/* classe objetEvent
+ * matricule
+ * action
+ * event
+ *  des infos
+ *  
+ *  Est ce que je stocke les objetEvent ? 
+ * 
+ * 
+ */
+ObjectEvent = Class.extend({
+    init: function(params) {
+        //default value
+
+        //matricule du composant
+        //sinon c'est de la création
+        this.matricule = '';
+
+        /* ce qu'il faut faire sur le composant
+         *  +move
+         *  
+         */
+        this.action = '';
+
+        /* caracterique de l'event
+         * type : keyboard, souris
+         * si move -> direction : z+, z-, y+...
+         * si rotate -> sens : x, -x, y, -y
+         * si create -> pos : {}, rotate{}
+         */
+        this.event = {
+        };
+
+
+
+        if (typeof params !== 'undefined') {
+            for (var param in params) {
+                if (typeof params[param] === 'object') {
+                    for (var paramNested in param) {
+                        this[param][paramNested] = param[paramNested];
+                    }
+                }
+                this[param] = params[param];
+            }
+        }
+
+
+
+    },
+    show: function(i) {
+        if (typeof i === 'undefined') {
+            //console.log('objectEvent');
+        } else {
+            //console.log('objectEvent');
+        }
+    },
+    destroy: function() {
+        //console.log('nothing to delete');
+    }
+
+
+
+});

@@ -1,10 +1,17 @@
 /* 
- * Scripts regarding only animation of layout (slidding menu, etc)
- * listeners de tous les boutons
- *  a deplacer dans GUIEditor
+ * Listener de toute l'interface graphique
+ * 
+ * Fonction de gestion de toutes les interactions possibles via l'interface
  */
 
-
+/*
+ * Zoom en Z
+ */
+$(document).mousewheel(function(event, delta, deltaX, deltaY) {
+    var transform = getTrans3D();
+    transform.translate3d[2] = transform.translate3d[2] + deltaY * 10;
+    setTrans3D(transform);
+});
 
 
 function handlerLayout() {
