@@ -9,7 +9,7 @@
 /*
  * Wrap les content dans une span pour facilement le traitement
  */ 
-function goCK(config) {
+function goCK() {
     $('#tree li').each(function() {
        
         var span = "<span style='display:'none' class='li' contenteditable='true'> " + $(this).html().match(/.*/)[0] + " </span>";
@@ -46,7 +46,7 @@ function max(array) {
 /*
  * Parse la liste ol pour determiner la profondeur, le nombre d'enfant et le nombre de jumeaux (soeurs) de chaque li
  */
-function goDepth(config) {
+function goDepth() {
 
     var sibPerLevel = new Array();
     //stocke le nombre de siblings par niveau de profondeur (independament des parents)

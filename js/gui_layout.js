@@ -709,16 +709,16 @@ function modalSelectStorage(callback, title) {
     for (var key in localStorage) {
         var item = "<li>" + key + "</li> ";
         $modal.children('ul').append(item);
-//         $modal.last().one('click', function(event) {
-//             //$('#' + $modal.attr('id') + ' #new-local').off(); //supprimer le handler sur le createNew
-//             $modal.children('ul').children('li').each(function(){
-//                 $(this).off();
-//             });
+         $modal.last().one('click', function(event) {
+             //$('#' + $modal.attr('id') + ' #new-local').off(); //supprimer le handler sur le createNew
+             $modal.children('ul').children('li').each(function(){
+                 $(this).off();
+             });
 
-//             callback($(event.target).html());
-//             hideModalSelectStorage($modal, title);
+             callback($(event.target).html());
+             hideModalSelectStorage($modal, title);
 
-//         });
+         });
     }
 }
 
