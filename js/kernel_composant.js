@@ -62,7 +62,7 @@ function initJmpress() {
 //                    },
         viewPort: {
             height: 400,
-            width: 1200,
+            width: 3200,
             maxScale: 1
         }
     });

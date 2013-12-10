@@ -1,43 +1,51 @@
 {
-    "data": [{
-            "author": "",
-            "title": ""
+    "tags": [],
+    "informations": [{
+            "authors": "",
+            "title": "",
+            "date": ""
         }],
-    "slide": [
-   
-        {
-            "type": "slide",
-            "hierarchy" : 2.3,
-            "pos":
-                    {
-                        "x": 100,
-                        "y": 200,
-                        "z": 0
-                    },
-            "scale": 2,
-            "element": [
-                {
-                    "type": "text",
-                    "pos": {
-                        "x": 50,
-                        "y": 50,
-                        "z": 0
-                    },
-                    "rotate": {
+    "slides": {
+        "id": {
+            "locked": {
+                "user": {
+                },
+                "lockedAt": ""
+            },
+            "title": "",
+            "parent": "",
+            "elements": [
+        
+            ],
+            "displayOptions": {
+                "jmpress": {
+                    "positions": {
                         "x": 0,
                         "y": 0,
-                        "z": 0
+                        "z": 0,
                     },
-                    "hierarchy": "h1",
-                    "content": "Deuxieme Partie, Petit C",
-                    "attributes": []
+                    "rotates": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0,
+                    },
+                    "scale": 1,
+                    "time-delay": 1
+                },
+                "deckjs": {
+                    "transition": "horizontal",
+                    "time-delay": 1
+                },
+                "revealjs": {
+                    "transition": "horizontal",
+                    "time-delay": 1
+                },
+                "turnjs": {
                 }
-            ]
-        },
-        
- 
+            }
 
-    ]
+        }
+    }
 
 
 }
